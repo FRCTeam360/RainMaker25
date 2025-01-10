@@ -4,6 +4,8 @@ import static edu.wpi.first.units.Units.*;
 
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
@@ -12,6 +14,7 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -230,8 +233,35 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return m_sysIdRoutineToApply.dynamic(direction);
     }
 
+    public Pose2d getPose() {
+        return this.getState().Pose;
+    }
+
+    public Rotation2d getRotation2d() {
+        return this.getPose().getRotation();
+    }
+
+    public double getAngle() {
+        return this.getRotation2d().getDegrees();
+    }
+
+    // public boolean isFlat() {
+    //     double currentPitch = this.getPigeon2().getPitch().getValueAsDouble();
+    //     if (Math.abs(currentPitch - Constants.DRIVETRAIN_PITCH_AUTO_INIT) < 2.0 || DriverStation.isTeleop()) {
+    //         return true;
+    //     }
+    //     return false;
+    // }
+
     @Override
     public void periodic() {
+        Logger.recordOutput("Swerve: Current Pose", this.getPose());
+        Logger.recordOutput("Swerve: Rotation", this.getRotation2d());
+        Logger.recordOutput("Swerve: Angle", this.getAngle());
+        // Logger.recordOutput("swerve: pithc", this.isFlat());
+        Logger.recordOutput("Rotation2d", this.getPigeon2().getRotation2d());
+        Logger.recordOutput("Swerve: CurrentState", this.getState().ModuleStates);
+        Logger.recordOutput("Swerve: TargetState", this.getState().ModuleTargets);
         /*
          * Periodically try to apply the operator perspective.
          * If we haven't applied the operator perspective before, then we should apply it regardless of DS state.
@@ -240,6 +270,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
          * This ensures driving behavior doesn't change until an explicit disable event occurs during testing.
          */
         if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
+            
             DriverStation.getAlliance().ifPresent(allianceColor -> {
                 setOperatorPerspectiveForward(
                     allianceColor == Alliance.Red

@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.OldCompBot;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Vision.Vision;
+import frc.robot.subsystems.Vision.VisionIOLimelight;
 
 public class RobotContainer {
     private double MaxSpeed = OldCompBot.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -28,6 +30,8 @@ public class RobotContainer {
     private final CommandXboxController operatorCont = new CommandXboxController(1);
 
     public final CommandSwerveDrivetrain driveTrain;
+
+    private final Vision vision = new Vision(new VisionIOLimelight("limelight", 0.0, 0.0));
 
     public RobotContainer() {
       driveTrain = OldCompBot.createDrivetrain();

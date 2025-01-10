@@ -8,54 +8,48 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class VisionIOLimelight implements VisionIO {
   private final NetworkTable table;
-  private final double height;
-  private final double pitch;
-  private final double heightFudgeFactor;
+  private final double yawFudgeFactor;
   private final double pitchFudgeFactor;
 
   /**
    * Creates a new Limelight hardware layer.
    * 
    * @param name              the name of the limelight
-   * @param height            as designed camera height in meters
-   * @param pitch             as designed camera pitch in degrees
-   * @param heightFudgeFactor fudge factor for camera height in meters
+   * @param yawFudgeFactor    fudge factor for camera yaw in degrees
    * @param pitchFudgeFactor  fudge factor for camera pitch in degrees
    */
-  public VisionIOLimelight(String name, double height, double pitch, double heightFudgeFactor,
-      double pitchFudgeFactor) {
+  public VisionIOLimelight(String name, double yawFudgeFactor, double pitchFudgeFactor) {
     table = NetworkTableInstance.getDefault().getTable(name);
-    this.height = height;
-    this.pitch = pitch;
-    this.heightFudgeFactor = heightFudgeFactor;
+    this.yawFudgeFactor = yawFudgeFactor;
     this.pitchFudgeFactor = pitchFudgeFactor;
   }
 
   public void updateInputs(VisionIOInputs inputs) {
     inputs.tv = getTV();
-    inputs.tx = getTX();
-    inputs.tyBase = getTYBase();
+    inputs.tx = getTXRaw();
+    inputs.txAdjusted = getTXAdjusted();
+    inputs.ty = getTYRaw();
     inputs.tyAdjusted = getTYAdjusted();
     inputs.pipeline = getPipeline();
   }
 
-  public double getTX() {
+  public double getTXRaw() {
     return table.getEntry("tx").getDouble(0);
   }
 
-  /**
-   * @return the ty without the angle fudge factor
-   */
-  public double getTYBase() {
+  public double getTXAdjusted() {
+    return getTXRaw() - yawFudgeFactor;
+  }
+
+  public double getTYRaw() {
     return table.getEntry("ty").getDouble(0);
   }
 
-  public double getTYAdjusted() { 
-    return getTYBase() - pitchFudgeFactor;
+  public double getTYAdjusted() {
+    return getTYRaw() - pitchFudgeFactor;
   }
 
   public double getTV() {
@@ -80,10 +74,6 @@ public class VisionIOLimelight implements VisionIO {
 
   public void setPipeline(int pipeline) {
     table.getEntry("pipeline").setNumber(pipeline);
-  }
-
-  public void setLEDMode(int mode) {
-    table.getEntry("ledMode").setNumber(mode);
   }
 
   public void takeSnapshot() {

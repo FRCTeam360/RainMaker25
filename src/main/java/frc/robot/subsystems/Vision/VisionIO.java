@@ -7,14 +7,14 @@ package frc.robot.subsystems.Vision;
 import org.littletonrobotics.junction.AutoLog;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public interface VisionIO {
   /** Creates a new VisionIO. */
   @AutoLog
     public static class VisionIOInputs {
         public double tx;
-        public double tyBase;
+        public double txAdjusted;
+        public double ty;
         public double tyAdjusted;
         public double tv;
         public double pipeline;
@@ -22,7 +22,11 @@ public interface VisionIO {
 
     public void updateInputs(VisionIOInputs inputs);
 
-    public double getTX();
+    public double getTXRaw();
+
+    public double getTXAdjusted();
+
+    public double getTYRaw();
 
     public double getTYAdjusted();
 
@@ -34,11 +38,7 @@ public interface VisionIO {
 
     public void setPipeline(int pipeline);
 
-    public void setLEDMode(int mode);
-
     public void takeSnapshot();
-
-    public double getTYBase();
 
     public void resetSnapshot();
 }

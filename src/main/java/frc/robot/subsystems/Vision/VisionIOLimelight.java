@@ -54,7 +54,7 @@ public class VisionIOLimelight implements VisionIO {
     return table.getEntry("ty").getDouble(0);
   }
 
-  public double getTYAdjusted() {
+  public double getTYAdjusted() { 
     return getTYBase() - pitchFudgeFactor;
   }
 

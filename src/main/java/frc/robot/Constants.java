@@ -47,7 +47,7 @@ public final class Constants {
         OLD_COMP_BOT
     }
     public static final class SerialAddressConstants{
-      public static String OCB_SERIAL_ADDRESS = "a";
+      public static String OCB_SERIAL_ADDRESS = "032BE44A";
       public static String WOOD_SERIAL_ADDRESS = "b";
       public static String PRACTICE_SERIAL_ADDRESS = "c";
       public static String COMP_SERIAL_ADDRESS = "d";

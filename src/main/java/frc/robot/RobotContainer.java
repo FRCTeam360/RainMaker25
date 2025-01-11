@@ -18,12 +18,15 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.generated.OldCompBot;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Vision.Vision;
+import frc.robot.subsystems.Vision.VisionConstants;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
+import frc.robot.subsystems.Vision.VisionIOPhotonVisionSim;
 
 public class RobotContainer {
     private double MaxSpeed = OldCompBot.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
+   private VisionConstants visionConstants = new VisionConstants();
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController driverCont = new CommandXboxController(0);
@@ -31,11 +34,12 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain driveTrain;
 
-    private final Vision vision = new Vision(new VisionIOLimelight("limelight", 0.0, 0.0));
 
     public RobotContainer() {
       driveTrain = OldCompBot.createDrivetrain();
       configureBindings();
+     Vision vision = new Vision(new VisionIOPhotonVisionSim(visionConstants.camera0Name, visionConstants.robotToCamera0, driveTrain::getPose));
+
     }
 
     private void configureBindings() {

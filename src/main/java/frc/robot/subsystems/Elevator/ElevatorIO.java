@@ -13,6 +13,11 @@ public interface ElevatorIO {
 
   @AutoLog
   public static class ElevatorIOInputs {
+    public double elevatorStatorCurrent = 0.0;
+    public double elevatorSupplyCurrent = 0.0;
+    public double elevatorVoltage = 0.0;
+    public double elevatorVelocity = 0.0;
+    public double elevatorPosition = 0.0;
       // insert inputs
   }
 

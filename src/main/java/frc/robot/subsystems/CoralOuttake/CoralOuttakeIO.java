@@ -13,6 +13,11 @@ public interface CoralOuttakeIO {
   
   @AutoLog
   public static class CoralOuttakeIOInputs {
+    public double outtakeStatorCurrent = 0.0;
+    public double outtakeSupplyCurrent = 0.0;
+    public double outtakeVoltage = 0.0;
+    public double outtakeVelocity = 0.0;
+    public double outtakePosition = 0.0;
     // insert inputs
   }
 

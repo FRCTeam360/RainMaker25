@@ -13,6 +13,11 @@ public interface CatapultIO {
 
   @AutoLog
   public static class CatapultIOInputs {
+    public double catapultStatorCurrent = 0.0;
+    public double catapultSupplyCurrent = 0.0;
+    public double catapultVoltage = 0.0;
+    public double catapultVelocity = 0.0;
+    public double catapultPosition = 0.0;
     // insert inputs
   }
 

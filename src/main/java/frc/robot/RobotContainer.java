@@ -56,6 +56,7 @@ public class RobotContainer {
                     Constants.VisionConstants.OCB_YAW_FUDGE_FACTOR,
                     Constants.VisionConstants.OCB_PITCH_FUDGE_FACTOR));
                 driveTrain = OldCompBot.createDrivetrain();
+                break;
             case PRACTICE:
                 //practice bot stuff
                 break;

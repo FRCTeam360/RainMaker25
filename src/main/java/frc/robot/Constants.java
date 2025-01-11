@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.hal.HALUtil;
+import edu.wpi.first.util.function.BooleanConsumer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -14,20 +18,104 @@ package frc.robot;
  */
 public final class Constants {
 
+  public static class VisionConstants{
+    public static final String WOODBOT_LIMELIGHT_NAME = "limelight";
+    public static final double WOODBOT_YAW_FUDGE_FACTOR = 0;
+    public static final double WOODBOT_PITCH_FUDGE_FACTOR = 0;
+
+    public static final String OCB_LIMELIGHT_NAME = "limelight";
+    public static final double OCB_YAW_FUDGE_FACTOR = 0;
+    public static final double OCB_PITCH_FUDGE_FACTOR = 0;
+  }
+
   public static final Mode currentMode = Mode.SIM;
 
-        public static enum Mode {
-                /** Running on a real robot. */
-                REAL,
+    public static enum RobotType{
+        //real robot
+        REAL,
+        //physics sim
+        SIM,
+        //log file
+        REPLAY,
+        //woodbot
+        WOODBOT,
+        //practice bot
+        PRACTICE,
+        //comp bot
+        COMPETITION,
+        //last year's comp bot; abbreviated to OCB
+        OLD_COMP_BOT
+    }
+    public static final class SerialAddressConstants{
+      public static String OCB_SERIAL_ADDRESS = "a";
+      public static String WOOD_SERIAL_ADDRESS = "b";
+      public static String PRACTICE_SERIAL_ADDRESS = "c";
+      public static String COMP_SERIAL_ADDRESS = "d";
+    }
+    public static RobotType getRobotType(){
+      String serialAddress = HALUtil.getSerialNumber();
+      
+      
+      if(serialAddress.equals(SerialAddressConstants.PRACTICE_SERIAL_ADDRESS)){
+        return Constants.RobotType.PRACTICE;
+      }
+      else if(serialAddress.equals(SerialAddressConstants.COMP_SERIAL_ADDRESS)){
+        return Constants.RobotType.COMPETITION;
+      }
+      else if(serialAddress.equals(SerialAddressConstants.WOOD_SERIAL_ADDRESS)){
+        return Constants.RobotType.WOODBOT;
+      }
+      else if(serialAddress.equals(SerialAddressConstants.OCB_SERIAL_ADDRESS)) {
+        return Constants.RobotType.OLD_COMP_BOT;
+      }
+      return Constants.RobotType.WOODBOT;
+      
+    }
 
-                /** Running a physics simulator. */
-                SIM,
+    public static enum Mode {
+      /** Running on a real robot. */
+      REAL,
 
-                /** Replaying from a log file. */
-                REPLAY
-        }
+      /** Running a physics simulator. */
+      SIM,
+
+      /** Replaying from a log file. */
+      REPLAY
+    }
+
+    public static boolean isWoodBot(){
+      if( getRobotType() == RobotType.WOODBOT){
+        return true;
+      }
+      return false;
+    }
+    
+    public static boolean isCompBot(){
+      if(getRobotType() == RobotType.COMPETITION){
+        return true;
+      }
+      return false;
+    }
+
+    public static boolean isPracticeBot(){
+      if(getRobotType() == RobotType.PRACTICE){
+        return true;
+      }
+      return false;
+    }
+
+    public static boolean isOCB() {
+      if(getRobotType() == RobotType.OLD_COMP_BOT) {
+        return true;
+      }
+      return false;
+    }
+
+
         
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+  
+
 }

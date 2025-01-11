@@ -9,7 +9,10 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -26,18 +29,53 @@ public class RobotContainer {
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
+
     private final CommandXboxController driverCont = new CommandXboxController(0);
     private final CommandXboxController operatorCont = new CommandXboxController(1);
 
-    public final CommandSwerveDrivetrain driveTrain;
+    public CommandSwerveDrivetrain driveTrain;
+    private Vision vision;
 
-    private final Vision vision = new Vision(new VisionIOLimelight("limelight", 0.0, 0.0));
+    private ShuffleboardTab diagnosticTab;
+
 
     public RobotContainer() {
-      driveTrain = OldCompBot.createDrivetrain();
+        switch (Constants.getRobotType()) {
+            case WOODBOT:
+                //woodbot stuff
+                vision = new Vision(new VisionIOLimelight(
+                    Constants.VisionConstants.WOODBOT_LIMELIGHT_NAME, 
+                    Constants.VisionConstants.WOODBOT_YAW_FUDGE_FACTOR,
+                    Constants.VisionConstants.WOODBOT_PITCH_FUDGE_FACTOR));
+                driveTrain = OldCompBot.createDrivetrain();
+                break;
+            case OLD_COMP_BOT:
+                //ocb stuff
+                vision = new Vision(new VisionIOLimelight(
+                    Constants.VisionConstants.OCB_LIMELIGHT_NAME,
+                    Constants.VisionConstants.OCB_YAW_FUDGE_FACTOR,
+                    Constants.VisionConstants.OCB_PITCH_FUDGE_FACTOR));
+                driveTrain = OldCompBot.createDrivetrain();
+            case PRACTICE:
+                //practice bot stuff
+                break;
+            case COMPETITION:
+                //competition bot stuff
+                break;
+            default:
+                break;
+        }
+
+        diagnosticTab = Shuffleboard.getTab("Diagnostics");
+        diagnosticTab.addBoolean("Wood Bot",Constants::isWoodBot);
+        diagnosticTab.addBoolean("Comp Bot", Constants::isCompBot);
+        diagnosticTab.addBoolean("Practice Bot", Constants::isPracticeBot);
+        diagnosticTab.addBoolean("Old Comp Bot", Constants::isOCB);
+        diagnosticTab.addString("Serial Address", HALUtil::getSerialNumber);
+
+
       configureBindings();
     }
-
     private void configureBindings() {
         driveTrain.setDefaultCommand(
            driveTrain.fieldOrientedDrive(MaxSpeed, MaxAngularRate, driverCont)
@@ -49,4 +87,5 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return Commands.print("No autonomous command configured");
     }
+    
 }

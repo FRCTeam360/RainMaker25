@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-
+import frc.robot.Constants.OldCompBotConstants;
 import frc.robot.generated.OldCompBot;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Vision.Vision;
@@ -28,12 +28,13 @@ public class RobotContainer {
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
-
+    
+    private static Class constants;
 
     private final CommandXboxController driverCont = new CommandXboxController(0);
     private final CommandXboxController operatorCont = new CommandXboxController(1);
 
-    public CommandSwerveDrivetrain driveTrain;
+    public static CommandSwerveDrivetrain driveTrain;
     private Vision vision;
 
     private ShuffleboardTab diagnosticTab;
@@ -52,10 +53,12 @@ public class RobotContainer {
             case OLD_COMP_BOT:
                 //ocb stuff
                 vision = new Vision(new VisionIOLimelight(
-                    Constants.VisionConstants.OCB_LIMELIGHT_NAME,
-                    Constants.VisionConstants.OCB_YAW_FUDGE_FACTOR,
-                    Constants.VisionConstants.OCB_PITCH_FUDGE_FACTOR));
+                    Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
+                    Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
+                    Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR));
                 driveTrain = OldCompBot.createDrivetrain();
+                //constants = Constants.OldCompBotConstants;
+                setUpDrivetrain(vision, Constants.OldCompBotConstants.headingKP,  Constants.OldCompBotConstants.headingKI,  Constants.OldCompBotConstants.headingKD,  Constants.OldCompBotConstants.translationKP,  Constants.OldCompBotConstants.translationKI,  Constants.OldCompBotConstants.translationKD);
             case PRACTICE:
                 //practice bot stuff
                 break;
@@ -72,18 +75,25 @@ public class RobotContainer {
         diagnosticTab.addBoolean("Old Comp Bot", Constants::isOCB);
         diagnosticTab.addString("Serial Address", HALUtil::getSerialNumber);
 
-
       configureBindings();
-      driveTrain.asignVision(vision);
     }
 
+    private static void setUpDrivetrain(Vision vision, double headingKP, double headingKI, double headingKD, double translationKP, double translationKI, double translationKD) {
+        driveTrain.addHeadingController(headingKP, headingKI, headingKD);
+        driveTrain.addTranslationController(translationKP, translationKI, translationKD);
+        driveTrain.assignVision(vision);
+    }
+    
     private void configureBindings() {
         driveTrain.setDefaultCommand(
-           driveTrain.fieldOrientedDrive(MaxSpeed, MaxAngularRate, driverCont)
+            driveTrain.fieldOrientedDrive(MaxSpeed, MaxAngularRate, driverCont)
         );
 
+        driverCont.a().onTrue(driveTrain.alignToLimelight(Constants.OldCompBotConstants.maxSpeed, Constants.OldCompBotConstants.maxAngularRate, null, MaxSpeed, MaxAngularRate));
+            
         driveTrain.registerTelemetry(logger::telemeterize);
     }
+        
 
     public Command getAutonomousCommand() {
         return Commands.print("No autonomous command configured");

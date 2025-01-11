@@ -4,9 +4,13 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.util.function.BooleanConsumer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import frc.robot.generated.OldCompBot;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -22,16 +26,35 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 
 public final class Constants {
+  
+    public static class OperatorConstants {
+      public static final int kDriverControllerPort = 0;
+    }
 
   public static class VisionConstants {
     public static final String WOODBOT_LIMELIGHT_NAME = "limelight";
     public static final double WOODBOT_YAW_FUDGE_FACTOR = 0;
     public static final double WOODBOT_PITCH_FUDGE_FACTOR = 0;
+  }
 
+  public static class OldCompBotConstants {
     public static final String OCB_LIMELIGHT_NAME = "limelight";
     public static final double OCB_YAW_FUDGE_FACTOR = 0;
     public static final double OCB_PITCH_FUDGE_FACTOR = 0;
+
+    public static final double maxSpeed = OldCompBot.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+    public static final double maxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+
+    public final static double headingKP = 0.0;
+    public final static double headingKI = 0.0;
+    public final static double headingKD = 0.0;
+
+    public final static double translationKP = 0.0;
+    public final static double translationKI = 0.0;
+    public final static double translationKD = 0.0;
   }
+
+  
 
   public static final Mode currentMode = Mode.SIM;
 
@@ -84,9 +107,24 @@ public final class Constants {
     /** Replaying from a log file. */
     REPLAY
   }
+  
+  
+    public static boolean isOCB() {
+      if (getRobotType() == RobotType.OLD_COMP_BOT) {
+        return true;
+      }
+      return false;
+    }
 
   public static boolean isWoodBot() {
     if (getRobotType() == RobotType.WOODBOT) {
+      return true;
+    }
+    return false;
+  }
+  
+  public static boolean isPracticeBot() {
+    if (getRobotType() == RobotType.PRACTICE) {
       return true;
     }
     return false;
@@ -97,24 +135,6 @@ public final class Constants {
       return true;
     }
     return false;
-  }
-
-  public static boolean isPracticeBot() {
-    if (getRobotType() == RobotType.PRACTICE) {
-      return true;
-    }
-    return false;
-  }
-
-  public static boolean isOCB() {
-    if (getRobotType() == RobotType.OLD_COMP_BOT) {
-      return true;
-    }
-    return false;
-  }
-
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
   }
 
 }

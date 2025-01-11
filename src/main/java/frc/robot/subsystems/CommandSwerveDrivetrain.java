@@ -46,8 +46,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
 
-    public final PhoenixPIDController headingController = new PhoenixPIDController(0, 0, 0);
-    public final PIDController translationController = new PIDController(0,0,0);
+    public PhoenixPIDController headingController;
+    public PIDController translationController;
     
     private Vision vision;
 
@@ -75,12 +75,21 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         );
     }
 
-    public final void asignVision(Vision vision) {
+    public final void assignVision(Vision vision) {
         this.vision = vision;
+    }
+
+    public void addHeadingController(double kP, double kI, double kD) {
+        headingController = new PhoenixPIDController(kP, kI, kD);
+    }
+
+    public void addTranslationController(double kP, double kI, double kD) {
+        translationController = new PIDController(kP, kP, kD);
     }
 
     //goal: aligns to be square w apriltag given limelight data 
     public Command alignToLimelight(double goalAngle, double goalTY, DoubleSupplier currentTX, double maxSpeed, double maxAngularRate) {
+        System.out.println("RUNNING ALIGN");
         driveFieldCentricFacingAngle(0, 0, goalAngle, 0); //sets robot to goal angle
         return new InstantCommand(() -> robotCentricDrive(translationController.calculate(currentTX.getAsDouble(), 0.0), translationController.calculate(vision.getTYAdjusted(), goalTY), 0.0, maxSpeed, maxAngularRate)); //drives to apirltag
     }

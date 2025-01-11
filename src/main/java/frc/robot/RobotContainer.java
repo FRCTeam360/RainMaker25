@@ -36,6 +36,7 @@ public class RobotContainer {
     public RobotContainer() {
       driveTrain = OldCompBot.createDrivetrain();
       configureBindings();
+      driveTrain.asignVision(vision);
     }
 
     private void configureBindings() {

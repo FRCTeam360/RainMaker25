@@ -60,9 +60,8 @@ public class RobotContainer {
                 //practice bot stuff
                 break;
             case COMPETITION:
-                //competition bot stuff
-                break;
             default:
+                //competition bot stuff
                 break;
         }
 
@@ -76,6 +75,7 @@ public class RobotContainer {
 
       configureBindings();
     }
+
     private void configureBindings() {
         driveTrain.setDefaultCommand(
            driveTrain.fieldOrientedDrive(MaxSpeed, MaxAngularRate, driverCont)

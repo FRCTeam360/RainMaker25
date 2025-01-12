@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.OldCompBot;
+import frc.robot.generated.WoodBotDriveTrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
@@ -47,7 +48,7 @@ public class RobotContainer {
                     Constants.VisionConstants.WOODBOT_LIMELIGHT_NAME, 
                     Constants.VisionConstants.WOODBOT_YAW_FUDGE_FACTOR,
                     Constants.VisionConstants.WOODBOT_PITCH_FUDGE_FACTOR));
-                driveTrain = OldCompBot.createDrivetrain();
+                driveTrain = WoodBotDriveTrain.createDrivetrain();
                 break;
             case OLD_COMP_BOT:
                 //ocb stuff

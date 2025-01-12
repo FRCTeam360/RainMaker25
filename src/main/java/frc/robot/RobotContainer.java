@@ -15,9 +15,11 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OldCompBotConstants;
+import frc.robot.commands.AlignWithLimelight;
 import frc.robot.generated.OldCompBot;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Vision.Vision;
@@ -29,8 +31,6 @@ public class RobotContainer {
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
     
-    private static Class constants;
-
     private final CommandXboxController driverCont = new CommandXboxController(0);
     private final CommandXboxController operatorCont = new CommandXboxController(1);
 
@@ -38,6 +38,8 @@ public class RobotContainer {
     private Vision vision;
 
     private ShuffleboardTab diagnosticTab;
+
+    private AlignWithLimelight alignWithLimelight;
 
 
     public RobotContainer() {
@@ -75,7 +77,12 @@ public class RobotContainer {
         diagnosticTab.addBoolean("Old Comp Bot", Constants::isOCB);
         diagnosticTab.addString("Serial Address", HALUtil::getSerialNumber);
 
+        initializeCommands();
       configureBindings();
+    }
+
+    public void initializeCommands() {
+        alignWithLimelight = new AlignWithLimelight(vision, driveTrain, 0.0,25.0, Constants.OldCompBotConstants.maxSpeed, Constants.OldCompBotConstants.maxAngularRate);
     }
 
     private static void setUpDrivetrain(Vision vision, double headingKP, double headingKI, double headingKD, double translationKP, double translationKI, double translationKD) {
@@ -89,7 +96,9 @@ public class RobotContainer {
             driveTrain.fieldOrientedDrive(MaxSpeed, MaxAngularRate, driverCont)
         );
 
-        driverCont.a().onTrue(driveTrain.alignToLimelight(Constants.OldCompBotConstants.maxSpeed, Constants.OldCompBotConstants.maxAngularRate, null, MaxSpeed, MaxAngularRate));
+        driverCont.pov(90).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
+
+        driverCont.a().onTrue(alignWithLimelight);
             
         driveTrain.registerTelemetry(logger::telemeterize);
     }

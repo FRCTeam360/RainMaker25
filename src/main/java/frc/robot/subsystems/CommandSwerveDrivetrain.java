@@ -75,6 +75,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         );
     }
 
+    public final void zero() {
+        this.tareEverything();
+    }
+
     public final void assignVision(Vision vision) {
         this.vision = vision;
     }
@@ -87,16 +91,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         translationController = new PIDController(kP, kP, kD);
     }
 
-    //goal: aligns to be square w apriltag given limelight data 
-    public Command alignToLimelight(double goalAngle, double goalTY, DoubleSupplier currentTX, double maxSpeed, double maxAngularRate) {
-        System.out.println("RUNNING ALIGN");
-        driveFieldCentricFacingAngle(0, 0, goalAngle, 0); //sets robot to goal angle
-        return new InstantCommand(() -> robotCentricDrive(translationController.calculate(currentTX.getAsDouble(), 0.0), translationController.calculate(vision.getTYAdjusted(), goalTY), 0.0, maxSpeed, maxAngularRate)); //drives to apirltag
-    }
-
     public void driveFieldCentricFacingAngle(double x, double y, double desiredAngle, double maxSpeed) {
         FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle()
-                .withVelocityX(x * maxSpeed)
+                .withVelocityX(-x * maxSpeed)
                 .withVelocityY(y * maxSpeed)
                 .withTargetDirection(Rotation2d.fromDegrees(desiredAngle));
         request.HeadingController = headingController;

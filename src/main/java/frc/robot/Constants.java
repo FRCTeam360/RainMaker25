@@ -31,6 +31,10 @@ public final class Constants {
     public static final String OCB_LIMELIGHT_NAME = "limelight";
     public static final double OCB_YAW_FUDGE_FACTOR = 0;
     public static final double OCB_PITCH_FUDGE_FACTOR = 0;
+
+
+   
+
   }
 
   public static final Mode currentMode = Mode.SIM;
@@ -73,6 +77,10 @@ public final class Constants {
     }
     return Constants.RobotType.COMPETITION;
   }
+// placeholders for now until we got woodbot working
+  public static final int CORAL_INTAKE_ID = 0;
+  public static final int CORAL_OUTTAKE_ID = 1;
+  public static final int ELEVATOR_ID = 2;
 
   public static enum Mode {
     /** Running on a real robot. */

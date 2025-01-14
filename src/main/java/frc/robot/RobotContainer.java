@@ -43,20 +43,10 @@ public class RobotContainer {
     private AlignWithLimelight alignWithLimelight;
     private SnapDrivebaseToAngle snapDrivebaseToAngle;
 
+    private Class constants;
+
     public RobotContainer() {
         switch (Constants.getRobotType()) {
-            case WOODBOT:
-                //woodbot stuff
-                vision =
-                    new Vision(
-                        new VisionIOLimelight(
-                            Constants.VisionConstants.WOODBOT_LIMELIGHT_NAME,
-                            Constants.VisionConstants.WOODBOT_YAW_FUDGE_FACTOR,
-                            Constants.VisionConstants.WOODBOT_PITCH_FUDGE_FACTOR
-                        )
-                    );
-                driveTrain = OldCompBot.createDrivetrain();
-                break;
             case OLD_COMP_BOT:
                 //ocb stuff
                 vision =
@@ -78,8 +68,41 @@ public class RobotContainer {
                     Constants.OldCompBotConstants.translationKI,
                     Constants.OldCompBotConstants.translationKD
                 );
+            case WOODBOT:
+                //woodbot stuff
+                vision =
+                    new Vision(
+                        new VisionIOLimelight(
+                            Constants.VisionConstants.WOODBOT_LIMELIGHT_NAME,
+                            Constants.VisionConstants.WOODBOT_YAW_FUDGE_FACTOR,
+                            Constants.VisionConstants.WOODBOT_PITCH_FUDGE_FACTOR
+                        )
+                    );
+                driveTrain = OldCompBot.createDrivetrain();
+                break;
             case PRACTICE:
                 //practice bot stuff
+                break;
+            case SIM:
+                vision =
+                    new Vision(
+                        new VisionIOLimelight(
+                            Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
+                            Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
+                            Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR
+                        )
+                    );
+                driveTrain = OldCompBot.createDrivetrain();
+                //constants = Constants.OldCompBotConstants;
+                setUpDrivetrain(
+                    vision,
+                    Constants.OldCompBotConstants.headingKP,
+                    Constants.OldCompBotConstants.headingKI,
+                    Constants.OldCompBotConstants.headingKD,
+                    Constants.OldCompBotConstants.translationKP,
+                    Constants.OldCompBotConstants.translationKI,
+                    Constants.OldCompBotConstants.translationKD
+                );
                 break;
             case COMPETITION:
             default:
@@ -132,8 +155,7 @@ public class RobotContainer {
         driverCont.pov(90).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
 
         driverCont.b().onTrue(snapDrivebaseToAngle);
-
-        //driverCont.a().onTrue(new SequentialCommandGroup(snapDrivebaseToAngle, alignWithLimelight));
+        driverCont.a().onTrue(new SequentialCommandGroup(snapDrivebaseToAngle, alignWithLimelight));
 
         driveTrain.registerTelemetry(logger::telemeterize);
     }

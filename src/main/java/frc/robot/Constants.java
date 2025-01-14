@@ -54,8 +54,6 @@ public final class Constants {
     public final static double translationKD = 0.0;
   }
 
-  
-
   public static final Mode currentMode = Mode.REAL;
 
   public static enum RobotType {

@@ -24,7 +24,6 @@ public class AlignWithLimelight extends Command {
     public AlignWithLimelight(
         Vision vision,
         CommandSwerveDrivetrain driveTrain,
-        double goalAngle,
         double goalTY,
         double maxSpeed,
         double maxAngularRate
@@ -34,7 +33,6 @@ public class AlignWithLimelight extends Command {
         this.goalTY = goalTY;
         this.maxSpeed = maxSpeed;
         this.maxAngularRate = maxAngularRate;
-        this.goalAngle = goalAngle;
 
         addRequirements(vision, driveTrain);
     }
@@ -46,19 +44,14 @@ public class AlignWithLimelight extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-      
-        // driveTrain.driveFieldCentricFacingAngle(0.0, 0.0, goalAngle, 0); //changes angle to be square with apriltag
-        System.out.println("running facing angle");
-        if (Math.abs(driveTrain.getAngle() - goalAngle) < 5.0) {
-            System.out.println("robot centric");
-            driveTrain.robotCentricDrive(
-                driveTrain.translationController.calculate(vision.getTXAdjusted()),
-                0.0,
-                0.0,
-                maxSpeed,
-                maxAngularRate
-            ); //drives to apirltag
-        }
+        System.out.println("robot centric");
+        driveTrain.robotCentricDrive(
+            driveTrain.translationController.calculate(vision.getTXAdjusted()),
+            0.0,
+            0.0,
+            maxSpeed,
+            maxAngularRate
+        ); //drives to apirltag
     }
 
     // Called once the command ends or is interrupted.

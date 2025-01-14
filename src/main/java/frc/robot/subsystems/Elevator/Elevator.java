@@ -12,10 +12,33 @@ public class Elevator extends SubsystemBase {
   private final ElevatorIO io;
   private final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
   
-
   /** Creates a new Elevator. */
   public Elevator(ElevatorIO io) {
     this.io = io;
+  }
+
+  public double getVelocity() {
+    return inputs.elevatorVelocity;
+  }
+
+  public double getElevatorPosition() {
+    return inputs.elevatorPosition;
+  }
+
+  public void setFF(double ff) {
+    io.setFF(ff);
+  }
+
+  public void setElevatorPostion(double height) {
+    io.setElevatorPostion(height);
+  }
+
+  public void setDutyCycle(double percent) {
+    io.setDutyCycle(percent);
+  }
+
+  public void runElevator(double speed) {
+    io.runElevator(speed);
   }
 
   @Override

@@ -19,10 +19,17 @@ public interface CoralIntakeIO {
     public double intakeVoltage = 0.0;
     public double intakeVelocity = 0.0;
     public double intakePosition = 0.0;
+    public double intakeDutyCycle = 0.0;
+
     // insert inputs
   }
 
   public default void updateInputs(CoralIntakeIOInputs inputs) {}
 
   // insert subsystem methods
+  public void setDutyCycle(double dutyCycle);
+
+  public void setVelocity(double targetVelocity);
+
+
 }

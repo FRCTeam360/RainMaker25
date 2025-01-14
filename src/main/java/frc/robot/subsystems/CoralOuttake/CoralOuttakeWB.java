@@ -20,11 +20,6 @@ public class CoralOuttakeWB implements CoralOuttakeIO {
     private final double woodCoralOuttakeKD = 0.0;
     private final double woodCoralOuttakeKF = 0.0;
 
-    private final double coralOuttakeKP = 0.0;
-    private final double coralOuttakeKI = 0.0;
-    private final double coralOuttakeKD = 0.0;
-    private final double coralOuttakeKF = 0.0;
-
     public CoralOuttakeWB() {
 
     }

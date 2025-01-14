@@ -82,7 +82,7 @@ public class RobotContainer {
     }
 
     public void initializeCommands() {
-        alignWithLimelight = new AlignWithLimelight(vision, driveTrain, 0.0,25.0, Constants.OldCompBotConstants.maxSpeed, Constants.OldCompBotConstants.maxAngularRate);
+        alignWithLimelight = new AlignWithLimelight(vision, driveTrain, 0.0, 25.0, Constants.OldCompBotConstants.maxSpeed, Constants.OldCompBotConstants.maxAngularRate);
     }
 
     private static void setUpDrivetrain(Vision vision, double headingKP, double headingKI, double headingKD, double translationKP, double translationKI, double translationKD) {

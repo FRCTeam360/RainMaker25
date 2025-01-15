@@ -43,12 +43,13 @@ public class RobotContainer {
     private AlignWithLimelight alignWithLimelight;
     private SnapDrivebaseToAngle snapDrivebaseToAngle;
 
-    private Class constants;
+    private Class<?> constants;
 
     public RobotContainer() {
         switch (Constants.getRobotType()) {
             case OLD_COMP_BOT:
                 //ocb stuff
+                constants = Constants.getOldCompBotConstants();
                 vision =
                     new Vision(
                         new VisionIOLimelight(

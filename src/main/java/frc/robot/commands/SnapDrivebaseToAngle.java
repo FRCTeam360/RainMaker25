@@ -50,7 +50,7 @@ public class SnapDrivebaseToAngle extends Command {
         } else if (driveTrain.getAngle() <= 150.0 && driveTrain.getAngle() >= 90.0) {
             angleToFace = 120.0;
         } else if (driveTrain.getAngle() >= 30.0 && driveTrain.getAngle() <= 90.0) {
-            angleToFace = 160.0;
+            angleToFace = 60.0;
         }
     }
 

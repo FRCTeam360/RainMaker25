@@ -7,7 +7,6 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.signals.ConnectedMotorValue;
-
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.util.function.BooleanConsumer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -55,6 +54,10 @@ public final class Constants {
         public static final double translationKD = 0.0;
     }
 
+    public static Class<?> getOldCompBotConstants() {
+        return Constants.OldCompBotConstants.class;
+    }
+
     public static enum RobotType {
         //sim
         SIM,
@@ -91,7 +94,7 @@ public final class Constants {
         } else if (serialAddress.equals(SerialAddressConstants.OCB_SERIAL_ADDRESS)) {
             return Constants.RobotType.OLD_COMP_BOT;
         } else if (!Robot.isReal()) { // KEEP AT BOTTOM
-          return Constants.RobotType.SIM;
+            return Constants.RobotType.SIM;
         }
 
         return Constants.RobotType.COMPETITION;

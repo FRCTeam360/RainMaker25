@@ -17,8 +17,8 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 /** Add your docs here. */
 public class CoralIntakeWB implements CoralIntakeIO {
     
-    private final SparkMax sparkmax = new SparkMax(Constants.CORAL_INTAKE_ID, MotorType.kBrushless);
-    private final RelativeEncoder encoder = sparkmax.getEncoder();
+    private final SparkMax intakeMotor = new SparkMax(Constants.CORAL_INTAKE_ID, MotorType.kBrushless);
+    private final RelativeEncoder encoder = intakeMotor.getEncoder();
     
     private final double woodCoralIntakeKP = 0.0;
     private final double woodCoralIntakeKI = 0.0;
@@ -31,23 +31,19 @@ public class CoralIntakeWB implements CoralIntakeIO {
 
     }
 
+    public void setDutyCycle(double dutyCycle) {
+        intakeMotor.set(dutyCycle);
+    }
+
+    public void setVelocity(double velocity) {
+        System.out.println(":(");
+    }
+
     public void updateInputs(CoralIntakeIOInputs inputs) {
         inputs.intakeVelocity = encoder.getVelocity();
         inputs.intakePosition = encoder.getPosition();
-        inputs.intakeStatorCurrent = sparkmax.getOutputCurrent();
-        inputs.intakeVoltage = sparkmax.getAppliedOutput();
-        inputs.intakeSupplyCurrent = sparkmax.getAppliedOutput();
-        inputs.intakeDutyCycle = sparkmax.getAppliedOutput();
-    }
-
-    public void setDutyCycle(double dutyCycle) {
-
-    }
-
-    public void setVelocity(double targetVelocity) {
-
-    }
-
-
-
+        inputs.intakeStatorCurrent = intakeMotor.getOutputCurrent();
+        inputs.intakeVoltage = intakeMotor.getAppliedOutput() * intakeMotor.getBusVoltage();
+        inputs.intakeDutyCycle = intakeMotor.getAppliedOutput();
+    } 
 }

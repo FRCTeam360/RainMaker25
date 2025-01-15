@@ -5,6 +5,7 @@
 package frc.robot.subsystems.Elevator;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.RelativeEncoder;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.CoralIntake.CoralIntakeIO.CoralIntakeIOInputs;
@@ -12,7 +13,8 @@ import frc.robot.subsystems.CoralIntake.CoralIntakeIO.CoralIntakeIOInputs;
 /** Add your docs here. */
 public class ElevatorWB implements ElevatorIO {
 
-    private final TalonFX talonFX = new TalonFX(Constants.ELEVATOR_ID, "Default Name");
+    private final TalonFX elevatorMotor = new TalonFX(Constants.ELEVATOR_ID, "Default Name");
+    
     
     private final double woodElevatorKP = 0.0;
     private final double woodElevatorKI = 0.0;
@@ -20,39 +22,23 @@ public class ElevatorWB implements ElevatorIO {
     private final double woodElevatorKF = 0.0;
 
 
-    public ElevatorWB() {
-
-    }
+    public ElevatorWB() {}
 
     public void updateInputs(ElevatorIOInputs inputs) {
-        inputs.elevatorStatorCurrent = talonFX.getStatorCurrent().getValueAsDouble();
-        inputs.elevatorSupplyCurrent = talonFX.getSupplyCurrent().getValueAsDouble();
-        inputs.elevatorVoltage = talonFX.getMotorVoltage().getValueAsDouble();
-        inputs.elevatorPosition = talonFX.getPosition().getValueAsDouble();
-        inputs.elevatorVelocity = talonFX.getVelocity().getValueAsDouble();
+        inputs.elevatorStatorCurrent = elevatorMotor.getStatorCurrent().getValueAsDouble();
+        inputs.elevatorSupplyCurrent = elevatorMotor.getSupplyCurrent().getValueAsDouble();
+        inputs.elevatorVoltage = elevatorMotor.getMotorVoltage().getValueAsDouble();
+        inputs.elevatorPosition = elevatorMotor.getPosition().getValueAsDouble();
+        inputs.elevatorVelocity = elevatorMotor.getVelocity().getValueAsDouble();
     }
 
-    public void setDutyCycle(double percent) {
-        
-    }
-
-    public double getElevatorPosition() {
-        return 0.0; //placeholder
+    public void setDutyCycle(double dutyCycle) {
+        elevatorMotor.set(dutyCycle);
     }
 
     public void setElevatorPostion(double height) {
-
+        elevatorMotor.setPosition(height);
     }
 
-    public double getVelocity() {
-        return 0.0;
-    }
 
-    public void runElevator(double speed) {
-
-    }
-
-    public void setFF(double ff) {
-
-    }
 }

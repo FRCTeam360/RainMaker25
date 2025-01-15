@@ -23,17 +23,11 @@ public interface ElevatorIO {
 
   public default void updateInputs(ElevatorIOInputs inputs) {}
 
-  public void setDutyCycle(double percent);
-
-  public double getElevatorPosition();
-
-  public double getVelocity();
-
-  public void setFF(double ff);
-
   public void setElevatorPostion(double height);
 
-  public void runElevator(double speed);
+  public void setDutyCycle(double dutyCycle);
+
+  
 
 
 

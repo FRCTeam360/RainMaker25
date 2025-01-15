@@ -17,29 +17,14 @@ public class Elevator extends SubsystemBase {
     this.io = io;
   }
 
-  public double getVelocity() {
-    return inputs.elevatorVelocity;
-  }
-
-  public double getElevatorPosition() {
-    return inputs.elevatorPosition;
-  }
-
-  public void setFF(double ff) {
-    io.setFF(ff);
-  }
-
   public void setElevatorPostion(double height) {
     io.setElevatorPostion(height);
   }
 
-  public void setDutyCycle(double percent) {
-    io.setDutyCycle(percent);
+  public void setDutyCycle(double dutyCycle) {
+    io.setDutyCycle(dutyCycle);
   }
-
-  public void runElevator(double speed) {
-    io.runElevator(speed);
-  }
+  
 
   @Override
   public void periodic() {

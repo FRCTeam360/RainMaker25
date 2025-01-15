@@ -18,7 +18,6 @@ public class AlignWithLimelight extends Command {
     private double goalTY;
     private double maxSpeed;
     private double maxAngularRate;
-    private double goalAngle;
 
     /** Creates a new AlignWithLimelight. */
     public AlignWithLimelight(
@@ -44,7 +43,6 @@ public class AlignWithLimelight extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        System.out.println("robot centric");
         driveTrain.robotCentricDrive(
             driveTrain.translationController.calculate(vision.getTXAdjusted()),
             0.0,
@@ -54,6 +52,7 @@ public class AlignWithLimelight extends Command {
         ); //drives to apirltag
     }
 
+
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {}
@@ -61,6 +60,6 @@ public class AlignWithLimelight extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return false;
+        return Math.abs(vision.getTXAdjusted()) <= 0.0;
     }
 }

@@ -31,10 +31,6 @@ public final class Constants {
     public static final String OCB_LIMELIGHT_NAME = "limelight";
     public static final double OCB_YAW_FUDGE_FACTOR = 0;
     public static final double OCB_PITCH_FUDGE_FACTOR = 0;
-
-
-   
-
   }
 
   public static final Mode currentMode = Mode.SIM;
@@ -61,6 +57,15 @@ public final class Constants {
     public static String WOOD_SERIAL_ADDRESS = "031b5208";
     public static String PRACTICE_SERIAL_ADDRESS = "c";
     public static String COMP_SERIAL_ADDRESS = "d";
+  }
+
+  public static final class WoodbotConstants {
+    public static double ELEVATOR_UPPER_LIMIT = 84; // inches
+    public static double ELEVATOR_LOWER_LIMIT = 30; // inches
+    public static double ELEVATOR_KP = 0.0;
+    public static double ELEVATOR_KI = 0.0;
+    public static double ELEVATOR_KD = 0.0;
+    public static double ELEVATOR_KF = 0.0;
   }
 
   public static RobotType getRobotType() {

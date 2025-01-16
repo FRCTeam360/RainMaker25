@@ -31,56 +31,60 @@ public final class Constants {
         public static final int kDriverControllerPort = 0;
     }
 
-    public static class VisionConstants {
-        public static final String WOODBOT_LIMELIGHT_NAME = "limelight";
-        public static final double WOODBOT_YAW_FUDGE_FACTOR = 0;
-        public static final double WOODBOT_PITCH_FUDGE_FACTOR = 0;
-    }
+  public static class VisionConstants {
+    public static final String WOODBOT_LIMELIGHT_NAME = "limelight";
+    public static final double WOODBOT_YAW_FUDGE_FACTOR = 0;
+    public static final double WOODBOT_PITCH_FUDGE_FACTOR = 0;
+  }
 
-    public static class OldCompBotConstants {
-        public static final String OCB_LIMELIGHT_NAME = "limelight";
-        public static final double OCB_YAW_FUDGE_FACTOR = 0;
-        public static final double OCB_PITCH_FUDGE_FACTOR = 0;
+  public static class OldCompBotConstants {
+    public static final String OCB_LIMELIGHT_NAME = "limelight";
+    public static final double OCB_YAW_FUDGE_FACTOR = 0;
+    public static final double OCB_PITCH_FUDGE_FACTOR = 0;
 
-        public static final double maxSpeed = OldCompBot.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-        public static final double maxAngularRate = RotationsPerSecond.of(15).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+    public static final double maxSpeed = OldCompBot.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+    public static final double maxAngularRate = RotationsPerSecond.of(15).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
-        public static final double headingKP = 5.0;
-        public static final double headingKI = 0.0;
-        public static final double headingKD = 0.0;
+    public final static double headingKP = 3.0;
+    public final static double headingKI = 0.0;
+    public final static double headingKD = 0.0;
 
-        public static final double translationKP = 1.0;
-        public static final double translationKI = 0.0;
-        public static final double translationKD = 0.0;
-    }
+    public final static double translationKP = 3.0;
+    public final static double translationKI = 0.0;
+    public final static double translationKD = 0.0;
+  }
+
+  
+
+  public static enum RobotType {
+    // real robot
+    REAL,
+    // physics sim
+    SIM,
+    // log file
+    REPLAY,
+    // woodbot
+    WOODBOT,
+    // practice bot
+    PRACTICE,
+    // comp bot
+    COMPETITION,
+    // last year's comp bot; abbreviated to OCB
+    OLD_COMP_BOT
+  }
+
+  public static final class SerialAddressConstants {
+    public static String OCB_SERIAL_ADDRESS = "032BE44A";
+    public static String WOOD_SERIAL_ADDRESS = "b";
+    public static String PRACTICE_SERIAL_ADDRESS = "c";
+    public static String COMP_SERIAL_ADDRESS = "d";
+  }
 
     public static Class<?> getOldCompBotConstants() {
         return Constants.OldCompBotConstants.class;
     }
 
-    public static enum RobotType {
-        //sim
-        SIM,
-        //real
-        REAL,
-        //replay
-        REPLAY,
-        // woodbot
-        WOODBOT,
-        // practice bot
-        PRACTICE,
-        // comp bot
-        COMPETITION,
-        // last year's comp bot; abbreviated to OCB
-        OLD_COMP_BOT,
-    }
 
-    public static final class SerialAddressConstants {
-        public static String OCB_SERIAL_ADDRESS = "032BE44A";
-        public static String WOOD_SERIAL_ADDRESS = "b";
-        public static String PRACTICE_SERIAL_ADDRESS = "c";
-        public static String COMP_SERIAL_ADDRESS = "d";
-    }
 
     public static RobotType getRobotType() {
         String serialAddress = HALUtil.getSerialNumber();

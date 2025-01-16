@@ -53,13 +53,14 @@ public class SnapDrivebaseToAngle extends Command {
             angleToFace = 60.0;
         }
     }
-
+    
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        System.out.print(driveTrain.getAngle());
         driveTrain.driveFieldCentricFacingAngle(
-            x * Math.pow((MathUtil.applyDeadband(-driverCont.getLeftY(), 0.1)), 2.0),
-            x * Math.pow((MathUtil.applyDeadband(-driverCont.getLeftX(), 0.1)), 2.0),
+            Math.signum(x) * x * Math.pow((MathUtil.applyDeadband(-driverCont.getLeftY(), 0.1)), 2.0),
+            Math.signum(x) * x * Math.pow((MathUtil.applyDeadband(-driverCont.getLeftX(), 0.1)), 2.0),
             angleToFace,
             maxSpeed
         );

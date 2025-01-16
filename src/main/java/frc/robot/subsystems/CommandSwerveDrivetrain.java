@@ -93,7 +93,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public void driveFieldCentricFacingAngle(double x, double y, double desiredAngle, double maxSpeed) {
         FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle()
-                .withVelocityX(-x * maxSpeed)
+                .withVelocityX(x * maxSpeed)
                 .withVelocityY(y * maxSpeed)
                 .withTargetDirection(Rotation2d.fromDegrees(desiredAngle));
         request.HeadingController = headingController;

@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OldCompBotConstants;
@@ -40,16 +39,25 @@ public class RobotContainer {
 
     private ShuffleboardTab diagnosticTab;
 
+    private SnapDrivebaseToAngle snapDrivebaseToAngle;
     private AlignWithLimelight alignWithLimelight;
-    // private SnapDrivebaseToAngle snapDrivebaseToAngle;
-
-    private Command snapAndAlign;
 
     public RobotContainer() {
         switch (Constants.getRobotType()) {
+            case WOODBOT:
+                //woodbot stuff
+                vision =
+                    new Vision(
+                        new VisionIOLimelight(
+                            Constants.VisionConstants.WOODBOT_LIMELIGHT_NAME,
+                            Constants.VisionConstants.WOODBOT_YAW_FUDGE_FACTOR,
+                            Constants.VisionConstants.WOODBOT_PITCH_FUDGE_FACTOR
+                        )
+                    );
+                driveTrain = OldCompBot.createDrivetrain();
+                break;
             case OLD_COMP_BOT:
                 //ocb stuff
-                // constants = Constants.getOldCompBotConstants();
                 vision =
                     new Vision(
                         new VisionIOLimelight(
@@ -69,18 +77,6 @@ public class RobotContainer {
                     Constants.OldCompBotConstants.translationKI,
                     Constants.OldCompBotConstants.translationKD
                 );
-            case WOODBOT:
-                //woodbot stuff
-                vision =
-                    new Vision(
-                        new VisionIOLimelight(
-                            Constants.VisionConstants.WOODBOT_LIMELIGHT_NAME,
-                            Constants.VisionConstants.WOODBOT_YAW_FUDGE_FACTOR,
-                            Constants.VisionConstants.WOODBOT_PITCH_FUDGE_FACTOR
-                        )
-                    );
-                driveTrain = OldCompBot.createDrivetrain();
-                break;
             case PRACTICE:
                 //practice bot stuff
                 break;
@@ -123,17 +119,9 @@ public class RobotContainer {
     }
 
     public void initializeCommands() {
-     //   snapDrivebaseToAngle = new SnapDrivebaseToAngle(driveTrain, MaxSpeed);
-        alignWithLimelight =
-            new AlignWithLimelight(
-                vision,
-                driveTrain,
-                25.0,
-                Constants.OldCompBotConstants.maxSpeed,
-                Constants.OldCompBotConstants.maxAngularRate
-            );
-
-        //snapAndAlign = new SequentialCommandGroup(snapDrivebaseToAngle, alignWithLimelight);
+        snapDrivebaseToAngle =
+            new SnapDrivebaseToAngle(driveTrain, Constants.OldCompBotConstants.maxSpeed);
+        //alignWithLimelight = new AlignWithLimelight(vision, driveTrain, 0.0, 25.0, Constants.OldCompBotConstants.maxSpeed, Constants.OldCompBotConstants.maxAngularRate);
     }
 
     private static void setUpDrivetrain(
@@ -157,8 +145,8 @@ public class RobotContainer {
 
         driverCont.pov(90).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
 
-        //driverCont.b().onTrue(snapDrivebaseToAngle);
-        driverCont.a().onTrue(alignWithLimelight);
+        //driverCont.a().onTrue(alignWithLimelight);
+        driverCont.b().onTrue(snapDrivebaseToAngle);
 
         driveTrain.registerTelemetry(logger::telemeterize);
     }
@@ -167,7 +155,6 @@ public class RobotContainer {
         return Commands.print("No autonomous command configured");
     }
 }
-
 // Loop time of 0.02s overrun
 // Unhandled exception: java.lang.IllegalArgumentException: Commands that have been composed may not be added to another composition or scheduled individually!
 // java.lang.Exception: Originally composed at:

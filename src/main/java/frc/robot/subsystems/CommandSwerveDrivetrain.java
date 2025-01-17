@@ -83,8 +83,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         this.vision = vision;
     }
 
-    public void addHeadingController(double kP, double kI, double kD) {
+    public void addHeadingController(double kP, double kI, double kD, double kIZone) {
         headingController = new PhoenixPIDController(kP, kI, kD);
+        
+        headingController.enableContinuousInput(-Math.PI, Math.PI);
+        headingController.setTolerance(Math.toRadians(2));
+        headingController.setIntegratorRange(-kIZone, kIZone);
     }
 
     public void addTranslationController(double kP, double kI, double kD) {

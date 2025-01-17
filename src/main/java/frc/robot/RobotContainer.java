@@ -73,6 +73,7 @@ public class RobotContainer {
                     Constants.OldCompBotConstants.headingKP,
                     Constants.OldCompBotConstants.headingKI,
                     Constants.OldCompBotConstants.headingKD,
+                    Constants.OldCompBotConstants.headingKIZone,
                     Constants.OldCompBotConstants.translationKP,
                     Constants.OldCompBotConstants.translationKI,
                     Constants.OldCompBotConstants.translationKD
@@ -96,6 +97,7 @@ public class RobotContainer {
                     Constants.OldCompBotConstants.headingKP,
                     Constants.OldCompBotConstants.headingKI,
                     Constants.OldCompBotConstants.headingKD,
+                    Constants.OldCompBotConstants.headingKIZone,
                     Constants.OldCompBotConstants.translationKP,
                     Constants.OldCompBotConstants.translationKI,
                     Constants.OldCompBotConstants.translationKD
@@ -129,11 +131,12 @@ public class RobotContainer {
         double headingKP,
         double headingKI,
         double headingKD,
+        double headingKIZone,
         double translationKP,
         double translationKI,
         double translationKD
     ) {
-        driveTrain.addHeadingController(headingKP, headingKI, headingKD);
+        driveTrain.addHeadingController(headingKP, headingKI, headingKD, headingKIZone);
         driveTrain.addTranslationController(translationKP, translationKI, translationKD);
         driveTrain.assignVision(vision);
     }

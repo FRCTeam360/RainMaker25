@@ -45,9 +45,10 @@ public final class Constants {
     public static final double maxSpeed = OldCompBot.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     public static final double maxAngularRate = RotationsPerSecond.of(15).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
-    public final static double headingKP = 3.0;
+    public final static double headingKP = 4.0;
     public final static double headingKI = 0.0;
     public final static double headingKD = 0.0;
+    public final static double headingKIZone = 0.0;
 
     public final static double translationKP = 3.0;
     public final static double translationKI = 0.0;

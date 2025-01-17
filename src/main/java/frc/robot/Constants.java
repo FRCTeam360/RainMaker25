@@ -63,6 +63,15 @@ public final class Constants {
     public static String COMP_SERIAL_ADDRESS = "d";
   }
 
+  public static final class WoodbotConstants {
+    public static double ELEVATOR_UPPER_LIMIT = 0;
+    public static double ELEVATOR_LOWER_LIMIT = 0;
+    public static double ELEVATOR_KP = 0;
+    public static double ELEVATOR_KI = 0;
+    public static double ELEVATOR_KD = 0;
+    public static double ELEVATOR_KF = 0;
+  }
+
   public static RobotType getRobotType() {
     String serialAddress = HALUtil.getSerialNumber();
 

@@ -92,7 +92,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public void addTranslationController(double kP, double kI, double kD) {
-        translationController = new PIDController(kP, kP, kD);
+        translationController = new PIDController(2.0, kP, kD);
     }
 
     public void driveFieldCentricFacingAngle(double x, double y, double desiredAngle, double maxSpeed) {
@@ -104,10 +104,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         this.setControl(request);
     }
 
-    public void robotCentricDrive(double left, double forward, double rotation, double maxSpeed, double maxAngularRate) {
+    public void robotCentricDrive(double x, double y, double rotation, double maxSpeed, double maxAngularRate) {
         this.setControl(new SwerveRequest.RobotCentric()
-                .withVelocityX(forward * maxSpeed)
-                .withVelocityY(left * maxSpeed)
+                .withVelocityX(x * maxSpeed)
+                .withVelocityY(y * maxSpeed)
                 .withRotationalRate(-rotation * maxAngularRate));
     }
 

@@ -123,7 +123,15 @@ public class RobotContainer {
     public void initializeCommands() {
         snapDrivebaseToAngle =
             new SnapDrivebaseToAngle(driveTrain, Constants.OldCompBotConstants.maxSpeed);
-        //alignWithLimelight = new AlignWithLimelight(vision, driveTrain, 0.0, 25.0, Constants.OldCompBotConstants.maxSpeed, Constants.OldCompBotConstants.maxAngularRate);
+        alignWithLimelight =
+            new AlignWithLimelight(
+                vision,
+                driveTrain,
+                0.0,
+                0.0,
+                Constants.OldCompBotConstants.maxSpeed,
+                Constants.OldCompBotConstants.maxAngularRate
+            );
     }
 
     private static void setUpDrivetrain(
@@ -148,7 +156,7 @@ public class RobotContainer {
 
         driverCont.pov(90).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
 
-        //driverCont.a().onTrue(alignWithLimelight);
+        driverCont.a().onTrue(alignWithLimelight);
         driverCont.b().onTrue(snapDrivebaseToAngle);
 
         driveTrain.registerTelemetry(logger::telemeterize);
@@ -158,37 +166,3 @@ public class RobotContainer {
         return Commands.print("No autonomous command configured");
     }
 }
-// Loop time of 0.02s overrun
-// Unhandled exception: java.lang.IllegalArgumentException: Commands that have been composed may not be added to another composition or scheduled individually!
-// java.lang.Exception: Originally composed at:
-// at edu.wpi.first.wpilibj2.command.SequentialCommandGroup.<init>(SequentialCommandGroup.java:34)
-// at frc.robot.RobotContainer.initializeCommands(RobotContainer.java:138)
-// at frc.robot.RobotContainer.<init>(RobotContainer.java:123)
-// at frc.robot.Robot.<init>(Robot.java:72)
-// at edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:370)
-// at edu.wpi.first.wpilibj.RobotBase.startRobot(RobotBase.java:510)
-// at frc.robot.Main.main(Main.java:23)
-// Error at frc.robot.Robot.robotPeriodic(Robot.java:94): Unhandled exception: java.lang.IllegalArgumentException: Commands that have been composed may not be added to another composition or scheduled individually!
-// java.lang.Exception: Originally composed at:
-// at edu.wpi.first.wpilibj2.command.SequentialCommandGroup.<init>(SequentialCommandGroup.java:34)
-// at frc.robot.RobotContainer.initializeCommands(RobotContainer.java:138)
-// at frc.robot.RobotContainer.<init>(RobotContainer.java:123)
-// at frc.robot.Robot.<init>(Robot.java:72)
-// at edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:370)
-// at edu.wpi.first.wpilibj.RobotBase.startRobot(RobotBase.java:510)
-// at frc.robot.Main.main(Main.java:23)
-// at edu.wpi.first.wpilibj2.command.CommandScheduler.run(CommandScheduler.java:274)
-// at frc.robot.Robot.robotPeriodic(Robot.java:94)
-// at edu.wpi.first.wpilibj.IterativeRobotBase.loopFunc(IterativeRobotBase.java:400)
-// at org.littletonrobotics.junction.LoggedRobot.startCompetition(LoggedRobot.java:116)
-// at edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:419)
-// at edu.wpi.first.wpilibj.RobotBase.startRobot(RobotBase.java:510)
-// at frc.robot.Main.main(Main.java:23)
-// The robot program quit unexpectedly. This is usually due to a code error.
-// The above stacktrace can help determine where the error occurred.
-// See https://wpilib.org/stacktrace for more information.
-// Warning at edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:433): The robot program quit unexpectedly. This is usually due to a code error.
-// The above stacktrace can help determine where the error occurred.
-// See https://wpilib.org/stacktrace for more information.
-// The startCompetition() method (or methods called by it) should have handled the exception above.
-// Error at edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:440): The startCompetition() method (or methods called by it) should have handled the exception above.

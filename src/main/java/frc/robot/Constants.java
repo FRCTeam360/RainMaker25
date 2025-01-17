@@ -50,7 +50,7 @@ public final class Constants {
     public final static double headingKD = 0.0;
     public final static double headingKIZone = 0.0;
 
-    public final static double translationKP = 3.0;
+    public final static double translationKP = 0.001;
     public final static double translationKI = 0.0;
     public final static double translationKD = 0.0;
   }

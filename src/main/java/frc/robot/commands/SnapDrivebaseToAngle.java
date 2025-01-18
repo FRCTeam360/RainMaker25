@@ -31,7 +31,6 @@ public class SnapDrivebaseToAngle extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        
         if (driveTrain.getAngle() >= -30.0 && driveTrain.getAngle() <= 30.0) {
             angleToFace = 0.0;
         } else if (driveTrain.getAngle() <= -30.0 && driveTrain.getAngle() >= -90.0) {

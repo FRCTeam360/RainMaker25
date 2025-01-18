@@ -13,7 +13,6 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -39,8 +38,12 @@ public class Robot extends LoggedRobot {
   public Robot() {
     Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
 
-    switch (Constants.currentMode) {
+    switch (Constants.getRobotType()) {
       case REAL:
+      case WOODBOT:
+      case OLD_COMP_BOT:
+      case COMPETITION:
+      case PRACTICE:
         // Running on a real robot, log to a USB stick ("/U/logs")
         Logger.addDataReceiver(new WPILOGWriter());
         Logger.addDataReceiver(new NT4Publisher());

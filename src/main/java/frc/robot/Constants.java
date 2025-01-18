@@ -60,6 +60,7 @@ public final class Constants {
       public static final int CORAL_OUTTAKE_ID = 1;
       public static final int ELEVATOR_ID = 2;
 
+      public static final int ELEVATOR_BOTTOM_SWITCH = 0;
       public static final int OUTTAKE_SENSOR = 1;
     }
 

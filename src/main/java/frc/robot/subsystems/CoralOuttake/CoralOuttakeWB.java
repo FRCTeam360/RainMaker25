@@ -45,7 +45,7 @@ public class CoralOuttakeWB implements CoralOuttakeIO {
     }
 
     public boolean getOuttakeSensor() {
-        return outtakeSensor.get();
+        return !outtakeSensor.get();
     }
 
     public void updateInputs(CoralOuttakeIOInputs inputs) {

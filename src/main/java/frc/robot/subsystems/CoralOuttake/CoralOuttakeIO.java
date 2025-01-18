@@ -29,9 +29,6 @@ public interface CoralOuttakeIO {
    */
   public void setDutyCycle(double dutyCycle);
 
-  public boolean getOuttakeSensor();
-
-
-  
+  public boolean getOuttakeSensor();  
   // insert subsystem methods
 }

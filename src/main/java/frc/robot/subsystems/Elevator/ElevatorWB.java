@@ -13,6 +13,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.RelativeEncoder;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 import frc.robot.Constants;
 import frc.robot.Constants.WoodbotConstants;
@@ -25,6 +26,8 @@ public class ElevatorWB implements ElevatorIO {
 
     private TalonFXConfiguration talonFXConfiguration = new TalonFXConfiguration();
     private MotorOutputConfigs outputConfigs = new MotorOutputConfigs();
+
+    private final DigitalInput bottomSwitch = new DigitalInput(WoodbotConstants.ELEVATOR_BOTTOM_SWITCH);
 
     private final double GEAR_RATIO = 1.0;
 
@@ -88,5 +91,7 @@ public class ElevatorWB implements ElevatorIO {
         elevatorMotor.setPosition(height);
     }
 
-
+    public boolean getBottomSwitch() {
+        return !bottomSwitch.get();
+    }
 }

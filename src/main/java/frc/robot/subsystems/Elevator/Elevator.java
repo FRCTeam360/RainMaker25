@@ -25,6 +25,9 @@ public class Elevator extends SubsystemBase {
     io.setDutyCycle(dutyCycle);
   }
   
+  public boolean getBottomSwitch() {
+    return io.getBottomSwitch();
+  }
 
   @Override
   public void periodic() {

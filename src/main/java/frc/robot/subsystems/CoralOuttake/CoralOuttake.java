@@ -21,8 +21,8 @@ public class CoralOuttake extends SubsystemBase {
     io.setDutyCycle(speed);
   }
 
-  public void getOuttakeSensor() {
-    io.getOuttakeSensor();
+  public boolean getOuttakeSensor() {
+    return io.getOuttakeSensor();
   }
 
   @Override

@@ -19,7 +19,6 @@ public class AlignWithLimelight extends Command {
     private CommandSwerveDrivetrain driveTrain;
     private double goalTY;
     private double maxSpeed;
-    private double goalAngle;
     private double maxAngularRate;
 
     /** Creates a new AlignWithLimelight. */
@@ -36,7 +35,6 @@ public class AlignWithLimelight extends Command {
         this.goalTY = goalTY;
         this.maxSpeed = maxSpeed;
         this.maxAngularRate = maxAngularRate;
-        this.goalAngle = goalAngle;
 
         addRequirements(vision, driveTrain);
     }
@@ -48,24 +46,14 @@ public class AlignWithLimelight extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        System.out.println("TX EQUALS " + vision.getTXRaw());
-        Logger.recordOutput(
-            "pid calculate ",
-            driveTrain.translationController.calculate(vision.getTXRaw(), 0.0)
-        );
-        // driveTrain.robotCentricDrive(0.0,
-        //     driveTrain.translationController.calculate(vision.getTXRaw(), 0.0),
-        //     0.0,
-        //     0.25,
-        //     maxAngularRate
-        // ); //drives to apirltag
+        
         driveTrain.robotCentricDrive(
-            driveTrain.translationController.calculate(vision.getTYRaw(), 3.0),
-            driveTrain.translationController.calculate(vision.getTXRaw(), 0.0),
+            driveTrain.translationController.calculate(vision.getTYRaw(), goalTY), //forward & backward motion
+            driveTrain.translationController.calculate(vision.getTXRaw(), 0.0), //side to side motion
             0.0,
-            0.25,
+            maxSpeed,
             maxAngularRate
-        ); //drives to apirltag
+        ); 
     }
 
     // Called once the command ends or is interrupted.

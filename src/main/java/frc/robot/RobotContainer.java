@@ -128,8 +128,8 @@ public class RobotContainer {
                 vision,
                 driveTrain,
                 0.0,
-                0.0,
-                Constants.OldCompBotConstants.maxSpeed,
+                3.0,
+                0.25,
                 Constants.OldCompBotConstants.maxAngularRate
             );
     }

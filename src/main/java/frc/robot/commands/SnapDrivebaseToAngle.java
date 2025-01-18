@@ -50,8 +50,8 @@ public class SnapDrivebaseToAngle extends Command {
     @Override
     public void execute() {
         driveTrain.driveFieldCentricFacingAngle(
-            Math.pow((MathUtil.applyDeadband(-driverCont.getLeftY(), 0.1)), 2.0),
-            Math.pow((MathUtil.applyDeadband(-driverCont.getLeftX(), 0.1)), 2.0),
+            Math.pow(MathUtil.applyDeadband(-driverCont.getLeftY(), 0.1), 2.0),
+            Math.pow(MathUtil.applyDeadband(-driverCont.getLeftX(), 0.1), 2.0),
             angleToFace,
             maxSpeed
         );

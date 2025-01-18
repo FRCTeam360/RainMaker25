@@ -21,7 +21,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 
 /** Add your docs here. */
-public class CoralIntakeWB implements CoralIntakeIO {
+public class CoralIntakeIOWB implements CoralIntakeIO {
     
     private final SparkMax intakeMotor = new SparkMax(WoodbotConstants.CORAL_INTAKE_ID, MotorType.kBrushless);
     private final RelativeEncoder encoder = intakeMotor.getEncoder();
@@ -34,7 +34,7 @@ public class CoralIntakeWB implements CoralIntakeIO {
 
     private final double GEAR_RATIO = 1.0;
 
-    public CoralIntakeWB() {
+    public CoralIntakeIOWB() {
         sparkMaxConfig.idleMode(IdleMode.kBrake);
         sparkMaxConfig.inverted(false);
         intakeMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

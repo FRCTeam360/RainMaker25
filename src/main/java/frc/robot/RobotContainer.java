@@ -25,7 +25,7 @@ import frc.robot.generated.WoodBotDriveTrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorIO;
-import frc.robot.subsystems.Elevator.ElevatorWB;
+import frc.robot.subsystems.Elevator.ElevatorIOWB;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
 
@@ -67,7 +67,7 @@ public class RobotContainer {
                     Constants.OldCompBotConstants.translationKI,
                     Constants.OldCompBotConstants.translationKD
                 );
-                elevator = new Elevator(new ElevatorWB());
+                elevator = new Elevator(new ElevatorIOWB());
                 break;
             case OLD_COMP_BOT:
                 //ocb stuff

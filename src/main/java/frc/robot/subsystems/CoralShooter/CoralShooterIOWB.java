@@ -21,7 +21,7 @@ import frc.robot.Constants.WoodbotConstants;
 import frc.robot.subsystems.CoralShooter.CoralShooterIO.CoralShooterIOInputs;
 
 /** Add your docs here. */
-public class CoralShooterWB implements CoralShooterIO {
+public class CoralShooterIOWB implements CoralShooterIO {
 
     private final SparkMax outtakeMotor = new SparkMax(WoodbotConstants.CORAL_OUTTAKE_ID, MotorType.kBrushless);
     private final RelativeEncoder encoder = outtakeMotor.getEncoder();
@@ -34,7 +34,7 @@ public class CoralShooterWB implements CoralShooterIO {
     private final double KD = 0.0;
     private final double KF = 0.0;
 
-    public CoralShooterWB() {
+    public CoralShooterIOWB() {
         sparkMaxConfig.idleMode(IdleMode.kBrake);
         sparkMaxConfig.inverted(false);
         outtakeMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

@@ -23,5 +23,10 @@ public interface ElevatorIO {
 
   public default void updateInputs(ElevatorIOInputs inputs) {}
 
+  public void setElevatorPostion(double height);
+
+  public void setDutyCycle(double dutyCycle);
+
+  public boolean getBottomSwitch();
   // insert methods from subsystem layer
 }

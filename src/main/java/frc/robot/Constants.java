@@ -55,6 +55,15 @@ public final class Constants {
         public static final double translationKD = 0.0;
     }
 
+    public static final class WoodbotConstants {
+      public static final int CORAL_INTAKE_ID = 0;
+      public static final int CORAL_OUTTAKE_ID = 1;
+      public static final int ELEVATOR_ID = 2;
+
+      public static final int ELEVATOR_BOTTOM_SWITCH = 0;
+      public static final int OUTTAKE_SENSOR = 1;
+    }
+
     public static enum RobotType {
         // real robot
         REAL,

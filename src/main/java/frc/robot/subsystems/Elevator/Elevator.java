@@ -11,10 +11,22 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Elevator extends SubsystemBase {
   private final ElevatorIO io;
   private final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
-
+  
   /** Creates a new Elevator. */
   public Elevator(ElevatorIO io) {
     this.io = io;
+  }
+
+  public void setElevatorPostion(double height) {
+    io.setElevatorPostion(height);
+  }
+
+  public void setDutyCycle(double dutyCycle) {
+    io.setDutyCycle(dutyCycle);
+  }
+  
+  public boolean getBottomSwitch() {
+    return io.getBottomSwitch();
   }
 
   @Override

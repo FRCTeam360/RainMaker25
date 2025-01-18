@@ -88,11 +88,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         
         headingController.enableContinuousInput(-Math.PI, Math.PI);
         headingController.setTolerance(Math.toRadians(2));
-        headingController.setIntegratorRange(-kIZone, kIZone);
     }
 
     public void addTranslationController(double kP, double kI, double kD) {
-        translationController = new PIDController(2.0, kP, kD);
+        translationController = new PIDController(kP, kI, kD);
     }
 
     public void driveFieldCentricFacingAngle(double x, double y, double desiredAngle, double maxSpeed) {

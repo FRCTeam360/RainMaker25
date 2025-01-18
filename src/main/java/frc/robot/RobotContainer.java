@@ -8,65 +8,155 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-
+import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-
-import frc.robot.generated.TunerConstants;
+import frc.robot.Constants.OldCompBotConstants;
+import frc.robot.commands.AlignWithLimelight;
+import frc.robot.commands.SnapDrivebaseToAngle;
+import frc.robot.generated.OldCompBot;
+import frc.robot.generated.WoodBotDriveTrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Vision.Vision;
+import frc.robot.subsystems.Vision.VisionIOLimelight;
 
 public class RobotContainer {
-    private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+    private double MaxSpeed = OldCompBot.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
-
-    /* Setting up bindings for necessary control of the swerve drive platform */
-    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
-    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-    private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
-    private final CommandXboxController joystick = new CommandXboxController(0);
+    private final CommandXboxController driverCont = new CommandXboxController(0);
+    private final CommandXboxController operatorCont = new CommandXboxController(1);
 
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public static CommandSwerveDrivetrain driveTrain;
+    private Vision vision;
+
+    private ShuffleboardTab diagnosticTab;
+
+    private SnapDrivebaseToAngle snapDrivebaseToAngle;
+    private AlignWithLimelight alignWithLimelight;
 
     public RobotContainer() {
+        switch (Constants.getRobotType()) {
+            case WOODBOT:
+                //woodbot stuff
+                vision = new Vision(new VisionIOLimelight(
+                    Constants.VisionConstants.WOODBOT_LIMELIGHT_NAME, 
+                    Constants.VisionConstants.WOODBOT_YAW_FUDGE_FACTOR,
+                    Constants.VisionConstants.WOODBOT_PITCH_FUDGE_FACTOR));
+                driveTrain = WoodBotDriveTrain.createDrivetrain();
+                break;
+            case OLD_COMP_BOT:
+                //ocb stuff
+                vision =
+                    new Vision(
+                        new VisionIOLimelight(
+                            Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
+                            Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
+                            Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR
+                        )
+                    );
+                driveTrain = OldCompBot.createDrivetrain();
+                //constants = Constants.OldCompBotConstants;
+                setUpDrivetrain(
+                    vision,
+                    Constants.OldCompBotConstants.headingKP,
+                    Constants.OldCompBotConstants.headingKI,
+                    Constants.OldCompBotConstants.headingKD,
+                    Constants.OldCompBotConstants.headingKIZone,
+                    Constants.OldCompBotConstants.translationKP,
+                    Constants.OldCompBotConstants.translationKI,
+                    Constants.OldCompBotConstants.translationKD
+                );
+            case PRACTICE:
+                //practice bot stuff
+                break;
+            case SIM:
+                vision =
+                    new Vision(
+                        new VisionIOLimelight(
+                            Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
+                            Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
+                            Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR
+                        )
+                    );
+                driveTrain = OldCompBot.createDrivetrain();
+                //constants = Constants.OldCompBotConstants;
+                setUpDrivetrain(
+                    vision,
+                    Constants.OldCompBotConstants.headingKP,
+                    Constants.OldCompBotConstants.headingKI,
+                    Constants.OldCompBotConstants.headingKD,
+                    Constants.OldCompBotConstants.headingKIZone,
+                    Constants.OldCompBotConstants.translationKP,
+                    Constants.OldCompBotConstants.translationKI,
+                    Constants.OldCompBotConstants.translationKD
+                );
+                break;
+            case COMPETITION:
+            default:
+                //competition bot stuff
+                break;
+        }
+
+        diagnosticTab = Shuffleboard.getTab("Diagnostics");
+        diagnosticTab.addBoolean("Wood Bot", Constants::isWoodBot);
+        diagnosticTab.addBoolean("Comp Bot", Constants::isCompBot);
+        diagnosticTab.addBoolean("Practice Bot", Constants::isPracticeBot);
+        diagnosticTab.addBoolean("Old Comp Bot", Constants::isOCB);
+        diagnosticTab.addString("Serial Address", HALUtil::getSerialNumber);
+
+        initializeCommands();
         configureBindings();
     }
 
+    public void initializeCommands() {
+        snapDrivebaseToAngle =
+            new SnapDrivebaseToAngle(driveTrain, Constants.OldCompBotConstants.maxSpeed);
+        alignWithLimelight =
+            new AlignWithLimelight(
+                vision,
+                driveTrain,
+                0.0,
+                3.0,
+                0.25,
+                Constants.OldCompBotConstants.maxAngularRate
+            );
+    }
+
+    private static void setUpDrivetrain(
+        Vision vision,
+        double headingKP,
+        double headingKI,
+        double headingKD,
+        double headingKIZone,
+        double translationKP,
+        double translationKI,
+        double translationKD
+    ) {
+        driveTrain.addHeadingController(headingKP, headingKI, headingKD, headingKIZone);
+        driveTrain.addTranslationController(translationKP, translationKI, translationKD);
+        driveTrain.assignVision(vision);
+    }
+
     private void configureBindings() {
-        // Note that X is defined as forward according to WPILib convention,
-        // and Y is defined as to the left according to WPILib convention.
-        drivetrain.setDefaultCommand(
-            // Drivetrain will execute this command periodically
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-            )
+        driveTrain.setDefaultCommand(
+            driveTrain.fieldOrientedDrive(MaxSpeed, MaxAngularRate, driverCont)
         );
 
-        joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        joystick.b().whileTrue(drivetrain.applyRequest(() ->
-            point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
-        ));
+        driverCont.pov(90).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
 
-        // Run SysId routines when holding back/start and X/Y.
-        // Note that each routine should be run exactly once in a single log.
-        joystick.back().and(joystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-        joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-        joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+        driverCont.a().onTrue(alignWithLimelight);
+        driverCont.b().onTrue(snapDrivebaseToAngle);
 
-        // reset the field-centric heading on left bumper press
-        joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
-
-        drivetrain.registerTelemetry(logger::telemeterize);
+        driveTrain.registerTelemetry(logger::telemeterize);
     }
 
     public Command getAutonomousCommand() {

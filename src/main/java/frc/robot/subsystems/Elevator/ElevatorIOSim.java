@@ -5,6 +5,7 @@
 package frc.robot.subsystems.Elevator;
 
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.WoodbotConstants;
@@ -14,6 +15,8 @@ public class ElevatorIOSim implements ElevatorIO {
 
   private DCMotorSim simMotor = new DCMotorSim(null, DCMotor.getFalcon500(1), null);
 
+  private Encoder encoder = new Encoder(0, 1);
+
   public ElevatorIOSim() {
   }
 
@@ -21,6 +24,7 @@ public class ElevatorIOSim implements ElevatorIO {
   public void updateInputs(ElevatorIOInputs inputs) {
     simMotor.update(0.02);
     inputs.elevatorPosition = simMotor.getAngularPositionRad();
+    inputs.elevatorVelocity = simMotor.getAngularVelocityRPM();
   }
 
   public void setElevatorPostion(double height) {

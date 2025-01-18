@@ -37,7 +37,7 @@ public class VisionIOLimelight implements VisionIO {
   }
 
   public double getTXRaw() {
-    return table.getEntry("tx").getDouble(0);
+    return table.getEntry("tx").getDouble(0.0);
   }
 
   public double getTXAdjusted() {

@@ -53,12 +53,18 @@ public class AlignWithLimelight extends Command {
     public void execute() {
         System.out.println("TX EQUALS " + vision.getTXRaw());
         Logger.recordOutput("pid calculate ",driveTrain.translationController.calculate(vision.getTXRaw(), 0.0));
-        driveTrain.robotCentricDrive(0.0,
-            driveTrain.translationController.calculate(vision.getTXRaw(), 0.0),
-            0.0,
-            0.25,
-            maxAngularRate
-        ); //drives to apirltag
+        // driveTrain.robotCentricDrive(0.0,
+        //     driveTrain.translationController.calculate(vision.getTXRaw(), 0.0),
+        //     0.0,
+        //     0.25,
+        //     maxAngularRate
+        // ); //drives to apirltag
+        driveTrain.robotCentricDrive(
+        driveTrain.translationController.calculate(vision.getTYRaw(), 3.0), 0.0,
+        0.0,
+        0.25,
+        maxAngularRate
+    ); //drives to apirltag
     }
 
     // Called once the command ends or is interrupted.
@@ -68,6 +74,7 @@ public class AlignWithLimelight extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return Math.abs(vision.getTXRaw()) <= 1.0;
+        //return Math.abs(vision.getTXRaw()) <= 1.0;
+        return false;
     }
 }

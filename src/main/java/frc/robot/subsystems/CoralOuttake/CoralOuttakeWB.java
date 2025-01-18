@@ -35,10 +35,6 @@ public class CoralOuttakeWB implements CoralOuttakeIO {
         outtakeMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
-    public void setVelocity(double velocity) {
-        System.out.println(":(");
-    }
-
     public void setDutyCycle(double dutyCycle) {
         outtakeMotor.set(dutyCycle);
     }

@@ -25,21 +25,21 @@ public class ElevatorWB implements ElevatorIO {
     private TalonFXConfiguration talonFXConfiguration = new TalonFXConfiguration();
     private MotorOutputConfigs outputConfigs = new MotorOutputConfigs();
 
-    private final double UPPER_LIMIT = 0;
-    private final double LOWER_LIMIT = 0;
-    private final double KP = 0;
-    private final double KI = 0;
-    private final double KD = 0;
-    private final double KFF = 0;
-
     private final double GEAR_RATIO = 1.0;
-
-    final double motionMagicAcceleration = 400.0;
-    final double motionMagicCruiseVelocity = 85.0;
-    final double motionMagicCruiseJerk = 1750.0;
 
 
     public ElevatorWB() {
+        final double UPPER_LIMIT = 0;
+        final double LOWER_LIMIT = 0;
+        final double KP = 0;
+        final double KI = 0;
+        final double KD = 0;
+        final double KFF = 0;
+
+        final double motionMagicAcceleration = 400.0;
+        final double motionMagicCruiseVelocity = 85.0;
+        final double motionMagicCruiseJerk = 1750.0;
+
         elevatorMotor.getConfigurator().apply((talonFXConfiguration));
         outputConfigs.withNeutralMode(NeutralModeValue.Brake);
         outputConfigs.withInverted(InvertedValue.Clockwise_Positive);

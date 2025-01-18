@@ -24,12 +24,6 @@ public interface CoralOuttakeIO {
   public default void updateInputs(CoralOuttakeIOInputs inputs) {}
 
   /**
-   * controls the velocity of the outtake
-   * @param velocity
-   */
-  public void setVelocity(double velocity);
-
-  /**
    * sets the speed ot a number between -1 and 1
    * @param dutyCycle
    */

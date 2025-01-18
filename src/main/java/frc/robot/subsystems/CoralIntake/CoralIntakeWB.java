@@ -43,11 +43,7 @@ public class CoralIntakeWB implements CoralIntakeIO {
     public void setDutyCycle(double dutyCycle) {
         intakeMotor.set(dutyCycle);
     }
-
-    public void setVelocity(double velocity) {
-        System.out.println(":(");
-    }
-
+    
     public void updateInputs(CoralIntakeIOInputs inputs) {
         inputs.intakeVelocity = encoder.getVelocity();
         inputs.intakePosition = encoder.getPosition();

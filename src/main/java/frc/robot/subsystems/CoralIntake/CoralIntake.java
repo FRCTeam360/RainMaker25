@@ -21,11 +21,6 @@ public class CoralIntake extends SubsystemBase {
   public void setDutyCycle(double dutyCycle) {
     io.setDutyCycle(dutyCycle);
   }
-  
-  // control duty cycle
-  public void setVelocity(double velocity) {
-    io.setVelocity(velocity);
-  }
 
 
   @Override

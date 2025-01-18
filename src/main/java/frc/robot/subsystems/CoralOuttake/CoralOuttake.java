@@ -21,10 +21,6 @@ public class CoralOuttake extends SubsystemBase {
     io.setDutyCycle(speed);
   }
 
-  public void setVelocity(double voltage) {
-    io.setVelocity(voltage);
-  }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

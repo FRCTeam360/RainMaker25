@@ -25,7 +25,7 @@ import frc.robot.generated.WoodBotDriveTrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Catapult.Catapult;
 import frc.robot.subsystems.CoralIntake.CoralIntake;
-import frc.robot.subsystems.CoralOuttake.CoralOuttake;
+import frc.robot.subsystems.CoralShooter.CoralShooter;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorIO;
 import frc.robot.subsystems.Elevator.ElevatorIOWB;
@@ -47,11 +47,11 @@ public class RobotContainer {
     private Vision vision;
     private Catapult catapult;
     private CoralIntake coralIntake;
-    private CoralOuttake coralOuttake;
+    private CoralShooter coralShooter;
     private Elevator elevator;
 
 
-    private Elevator elevator; 
+
 
     private ShuffleboardTab diagnosticTab;
 
@@ -132,7 +132,7 @@ public class RobotContainer {
                 //competition bot stuff
                 break;
         }
-        commandFactory = new CommandFactory(catapult, coralIntake, coralOuttake, elevator, vision);
+        commandFactory = new CommandFactory(catapult, coralIntake, coralShooter, elevator, vision);
 
         diagnosticTab = Shuffleboard.getTab("Diagnostics");
         diagnosticTab.addBoolean("Wood Bot", Constants::isWoodBot);

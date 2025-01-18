@@ -21,6 +21,10 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.generated.OldCompBot;
 import frc.robot.generated.WoodBotDriveTrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Catapult.Catapult;
+import frc.robot.subsystems.CoralIntake.CoralIntake;
+import frc.robot.subsystems.CoralOuttake.CoralOuttake;
+import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
 
@@ -33,13 +37,20 @@ public class RobotContainer {
 
     private final CommandXboxController driverCont = new CommandXboxController(0);
     private final CommandXboxController operatorCont = new CommandXboxController(1);
+    
+    private CommandFactory commandFactory;
 
     public CommandSwerveDrivetrain driveTrain;
     private Vision vision;
+    private Catapult catapult;
+    private CoralIntake coralIntake;
+    private CoralOuttake coralOuttake;
+    private Elevator elevator;
+
 
     private ShuffleboardTab diagnosticTab;
 
-
+    
     public RobotContainer() {
         switch (Constants.getRobotType()) {
             case WOODBOT:
@@ -66,6 +77,7 @@ public class RobotContainer {
                 //competition bot stuff
                 break;
         }
+        commandFactory = new CommandFactory(catapult, coralIntake, coralOuttake, elevator, vision);
 
         diagnosticTab = Shuffleboard.getTab("Diagnostics");
         diagnosticTab.addBoolean("Wood Bot",Constants::isWoodBot);

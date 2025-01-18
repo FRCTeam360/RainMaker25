@@ -6,6 +6,7 @@ package frc.robot.subsystems.Elevator;
 
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -31,10 +32,24 @@ public class ElevatorWB implements ElevatorIO {
     public ElevatorWB() {
         final double UPPER_LIMIT = 0;
         final double LOWER_LIMIT = 0;
-        final double KP = 0;
-        final double KI = 0;
-        final double KD = 0;
-        final double KFF = 0;
+
+        // TODO: add values
+        final double kA = 0.0;
+        final double kD = 0.0;
+        final double kG = 0.0;
+        final double kI = 0.0;
+        final double kP = 2.5;
+        final double kS = 0.25;
+        final double kV = 0.0;
+
+        Slot0Configs slot0Configs = talonFXConfiguration.Slot0;
+        slot0Configs.kA = kA;
+        slot0Configs.kD = kD;
+        slot0Configs.kG = kG;
+        slot0Configs.kI = kI;
+        slot0Configs.kP = kP;
+        slot0Configs.kS = kS;
+        slot0Configs.kV = kV;
 
         final double motionMagicAcceleration = 400.0;
         final double motionMagicCruiseVelocity = 85.0;
@@ -44,10 +59,10 @@ public class ElevatorWB implements ElevatorIO {
         outputConfigs.withNeutralMode(NeutralModeValue.Brake);
         outputConfigs.withInverted(InvertedValue.Clockwise_Positive);
 
-        talonFXConfiguration.SoftwareLimitSwitch.withForwardSoftLimitThreshold(UPPER_LIMIT);
-        talonFXConfiguration.SoftwareLimitSwitch.withForwardSoftLimitEnable(true);
-        talonFXConfiguration.SoftwareLimitSwitch.withReverseSoftLimitThreshold(LOWER_LIMIT);
-        talonFXConfiguration.SoftwareLimitSwitch.withReverseSoftLimitEnable(true);
+        // talonFXConfiguration.SoftwareLimitSwitch.withForwardSoftLimitThreshold(UPPER_LIMIT);
+        // talonFXConfiguration.SoftwareLimitSwitch.withForwardSoftLimitEnable(true);
+        // talonFXConfiguration.SoftwareLimitSwitch.withReverseSoftLimitThreshold(LOWER_LIMIT);
+        // talonFXConfiguration.SoftwareLimitSwitch.withReverseSoftLimitEnable(true);
 
         MotionMagicConfigs motionMagicConfigs = talonFXConfiguration.MotionMagic;
         motionMagicConfigs.MotionMagicCruiseVelocity = motionMagicCruiseVelocity;

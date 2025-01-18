@@ -7,28 +7,38 @@ package frc.robot.subsystems.CoralOuttake;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import frc.robot.Constants;
+import frc.robot.Constants.WoodbotConstants;
 import frc.robot.subsystems.CoralOuttake.CoralOuttakeIO.CoralOuttakeIOInputs;
 
 /** Add your docs here. */
 public class CoralOuttakeWB implements CoralOuttakeIO {
 
-    private final SparkMax outtakeMotor = new SparkMax(Constants.CORAL_OUTTAKE_ID, MotorType.kBrushless);
+    private final SparkMax outtakeMotor = new SparkMax(WoodbotConstants.CORAL_OUTTAKE_ID, MotorType.kBrushless);
     private final RelativeEncoder encoder = outtakeMotor.getEncoder();
-
-    private final double woodCoralOuttakeKP = 0.0;
-    private final double woodCoralOuttakeKI = 0.0;
-    private final double woodCoralOuttakeKD = 0.0;
-    private final double woodCoralOuttakeKF = 0.0;
+    private final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
+  
+    private final double KP = 0.0;
+    private final double KI = 0.0;
+    private final double KD = 0.0;
+    private final double KF = 0.0;
 
     public CoralOuttakeWB() {
+        sparkMaxConfig.idleMode(IdleMode.kBrake);
+        sparkMaxConfig.inverted(false);
+        outtakeMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     public void setVelocity(double velocity) {
         System.out.println(":(");
     }
-    
+
     public void setDutyCycle(double dutyCycle) {
         outtakeMotor.set(dutyCycle);
     }

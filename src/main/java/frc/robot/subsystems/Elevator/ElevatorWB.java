@@ -4,9 +4,13 @@
 
 package frc.robot.subsystems.Elevator;
 
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.RelativeEncoder;
 
 import frc.robot.Constants;
@@ -16,20 +20,30 @@ import frc.robot.subsystems.CoralIntake.CoralIntakeIO.CoralIntakeIOInputs;
 /** Add your docs here. */
 public class ElevatorWB implements ElevatorIO {
 
-    private final TalonFX elevatorMotor = new TalonFX(Constants.ELEVATOR_ID, "Default Name");
+    private final TalonFX elevatorMotor = new TalonFX(WoodbotConstants.ELEVATOR_ID, "Default Name");
 
     private TalonFXConfiguration talonFXConfiguration = new TalonFXConfiguration();
-    
-    private final double UPPER_LIMIT = WoodbotConstants.ELEVATOR_UPPER_LIMIT;
-    private final double LOWER_LIMIT = WoodbotConstants.ELEVATOR_LOWER_LIMIT;
-    
-    private final double woodElevatorKP = WoodbotConstants.ELEVATOR_KP;
-    private final double woodElevatorKI = WoodbotConstants.ELEVATOR_KI;
-    private final double woodElevatorKD = WoodbotConstants.ELEVATOR_KD;
-    private final double woodElevatorKF = WoodbotConstants.ELEVATOR_KF;
+    private MotorOutputConfigs outputConfigs = new MotorOutputConfigs();
+
+    private final double UPPER_LIMIT = 0;
+    private final double LOWER_LIMIT = 0;
+    private final double KP = 0;
+    private final double KI = 0;
+    private final double KD = 0;
+    private final double KFF = 0;
+
+    private final double GEAR_RATIO = 1.0;
+
+    final double motionMagicAcceleration = 400.0;
+    final double motionMagicCruiseVelocity = 85.0;
+    final double motionMagicCruiseJerk = 1750.0;
 
 
     public ElevatorWB() {
+        elevatorMotor.getConfigurator().apply((talonFXConfiguration));
+        outputConfigs.withNeutralMode(NeutralModeValue.Brake);
+        outputConfigs.withInverted(InvertedValue.Clockwise_Positive);
+
         talonFXConfiguration.SoftwareLimitSwitch.withForwardSoftLimitThreshold(UPPER_LIMIT);
         talonFXConfiguration.SoftwareLimitSwitch.withForwardSoftLimitEnable(true);
         talonFXConfiguration.SoftwareLimitSwitch.withReverseSoftLimitThreshold(LOWER_LIMIT);
@@ -42,6 +56,13 @@ public class ElevatorWB implements ElevatorIO {
         inputs.elevatorVoltage = elevatorMotor.getMotorVoltage().getValueAsDouble();
         inputs.elevatorPosition = elevatorMotor.getPosition().getValueAsDouble();
         inputs.elevatorVelocity = elevatorMotor.getVelocity().getValueAsDouble();
+
+        MotionMagicConfigs motionMagicConfigs = talonFXConfiguration.MotionMagic;
+        motionMagicConfigs.MotionMagicCruiseVelocity = motionMagicCruiseVelocity;
+        motionMagicConfigs.MotionMagicAcceleration = motionMagicAcceleration;
+        motionMagicConfigs.MotionMagicJerk = motionMagicCruiseJerk;
+
+        talonFXConfiguration.MotionMagic.withMotionMagicAcceleration(motionMagicAcceleration).withMotionMagicCruiseVelocity(motionMagicCruiseVelocity).withMotionMagicJerk(motionMagicCruiseJerk);
     }
 
     public void setDutyCycle(double dutyCycle) {

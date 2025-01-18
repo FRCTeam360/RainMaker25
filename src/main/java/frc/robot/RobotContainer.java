@@ -8,16 +8,18 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-
+import frc.robot.Constants.OldCompBotConstants;
+import frc.robot.commands.AlignWithLimelight;
+import frc.robot.commands.SnapDrivebaseToAngle;
 import frc.robot.generated.OldCompBot;
 import frc.robot.generated.WoodBotDriveTrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -25,6 +27,8 @@ import frc.robot.subsystems.Catapult.Catapult;
 import frc.robot.subsystems.CoralIntake.CoralIntake;
 import frc.robot.subsystems.CoralOuttake.CoralOuttake;
 import frc.robot.subsystems.Elevator.Elevator;
+import frc.robot.subsystems.Elevator.ElevatorIO;
+import frc.robot.subsystems.Elevator.ElevatorIOWB;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
 
@@ -34,13 +38,12 @@ public class RobotContainer {
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
-
     private final CommandXboxController driverCont = new CommandXboxController(0);
     private final CommandXboxController operatorCont = new CommandXboxController(1);
     
     private CommandFactory commandFactory;
 
-    public CommandSwerveDrivetrain driveTrain;
+    public static CommandSwerveDrivetrain driveTrain;
     private Vision vision;
     private Catapult catapult;
     private CoralIntake coralIntake;
@@ -48,9 +51,13 @@ public class RobotContainer {
     private Elevator elevator;
 
 
+    private Elevator elevator; 
+
     private ShuffleboardTab diagnosticTab;
 
-    
+    private SnapDrivebaseToAngle snapDrivebaseToAngle;
+    private AlignWithLimelight alignWithLimelight;
+
     public RobotContainer() {
         switch (Constants.getRobotType()) {
             case WOODBOT:
@@ -60,17 +67,65 @@ public class RobotContainer {
                     Constants.VisionConstants.WOODBOT_YAW_FUDGE_FACTOR,
                     Constants.VisionConstants.WOODBOT_PITCH_FUDGE_FACTOR));
                 driveTrain = WoodBotDriveTrain.createDrivetrain();
+                setUpDrivetrain(
+                    vision,
+                    Constants.OldCompBotConstants.headingKP,
+                    Constants.OldCompBotConstants.headingKI,
+                    Constants.OldCompBotConstants.headingKD,
+                    Constants.OldCompBotConstants.headingKIZone,
+                    Constants.OldCompBotConstants.translationKP,
+                    Constants.OldCompBotConstants.translationKI,
+                    Constants.OldCompBotConstants.translationKD
+                );
+                elevator = new Elevator(new ElevatorIOWB());
                 break;
             case OLD_COMP_BOT:
                 //ocb stuff
-                vision = new Vision(new VisionIOLimelight(
-                    Constants.VisionConstants.OCB_LIMELIGHT_NAME,
-                    Constants.VisionConstants.OCB_YAW_FUDGE_FACTOR,
-                    Constants.VisionConstants.OCB_PITCH_FUDGE_FACTOR));
+
+                vision =
+                    new Vision(
+                        new VisionIOLimelight(
+                            Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
+                            Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
+                            Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR
+                        )
+                    );
                 driveTrain = OldCompBot.createDrivetrain();
-                break;
+                //constants = Constants.OldCompBotConstants;
+                setUpDrivetrain(
+                    vision,
+                    Constants.OldCompBotConstants.headingKP,
+                    Constants.OldCompBotConstants.headingKI,
+                    Constants.OldCompBotConstants.headingKD,
+                    Constants.OldCompBotConstants.headingKIZone,
+                    Constants.OldCompBotConstants.translationKP,
+                    Constants.OldCompBotConstants.translationKI,
+                    Constants.OldCompBotConstants.translationKD
+                );
             case PRACTICE:
                 //practice bot stuff
+                break;
+            case SIM:
+                vision =
+                    new Vision(
+                        new VisionIOLimelight(
+                            Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
+                            Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
+                            Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR
+                        )
+                    );
+                driveTrain = OldCompBot.createDrivetrain();
+                //constants = Constants.OldCompBotConstants;
+                setUpDrivetrain(
+                    vision,
+                    Constants.OldCompBotConstants.headingKP,
+                    Constants.OldCompBotConstants.headingKI,
+                    Constants.OldCompBotConstants.headingKD,
+                    Constants.OldCompBotConstants.headingKIZone,
+                    Constants.OldCompBotConstants.translationKP,
+                    Constants.OldCompBotConstants.translationKI,
+                    Constants.OldCompBotConstants.translationKD
+                );
                 break;
             case COMPETITION:
             default:
@@ -80,20 +135,54 @@ public class RobotContainer {
         commandFactory = new CommandFactory(catapult, coralIntake, coralOuttake, elevator, vision);
 
         diagnosticTab = Shuffleboard.getTab("Diagnostics");
-        diagnosticTab.addBoolean("Wood Bot",Constants::isWoodBot);
+        diagnosticTab.addBoolean("Wood Bot", Constants::isWoodBot);
         diagnosticTab.addBoolean("Comp Bot", Constants::isCompBot);
         diagnosticTab.addBoolean("Practice Bot", Constants::isPracticeBot);
         diagnosticTab.addBoolean("Old Comp Bot", Constants::isOCB);
         diagnosticTab.addString("Serial Address", HALUtil::getSerialNumber);
 
+        //initializeCommands();
+        //configureBindings();
+    }
 
-      configureBindings();
+    public void initializeCommands() {
+        snapDrivebaseToAngle =
+            new SnapDrivebaseToAngle(driveTrain, Constants.OldCompBotConstants.maxSpeed);
+        alignWithLimelight =
+            new AlignWithLimelight(
+                vision,
+                driveTrain,
+                0.0,
+                3.0,
+                0.25,
+                Constants.OldCompBotConstants.maxAngularRate
+            );
+    }
+
+    private static void setUpDrivetrain(
+        Vision vision,
+        double headingKP,
+        double headingKI,
+        double headingKD,
+        double headingKIZone,
+        double translationKP,
+        double translationKI,
+        double translationKD
+    ) {
+        driveTrain.addHeadingController(headingKP, headingKI, headingKD, headingKIZone);
+        driveTrain.addTranslationController(translationKP, translationKI, translationKD);
+        driveTrain.assignVision(vision);
     }
 
     private void configureBindings() {
         driveTrain.setDefaultCommand(
-           driveTrain.fieldOrientedDrive(MaxSpeed, MaxAngularRate, driverCont)
+            driveTrain.fieldOrientedDrive(MaxSpeed, MaxAngularRate, driverCont)
         );
+
+        driverCont.pov(90).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
+
+        driverCont.a().onTrue(alignWithLimelight);
+        driverCont.b().onTrue(snapDrivebaseToAngle);
 
         driveTrain.registerTelemetry(logger::telemeterize);
     }
@@ -101,5 +190,4 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return Commands.print("No autonomous command configured");
     }
-    
 }

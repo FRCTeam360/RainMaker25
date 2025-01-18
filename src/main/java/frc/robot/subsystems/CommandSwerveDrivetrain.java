@@ -336,8 +336,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                     new PIDConstants(7, 0, 0)
                 ),
                 config,
-                // Assume the path needs to be flipped for Red vs Blue, this is normally the case
-                () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
+                // For our team, the path does not need to be flipped for Red vs Blue. 
+                // The reasoning for this is that the fields are not constructed the same for each event, each side is a bit different.
+                () -> false,
                 this // Subsystem for requirements
             );
         } catch (Exception ex) {

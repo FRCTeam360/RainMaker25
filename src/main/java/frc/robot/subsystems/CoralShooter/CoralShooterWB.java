@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.CoralOuttake;
+package frc.robot.subsystems.CoralShooter;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.RelativeEncoder;
@@ -18,10 +18,10 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import frc.robot.Constants;
 import frc.robot.Constants.WoodbotConstants;
-import frc.robot.subsystems.CoralOuttake.CoralOuttakeIO.CoralOuttakeIOInputs;
+import frc.robot.subsystems.CoralShooter.CoralShooterIO.CoralShooterIOInputs;
 
 /** Add your docs here. */
-public class CoralOuttakeWB implements CoralOuttakeIO {
+public class CoralShooterWB implements CoralShooterIO {
 
     private final SparkMax outtakeMotor = new SparkMax(WoodbotConstants.CORAL_OUTTAKE_ID, MotorType.kBrushless);
     private final RelativeEncoder encoder = outtakeMotor.getEncoder();
@@ -34,7 +34,7 @@ public class CoralOuttakeWB implements CoralOuttakeIO {
     private final double KD = 0.0;
     private final double KF = 0.0;
 
-    public CoralOuttakeWB() {
+    public CoralShooterWB() {
         sparkMaxConfig.idleMode(IdleMode.kBrake);
         sparkMaxConfig.inverted(false);
         outtakeMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -48,7 +48,11 @@ public class CoralOuttakeWB implements CoralOuttakeIO {
         return !outtakeSensor.get();
     }
 
-    public void updateInputs(CoralOuttakeIOInputs inputs) {
+    public void stop() {
+        outtakeMotor.stopMotor();
+    }
+
+    public void updateInputs(CoralShooterIOInputs inputs) {
         inputs.outtakeStatorCurrent = outtakeMotor.getOutputCurrent();
         inputs.outtakePosition = encoder.getPosition();
         inputs.outtakeVelocity = encoder.getVelocity();

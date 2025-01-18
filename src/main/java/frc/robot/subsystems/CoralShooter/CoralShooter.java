@@ -2,18 +2,18 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.CoralOuttake;
+package frc.robot.subsystems.CoralShooter;
 
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class CoralOuttake extends SubsystemBase {
-  private final CoralOuttakeIO io;
-  private final CoralOuttakeIOInputsAutoLogged inputs = new CoralOuttakeIOInputsAutoLogged();
+public class CoralShooter extends SubsystemBase {
+  private final CoralShooterIO io;
+  private final CoralShooterIOInputsAutoLogged inputs = new CoralShooterIOInputsAutoLogged();
 
   /** Creates a new CoralOutake. */
-  public CoralOuttake(CoralOuttakeIO io) {
+  public CoralShooter(CoralShooterIO io) {
     this.io = io;
   }
 
@@ -23,6 +23,10 @@ public class CoralOuttake extends SubsystemBase {
 
   public boolean getOuttakeSensor() {
     return io.getOuttakeSensor();
+  }
+
+  public void stop() {
+    io.stop();
   }
 
   @Override

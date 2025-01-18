@@ -36,7 +36,7 @@ public class AlignWithLimelight extends Command {
         this.maxSpeed = maxSpeed;
         this.maxAngularRate = maxAngularRate;
 
-        addRequirements(vision, driveTrain);
+        addRequirements(driveTrain);
     }
 
     // Called when the command is initially scheduled.

@@ -23,6 +23,9 @@ import frc.robot.commands.SnapDrivebaseToAngle;
 import frc.robot.generated.OldCompBot;
 import frc.robot.generated.WoodBotDriveTrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Elevator.Elevator;
+import frc.robot.subsystems.Elevator.ElevatorIO;
+import frc.robot.subsystems.Elevator.ElevatorWB;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
 
@@ -38,6 +41,8 @@ public class RobotContainer {
     public static CommandSwerveDrivetrain driveTrain;
     private Vision vision;
 
+    private Elevator elevator; 
+
     private ShuffleboardTab diagnosticTab;
 
     private SnapDrivebaseToAngle snapDrivebaseToAngle;
@@ -52,9 +57,21 @@ public class RobotContainer {
                     Constants.VisionConstants.WOODBOT_YAW_FUDGE_FACTOR,
                     Constants.VisionConstants.WOODBOT_PITCH_FUDGE_FACTOR));
                 driveTrain = WoodBotDriveTrain.createDrivetrain();
+                setUpDrivetrain(
+                    vision,
+                    Constants.OldCompBotConstants.headingKP,
+                    Constants.OldCompBotConstants.headingKI,
+                    Constants.OldCompBotConstants.headingKD,
+                    Constants.OldCompBotConstants.headingKIZone,
+                    Constants.OldCompBotConstants.translationKP,
+                    Constants.OldCompBotConstants.translationKI,
+                    Constants.OldCompBotConstants.translationKD
+                );
+                elevator = new Elevator(new ElevatorWB());
                 break;
             case OLD_COMP_BOT:
                 //ocb stuff
+
                 vision =
                     new Vision(
                         new VisionIOLimelight(
@@ -113,8 +130,8 @@ public class RobotContainer {
         diagnosticTab.addBoolean("Old Comp Bot", Constants::isOCB);
         diagnosticTab.addString("Serial Address", HALUtil::getSerialNumber);
 
-        initializeCommands();
-        configureBindings();
+        //initializeCommands();
+        //configureBindings();
     }
 
     public void initializeCommands() {

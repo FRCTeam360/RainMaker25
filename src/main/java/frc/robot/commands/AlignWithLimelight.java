@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Vision.Vision;
 import java.util.function.DoubleSupplier;
-
 import org.littletonrobotics.junction.Logger;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -44,15 +43,16 @@ public class AlignWithLimelight extends Command {
 
     // Called when the command is initially scheduled.
     @Override
-    public void initialize() {
-        
-    }
+    public void initialize() {}
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
         System.out.println("TX EQUALS " + vision.getTXRaw());
-        Logger.recordOutput("pid calculate ",driveTrain.translationController.calculate(vision.getTXRaw(), 0.0));
+        Logger.recordOutput(
+            "pid calculate ",
+            driveTrain.translationController.calculate(vision.getTXRaw(), 0.0)
+        );
         // driveTrain.robotCentricDrive(0.0,
         //     driveTrain.translationController.calculate(vision.getTXRaw(), 0.0),
         //     0.0,
@@ -60,11 +60,12 @@ public class AlignWithLimelight extends Command {
         //     maxAngularRate
         // ); //drives to apirltag
         driveTrain.robotCentricDrive(
-        driveTrain.translationController.calculate(vision.getTYRaw(), 3.0), 0.0,
-        0.0,
-        0.25,
-        maxAngularRate
-    ); //drives to apirltag
+            driveTrain.translationController.calculate(vision.getTYRaw(), 3.0),
+            driveTrain.translationController.calculate(vision.getTXRaw(), 0.0),
+            0.0,
+            0.25,
+            maxAngularRate
+        ); //drives to apirltag
     }
 
     // Called once the command ends or is interrupted.
@@ -74,7 +75,6 @@ public class AlignWithLimelight extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        //return Math.abs(vision.getTXRaw()) <= 1.0;
-        return false;
+        return Math.abs(vision.getTXRaw()) <= 1.0 && Math.abs(vision.getTYRaw() - 3.0) <= 2.0; 
     }
 }

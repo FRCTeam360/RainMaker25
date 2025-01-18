@@ -40,7 +40,7 @@ public class RobotContainer {
 
     private ShuffleboardTab diagnosticTab;
 
-    private SnapDrivebaseToAngle snapDrivebaseToAngle;
+    private SnapDrivebaseToAngle snapDrivebaseToAngle
     private AlignWithLimelight alignWithLimelight;
 
     public RobotContainer() {

@@ -17,6 +17,14 @@ public class CoralOuttake extends SubsystemBase {
     this.io = io;
   }
 
+  public void setDutyCycle(double speed) {
+    io.setDutyCycle(speed);
+  }
+
+  public boolean getOuttakeSensor() {
+    return io.getOuttakeSensor();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

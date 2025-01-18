@@ -21,6 +21,7 @@ import frc.robot.Constants.OldCompBotConstants;
 import frc.robot.commands.AlignWithLimelight;
 import frc.robot.commands.SnapDrivebaseToAngle;
 import frc.robot.generated.OldCompBot;
+import frc.robot.generated.WoodBotDriveTrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
@@ -46,15 +47,11 @@ public class RobotContainer {
         switch (Constants.getRobotType()) {
             case WOODBOT:
                 //woodbot stuff
-                vision =
-                    new Vision(
-                        new VisionIOLimelight(
-                            Constants.VisionConstants.WOODBOT_LIMELIGHT_NAME,
-                            Constants.VisionConstants.WOODBOT_YAW_FUDGE_FACTOR,
-                            Constants.VisionConstants.WOODBOT_PITCH_FUDGE_FACTOR
-                        )
-                    );
-                driveTrain = OldCompBot.createDrivetrain();
+                vision = new Vision(new VisionIOLimelight(
+                    Constants.VisionConstants.WOODBOT_LIMELIGHT_NAME, 
+                    Constants.VisionConstants.WOODBOT_YAW_FUDGE_FACTOR,
+                    Constants.VisionConstants.WOODBOT_PITCH_FUDGE_FACTOR));
+                driveTrain = WoodBotDriveTrain.createDrivetrain();
                 break;
             case OLD_COMP_BOT:
                 //ocb stuff

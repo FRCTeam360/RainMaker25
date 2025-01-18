@@ -18,7 +18,6 @@ public class SnapDrivebaseToAngle extends Command {
     private CommandSwerveDrivetrain driveTrain;
     private CommandXboxController driverCont = new CommandXboxController(0);
     private double maxSpeed;
-    private double x = 1.0;
     private double angleToFace = 0.0;
 
     /** Creates a new SnapDrivebaseToAngle. */
@@ -32,13 +31,7 @@ public class SnapDrivebaseToAngle extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        Optional<Alliance> alliance = DriverStation.getAlliance();
-        if (alliance.isPresent() && alliance.get() == Alliance.Red) {
-            x = -1.0;
-        } else {
-            x = 1.0;
-        }
-
+        
         if (driveTrain.getAngle() >= -30.0 && driveTrain.getAngle() <= 30.0) {
             angleToFace = 0.0;
         } else if (driveTrain.getAngle() <= -30.0 && driveTrain.getAngle() >= -90.0) {
@@ -58,8 +51,8 @@ public class SnapDrivebaseToAngle extends Command {
     @Override
     public void execute() {
         driveTrain.driveFieldCentricFacingAngle(
-            Math.signum(x) * x * Math.pow((MathUtil.applyDeadband(-driverCont.getLeftY(), 0.1)), 2.0),
-            Math.signum(x) * x * Math.pow((MathUtil.applyDeadband(-driverCont.getLeftX(), 0.1)), 2.0),
+            Math.pow((MathUtil.applyDeadband(-driverCont.getLeftY(), 0.1)), 2.0),
+            Math.pow((MathUtil.applyDeadband(-driverCont.getLeftX(), 0.1)), 2.0),
             angleToFace,
             maxSpeed
         );

@@ -46,14 +46,13 @@ public class AlignWithLimelight extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        
         driveTrain.robotCentricDrive(
             driveTrain.translationController.calculate(vision.getTYRaw(), goalTY), //forward & backward motion
             driveTrain.translationController.calculate(vision.getTXRaw(), 0.0), //side to side motion
             0.0,
             maxSpeed,
             maxAngularRate
-        ); 
+        );
     }
 
     // Called once the command ends or is interrupted.
@@ -63,6 +62,6 @@ public class AlignWithLimelight extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return Math.abs(vision.getTXRaw()) <= 1.0 && Math.abs(vision.getTYRaw() - 3.0) <= 2.0; 
+        return Math.abs(vision.getTXRaw()) <= 1.0 && Math.abs(vision.getTYRaw() - 3.0) <= 2.0;
     }
 }

@@ -125,19 +125,3 @@ public final class Constants {
         return false;
     }
 }
-// 一䔀䌀吀䔀䐀 一吀㐀 挀氀椀攀渀琀 ✀䄀搀瘀愀渀琀愀最攀匀挀漀瀀攀䀀㈀✀ ⠀昀爀漀洀 ㄀　⸀㌀⸀㘀　⸀㈀　㄀㨀㔀　㔀㔀㈀⤀ ＀෾਀＀￾￾￾￾￾￾￾埾愀爀渀椀渀最 ＀￾⃾㐀㐀　　㐀 ＀￾⃾䘀刀䌀㨀 吀栀攀 䐀爀椀瘀攀爀 匀琀愀琀椀漀渀 栀愀猀 氀漀猀琀 挀漀洀洀甀渀椀挀愀琀椀漀渀 眀椀琀栀 琀栀攀 爀漀戀漀琀⸀ ＀￾⃾䐀爀椀瘀攀爀 匀琀愀琀椀漀渀 ＀￾￾෾਀＀￾￾￾￾￾⃾一吀㨀 䜀漀琀 愀 一吀㐀 挀漀渀渀攀挀琀椀漀渀 昀爀漀洀 ㄀　⸀㌀⸀㘀　⸀㈀　㄀ 瀀漀爀琀 㔀　㔀㔀㌀ ＀෾਀＀￾￾￾￾￾￾￾埾愀爀渀椀渀最 ＀￾⃾㐀㐀　　㐀 ＀￾⃾䘀刀䌀㨀 吀栀攀 䐀爀椀瘀攀爀 匀琀愀琀椀漀渀 栀愀猀 氀漀猀琀 挀漀洀洀甀渀椀挀愀琀椀漀渀 眀椀琀栀 琀栀攀 爀漀戀漀琀⸀ ＀￾⃾䐀爀椀瘀攀爀 匀琀愀琀椀漀渀 ＀￾￾෾਀＀￾￾￾￾￾⃾一吀㨀 䌀伀一一䔀䌀吀䔀䐀 刀吀吀 挀氀椀攀渀琀 ⠀昀爀漀洀 ㄀　⸀㌀⸀㘀　⸀㈀　㄀㨀㔀　㔀㔀㌀⤀ ＀෾਀＀￾￾￾￾￾⃾一吀㨀 䜀漀琀 愀 一吀㐀 挀漀渀渀攀挀琀椀漀渀 昀爀漀洀 ㄀　⸀㌀⸀㘀　⸀㈀　㄀ 瀀漀爀琀 㔀　㔀㌀　 ＀෾਀＀￾￾￾￾￾⃾一吀㨀 䜀漀琀 愀 一吀㐀 挀漀渀渀攀挀琀椀漀渀 昀爀漀洀 ㄀　⸀㌀⸀㘀　⸀㈀　㄀ 瀀漀爀琀 㔀　㔀㌀㘀 ＀෾਀＀￾￾￾￾￾⃾一吀㨀 䜀漀琀 愀 一吀㐀 挀漀渀渀攀挀琀椀漀渀 昀爀漀洀 ㄀　⸀㌀⸀㘀　⸀㈀　㄀ 瀀漀爀琀 㔀　㔀㌀㄀ ＀෾਀＀￾￾￾￾￾⃾一吀㨀 䐀䤀匀䌀伀一一䔀䌀吀䔀䐀 刀吀吀 挀氀椀攀渀琀 ⠀昀爀漀洀 ㄀　⸀㌀⸀㘀　⸀㈀　㄀㨀㔀　㔀㄀㈀⤀㨀 爀攀洀漀琀攀 挀氀漀猀攀㨀  ＀෾਀＀￾￾￾￾￾⃾一吀㨀 䜀漀琀 愀 一吀㐀 挀漀渀渀攀挀琀椀漀渀 昀爀漀洀 ㄀　⸀㌀⸀㘀　⸀㈀　㄀ 瀀漀爀琀 㔀　㔀㜀㔀 ＀෾਀＀￾￾￾￾￾￾￾埾愀爀渀椀渀最 ＀￾⃾㐀㐀　　㐀 ＀￾⃾䘀刀䌀㨀 吀栀攀 䐀爀椀瘀攀爀 匀琀愀琀椀漀渀 栀愀猀 氀漀猀琀 挀漀洀洀甀渀椀挀愀琀椀漀渀 眀椀琀栀 琀栀攀 爀漀戀漀琀⸀ ＀￾⃾䐀爀椀瘀攀爀 匀琀愀琀椀漀渀 ＀￾￾෾਀＀￾￾￾￾￾⃾一吀㨀 䌀伀一一䔀䌀吀䔀䐀 一吀㐀 挀氀椀攀渀琀 ✀猀栀甀昀昀氀攀戀漀愀爀搀䀀㌀✀ ⠀昀爀漀洀 ㄀　⸀㌀⸀㘀　⸀㈀　㄀㨀㔀　㔀㜀㔀⤀ ＀෾਀＀￾￾￾￾￾￾￾埾愀爀渀椀渀最 ＀￾⃾㐀㐀　　㐀 ＀￾⃾䘀刀䌀㨀 吀栀攀 䐀爀椀瘀攀爀 匀琀愀琀椀漀渀 栀愀猀 氀漀猀琀 挀漀洀洀甀渀椀挀愀琀椀漀渀 眀椀琀栀 琀栀攀 爀漀戀漀琀⸀ ＀￾⃾䐀爀椀瘀攀爀 匀琀愀琀椀漀渀 ＀￾￾෾਀＀￾￾￾￾￾￾￾埾愀爀渀椀渀最 ＀￾⃾㐀㐀　　㐀 ＀￾⃾䘀刀䌀㨀 吀栀攀 䐀爀椀瘀攀爀 匀琀愀琀椀漀渀 栀愀猀 氀漀猀琀 挀漀洀洀甀渀椀挀愀琀椀漀渀 眀椀琀栀 琀栀攀 爀漀戀漀琀⸀ ＀￾⃾䐀爀椀瘀攀爀 匀琀愀琀椀漀渀 ＀￾￾෾਀＀￾￾￾￾￾￾￾埾愀爀渀椀渀最 ＀￾⃾㐀㐀　　㐀 ＀￾⃾䘀刀䌀㨀 吀栀攀 䐀爀椀瘀攀爀 匀琀愀琀椀漀渀 栀愀猀 氀漀猀琀 挀漀洀洀甀渀椀挀愀琀椀漀渀 眀椀琀栀 琀栀攀 爀漀戀漀琀⸀ ＀￾⃾䐀爀椀瘀攀爀 匀琀愀琀椀漀渀 ＀￾￾෾਀＀￾￾￾￾￾￾￾埾愀爀渀椀渀最 ＀￾⃾㐀㐀　　㐀 ＀￾⃾䘀刀䌀㨀 吀栀攀 䐀爀椀瘀攀爀 匀琀愀琀椀漀渀 栀愀猀 氀漀猀琀 挀漀洀洀甀渀椀挀愀琀椀漀渀 眀椀琀栀 琀栀攀 
-// GOOD﻿,  FMS-bad﻿﻿ Driver Station ﻿﻿﻿
-// ﻿﻿﻿﻿﻿﻿﻿﻿Warning ﻿﻿ 44004 ﻿﻿ FRC: The Driver Station has lost communication with the robot. ﻿﻿ Driver Station ﻿﻿﻿
-// ﻿﻿﻿﻿﻿﻿﻿﻿Warning ﻿﻿ 44004 ﻿﻿ FRC: The Driver Station has lost communication with the robot. ﻿﻿ Driver Station ﻿﻿﻿
-// ﻿﻿﻿﻿﻿﻿﻿﻿Warning ﻿﻿ 44004 ﻿﻿ FRC: The Driver Station has lost communication with the robot. ﻿﻿ Driver Station ﻿﻿﻿
-// ﻿﻿﻿﻿﻿﻿﻿﻿Warning ﻿﻿ 44004 ﻿﻿ FRC: The Driver Station has lost communication with the robot. ﻿﻿ Driver Station ﻿﻿﻿
-// ﻿﻿﻿﻿﻿﻿﻿﻿Warning ﻿﻿ 44004 ﻿﻿ FRC: The Driver Station has lost communication with the robot. ﻿﻿ Driver Station ﻿﻿﻿
-// ﻿﻿﻿﻿﻿﻿﻿﻿Warning ﻿﻿ 44004 ﻿﻿ FRC: The Driver Station has lost communication with the robot. ﻿﻿ Driver Station ﻿﻿﻿
-// ﻿﻿﻿﻿﻿﻿﻿﻿Warning ﻿﻿ 44004 ﻿﻿ FRC: The Driver Station has lost communication with the robot. ﻿﻿ Driver Station ﻿﻿﻿
-// ﻿﻿﻿﻿﻿﻿﻿﻿Warning ﻿﻿ 44004 ﻿﻿ FRC: The Driver Station has lost communication with the robot. ﻿﻿ Driver Station ﻿﻿﻿
-// ﻿﻿﻿﻿﻿﻿﻿﻿Warning ﻿﻿ 44004 ﻿﻿ FRC: The Driver Station has lost communication with the robot. ﻿﻿ Driver Station ﻿﻿﻿
-// ﻿﻿﻿﻿﻿﻿﻿﻿Warning ﻿﻿ 44004 ﻿﻿ FRC: The Driver Station has lost communication with the robot. ﻿﻿ Driver Station ﻿﻿﻿
-// ﻿﻿﻿﻿﻿﻿﻿﻿Warning ﻿﻿ 44004 ﻿﻿ FRC: The Driver Station has lost communication with the robot. ﻿﻿ Driver Station ﻿﻿﻿
-// ﻿﻿﻿﻿﻿﻿﻿﻿Warning ﻿﻿ 44004 ﻿﻿ FRC: The Driver Station has lost communication with the robot. ﻿﻿ Driver Station ﻿﻿﻿
-// ﻿﻿﻿﻿﻿﻿﻿﻿Warning ﻿﻿ 44000 ﻿﻿ Driver Station not keeping up with protocol rates ﻿﻿ Driver Station ﻿﻿﻿
-// ﻿﻿﻿﻿﻿﻿﻿﻿Warning ﻿﻿ 44002 ﻿﻿ Ping Results:  ﻿link-bad﻿,  DS radio(.4)-bad﻿,  robot radio(.1)-bad﻿,  roboRIO(.2)-bad﻿,  FMS-bad﻿﻿ Driver Station ﻿﻿﻿

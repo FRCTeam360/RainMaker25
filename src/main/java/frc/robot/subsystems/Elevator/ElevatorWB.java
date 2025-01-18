@@ -48,6 +48,13 @@ public class ElevatorWB implements ElevatorIO {
         talonFXConfiguration.SoftwareLimitSwitch.withForwardSoftLimitEnable(true);
         talonFXConfiguration.SoftwareLimitSwitch.withReverseSoftLimitThreshold(LOWER_LIMIT);
         talonFXConfiguration.SoftwareLimitSwitch.withReverseSoftLimitEnable(true);
+
+        MotionMagicConfigs motionMagicConfigs = talonFXConfiguration.MotionMagic;
+        motionMagicConfigs.MotionMagicCruiseVelocity = motionMagicCruiseVelocity;
+        motionMagicConfigs.MotionMagicAcceleration = motionMagicAcceleration;
+        motionMagicConfigs.MotionMagicJerk = motionMagicCruiseJerk;
+
+        talonFXConfiguration.MotionMagic.withMotionMagicAcceleration(motionMagicAcceleration).withMotionMagicCruiseVelocity(motionMagicCruiseVelocity).withMotionMagicJerk(motionMagicCruiseJerk);
     }
 
     public void updateInputs(ElevatorIOInputs inputs) {
@@ -56,13 +63,6 @@ public class ElevatorWB implements ElevatorIO {
         inputs.elevatorVoltage = elevatorMotor.getMotorVoltage().getValueAsDouble();
         inputs.elevatorPosition = elevatorMotor.getPosition().getValueAsDouble();
         inputs.elevatorVelocity = elevatorMotor.getVelocity().getValueAsDouble();
-
-        MotionMagicConfigs motionMagicConfigs = talonFXConfiguration.MotionMagic;
-        motionMagicConfigs.MotionMagicCruiseVelocity = motionMagicCruiseVelocity;
-        motionMagicConfigs.MotionMagicAcceleration = motionMagicAcceleration;
-        motionMagicConfigs.MotionMagicJerk = motionMagicCruiseJerk;
-
-        talonFXConfiguration.MotionMagic.withMotionMagicAcceleration(motionMagicAcceleration).withMotionMagicCruiseVelocity(motionMagicCruiseVelocity).withMotionMagicJerk(motionMagicCruiseJerk);
     }
 
     public void setDutyCycle(double dutyCycle) {

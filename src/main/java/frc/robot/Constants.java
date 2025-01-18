@@ -59,6 +59,8 @@ public final class Constants {
       public static final int CORAL_INTAKE_ID = 0;
       public static final int CORAL_OUTTAKE_ID = 1;
       public static final int ELEVATOR_ID = 2;
+
+      public static final int OUTTAKE_SENSOR = 1;
     }
 
     public static enum RobotType {

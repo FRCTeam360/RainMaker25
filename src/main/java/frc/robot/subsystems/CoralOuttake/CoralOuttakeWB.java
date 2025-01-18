@@ -9,6 +9,9 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
+import edu.wpi.first.wpilibj.DigitalInput;
+
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -23,6 +26,8 @@ public class CoralOuttakeWB implements CoralOuttakeIO {
     private final SparkMax outtakeMotor = new SparkMax(WoodbotConstants.CORAL_OUTTAKE_ID, MotorType.kBrushless);
     private final RelativeEncoder encoder = outtakeMotor.getEncoder();
     private final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
+
+    private final DigitalInput outtakeSensor = new DigitalInput(WoodbotConstants.OUTTAKE_SENSOR);
   
     private final double KP = 0.0;
     private final double KI = 0.0;
@@ -37,6 +42,10 @@ public class CoralOuttakeWB implements CoralOuttakeIO {
 
     public void setDutyCycle(double dutyCycle) {
         outtakeMotor.set(dutyCycle);
+    }
+
+    public boolean getOuttakeSensor() {
+        return outtakeSensor.get();
     }
 
     public void updateInputs(CoralOuttakeIOInputs inputs) {

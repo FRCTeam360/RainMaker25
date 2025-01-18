@@ -23,6 +23,9 @@ import frc.robot.commands.SnapDrivebaseToAngle;
 import frc.robot.generated.OldCompBot;
 import frc.robot.generated.WoodBotDriveTrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Catapult.Catapult;
+import frc.robot.subsystems.CoralIntake.CoralIntake;
+import frc.robot.subsystems.CoralShooter.CoralShooter;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorIO;
 import frc.robot.subsystems.Elevator.ElevatorIOWB;
@@ -37,11 +40,18 @@ public class RobotContainer {
 
     private final CommandXboxController driverCont = new CommandXboxController(0);
     private final CommandXboxController operatorCont = new CommandXboxController(1);
+    
+    private CommandFactory commandFactory;
 
     public static CommandSwerveDrivetrain driveTrain;
     private Vision vision;
+    private Catapult catapult;
+    private CoralIntake coralIntake;
+    private CoralShooter coralShooter;
+    private Elevator elevator;
 
-    private Elevator elevator; 
+
+
 
     private ShuffleboardTab diagnosticTab;
 
@@ -122,6 +132,7 @@ public class RobotContainer {
                 //competition bot stuff
                 break;
         }
+        commandFactory = new CommandFactory(catapult, coralIntake, coralShooter, elevator, vision);
 
         diagnosticTab = Shuffleboard.getTab("Diagnostics");
         diagnosticTab.addBoolean("Wood Bot", Constants::isWoodBot);

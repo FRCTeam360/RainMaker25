@@ -20,7 +20,7 @@ import frc.robot.Constants.WoodbotConstants;
 import frc.robot.subsystems.CoralIntake.CoralIntakeIO.CoralIntakeIOInputs;
 
 /** Add your docs here. */
-public class ElevatorWB implements ElevatorIO {
+public class ElevatorIOWB implements ElevatorIO {
 
     private final TalonFX elevatorMotor = new TalonFX(WoodbotConstants.ELEVATOR_ID, "Default Name");
 
@@ -32,9 +32,9 @@ public class ElevatorWB implements ElevatorIO {
     private final double GEAR_RATIO = 1.0;
 
 
-    public ElevatorWB() {
-        final double UPPER_LIMIT = 0.0;
-        final double LOWER_LIMIT = 0.0;
+    public ElevatorIOWB() {
+        final double UPPER_LIMIT = 0;
+        final double LOWER_LIMIT = 0;
 
         // TODO: add values
         final double kA = 0.0;

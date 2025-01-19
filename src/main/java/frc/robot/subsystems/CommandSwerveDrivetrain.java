@@ -26,6 +26,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
@@ -373,12 +374,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         try {
             // var config = RobotConfig.fromGUISettings();
             double weight  = Units.lbsToKilograms(100.0+12.0);
-        double radius = Units.inchesToMeters(10.0); // TODO LOOK AT THESE NUMBERS AND VALIDATE
+        // double radius = Units.inchesToMeters(10.0); // TODO LOOK AT THESE NUMBERS AND VALIDATE
         double momentOfInertia = 1.0 ;// VALIDATE
-        double trackwidth = Units.inchesToMeters(19.25);
-        double wheelbase = Units.inchesToMeters(19.25);
+        // double wheelbase = Units.inchesToMeters(19.25);
         double coefficientOfFriction = 0.7;
         DCMotor motor = DCMotor.getKrakenX60(1);
+        double driveGearRatio = 5.357142857142857;
         double driveCurrentLimit = 80.0;
 
         double wheelRadius = 1.86; // WRONG USE NUMBER FROM CONSTANTS FILE
@@ -387,15 +388,25 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             OldCompBotConstants.maxSpeed, //TODO Max Speed MPS 
             coefficientOfFriction, 
             motor, 
+            driveGearRatio,
             driveCurrentLimit, 
             1);
+        //Only robots with 4 modules are supported, and they should be in FL, FR, BL, BR order.
+            Translation2d frontLeftOffset = new Translation2d(9.625, 9.625);
+            Translation2d frontRightOffset = new Translation2d(9.625, -9.625);
+            Translation2d backLeftOffset = new Translation2d(-9.625, 9.625);
+            Translation2d backRightOffset = new Translation2d(-9.625, -9.625);
         // Load the RobotConfig from the GUI settings. You should probably
         // store this in your Constants file
         RobotConfig config = new RobotConfig(
             weight,
             momentOfInertia,
             moduleConfig,
-            trackwidth);
+            frontLeftOffset,
+            frontRightOffset,
+            backLeftOffset,
+            backRightOffset
+            );
             
             AutoBuilder.configure(
                 () -> getState().Pose,   // Supplier of current robot pose

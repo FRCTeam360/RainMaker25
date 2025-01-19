@@ -19,13 +19,15 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OldCompBotConstants;
 import frc.robot.commands.AlignWithLimelight;
+import frc.robot.commands.SetCoralIntake;
 import frc.robot.commands.SnapDrivebaseToAngle;
 import frc.robot.generated.OldCompBot;
 import frc.robot.generated.WoodBotDriveTrain;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Catapult.Catapult;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CoralIntake.CoralIntake;
 import frc.robot.subsystems.CoralShooter.CoralShooter;
+import frc.robot.subsystems.CoralShooter.CoralShooterIOWB;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorIO;
 import frc.robot.subsystems.Elevator.ElevatorIOWB;
@@ -40,7 +42,7 @@ public class RobotContainer {
 
     private final CommandXboxController driverCont = new CommandXboxController(0);
     private final CommandXboxController operatorCont = new CommandXboxController(1);
-    
+
     private CommandFactory commandFactory;
 
     public static CommandSwerveDrivetrain driveTrain;
@@ -50,34 +52,43 @@ public class RobotContainer {
     private CoralShooter coralShooter;
     private Elevator elevator;
 
-
-
-
     private ShuffleboardTab diagnosticTab;
 
     private SnapDrivebaseToAngle snapDrivebaseToAngle;
     private AlignWithLimelight alignWithLimelight;
 
+    private Command levelFour;
+    private Command levelThree;
+    private Command levelTwo;
+    private Command zero;
+
+    private SetCoralIntake setCoralIntake;
+
     public RobotContainer() {
         switch (Constants.getRobotType()) {
             case WOODBOT:
                 //woodbot stuff
-                vision = new Vision(new VisionIOLimelight(
-                    Constants.VisionConstants.WOODBOT_LIMELIGHT_NAME, 
-                    Constants.VisionConstants.WOODBOT_YAW_FUDGE_FACTOR,
-                    Constants.VisionConstants.WOODBOT_PITCH_FUDGE_FACTOR));
-                driveTrain = WoodBotDriveTrain.createDrivetrain();
-                setUpDrivetrain(
-                    vision,
-                    Constants.OldCompBotConstants.headingKP,
-                    Constants.OldCompBotConstants.headingKI,
-                    Constants.OldCompBotConstants.headingKD,
-                    Constants.OldCompBotConstants.headingKIZone,
-                    Constants.OldCompBotConstants.translationKP,
-                    Constants.OldCompBotConstants.translationKI,
-                    Constants.OldCompBotConstants.translationKD
-                );
+                vision =
+                    new Vision(
+                        new VisionIOLimelight(
+                            Constants.VisionConstants.WOODBOT_LIMELIGHT_NAME,
+                            Constants.VisionConstants.WOODBOT_YAW_FUDGE_FACTOR,
+                            Constants.VisionConstants.WOODBOT_PITCH_FUDGE_FACTOR
+                        )
+                    );
+                // driveTrain = WoodBotDriveTrain.createDrivetrain();
+                // setUpDrivetrain(
+                //     vision,
+                //     Constants.OldCompBotConstants.headingKP,
+                //     Constants.OldCompBotConstants.headingKI,
+                //     Constants.OldCompBotConstants.headingKD,
+                //     Constants.OldCompBotConstants.headingKIZone,
+                //     Constants.OldCompBotConstants.translationKP,
+                //     Constants.OldCompBotConstants.translationKI,
+                //     Constants.OldCompBotConstants.translationKD
+                // );
                 elevator = new Elevator(new ElevatorIOWB());
+                coralShooter = new CoralShooter(new CoralShooterIOWB());
                 break;
             case OLD_COMP_BOT:
                 //ocb stuff
@@ -141,22 +152,29 @@ public class RobotContainer {
         diagnosticTab.addBoolean("Old Comp Bot", Constants::isOCB);
         diagnosticTab.addString("Serial Address", HALUtil::getSerialNumber);
 
-        //initializeCommands();
-        //configureBindings();
+        initializeCommands();
+       configureBindings();
     }
 
     public void initializeCommands() {
-        snapDrivebaseToAngle =
-            new SnapDrivebaseToAngle(driveTrain, Constants.OldCompBotConstants.maxSpeed);
-        alignWithLimelight =
-            new AlignWithLimelight(
-                vision,
-                driveTrain,
-                0.0,
-                3.0,
-                0.25,
-                Constants.OldCompBotConstants.maxAngularRate
-            );
+        // snapDrivebaseToAngle =
+        //     new SnapDrivebaseToAngle(driveTrain, Constants.OldCompBotConstants.maxSpeed);
+        // alignWithLimelight =
+        //     new AlignWithLimelight(
+        //         vision,
+        //         driveTrain,
+        //         0.0,
+        //         3.0,
+        //         0.25,
+        //         Constants.OldCompBotConstants.maxAngularRate
+        //     );
+
+        levelFour = commandFactory.setElevatorHeight(34.0);
+        levelThree = commandFactory.setElevatorHeight(25.0);
+        levelTwo = commandFactory.setElevatorHeight(10.0);
+        zero = commandFactory.setElevatorHeight(0.0);
+
+        setCoralIntake = new SetCoralIntake(coralShooter);
     }
 
     private static void setUpDrivetrain(
@@ -175,16 +193,25 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        driveTrain.setDefaultCommand(
-            driveTrain.fieldOrientedDrive(MaxSpeed, MaxAngularRate, driverCont)
-        );
+        // driveTrain.setDefaultCommand(
+        //     driveTrain.fieldOrientedDrive(MaxSpeed, MaxAngularRate, driverCont)
+        // );
 
-        driverCont.pov(90).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
+     //   driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
 
-        driverCont.a().onTrue(alignWithLimelight);
-        driverCont.b().onTrue(snapDrivebaseToAngle);
+        driverCont.a().onTrue(zero);
+        driverCont.b().onTrue(levelTwo);
+        driverCont.x().onTrue(levelThree);
+        driverCont.y().onTrue(levelFour);
 
-        driveTrain.registerTelemetry(logger::telemeterize);
+        driverCont.leftBumper().whileTrue(setCoralIntake);
+        driverCont.rightBumper().whileTrue(coralShooter.runEnd(
+            () -> coralShooter.setDutyCycle(-0.3),
+            () -> coralShooter.setDutyCycle(0.0)
+        )); //add end T-T
+        //driverCont.rightBumper().whileTrue(new InstantCommand(() -> coralShooter.setDutyCycle(-0.3), coralShooter)); //add end T-T
+
+        //driveTrain.registerTelemetry(logger::telemeterize);
     }
 
     public Command getAutonomousCommand() {

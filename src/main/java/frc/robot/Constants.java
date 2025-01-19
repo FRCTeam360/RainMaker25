@@ -56,12 +56,12 @@ public final class Constants {
     }
 
     public static final class WoodbotConstants {
-      public static final int CORAL_INTAKE_ID = 1;
-      public static final int CORAL_OUTTAKE_ID = 2;
-      public static final int ELEVATOR_ID = 3;
+      public static final int CORAL_INTAKE_ID = 25;
+      public static final int CORAL_SHOOTER_ID = 20;
+      public static final int ELEVATOR_ID = 14;
 
-      public static final int ELEVATOR_BOTTOM_SWITCH = 0;
-      public static final int OUTTAKE_SENSOR = 1;
+    public static final int ELEVATOR_BOTTOM_SWITCH = 2;
+      public static final int OUTTAKE_SENSOR = 0; //DIO port
     }
 
     public static enum RobotType {
@@ -83,7 +83,7 @@ public final class Constants {
 
     public static final class SerialAddressConstants {
         public static String OCB_SERIAL_ADDRESS = "032BE44A";
-        public static String WOOD_SERIAL_ADDRESS = "b";
+        public static String WOOD_SERIAL_ADDRESS = "031b5208";
         public static String PRACTICE_SERIAL_ADDRESS = "c";
         public static String COMP_SERIAL_ADDRESS = "d";
     }

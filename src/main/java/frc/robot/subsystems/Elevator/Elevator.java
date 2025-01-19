@@ -29,17 +29,17 @@ public class Elevator extends SubsystemBase {
         return io.getBottomSwitch();
     }
 
+    public Command setElevatorHeight(double height) {
+        return this.runEnd(
+                () -> this.setElevatorPostion(height),
+                () -> this.setElevatorPostion(height)
+            );
+    }
+
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
         io.updateInputs(inputs);
         Logger.processInputs("Elevator", inputs);
-    }
-
-    public Command setElevatorHeight(double height) {
-        return this.runEnd(
-                () -> this.setElevatorHeight(height),
-                () -> this.setElevatorHeight(height)
-            );
     }
 }

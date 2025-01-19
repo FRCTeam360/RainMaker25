@@ -33,16 +33,16 @@ public class ElevatorWB implements ElevatorIO {
 
 
     public ElevatorWB() {
-        final double UPPER_LIMIT = 0;
-        final double LOWER_LIMIT = 0;
+        final double UPPER_LIMIT = 0.0;
+        final double LOWER_LIMIT = 0.0;
 
         // TODO: add values
         final double kA = 0.0;
         final double kD = 0.0;
-        final double kG = 0.0;
+        final double kG = 0.65;
         final double kI = 0.0;
-        final double kP = 0.0;
-        final double kS = 0.0;
+        final double kP = 5.0;
+        final double kS = 0.05;
         final double kV = 0.0;
 
         Slot0Configs slot0Configs = talonFXConfiguration.Slot0;
@@ -54,9 +54,9 @@ public class ElevatorWB implements ElevatorIO {
         slot0Configs.kS = kS;
         slot0Configs.kV = kV;
 
-        final double motionMagicAcceleration = 400.0;
-        final double motionMagicCruiseVelocity = 85.0;
-        final double motionMagicCruiseJerk = 1750.0;
+        final double motionMagicCruiseVelocity = 600.0;
+        final double motionMagicAcceleration = 300.0;
+        final double motionMagicCruiseJerk = 1000.0;
 
         elevatorMotor.getConfigurator().apply((talonFXConfiguration));
         outputConfigs.withNeutralMode(NeutralModeValue.Brake);
@@ -87,6 +87,9 @@ public class ElevatorWB implements ElevatorIO {
         elevatorMotor.set(dutyCycle);
     }
 
+    /*
+     * height is in motor rotations
+     */
     public void setElevatorPostion(double height) {
         elevatorMotor.setPosition(height);
     }

@@ -4,35 +4,42 @@
 
 package frc.robot.subsystems.Elevator;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 public class Elevator extends SubsystemBase {
-  private final ElevatorIO io;
-  private final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
-  
-  /** Creates a new Elevator. */
-  public Elevator(ElevatorIO io) {
-    this.io = io;
-  }
+    private final ElevatorIO io;
+    private final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
 
-  public void setElevatorPostion(double height) {
-    io.setElevatorPostion(height);
-  }
+    /** Creates a new Elevator. */
+    public Elevator(ElevatorIO io) {
+        this.io = io;
+    }
 
-  public void setDutyCycle(double dutyCycle) {
-    io.setDutyCycle(dutyCycle);
-  }
-  
-  public boolean getBottomSwitch() {
-    return io.getBottomSwitch();
-  }
+    public void setElevatorPostion(double height) {
+        io.setElevatorPostion(height);
+    }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    io.updateInputs(inputs);
-    Logger.processInputs("Elevator", inputs);
-  }
+    public void setDutyCycle(double dutyCycle) {
+        io.setDutyCycle(dutyCycle);
+    }
+
+    public boolean getBottomSwitch() {
+        return io.getBottomSwitch();
+    }
+
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+        io.updateInputs(inputs);
+        Logger.processInputs("Elevator", inputs);
+    }
+
+    public Command setElevatorHeight(double height) {
+        return this.runEnd(
+                () -> this.setElevatorHeight(height),
+                () -> this.setElevatorHeight(height)
+            );
+    }
 }

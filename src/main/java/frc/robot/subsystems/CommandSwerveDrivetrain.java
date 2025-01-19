@@ -15,6 +15,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
@@ -29,6 +30,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
@@ -39,6 +42,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants;
+import frc.robot.Constants.OldCompBotConstants;
 import frc.robot.generated.OldCompBot;
 import frc.robot.generated.OldCompBot.TunerSwerveDrivetrain;
 import frc.robot.subsystems.Vision.Vision;
@@ -366,7 +371,32 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     private void configureAutoBuilder() {
         try {
-            var config = RobotConfig.fromGUISettings();
+            // var config = RobotConfig.fromGUISettings();
+            double weight  = Units.lbsToKilograms(100.0+12.0);
+        double radius = Units.inchesToMeters(10.0); // TODO LOOK AT THESE NUMBERS AND VALIDATE
+        double momentOfInertia = 1.0 ;// VALIDATE
+        double trackwidth = Units.inchesToMeters(19.25);
+        double wheelbase = Units.inchesToMeters(19.25);
+        double coefficientOfFriction = 0.7;
+        DCMotor motor = DCMotor.getKrakenX60(1);
+        double driveCurrentLimit = 80.0;
+
+        double wheelRadius = 1.86; // WRONG USE NUMBER FROM CONSTANTS FILE
+        ModuleConfig moduleConfig = new ModuleConfig(
+            wheelRadius, 
+            OldCompBotConstants.maxSpeed, //TODO Max Speed MPS 
+            coefficientOfFriction, 
+            motor, 
+            driveCurrentLimit, 
+            1);
+        // Load the RobotConfig from the GUI settings. You should probably
+        // store this in your Constants file
+        RobotConfig config = new RobotConfig(
+            weight,
+            momentOfInertia,
+            moduleConfig,
+            trackwidth);
+            
             AutoBuilder.configure(
                 () -> getState().Pose,   // Supplier of current robot pose
                 this::resetPose,         // Consumer for seeding pose against auto

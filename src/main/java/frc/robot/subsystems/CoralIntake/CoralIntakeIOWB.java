@@ -6,39 +6,44 @@ package frc.robot.subsystems.CoralIntake;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import frc.robot.Constants;
+import frc.robot.Constants.WoodbotConstants;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.sim.SparkRelativeEncoderSim;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkRelativeEncoder;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 
 /** Add your docs here. */
-public class CoralIntakeWB implements CoralIntakeIO {
+public class CoralIntakeIOWB implements CoralIntakeIO {
     
-    private final SparkMax intakeMotor = new SparkMax(Constants.CORAL_INTAKE_ID, MotorType.kBrushless);
+    private final SparkMax intakeMotor = new SparkMax(WoodbotConstants.CORAL_INTAKE_ID, MotorType.kBrushless);
     private final RelativeEncoder encoder = intakeMotor.getEncoder();
+    private final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
     
-    private final double woodCoralIntakeKP = 0.0;
-    private final double woodCoralIntakeKI = 0.0;
-    private final double woodCoralIntakeKD = 0.0;
-    private final double woodCoralIntakeKF = 0.0;
+    private final double KP = 0.0;
+    private final double KI = 0.0;
+    private final double KD = 0.0;
+    private final double KF = 0.0;
 
     private final double GEAR_RATIO = 1.0;
 
-    public CoralIntakeWB() {
-
+    public CoralIntakeIOWB() {
+        sparkMaxConfig.idleMode(IdleMode.kBrake);
+        sparkMaxConfig.inverted(false);
+        intakeMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     public void setDutyCycle(double dutyCycle) {
         intakeMotor.set(dutyCycle);
     }
-
-    public void setVelocity(double velocity) {
-        System.out.println(":(");
-    }
-
+    
     public void updateInputs(CoralIntakeIOInputs inputs) {
         inputs.intakeVelocity = encoder.getVelocity();
         inputs.intakePosition = encoder.getPosition();

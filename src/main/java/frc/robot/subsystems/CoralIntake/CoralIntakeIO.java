@@ -27,6 +27,4 @@ public interface CoralIntakeIO {
   public default void updateInputs(CoralIntakeIOInputs inputs) {}
 
   public void setDutyCycle(double outputVolts);
-
-  public void setVelocity(double velocity);
 }

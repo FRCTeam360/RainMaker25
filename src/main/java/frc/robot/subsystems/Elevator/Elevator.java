@@ -35,6 +35,10 @@ public class Elevator extends SubsystemBase {
         () -> this.setElevatorPostion(height),
         () -> this.setElevatorPostion(height));
   }
+  
+  public boolean getBottomSwitch() {
+    return io.getBottomSwitch();
+  }
 
   @Override
   public void periodic() {

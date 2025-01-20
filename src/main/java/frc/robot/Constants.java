@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.*;
+
+import com.ctre.phoenix6.signals.ConnectedMotorValue;
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.util.function.BooleanConsumer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,7 +37,7 @@ public final class Constants {
     public static final double OCB_PITCH_FUDGE_FACTOR = 0;
   }
 
-  public static final Mode currentMode = Mode.SIM;
+  // public static final Mode currentMode = Mode.SIM;
 
   public static enum RobotType {
     // real robot
@@ -60,13 +63,22 @@ public final class Constants {
     public static String COMP_SERIAL_ADDRESS = "d";
   }
 
-   public static class OldCompBotConstants {
+// placeholders for now until we got woodbot working
+  public static final int CORAL_INTAKE_ID = 0;
+  public static final int CORAL_OUTTAKE_ID = 1;
+  public static final int ELEVATOR_ID = 2;
+
+    public static class OperatorConstants {
+        public static final int kDriverControllerPort = 0;
+    }
+
+    public static class OldCompBotConstants {
         public static final String OCB_LIMELIGHT_NAME = "limelight";
         public static final double OCB_YAW_FUDGE_FACTOR = 0;
         public static final double OCB_PITCH_FUDGE_FACTOR = 0;
 
-        // public static final double maxSpeed = OldCompBot.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-        // public static final double maxAngularRate = RotationsPerSecond.of(15).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+        public static final double maxSpeed = OldCompBot.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+        public static final double maxAngularRate = RotationsPerSecond.of(15).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
         public static final double headingKP = 4.0;
         public static final double headingKI = 0.0;
@@ -78,82 +90,65 @@ public final class Constants {
         public static final double translationKD = 0.0;
     }
 
-  public static final class WoodbotConstants {
-    public static double ELEVATOR_UPPER_LIMIT = 84; // inches
-    public static double ELEVATOR_LOWER_LIMIT = 30; // inches
-    public static double ELEVATOR_KP = 0.0;
-    public static double ELEVATOR_KI = 0.0;
-    public static double ELEVATOR_KD = 0.0;
-    public static double ELEVATOR_KF = 0.0;
-  }
+    public static final class WoodbotConstants {
+      public static final int CORAL_INTAKE_ID = 1;
+      public static final int CORAL_OUTTAKE_ID = 2;
+      public static final int ELEVATOR_ID = 3;
 
-  public static RobotType getRobotType() {
-    String serialAddress = HALUtil.getSerialNumber();
-
-    if (serialAddress.equals(SerialAddressConstants.PRACTICE_SERIAL_ADDRESS)) {
-      return Constants.RobotType.PRACTICE;
-    } else if (serialAddress.equals(SerialAddressConstants.COMP_SERIAL_ADDRESS)) {
-      return Constants.RobotType.COMPETITION;
-    } else if (serialAddress.equals(SerialAddressConstants.WOOD_SERIAL_ADDRESS)) {
-      return Constants.RobotType.WOODBOT;
-    } else if (serialAddress.equals(SerialAddressConstants.OCB_SERIAL_ADDRESS)) {
-      return Constants.RobotType.OLD_COMP_BOT;
+      public static final int ELEVATOR_BOTTOM_SWITCH = 0;
+      public static final int OUTTAKE_SENSOR = 1;
     }
-    return Constants.RobotType.SIM;
-  }
-// placeholders for now until we got woodbot working
-  public static final int CORAL_INTAKE_ID = 0;
-  public static final int CORAL_OUTTAKE_ID = 1;
-  public static final int ELEVATOR_ID = 2;
 
-  public static enum Mode {
-    /** Running on a real robot. */
-    REAL,
+    public static RobotType getRobotType() {
+        String serialAddress = HALUtil.getSerialNumber();
 
-    /** Running a physics simulator. */
-    SIM,
+        if (serialAddress.equals(SerialAddressConstants.PRACTICE_SERIAL_ADDRESS)) {
+            return Constants.RobotType.PRACTICE;
+        } else if (serialAddress.equals(SerialAddressConstants.COMP_SERIAL_ADDRESS)) {
+            return Constants.RobotType.COMPETITION;
+        } else if (serialAddress.equals(SerialAddressConstants.WOOD_SERIAL_ADDRESS)) {
+            return Constants.RobotType.WOODBOT;
+        } else if (serialAddress.equals(SerialAddressConstants.OCB_SERIAL_ADDRESS)) {
+            return Constants.RobotType.OLD_COMP_BOT;
+        } else if (!Robot.isReal()) { // KEEP AT BOTTOM
+            return Constants.RobotType.SIM;
+        }
 
-    /** Replaying from a log file. */
-    REPLAY
-  }
-
-  public static boolean isWoodBot() {
-    if (getRobotType() == RobotType.WOODBOT) {
-      return true;
+        return Constants.RobotType.COMPETITION;
     }
-    return false;
-  }
 
-  public static boolean isCompBot() {
-    if (getRobotType() == RobotType.COMPETITION) {
-      return true;
+    public static boolean isOCB() {
+        if (getRobotType() == RobotType.OLD_COMP_BOT) {
+            return true;
+        }
+        return false;
     }
-    return false;
-  }
 
-  public static boolean isPracticeBot() {
-    if (getRobotType() == RobotType.PRACTICE) {
-      return true;
+    public static boolean isWoodBot() {
+        if (getRobotType() == RobotType.WOODBOT) {
+            return true;
+        }
+        return false;
     }
-    return false;
-  }
 
-  public static boolean isOCB() {
-    if (getRobotType() == RobotType.OLD_COMP_BOT) {
-      return true;
+    public static boolean isPracticeBot() {
+        if (getRobotType() == RobotType.PRACTICE) {
+            return true;
+        }
+        return false;
     }
-    return false;
-  }
 
-  public static boolean isSim() {
-    if (getRobotType() == RobotType.SIM) {
-      return true;
+    public static boolean isCompBot() {
+        if (getRobotType() == RobotType.COMPETITION) {
+            return true;
+        }
+        return false;
     }
-    return false;
-  }
 
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
-  }
-
+    public static boolean isSim() {
+      if (getRobotType() == RobotType.SIM) {
+        return true;
+      }
+      return false;
+    }
 }

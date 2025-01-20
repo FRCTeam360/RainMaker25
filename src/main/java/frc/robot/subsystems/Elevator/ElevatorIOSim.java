@@ -42,10 +42,10 @@ public class ElevatorIOSim implements ElevatorIO {
   /** Creates a new ElevatorIOSim. */
 
   private DCMotor gearbox = DCMotor.getFalcon500(1);
-  private Encoder encoder = new Encoder(0, 1);
+  public static Encoder encoder = new Encoder(0, 1);
 
   final double UPPER_LIMIT = 40;
-  final double LOWER_LIMIT = 0;
+  final double LOWER_LIMIT = 5;
 
   final double kA = 0.0;
   final double kD = 0.35;
@@ -61,7 +61,7 @@ public class ElevatorIOSim implements ElevatorIO {
 
   private final PWMTalonFX motor = new PWMTalonFX(1);
 
-  private final ElevatorSim elevatorSim = new ElevatorSim(
+  public final ElevatorSim elevatorSim = new ElevatorSim(
       gearbox,
       1.0, // elevator gearing
       2.0, // carriage mass
@@ -81,7 +81,7 @@ public class ElevatorIOSim implements ElevatorIO {
   private final EncoderSim simEncoder = new EncoderSim(encoder);
   private final PWMSim simMotor = new PWMSim(motor);
 
-  private final LoggedMechanism2d mech2d = new LoggedMechanism2d(20, 50, new Color8Bit(Color.kAquamarine));
+  private final LoggedMechanism2d mech2d = new LoggedMechanism2d(40, 50, new Color8Bit(Color.kAquamarine));
   private final LoggedMechanismRoot2d mech2dRoot = mech2d.getRoot("elevator root", 10, 0);
   private final LoggedMechanismLigament2d elevatorMech2d = mech2dRoot.append(
       new LoggedMechanismLigament2d("elevator", elevatorSim.getPositionMeters(), 90, 5, new Color8Bit(Color.kCoral)));

@@ -33,5 +33,8 @@ public CommandFactory(
     this.vision = vision;
 }
 
+public Command setElevatorHeight(double height) {
+    return elevator.setElevatorHeight(height);
+}
 
 }

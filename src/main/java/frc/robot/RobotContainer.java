@@ -34,6 +34,7 @@ import frc.robot.subsystems.Elevator.ElevatorIOSim;
 import frc.robot.subsystems.Catapult.Catapult;
 import frc.robot.subsystems.CoralIntake.CoralIntake;
 import frc.robot.subsystems.CoralShooter.CoralShooter;
+import frc.robot.subsystems.CoralShooter.CoralShooterIOSim;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorIO;
 import frc.robot.subsystems.Elevator.ElevatorIOWB;
@@ -124,6 +125,8 @@ public class RobotContainer {
                             Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR
                         )
                     );
+                coralShooter = new CoralShooter(new CoralShooterIOSim());
+                elevator = new Elevator(new ElevatorIOSim());
                 driveTrain = OldCompBot.createDrivetrain();
                 //constants = Constants.OldCompBotConstants;
                 setUpDrivetrain(
@@ -172,6 +175,11 @@ public class RobotContainer {
                 0.25,
                 Constants.OldCompBotConstants.maxAngularRate
             );
+
+        levelFour = commandFactory.setElevatorHeight(34.0);
+        levelThree = commandFactory.setElevatorHeight(25.0);
+        levelTwo = commandFactory.setElevatorHeight(10.0);
+        zero = commandFactory.setElevatorHeight(0.0);
     }
 
     private static void setUpDrivetrain(
@@ -196,8 +204,8 @@ public class RobotContainer {
 
         driverCont.pov(90).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
 
-        driverCont.a().onTrue(alignWithLimelight);
-        driverCont.b().onTrue(snapDrivebaseToAngle);
+        // driverCont.a().onTrue(alignWithLimelight);
+        // driverCont.b().onTrue(snapDrivebaseToAngle);
 
         driveTrain.registerTelemetry(logger::telemeterize);
 

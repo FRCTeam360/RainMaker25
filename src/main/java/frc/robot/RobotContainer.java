@@ -122,10 +122,10 @@ public class RobotContainer {
         //         Constants.OldCompBotConstants.maxAngularRate
         //     );
 
-        levelFour = commandFactory.setElevatorHeight(34.0);
-        levelThree = commandFactory.setElevatorHeight(25.0);
-        levelTwo = commandFactory.setElevatorHeight(10.0);
-        zero = commandFactory.setElevatorHeight(0.0);
+        levelFour = commandFactory.setElevatorHeight(34.0);  // y
+        levelThree = commandFactory.setElevatorHeight(25.0); // x
+        levelTwo = commandFactory.setElevatorHeight(10.0); // b
+        zero = commandFactory.setElevatorHeight(0.0); // a
 
         // setCoralIntake = new SetCoralIntake(coralShooter);
     }

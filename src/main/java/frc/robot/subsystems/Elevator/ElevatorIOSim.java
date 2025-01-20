@@ -48,10 +48,10 @@ public class ElevatorIOSim implements ElevatorIO {
   final double LOWER_LIMIT = 0;
 
   final double kA = 0.0;
-  final double kD = 0.0;
+  final double kD = 0.35;
   final double kG = 0.65;
-  final double kI = 0.0;
-  final double kP = 5.0;
+  final double kI = 0.2;
+  final double kP = 0.55;
   final double kS = 0.05;
   final double kV = 0.0;
 
@@ -63,8 +63,8 @@ public class ElevatorIOSim implements ElevatorIO {
 
   private final ElevatorSim elevatorSim = new ElevatorSim(
       gearbox,
-      10.0, // elevator gearing
-      4.0, // carriage mass
+      1.0, // elevator gearing
+      2.0, // carriage mass
       Units.inchesToMeters(2.0), // elevator drum radius
       LOWER_LIMIT, // min elevator height meters
       UPPER_LIMIT, // max elevator height meters
@@ -99,21 +99,22 @@ public class ElevatorIOSim implements ElevatorIO {
     elevatorSim.update(0.02);
     simEncoder.setDistance(elevatorSim.getPositionMeters());
     RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(elevatorSim.getCurrentDrawAmps()));
-    elevatorMech2d.setLength(elevatorSim.getPositionMeters());
+    //elevatorMech2d.setLength(elevatorSim.getPositionMeters());
+    elevatorMech2d.setLength(encoder.getDistance());
 
     Logger.recordOutput("elevator sim", mech2d);
-    inputs.elevatorPosition = simMotor.getPosition();
+    inputs.elevatorPosition = elevatorSim.getPositionMeters();
     inputs.elevatorVelocity = simMotor.getSpeed();
   }
 
-  public void updateTelemetry() {
-    // Update elevator visualization with position
-    elevatorMech2d.setLength(encoder.getDistance());
-  }
+  //   public void updateTelemetry() {
+  //   // Update elevator visualization with position
+  //   elevatorMech2d.setLength(encoder.getDistance());
+  // }
 
   public void setElevatorPostion(double height) {
     pidController.setGoal(height);
-    simMotor.setPosition(height);
+    // simMotor.setPosition(height);
 
     double pidOutput = pidController.calculate(simEncoder.getDistance());
     double feedforwardOutput = feedforward.calculate(pidController.getSetpoint().velocity);

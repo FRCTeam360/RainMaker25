@@ -130,4 +130,10 @@ public class ElevatorIOSim implements ElevatorIO {
   public double getPosition() {
     return simMotor.getPosition();
   }
+
+  @Override
+  public boolean getBottomSwitch() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'getBottomSwitch'");
+  }
 }

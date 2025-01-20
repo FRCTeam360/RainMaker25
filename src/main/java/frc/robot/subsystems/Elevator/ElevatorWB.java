@@ -58,4 +58,8 @@ public class ElevatorWB implements ElevatorIO {
         double height = elevatorMotor.getPosition().getValueAsDouble();
         return height >= LOWER_LIMIT ? true : false;
     }
+
+    public double getPosition() {
+        return elevatorMotor.getPosition().getValueAsDouble();
+    }
 }

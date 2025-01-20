@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.util.function.BooleanConsumer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.generated.OldCompBot;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -59,6 +60,24 @@ public final class Constants {
     public static String COMP_SERIAL_ADDRESS = "d";
   }
 
+   public static class OldCompBotConstants {
+        public static final String OCB_LIMELIGHT_NAME = "limelight";
+        public static final double OCB_YAW_FUDGE_FACTOR = 0;
+        public static final double OCB_PITCH_FUDGE_FACTOR = 0;
+
+        // public static final double maxSpeed = OldCompBot.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+        // public static final double maxAngularRate = RotationsPerSecond.of(15).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+
+        public static final double headingKP = 4.0;
+        public static final double headingKI = 0.0;
+        public static final double headingKD = 0.0;
+        public static final double headingKIZone = 0.0;
+
+        public static final double translationKP = 0.5;
+        public static final double translationKI = 0.0;
+        public static final double translationKD = 0.0;
+    }
+
   public static final class WoodbotConstants {
     public static double ELEVATOR_UPPER_LIMIT = 84; // inches
     public static double ELEVATOR_LOWER_LIMIT = 30; // inches
@@ -80,7 +99,7 @@ public final class Constants {
     } else if (serialAddress.equals(SerialAddressConstants.OCB_SERIAL_ADDRESS)) {
       return Constants.RobotType.OLD_COMP_BOT;
     }
-    return Constants.RobotType.COMPETITION;
+    return Constants.RobotType.SIM;
   }
 // placeholders for now until we got woodbot working
   public static final int CORAL_INTAKE_ID = 0;
@@ -121,6 +140,13 @@ public final class Constants {
 
   public static boolean isOCB() {
     if (getRobotType() == RobotType.OLD_COMP_BOT) {
+      return true;
+    }
+    return false;
+  }
+
+  public static boolean isSim() {
+    if (getRobotType() == RobotType.SIM) {
       return true;
     }
     return false;

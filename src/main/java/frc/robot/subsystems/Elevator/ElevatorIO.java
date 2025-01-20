@@ -6,6 +6,7 @@ package frc.robot.subsystems.Elevator;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public interface ElevatorIO {
@@ -27,9 +28,6 @@ public interface ElevatorIO {
 
   public void setDutyCycle(double dutyCycle);
 
-  
-
-
-
+  public double getPosition();
   // insert methods from subsystem layer
 }

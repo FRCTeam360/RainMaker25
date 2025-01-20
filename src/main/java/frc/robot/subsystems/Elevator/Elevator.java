@@ -6,6 +6,7 @@ package frc.robot.subsystems.Elevator;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Elevator extends SubsystemBase {
@@ -24,7 +25,16 @@ public class Elevator extends SubsystemBase {
   public void setDutyCycle(double dutyCycle) {
     io.setDutyCycle(dutyCycle);
   }
-  
+
+  public double getPosition() {
+    return io.getPosition();
+  }
+
+  public Command setElevatorHeight(double height) {
+    return this.runEnd(
+        () -> this.setElevatorPostion(height),
+        () -> this.setElevatorPostion(height));
+  }
 
   @Override
   public void periodic() {

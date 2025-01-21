@@ -27,14 +27,23 @@ public class WoodBotDriveTrain {
         //     Constants.VisionConstants.WOODBOT_YAW_FUDGE_FACTOR,
         //     Constants.VisionConstants.WOODBOT_PITCH_FUDGE_FACTOR)
         // );
-        private static final double headingKP = Constants.OldCompBotConstants.headingKP;
-        private static final double headingKI = Constants.OldCompBotConstants.headingKI;
-        private static final double headingKD = Constants.OldCompBotConstants.headingKD;
-        private static final double headingKIZone = Constants.OldCompBotConstants.headingKIZone;
-        private static final double translationKP = Constants.OldCompBotConstants.translationKP;
-        private static final double translationKI = Constants.OldCompBotConstants.translationKI;
-        private static final double translationKD = Constants.OldCompBotConstants.translationKD;
 
+        //change these
+        public static final String OCB_LIMELIGHT_NAME = "limelight";
+        public static final double OCB_YAW_FUDGE_FACTOR = 0;
+        public static final double OCB_PITCH_FUDGE_FACTOR = 0;
+
+        public static final double maxSpeed = OldCompBot.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+        public static final double maxAngularRate = RotationsPerSecond.of(15).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+
+        public static final double headingKP = 4.0;
+        public static final double headingKI = 0.0;
+        public static final double headingKD = 0.0;
+        public static final double headingKIZone = 0.0;
+
+        public static final double translationKP = 0.5;
+        public static final double translationKI = 0.0;
+        public static final double translationKD = 0.0;
 
     // Both sets of gains need to be tuned to your individual robot.
 

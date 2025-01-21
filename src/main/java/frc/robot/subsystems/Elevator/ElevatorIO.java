@@ -27,6 +27,8 @@ public interface ElevatorIO {
 
   public void setDutyCycle(double dutyCycle);
 
+  public void stop();
+
   public boolean getBottomSwitch();
   // insert methods from subsystem layer
 }

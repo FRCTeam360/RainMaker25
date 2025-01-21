@@ -37,6 +37,10 @@ public class Elevator extends SubsystemBase {
             );
     }
 
+    public void stop() {
+        io.stop();
+    }
+
     public Command isAtHeight(double position) {
         return Commands.waitUntil(() -> Math.abs(inputs.elevatorPosition - position) <= 1.0);
     }

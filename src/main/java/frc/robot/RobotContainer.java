@@ -231,6 +231,10 @@ public class RobotContainer {
         //driveTrain.registerTelemetry(logger::telemeterize);
     }
 
+    public void onDisable() {
+        elevator.stop();
+    }
+
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
     }

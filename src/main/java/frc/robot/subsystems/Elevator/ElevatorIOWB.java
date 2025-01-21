@@ -96,6 +96,10 @@ public class ElevatorIOWB implements ElevatorIO {
         elevatorMotor.set(dutyCycle);
     }
 
+    public void stop() {
+        elevatorMotor.stopMotor();
+    }
+
     /*
      * height is in motor rotations
      */

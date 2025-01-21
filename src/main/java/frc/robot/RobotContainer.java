@@ -67,21 +67,13 @@ public class RobotContainer {
         switch (Constants.getRobotType()) {
             case WOODBOT:
                 //woodbot stuff
-                vision = new Vision(new VisionIOLimelight(
-                    Constants.VisionConstants.WOODBOT_LIMELIGHT_NAME, 
-                    Constants.VisionConstants.WOODBOT_YAW_FUDGE_FACTOR,
-                    Constants.VisionConstants.WOODBOT_PITCH_FUDGE_FACTOR));
+                // vision = new Vision(new VisionIOLimelight(
+                //     Constants.VisionConstants.WOODBOT_LIMELIGHT_NAME, 
+                //     Constants.VisionConstants.WOODBOT_YAW_FUDGE_FACTOR,
+                //     Constants.VisionConstants.WOODBOT_PITCH_FUDGE_FACTOR));
+
                 driveTrain = WoodBotDriveTrain.createDrivetrain();
-                setUpDrivetrain(
-                    vision,
-                    Constants.OldCompBotConstants.headingKP,
-                    Constants.OldCompBotConstants.headingKI,
-                    Constants.OldCompBotConstants.headingKD,
-                    Constants.OldCompBotConstants.headingKIZone,
-                    Constants.OldCompBotConstants.translationKP,
-                    Constants.OldCompBotConstants.translationKI,
-                    Constants.OldCompBotConstants.translationKD
-                );
+
                 elevator = new Elevator(new ElevatorIOWB());
                 break;
             case OLD_COMP_BOT:
@@ -96,17 +88,7 @@ public class RobotContainer {
                         )
                     );
                 driveTrain = OldCompBot.createDrivetrain();
-                //constants = Constants.OldCompBotConstants;
-                setUpDrivetrain(
-                    vision,
-                    Constants.OldCompBotConstants.headingKP,
-                    Constants.OldCompBotConstants.headingKI,
-                    Constants.OldCompBotConstants.headingKD,
-                    Constants.OldCompBotConstants.headingKIZone,
-                    Constants.OldCompBotConstants.translationKP,
-                    Constants.OldCompBotConstants.translationKI,
-                    Constants.OldCompBotConstants.translationKD
-                );
+                
             case PRACTICE:
                 //practice bot stuff
                 break;
@@ -120,17 +102,6 @@ public class RobotContainer {
                         )
                     );
                 driveTrain = OldCompBot.createDrivetrain();
-                //constants = Constants.OldCompBotConstants;
-                setUpDrivetrain(
-                    vision,
-                    Constants.OldCompBotConstants.headingKP,
-                    Constants.OldCompBotConstants.headingKI,
-                    Constants.OldCompBotConstants.headingKD,
-                    Constants.OldCompBotConstants.headingKIZone,
-                    Constants.OldCompBotConstants.translationKP,
-                    Constants.OldCompBotConstants.translationKI,
-                    Constants.OldCompBotConstants.translationKD
-                );
                 break;
             case COMPETITION:
             default:
@@ -168,20 +139,20 @@ public class RobotContainer {
             );
     }
 
-    private static void setUpDrivetrain(
-        Vision vision,
-        double headingKP,
-        double headingKI,
-        double headingKD,
-        double headingKIZone,
-        double translationKP,
-        double translationKI,
-        double translationKD
-    ) {
-        driveTrain.addHeadingController(headingKP, headingKI, headingKD, headingKIZone);
-        driveTrain.addTranslationController(translationKP, translationKI, translationKD);
-        driveTrain.assignVision(vision);
-    }
+    // private static void setUpDrivetrain(
+        // Vision vision,
+        // double headingKP,
+        // double headingKI,
+        // double headingKD,
+        // double headingKIZone,
+        // double translationKP,
+        // double translationKI,
+        // double translationKD
+    // ) {
+        // driveTrain.addHeadingController(headingKP, headingKI, headingKD, headingKIZone);
+        // driveTrain.addTranslationController(translationKP, translationKI, translationKD);
+        // driveTrain.assignVision(vision);
+    // }
 
     private void configureBindings() {
         driveTrain.setDefaultCommand(

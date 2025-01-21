@@ -55,8 +55,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public PhoenixPIDController headingController;
     public PIDController translationController;
-    
-    private Vision vision;
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -86,10 +84,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public final void zero() {
         this.tareEverything();
-    }
-
-    public final void assignVision(Vision vision) {
-        this.vision = vision;
     }
 
     public void addHeadingController(double kP, double kI, double kD, double kIZone) {
@@ -192,14 +186,22 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
      * @param modules               Constants for each specific module
      */
     public CommandSwerveDrivetrain(
+        double headingKP,
+        double headingKI,
+        double headingKD,
+        double headingKIZone,
+        double translationKP,
+        double translationKI,
+        double translationKD,
         SwerveDrivetrainConstants drivetrainConstants,
         SwerveModuleConstants<?, ?, ?>... modules
     ) {
-        
         super(drivetrainConstants, modules);
         if (Utils.isSimulation()) {
             startSimThread();
         }
+        addHeadingController(headingKP, headingKI, headingKD, headingKIZone);
+        addTranslationController(translationKP, translationKI, translationKD);
 
         configureAutoBuilder();
     }

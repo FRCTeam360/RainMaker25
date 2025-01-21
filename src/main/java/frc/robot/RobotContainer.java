@@ -184,13 +184,18 @@ public class RobotContainer {
 
         setCoralIntake = new SetCoralIntake(coralShooter);
 
-        NamedCommands.registerCommand("raise to l4", commandFactory.setElevatorHeight(34.0).raceWith(elevator.isAtHeight(34.0)));
-        NamedCommands.registerCommand("zero", commandFactory.setElevatorHeight(0.0).raceWith(elevator.isAtHeight(0.0)));
-
         NamedCommands.registerCommand(
-            "shoot",
-            coralShooter.shootCmd()
+            "raise to l4",
+            commandFactory.setElevatorHeight(34.0).raceWith(elevator.isAtHeight(34.0))
         );
+        NamedCommands.registerCommand(
+            "zero",
+            commandFactory.setElevatorHeight(0.0).raceWith(elevator.isAtHeight(0.0))
+        );
+
+        NamedCommands.registerCommand("shoot", coralShooter.shootCmd());
+
+        NamedCommands.registerCommand("intake", coralShooter.intakeCmd());
     }
 
     private void setUpDrivetrain(
@@ -221,11 +226,7 @@ public class RobotContainer {
         driverCont.y().onTrue(levelFour);
 
         driverCont.leftBumper().whileTrue(setCoralIntake);
-        driverCont
-            .rightBumper()
-            .whileTrue(
-                coralShooter.shootCmd()
-            ); //add end T-T
+        driverCont.rightBumper().whileTrue(coralShooter.shootCmd()); //add end T-T
         //driverCont.rightBumper().whileTrue(new InstantCommand(() -> coralShooter.setDutyCycle(-0.3), coralShooter)); //add end T-T
 
         //driveTrain.registerTelemetry(logger::telemeterize);

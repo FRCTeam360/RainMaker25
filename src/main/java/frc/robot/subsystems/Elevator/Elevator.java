@@ -5,6 +5,7 @@
 package frc.robot.subsystems.Elevator;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -31,9 +32,13 @@ public class Elevator extends SubsystemBase {
 
     public Command setElevatorHeight(double height) {
         return this.runEnd(
-                () -> this.setElevatorPostion(height),
-                () -> this.setElevatorPostion(height)
+                () -> io.setElevatorPostion(height),
+                () -> io.setElevatorPostion(height)
             );
+    }
+
+    public Command isAtHeight(double position) {
+        return Commands.waitUntil(() -> Math.abs(inputs.elevatorPosition - position) <= 1.0);
     }
 
     @Override

@@ -9,6 +9,7 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -148,6 +149,7 @@ public class RobotContainer {
                 break;
         }
         commandFactory = new CommandFactory(catapult, coralIntake, coralShooter, elevator, vision);
+        initializeCommands();
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -159,7 +161,6 @@ public class RobotContainer {
         diagnosticTab.addBoolean("Old Comp Bot", Constants::isOCB);
         diagnosticTab.addString("Serial Address", HALUtil::getSerialNumber);
 
-        initializeCommands();
         configureBindings();
     }
 
@@ -182,6 +183,14 @@ public class RobotContainer {
         zero = commandFactory.setElevatorHeight(0.0);
 
         setCoralIntake = new SetCoralIntake(coralShooter);
+
+        NamedCommands.registerCommand("raise to l4", commandFactory.setElevatorHeight(34.0).raceWith(elevator.isAtHeight(34.0)));
+        NamedCommands.registerCommand("zero", commandFactory.setElevatorHeight(0.0).raceWith(elevator.isAtHeight(0.0)));
+
+        NamedCommands.registerCommand(
+            "shoot",
+            coralShooter.shootCmd()
+        );
     }
 
     private void setUpDrivetrain(
@@ -204,7 +213,7 @@ public class RobotContainer {
             driveTrain.fieldOrientedDrive(MaxSpeed, MaxAngularRate, driverCont)
         );
 
-          driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
+        driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
 
         driverCont.a().onTrue(zero);
         driverCont.b().onTrue(levelTwo);
@@ -215,10 +224,7 @@ public class RobotContainer {
         driverCont
             .rightBumper()
             .whileTrue(
-                coralShooter.runEnd(
-                    () -> coralShooter.setDutyCycle(-0.3),
-                    () -> coralShooter.setDutyCycle(0.0)
-                )
+                coralShooter.shootCmd()
             ); //add end T-T
         //driverCont.rightBumper().whileTrue(new InstantCommand(() -> coralShooter.setDutyCycle(-0.3), coralShooter)); //add end T-T
 

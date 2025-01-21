@@ -6,7 +6,12 @@ package frc.robot.subsystems.CoralShooter;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.CommandLogger;
 
 public class CoralShooter extends SubsystemBase {
   private final CoralShooterIO io;
@@ -22,11 +27,33 @@ public class CoralShooter extends SubsystemBase {
   }
 
   public boolean getOuttakeSensor() {
-    return io.getOuttakeSensor();
+    return inputs.shooterSensor;
   }
 
   public void stop() {
     io.stop();
+  }
+
+  public Command runCmd(double dutyCycle) {
+    return this.runEnd(
+      () -> this.setDutyCycle(dutyCycle),
+      () -> this.stop()
+    );
+  }
+
+  public Command waitUntilEmpty() {
+    return Commands.waitUntil(() -> !this.getOuttakeSensor());
+  }
+  
+  public Command waitUntilFull() {
+    return Commands.waitUntil(() -> this.getOuttakeSensor());
+  }
+
+  public Command shootCmd() {
+    String cmdName = "ShootCoral";
+    return new InstantCommand(() -> CommandLogger.logCommandStart(cmdName))
+      .andThen(waitUntilEmpty().raceWith(runCmd(-0.3)))
+      .andThen(() -> CommandLogger.logCommandEnd(cmdName));
   }
 
   @Override

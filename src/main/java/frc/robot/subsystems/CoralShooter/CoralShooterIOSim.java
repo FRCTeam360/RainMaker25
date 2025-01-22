@@ -49,7 +49,7 @@ public class CoralShooterIOSim implements CoralShooterIO {
   private final EncoderSim simEncoder = new EncoderSim(encoder);
   private final PWMSim simMotor = new PWMSim(motor);
   
-  private final Color8Bit color = new Color8Bit(Color.kCoral);
+  private final Color8Bit color = new Color8Bit(Color.kPurple);
   private final LoggedMechanism2d mech2d = new LoggedMechanism2d(30, 50, new Color8Bit(Color.kAliceBlue));
   private final LoggedMechanismRoot2d mech2dRoot = mech2d.getRoot("shooter root", 10, 0);
   private final LoggedMechanismLigament2d mech2dSide1 = mech2dRoot.append(new LoggedMechanismLigament2d("side1", 10, 340, 5, color));

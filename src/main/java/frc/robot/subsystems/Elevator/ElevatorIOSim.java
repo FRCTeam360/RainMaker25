@@ -81,10 +81,10 @@ public class ElevatorIOSim implements ElevatorIO {
   private final EncoderSim simEncoder = new EncoderSim(encoder);
   private final PWMSim simMotor = new PWMSim(motor);
 
-  private final LoggedMechanism2d mech2d = new LoggedMechanism2d(40, 50, new Color8Bit(Color.kAquamarine));
+  private final LoggedMechanism2d mech2d = new LoggedMechanism2d(40, 50, new Color8Bit(Color.kLavenderBlush));
   private final LoggedMechanismRoot2d mech2dRoot = mech2d.getRoot("elevator root", 10, 0);
   private final LoggedMechanismLigament2d elevatorMech2d = mech2dRoot.append(
-      new LoggedMechanismLigament2d("elevator", elevatorSim.getPositionMeters(), 90, 5, new Color8Bit(Color.kCoral)));
+      new LoggedMechanismLigament2d("elevator", elevatorSim.getPositionMeters(), 90, 5, new Color8Bit(Color.kPurple)));
 
   public ElevatorIOSim() {
     // distance per pulse = (distance per revolution) / (pulses per revolution)

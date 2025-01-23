@@ -178,8 +178,8 @@ public class RobotContainer {
         //     );
 
         levelFour = commandFactory.setElevatorHeight(34.0);
-        levelThree = commandFactory.setElevatorHeight(25.0);
-        levelTwo = commandFactory.setElevatorHeight(10.0);
+        levelThree = commandFactory.setElevatorHeight(18.0);
+        levelTwo = commandFactory.setElevatorHeight(8.5);
         zero = commandFactory.setElevatorHeight(0.0);
 
         setCoralIntake = new SetCoralIntake(coralShooter);

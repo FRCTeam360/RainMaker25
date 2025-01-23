@@ -7,31 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "left bulletproof"
+            "pathName": "right bulletproof 2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "left reef to station"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intake"
+            "pathName": "Copy of right bulletproof 2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "left station to reef"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
+            "pathName": "Bottom coral Reef 2"
           }
         }
       ]

@@ -13,19 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "raise to l4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "zero"
           }
         }
       ]

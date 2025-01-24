@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Vision.Vision;
+
 import java.util.Optional;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -19,11 +21,13 @@ public class SnapDrivebaseToAngle extends Command {
     private CommandXboxController driverCont = new CommandXboxController(0);
     private double maxSpeed;
     private double angleToFace = 0.0;
+    private Vision vision;
 
     /** Creates a new SnapDrivebaseToAngle. */
-    public SnapDrivebaseToAngle(CommandSwerveDrivetrain driveTrain, double maxSpeed) {
+    public SnapDrivebaseToAngle(CommandSwerveDrivetrain driveTrain, double maxSpeed, Vision vision) {
         this.driveTrain = driveTrain;
         this.maxSpeed = maxSpeed;
+        this.vision = vision;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(driveTrain);
     }
@@ -31,17 +35,17 @@ public class SnapDrivebaseToAngle extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        if (driveTrain.getAngle() >= -30.0 && driveTrain.getAngle() <= 30.0) {
+        if (vision.getAprilTagID() == 18 || vision.getAprilTagID() == 7) {
             angleToFace = 0.0;
-        } else if (driveTrain.getAngle() <= -30.0 && driveTrain.getAngle() >= -90.0) {
+        } else if (vision.getAprilTagID() == 19 || vision.getAprilTagID() == 6)  {
             angleToFace = -60.0;
-        } else if (driveTrain.getAngle() <= -90.0 && driveTrain.getAngle() >= -150.0) {
+        } else if (vision.getAprilTagID() == 20 || vision.getAprilTagID() == 11) {
             angleToFace = -120.0;
-        } else if (driveTrain.getAngle() <= -150.0 || driveTrain.getAngle() >= 150.0) {
+        } else if (vision.getAprilTagID() == 21 || vision.getAprilTagID() == 10) {
             angleToFace = 180.0;
-        } else if (driveTrain.getAngle() <= 150.0 && driveTrain.getAngle() >= 90.0) {
+        } else if (vision.getAprilTagID() == 22 || vision.getAprilTagID() == 9) {
             angleToFace = 120.0;
-        } else if (driveTrain.getAngle() >= 30.0 && driveTrain.getAngle() <= 90.0) {
+        } else if (vision.getAprilTagID() == 17 || vision.getAprilTagID() == 8) {
             angleToFace = 60.0;
         }
     }

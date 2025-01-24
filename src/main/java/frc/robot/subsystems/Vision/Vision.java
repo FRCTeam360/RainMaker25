@@ -8,13 +8,19 @@ import java.util.Optional;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.google.flatbuffers.Table;
+
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Vision extends SubsystemBase {
+  private NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
   private VisionIO io;
   private VisionIOInputsAutoLogged inputs = new VisionIOInputsAutoLogged();
   private Timer snapshotTimer = new Timer();
@@ -24,6 +30,11 @@ public class Vision extends SubsystemBase {
   /** Creates a new Vision. */
   public Vision(VisionIO io) {
     this.io = io;
+  }
+
+  public int getAprilTagID() {
+    // to be determined as of rn
+    return 18;
   }
 
   public double getTXRaw() {

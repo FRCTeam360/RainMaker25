@@ -7,6 +7,8 @@ package frc.robot.subsystems.Vision;
 import org.littletonrobotics.junction.AutoLog;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 
 public interface VisionIO {
   /** Creates a new VisionIO. */

@@ -98,6 +98,7 @@ public class ElevatorIOWB implements ElevatorIO {
 
     public void stop() {
         elevatorMotor.stopMotor();
+        
     }
 
     /*

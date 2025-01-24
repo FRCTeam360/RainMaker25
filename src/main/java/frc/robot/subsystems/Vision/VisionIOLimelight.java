@@ -4,15 +4,20 @@
 
 package frc.robot.subsystems.Vision;
 
+import java.lang.reflect.Array;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.robot.subsystems.Vision.LimelightHelpers.RawFiducial;
 
 public class VisionIOLimelight implements VisionIO {
   private final NetworkTable table;
   private final double yawFudgeFactor;
   private final double pitchFudgeFactor;
+
+  private RawFiducial[] fiducials = LimelightHelpers.getRawFiducials("");
 
   /**
    * Creates a new Limelight hardware layer.
@@ -34,7 +39,14 @@ public class VisionIOLimelight implements VisionIO {
     inputs.ty = getTYRaw();
     inputs.tyAdjusted = getTYAdjusted();
     inputs.pipeline = getPipeline();
+
   }
+  public int[] getAprilTagIDs(){
+    int[] ids = {5, 6, 7, 8};
+    //TODO: code to add apriltag ids to ids[] array
+    return ids;
+  }
+  
 
   public double getTXRaw() {
     return table.getEntry("tx").getDouble(0.0);

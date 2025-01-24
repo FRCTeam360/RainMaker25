@@ -15,6 +15,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.Constants.WoodbotConstants;
 import frc.robot.subsystems.CoralIntake.CoralIntakeIO.CoralIntakeIOInputs;
@@ -95,6 +96,11 @@ public class ElevatorIOWB implements ElevatorIO {
         elevatorMotor.set(dutyCycle);
     }
 
+    public void stop() {
+        elevatorMotor.stopMotor();
+        
+    }
+
     /*
      * height is in motor rotations
      */
@@ -102,6 +108,7 @@ public class ElevatorIOWB implements ElevatorIO {
         MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(height);
         elevatorMotor.setControl(motionMagicVoltage);
     }
+
 
     public boolean getBottomSwitch() {
         return !bottomSwitch.get();

@@ -9,7 +9,7 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
-
+import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -50,7 +50,7 @@ public class RobotContainer {
 
     private CommandFactory commandFactory;
 
-    public static CommandSwerveDrivetrain driveTrain;
+    private CommandSwerveDrivetrain driveTrain;
     private Vision vision;
     private Catapult catapult;
     private CoralIntake coralIntake;
@@ -81,17 +81,17 @@ public class RobotContainer {
                             Constants.VisionConstants.WOODBOT_PITCH_FUDGE_FACTOR
                         )
                     );
-                // driveTrain = WoodBotDriveTrain.createDrivetrain();
-                // setUpDrivetrain(
-                //     vision,
-                //     Constants.OldCompBotConstants.headingKP,
-                //     Constants.OldCompBotConstants.headingKI,
-                //     Constants.OldCompBotConstants.headingKD,
-                //     Constants.OldCompBotConstants.headingKIZone,
-                //     Constants.OldCompBotConstants.translationKP,
-                //     Constants.OldCompBotConstants.translationKI,
-                //     Constants.OldCompBotConstants.translationKD
-                // );
+                driveTrain = WoodBotDriveTrain.createDrivetrain();
+                setUpDrivetrain(
+                    vision,
+                    Constants.OldCompBotConstants.headingKP,
+                    Constants.OldCompBotConstants.headingKI,
+                    Constants.OldCompBotConstants.headingKD,
+                    Constants.OldCompBotConstants.headingKIZone,
+                    Constants.OldCompBotConstants.translationKP,
+                    Constants.OldCompBotConstants.translationKI,
+                    Constants.OldCompBotConstants.translationKD
+                );
                 elevator = new Elevator(new ElevatorIOWB());
                 coralShooter = new CoralShooter(new CoralShooterIOWB());
                 break;
@@ -147,9 +147,9 @@ public class RobotContainer {
             default:
                 //competition bot stuff
                 break;
-
         }
         commandFactory = new CommandFactory(catapult, coralIntake, coralShooter, elevator, vision);
+        initializeCommands();
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -161,8 +161,7 @@ public class RobotContainer {
         diagnosticTab.addBoolean("Old Comp Bot", Constants::isOCB);
         diagnosticTab.addString("Serial Address", HALUtil::getSerialNumber);
 
-        initializeCommands();
-       configureBindings();
+        configureBindings();
     }
 
     public void initializeCommands() {
@@ -179,14 +178,27 @@ public class RobotContainer {
         //     );
 
         levelFour = commandFactory.setElevatorHeight(34.0);
-        levelThree = commandFactory.setElevatorHeight(25.0);
-        levelTwo = commandFactory.setElevatorHeight(10.0);
+        levelThree = commandFactory.setElevatorHeight(18.0);
+        levelTwo = commandFactory.setElevatorHeight(8.5);
         zero = commandFactory.setElevatorHeight(0.0);
 
         setCoralIntake = new SetCoralIntake(coralShooter);
+
+        NamedCommands.registerCommand(
+            "raise to l4",
+            commandFactory.setElevatorHeight(34.0).raceWith(elevator.isAtHeight(34.0))
+        );
+        NamedCommands.registerCommand(
+            "zero",
+            commandFactory.setElevatorHeight(0.0).raceWith(elevator.isAtHeight(0.0))
+        );
+
+        NamedCommands.registerCommand("shoot", coralShooter.shootCmd());
+
+        NamedCommands.registerCommand("intake", coralShooter.intakeCmd());
     }
 
-    private static void setUpDrivetrain(
+    private void setUpDrivetrain(
         Vision vision,
         double headingKP,
         double headingKI,
@@ -202,11 +214,11 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        // driveTrain.setDefaultCommand(
-        //     driveTrain.fieldOrientedDrive(MaxSpeed, MaxAngularRate, driverCont)
-        // );
+        driveTrain.setDefaultCommand(
+            driveTrain.fieldOrientedDrive(MaxSpeed, MaxAngularRate, driverCont)
+        );
 
-     //   driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
+        driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
 
         driverCont.a().onTrue(zero);
         driverCont.b().onTrue(levelTwo);
@@ -214,13 +226,14 @@ public class RobotContainer {
         driverCont.y().onTrue(levelFour);
 
         driverCont.leftBumper().whileTrue(setCoralIntake);
-        driverCont.rightBumper().whileTrue(coralShooter.runEnd(
-            () -> coralShooter.setDutyCycle(-0.3),
-            () -> coralShooter.setDutyCycle(0.0)
-        )); //add end T-T
+        driverCont.rightBumper().whileTrue(coralShooter.shootCmd()); //add end T-T
         //driverCont.rightBumper().whileTrue(new InstantCommand(() -> coralShooter.setDutyCycle(-0.3), coralShooter)); //add end T-T
 
         //driveTrain.registerTelemetry(logger::telemeterize);
+    }
+
+    public void onDisable() {
+        elevator.stop();
     }
 
     public Command getAutonomousCommand() {

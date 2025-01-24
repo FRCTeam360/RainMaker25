@@ -165,8 +165,8 @@ public class RobotContainer {
     }
 
     public void initializeCommands() {
-        // snapDrivebaseToAngle =
-        //     new SnapDrivebaseToAngle(driveTrain, Constants.OldCompBotConstants.maxSpeed);
+        snapDrivebaseToAngle =
+            new SnapDrivebaseToAngle(driveTrain, Constants.OldCompBotConstants.maxSpeed, vision);
         // alignWithLimelight =
         //     new AlignWithLimelight(
         //         vision,
@@ -221,9 +221,11 @@ public class RobotContainer {
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
 
         driverCont.a().onTrue(zero);
-        driverCont.b().onTrue(levelTwo);
+        driverCont.b().onTrue(snapDrivebaseToAngle);
         driverCont.x().onTrue(levelThree);
         driverCont.y().onTrue(levelFour);
+
+  
 
         driverCont.leftBumper().whileTrue(setCoralIntake);
         driverCont.rightBumper().whileTrue(coralShooter.shootCmd()); //add end T-T

@@ -24,6 +24,8 @@ public interface VisionIO {
 
     public void updateInputs(VisionIOInputs inputs);
 
+    public int getAprilTagID();
+
     public double getTXRaw();
 
     public double getTXAdjusted();

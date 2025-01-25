@@ -30,6 +30,10 @@ public class Elevator extends SubsystemBase {
     return inputs.elevatorPosition;
   }
 
+  public boolean getBottomSwitch() {
+    return inputs.elevatorSensor;
+  }
+
   public Command setElevatorHeight(double height) {
     return this.runEnd(
         () -> this.setElevatorPostion(height),

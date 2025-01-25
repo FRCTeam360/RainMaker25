@@ -27,14 +27,49 @@ import frc.robot.generated.OldCompBot;
 
 public final class Constants {
 
+  public static class VisionConstants {
+    public static final String WOODBOT_LIMELIGHT_NAME = "limelight";
+    public static final double WOODBOT_YAW_FUDGE_FACTOR = 0;
+    public static final double WOODBOT_PITCH_FUDGE_FACTOR = 0;
+
+    public static final String OCB_LIMELIGHT_NAME = "limelight";
+    public static final double OCB_YAW_FUDGE_FACTOR = 0;
+    public static final double OCB_PITCH_FUDGE_FACTOR = 0;
+  }
+
+  // public static final Mode currentMode = Mode.SIM;
+
+  public static enum RobotType {
+    // real robot
+    REAL,
+    // physics sim
+    SIM,
+    // log file
+    REPLAY,
+    // woodbot
+    WOODBOT,
+    // practice bot
+    PRACTICE,
+    // comp bot
+    COMPETITION,
+    // last year's comp bot; abbreviated to OCB
+    OLD_COMP_BOT
+  }
+
+  public static final class SerialAddressConstants {
+    public static String OCB_SERIAL_ADDRESS = "032BE44A";
+    public static String WOOD_SERIAL_ADDRESS = "031b5208";
+    public static String PRACTICE_SERIAL_ADDRESS = "c";
+    public static String COMP_SERIAL_ADDRESS = "d";
+  }
+
+// placeholders for now until we got woodbot working
+  public static final int CORAL_INTAKE_ID = 0;
+  public static final int CORAL_OUTTAKE_ID = 1;
+  public static final int ELEVATOR_ID = 2;
+
     public static class OperatorConstants {
         public static final int kDriverControllerPort = 0;
-    }
-
-    public static class VisionConstants {
-        public static final String WOODBOT_LIMELIGHT_NAME = "limelight";
-        public static final double WOODBOT_YAW_FUDGE_FACTOR = 0;
-        public static final double WOODBOT_PITCH_FUDGE_FACTOR = 0;
     }
 
     public static class OldCompBotConstants {
@@ -62,30 +97,6 @@ public final class Constants {
 
       public static final int ELEVATOR_BOTTOM_SWITCH = 0;
       public static final int OUTTAKE_SENSOR = 1;
-    }
-
-    public static enum RobotType {
-        // real robot
-        REAL,
-        // physics sim
-        SIM,
-        // log file
-        REPLAY,
-        // woodbot
-        WOODBOT,
-        // practice bot
-        PRACTICE,
-        // comp bot
-        COMPETITION,
-        // last year's comp bot; abbreviated to OCB
-        OLD_COMP_BOT,
-    }
-
-    public static final class SerialAddressConstants {
-        public static String OCB_SERIAL_ADDRESS = "032BE44A";
-        public static String WOOD_SERIAL_ADDRESS = "b";
-        public static String PRACTICE_SERIAL_ADDRESS = "c";
-        public static String COMP_SERIAL_ADDRESS = "d";
     }
 
     public static RobotType getRobotType() {
@@ -132,5 +143,12 @@ public final class Constants {
             return true;
         }
         return false;
+    }
+
+    public static boolean isSim() {
+      if (getRobotType() == RobotType.SIM) {
+        return true;
+      }
+      return false;
     }
 }

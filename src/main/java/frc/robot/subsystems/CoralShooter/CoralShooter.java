@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class CoralShooter extends SubsystemBase {
   private final CoralShooterIO io;
-  private final CoralShooterIOInputsAutoLogged inputs = new CoralShooterIOInputsAutoLogged();
+  public final CoralShooterIOInputsAutoLogged inputs = new CoralShooterIOInputsAutoLogged();
 
   /** Creates a new CoralOutake. */
   public CoralShooter(CoralShooterIO io) {
@@ -19,10 +19,6 @@ public class CoralShooter extends SubsystemBase {
 
   public void setDutyCycle(double speed) {
     io.setDutyCycle(speed);
-  }
-
-  public boolean getOuttakeSensor() {
-    return io.getOuttakeSensor();
   }
 
   public void stop() {

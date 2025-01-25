@@ -81,6 +81,7 @@ public class ElevatorIOWB implements ElevatorIO {
         inputs.elevatorVoltage = elevatorMotor.getMotorVoltage().getValueAsDouble();
         inputs.elevatorPosition = elevatorMotor.getPosition().getValueAsDouble();
         inputs.elevatorVelocity = elevatorMotor.getVelocity().getValueAsDouble();
+        inputs.elevatorSensor = !bottomSwitch.get();
     }
 
     public void setDutyCycle(double dutyCycle) {

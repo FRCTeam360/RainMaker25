@@ -7,6 +7,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import java.lang.ModuleLayer.Controller;
+import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -132,8 +133,8 @@ public class RobotContainer {
                             Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR
                         )
                     );
-                coralShooter = new CoralShooter(new CoralShooterIOSim());
                 elevator = new Elevator(new ElevatorIOSim());
+                coralShooter = new CoralShooter(new CoralShooterIOSim(() -> elevator.getPosition()));
                 driveTrain = OldCompBot.createDrivetrain();
                 //constants = Constants.OldCompBotConstants;
                 setUpDrivetrain(

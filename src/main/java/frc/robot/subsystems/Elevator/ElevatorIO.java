@@ -19,6 +19,7 @@ public interface ElevatorIO {
     public double elevatorVoltage = 0.0;
     public double elevatorVelocity = 0.0;
     public double elevatorPosition = 0.0;
+    public boolean elevatorSensor = false;
       // insert inputs
   }
 
@@ -29,7 +30,5 @@ public interface ElevatorIO {
   public void setDutyCycle(double dutyCycle);
 
   public double getPosition();
-  
-  public boolean getBottomSwitch();
   // insert methods from subsystem layer
 }

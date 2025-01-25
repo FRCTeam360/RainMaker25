@@ -125,9 +125,4 @@ public class ElevatorIOSim implements ElevatorIO {
   public void setDutyCycle(double dutyCycle) {
     simMotor.setSpeed(dutyCycle);
   }
-
-  @Override
-  public double getPosition() {
-    return elevatorSim.getPositionMeters();
-  }
 }

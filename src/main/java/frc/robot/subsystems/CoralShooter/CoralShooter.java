@@ -25,6 +25,10 @@ public class CoralShooter extends SubsystemBase {
     io.stop();
   }
 
+  public boolean getOuttakeSensor() {
+    return inputs.outtakeSensor;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

@@ -28,7 +28,5 @@ public interface ElevatorIO {
   public void setElevatorPostion(double height);
 
   public void setDutyCycle(double dutyCycle);
-
-  public double getPosition();
   // insert methods from subsystem layer
 }

@@ -24,7 +24,7 @@ public class SetCoralIntake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(coralShooter.inputs.outtakeSensor){
+    if(coralShooter.getOuttakeSensor()){
       coralShooter.stop();
     }else{
       coralShooter.setDutyCycle(0.3);

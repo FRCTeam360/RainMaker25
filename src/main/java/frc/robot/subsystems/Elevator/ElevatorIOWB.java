@@ -95,9 +95,4 @@ public class ElevatorIOWB implements ElevatorIO {
     public boolean getBottomSwitch() {
         return !bottomSwitch.get();
     }
-
-    @Override
-    public double getPosition() {
-        return elevatorMotor.getPosition().getValueAsDouble();
-    }
 }

@@ -27,7 +27,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public double getPosition() {
-    return io.getPosition();
+    return inputs.elevatorPosition;
   }
 
   public Command setElevatorHeight(double height) {

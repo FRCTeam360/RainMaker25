@@ -41,10 +41,8 @@ public class VisionIOLimelight implements VisionIO {
     inputs.pipeline = getPipeline();
 
   }
-  public int[] getAprilTagIDs(){
-    int[] ids = {5, 6, 7, 8};
-    //TODO: code to add apriltag ids to ids[] array
-    return ids;
+  public int getAprilTagID() {
+    return (int)table.getEntry("tid").getInteger(0);
   }
   
   public double getTXRaw() {

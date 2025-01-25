@@ -33,8 +33,7 @@ public class Vision extends SubsystemBase {
   }
 
   public int getAprilTagID() {
-    // to be determined as of rn
-    return 18;
+    return io.getAprilTagID();
   }
 
   public double getTXRaw() {

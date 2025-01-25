@@ -39,7 +39,6 @@ public class CoralShooterIOSim implements CoralShooterIO {
 
   private DCMotor gearbox = DCMotor.getNEO(1);
   private Encoder encoder = new Encoder(2, 3);
-  private DigitalInput sensor = new DigitalInput(WoodbotConstants.OUTTAKE_SENSOR);
 
   private final PWMSparkMax motor = new PWMSparkMax(2);
 
@@ -81,7 +80,7 @@ public class CoralShooterIOSim implements CoralShooterIO {
     inputs.outtakePosition = simMotor.getPosition();
     inputs.outtakeVelocity = shooterSim.getAngularVelocityRPM();
     inputs.outtakeVoltage = shooterSim.getInputVoltage();
-    inputs.outtakeSensor = !sensor.get();
+    // inputs.outtakeSensor = !sensor.get();
   }
 
   @Override

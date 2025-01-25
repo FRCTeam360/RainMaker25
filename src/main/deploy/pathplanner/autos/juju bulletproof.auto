@@ -13,12 +13,6 @@
                 "data": {
                   "pathName": "middle bulletproof"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "raise to l4"
-                }
               }
             ]
           }

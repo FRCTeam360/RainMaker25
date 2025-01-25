@@ -5,22 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "right bulletproof"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "raise to l4"
-                }
-              }
-            ]
+            "pathName": "right bulletproof"
           }
         },
         {

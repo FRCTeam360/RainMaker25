@@ -23,7 +23,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "left reef to station"
+                  "pathName": "back left rts left"
                 }
               },
               {
@@ -44,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "left station to reef"
+            "pathName": "back left str right"
           }
         },
         {

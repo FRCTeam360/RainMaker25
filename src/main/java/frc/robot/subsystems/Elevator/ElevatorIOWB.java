@@ -91,8 +91,4 @@ public class ElevatorIOWB implements ElevatorIO {
     public void setElevatorPostion(double height) {
         elevatorMotor.setPosition(height);
     }
-
-    public boolean getBottomSwitch() {
-        return !bottomSwitch.get();
-    }
 }

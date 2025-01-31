@@ -41,6 +41,10 @@ public class Elevator extends SubsystemBase {
         io.stop();
     }
 
+    public void zeroElevatorEncoder() {
+        io.zeroElevatorEncoder();
+    }
+
     public Command isAtHeight(double position) {
         return Commands.waitUntil(() -> Math.abs(inputs.elevatorPosition - position) <= 1.0);
     }

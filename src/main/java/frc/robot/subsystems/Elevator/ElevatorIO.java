@@ -29,6 +29,8 @@ public interface ElevatorIO {
 
   public void stop();
 
+  public void zeroElevatorEncoder();
+
   public boolean getBottomSwitch();
   // insert methods from subsystem layer
 }

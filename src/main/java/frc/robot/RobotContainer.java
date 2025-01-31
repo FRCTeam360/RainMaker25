@@ -177,7 +177,7 @@ public class RobotContainer {
         //         Constants.OldCompBotConstants.maxAngularRate
         //     );
 
-        levelFour = commandFactory.setElevatorHeight(34.0);
+        levelFour = commandFactory.setElevatorHeight(33.0);
         levelThree = commandFactory.setElevatorHeight(18.0);
         levelTwo = commandFactory.setElevatorHeight(8.5);
         zero = commandFactory.setElevatorHeight(0.0);
@@ -186,7 +186,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
             "raise to l4",
-            commandFactory.setElevatorHeight(34.0).raceWith(elevator.isAtHeight(34.0))
+            commandFactory.setElevatorHeight(33.0).raceWith(elevator.isAtHeight(33.0))
         );
         NamedCommands.registerCommand(
             "zero",

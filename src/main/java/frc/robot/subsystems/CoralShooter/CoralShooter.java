@@ -55,7 +55,7 @@ public class CoralShooter extends SubsystemBase {
     public Command intakeCmd() {
         String cmdName = "IntakeCoral";
         return new InstantCommand(() -> CommandLogger.logCommandStart(cmdName))
-            .andThen(waitUntilFull().raceWith(runCmd(-0.3)))
+            .andThen(waitUntilFull().raceWith(runCmd(-0.25)))
             .andThen(() -> CommandLogger.logCommandEnd(cmdName));
     }
 

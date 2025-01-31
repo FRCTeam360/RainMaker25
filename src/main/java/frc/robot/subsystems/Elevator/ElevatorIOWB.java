@@ -55,7 +55,7 @@ public class ElevatorIOWB implements ElevatorIO {
         slot0Configs.kV = kV;
 
         final double motionMagicCruiseVelocity = 600.0;
-        final double motionMagicAcceleration = 300.0;
+        final double motionMagicAcceleration = 200.0; //used to be 300 - jan 30
         final double motionMagicCruiseJerk = 1000.0;
 
         elevatorMotor.getConfigurator().apply((talonFXConfiguration));

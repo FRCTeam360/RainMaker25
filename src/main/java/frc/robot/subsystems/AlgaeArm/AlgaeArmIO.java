@@ -19,7 +19,7 @@ public interface AlgaeArmIO {
     public double algaeArmPosition = 0.0;
   }
 
-  public void setPosition(double position);
-
   public default void updateInputs(AlgaeArmIOInputs inputs) {}
+
+  public void setDutyCycle(double dutyCycle);
 } 

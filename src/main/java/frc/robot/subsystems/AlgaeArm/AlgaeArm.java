@@ -18,10 +18,6 @@ public class AlgaeArm extends SubsystemBase {
     this.io = io;
   }
 
-  public void setPosition(double position){
-    io.setPosition(position);
-  }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

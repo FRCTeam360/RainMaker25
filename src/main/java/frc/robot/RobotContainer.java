@@ -46,6 +46,7 @@ import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorIO;
 import frc.robot.subsystems.Elevator.ElevatorIOWB;
 import frc.robot.subsystems.Vision.Vision;
+import frc.robot.subsystems.Vision.VisionIO;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
 
 public class RobotContainer {
@@ -82,11 +83,15 @@ public class RobotContainer {
         switch (Constants.getRobotType()) {
             case WOODBOT:
                 //woodbot stuff
-                vision = new Vision(new VisionIOLimelight(
-                    Constants.VisionConstants.WOODBOT_LIMELIGHT_NAME, 
-                    Constants.VisionConstants.WOODBOT_YAW_FUDGE_FACTOR,
-                    Constants.VisionConstants.WOODBOT_PITCH_FUDGE_FACTOR));
                 driveTrain = WoodBotDriveTrain.createDrivetrain();
+                vision = new Vision(new VisionIO[]{
+                            new VisionIOLimelight(
+                                Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
+                                Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
+                                Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR,
+                                () -> driveTrain.getAngle()
+                            )
+                        });
                 setUpDrivetrain(
                     vision,
                     Constants.OldCompBotConstants.headingKP,
@@ -101,15 +106,15 @@ public class RobotContainer {
                 break;
             case OLD_COMP_BOT:
                 //ocb stuff
-                vision =
-                    new Vision(
-                        new VisionIOLimelight(
-                            Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
-                            Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
-                            Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR
-                        )
-                    );
                 driveTrain = OldCompBot.createDrivetrain();
+                vision = new Vision(new VisionIO[]{
+                            new VisionIOLimelight(
+                                Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
+                                Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
+                                Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR,
+                                () -> driveTrain.getAngle()
+                            )
+                        });
                 //constants = Constants.OldCompBotConstants;
                 setUpDrivetrain(
                     vision,
@@ -125,14 +130,14 @@ public class RobotContainer {
                 //practice bot stuff
                 break;
             case SIM:
-                vision =
-                    new Vision(
-                        new VisionIOLimelight(
-                            Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
-                            Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
-                            Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR
-                        )
-                    );
+                vision = new Vision(new VisionIO[]{
+                            new VisionIOLimelight(
+                                Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
+                                Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
+                                Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR,
+                                () -> driveTrain.getAngle()
+                            )
+                        });
                 elevator = new Elevator(new ElevatorIOSim());
                 coralShooter = new CoralShooter(new CoralShooterIOSim(() -> elevator.getPosition()));
                 driveTrain = OldCompBot.createDrivetrain();
@@ -180,6 +185,12 @@ public class RobotContainer {
     }
 
     public void initializeCommands() {
+        // Periodically adds the vision measurement to drivetrain for pose estimation
+        // UNCOMMENT THIS IF YOU WANT TO BE A GAMER AND USE THE LIMELIGHT TO LOCALIZE THE ROBOT
+        // vision.setDefaultCommand(
+        //         vision.consumeVisionMeasurements(driveTrain::addVisionMeasurements).ignoringDisable(true)
+        // );
+
         snapDrivebaseToAngle =
             new SnapDrivebaseToAngle(driveTrain, Constants.OldCompBotConstants.maxSpeed);
         alignWithLimelight =

@@ -213,8 +213,8 @@ public class OldCompBot {
      */
     public static CommandSwerveDrivetrain createDrivetrain() {
         return new CommandSwerveDrivetrain(
-            headingKP,headingKI,headingKD,headingKIZone,translationKP,translationKI, translationKD,
-            DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight
+            headingKP,headingKI,headingKD,headingKIZone,translationKP,translationKI, translationKD, maxSpeed,
+            maxAngularRate, DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight
         );
     }
 

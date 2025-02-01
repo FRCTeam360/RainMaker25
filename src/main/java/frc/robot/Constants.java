@@ -36,6 +36,12 @@ public final class Constants {
         public static final double WOODBOT_YAW_FUDGE_FACTOR = 0;
         public static final double WOODBOT_PITCH_FUDGE_FACTOR = 0;
     }
+
+    public static class OldCompBotConstants {
+        public static final String OCB_LIMELIGHT_NAME = "limelight";
+        public static final double OCB_YAW_FUDGE_FACTOR = 0;
+        public static final double OCB_PITCH_FUDGE_FACTOR = 0;
+    }
     
     public static final class WoodbotConstants {
       public static final int CORAL_INTAKE_ID = 1;

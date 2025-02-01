@@ -38,10 +38,9 @@ import frc.robot.subsystems.Vision.VisionIOLimelight;
 
 public class RobotContainer {
     private final SendableChooser<Command> autoChooser;
-    private double MaxSpeed = OldCompBot.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
-    private final Telemetry logger = new Telemetry(MaxSpeed);
+    private Telemetry logger;
 
     private final CommandXboxController driverCont = new CommandXboxController(0);
     private final CommandXboxController operatorCont = new CommandXboxController(1);
@@ -67,12 +66,13 @@ public class RobotContainer {
         switch (Constants.getRobotType()) {
             case WOODBOT:
                 //woodbot stuff
-                // vision = new Vision(new VisionIOLimelight(
-                //     Constants.VisionConstants.WOODBOT_LIMELIGHT_NAME, 
-                //     Constants.VisionConstants.WOODBOT_YAW_FUDGE_FACTOR,
-                //     Constants.VisionConstants.WOODBOT_PITCH_FUDGE_FACTOR));
+                vision = new Vision(new VisionIOLimelight(
+                    Constants.VisionConstants.WOODBOT_LIMELIGHT_NAME, 
+                    Constants.VisionConstants.WOODBOT_YAW_FUDGE_FACTOR,
+                    Constants.VisionConstants.WOODBOT_PITCH_FUDGE_FACTOR));
 
                 driveTrain = WoodBotDriveTrain.createDrivetrain();
+                logger = new Telemetry(WoodBotDriveTrain.maxSpeed);
 
                 elevator = new Elevator(new ElevatorIOWB());
                 break;
@@ -127,15 +127,13 @@ public class RobotContainer {
 
     public void initializeCommands() {
         snapDrivebaseToAngle =
-            new SnapDrivebaseToAngle(driveTrain, Constants.OldCompBotConstants.maxSpeed);
+            new SnapDrivebaseToAngle(driveTrain);
         alignWithLimelight =
             new AlignWithLimelight(
                 vision,
                 driveTrain,
                 0.0,
-                3.0,
-                0.25,
-                Constants.OldCompBotConstants.maxAngularRate
+                3.0
             );
     }
 
@@ -156,7 +154,7 @@ public class RobotContainer {
 
     private void configureBindings() {
         driveTrain.setDefaultCommand(
-            driveTrain.fieldOrientedDrive(MaxSpeed, MaxAngularRate, driverCont)
+            driveTrain.fieldOrientedDrive(MaxAngularRate, driverCont)
         );
 
         driverCont.pov(90).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));

@@ -67,6 +67,8 @@ public class RobotContainer {
     private Command levelTwo;
     private Command zero;
 
+    private Command allignToReefWoodBot;
+
     private SetCoralIntake setCoralIntake;
 
     public RobotContainer() {
@@ -148,7 +150,7 @@ public class RobotContainer {
                 //competition bot stuff
                 break;
         }
-        commandFactory = new CommandFactory(catapult, coralIntake, coralShooter, elevator, vision);
+        commandFactory = new CommandFactory(catapult, coralIntake, coralShooter, elevator, vision, driveTrain);
         initializeCommands();
 
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -182,6 +184,8 @@ public class RobotContainer {
         levelTwo = commandFactory.setElevatorHeight(8.5);
         zero = commandFactory.setElevatorHeight(0.0);
 
+        allignToReefWoodBot = commandFactory.allignToReefWoodbotLeft();
+
         setCoralIntake = new SetCoralIntake(coralShooter);
 
         NamedCommands.registerCommand(
@@ -199,6 +203,7 @@ public class RobotContainer {
     }
 
     private void setUpDrivetrain(
+
         Vision vision,
         double headingKP,
         double headingKI,
@@ -219,13 +224,12 @@ public class RobotContainer {
         );
 
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
+        driverCont.pov(180).onTrue(allignToReefWoodBot);
 
         driverCont.a().onTrue(zero);
         driverCont.b().onTrue(snapDrivebaseToAngle);
         driverCont.x().onTrue(levelThree);
         driverCont.y().onTrue(levelFour);
-
-  
 
         driverCont.leftBumper().whileTrue(setCoralIntake);
         driverCont.rightBumper().whileTrue(coralShooter.shootCmd()); //add end T-T

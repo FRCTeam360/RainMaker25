@@ -18,6 +18,7 @@ public class AlignWithLimelight extends Command {
     private Vision vision;
     private CommandSwerveDrivetrain driveTrain;
     private double goalTY;
+    private double goalTX;
     private double maxSpeed;
     private double maxAngularRate;
 
@@ -25,8 +26,8 @@ public class AlignWithLimelight extends Command {
     public AlignWithLimelight(
         Vision vision,
         CommandSwerveDrivetrain driveTrain,
-        double goalAngle,
         double goalTY,
+        double goalTX,
         double maxSpeed,
         double maxAngularRate
     ) {
@@ -35,6 +36,7 @@ public class AlignWithLimelight extends Command {
         this.goalTY = goalTY;
         this.maxSpeed = maxSpeed;
         this.maxAngularRate = maxAngularRate;
+        this.goalTX = goalTX;
 
         addRequirements(driveTrain);
     }
@@ -48,7 +50,7 @@ public class AlignWithLimelight extends Command {
     public void execute() {
         driveTrain.robotCentricDrive(
             driveTrain.translationController.calculate(vision.getTYRaw(), goalTY), //forward & backward motion
-            driveTrain.translationController.calculate(vision.getTXRaw(), 0.0), //side to side motion
+            driveTrain.translationController.calculate(vision.getTXRaw(), goalTX), //side to side motion
             0.0,
             maxSpeed,
             maxAngularRate

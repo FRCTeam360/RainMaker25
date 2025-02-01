@@ -310,6 +310,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return this.getRotation2d().getDegrees();
     }
 
+    public boolean isAtSetpoint() {
+        return headingController.atSetpoint();
+    }
+
     // public boolean isFlat() {
     //     double currentPitch = this.getPigeon2().getPitch().getValueAsDouble();
     //     if (Math.abs(currentPitch - Constants.DRIVETRAIN_PITCH_AUTO_INIT) < 2.0 || DriverStation.isTeleop()) {

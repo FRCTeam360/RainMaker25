@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Vision.Vision;
 import java.util.function.DoubleSupplier;
+
+import javax.annotation.processing.SupportedOptions;
+
 import org.littletonrobotics.junction.Logger;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -43,7 +46,9 @@ public class AlignWithLimelight extends Command {
 
     // Called when the command is initially scheduled.
     @Override
-    public void initialize() {}
+    public void initialize() {
+        System.out.println("HUHEIUIUHIUHUISHEIFUHUSHIUE");
+    }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
@@ -64,6 +69,8 @@ public class AlignWithLimelight extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return Math.abs(vision.getTXRaw()) <= 1.0 && Math.abs(vision.getTYRaw() - 3.0) <= 2.0;
+        System.out.println("HELLOHELLOEHHOEJOJFEJIHFIE");
+        return false;
+        // return Math.abs( (vision.getTXRaw()) - goalTX) > 0.5 &&  Math.abs(vision.getTYRaw()  - goalTY) > 0.5;
     }
 }

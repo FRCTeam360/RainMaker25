@@ -47,10 +47,9 @@ public class CommandFactory {
     }
 
     public Command allignToReefWoodbotLeft(){
-        new SequentialCommandGroup(
+        return new SequentialCommandGroup(
             new SnapDrivebaseToAngle(drivetrain, 0, vision),
-            new AlignWithLimelight(vision, drivetrain, 3.0, 0.0, 0.25, Constants.OldCompBotConstants.maxAngularRate)
+            new AlignWithLimelight(vision, drivetrain, -12.64, -11.16, 1, Constants.OldCompBotConstants.maxAngularRate)
         );
-        return allignToReefWoodbotLeft();
     }
 }

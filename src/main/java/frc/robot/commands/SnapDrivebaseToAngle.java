@@ -54,17 +54,17 @@ public class SnapDrivebaseToAngle extends Command {
         //     angleToFace = 60.0;
         // }
 
-    if (driveTrain.getAngle() >= -30.0 && driveTrain.getAngle() <= 30.0) {
+    if (driveTrain.getAngle() >= -30.0 || driveTrain.getAngle() <= 30.0) {
             angleToFace = 0.0;
-        } else if (driveTrain.getAngle() <= -30.0 && driveTrain.getAngle() >= -90.0) {
+        } else if (driveTrain.getAngle() <= -30.0 || driveTrain.getAngle() >= -90.0) {
             angleToFace = -60.0;
-        } else if (driveTrain.getAngle() <= -90.0 && driveTrain.getAngle() >= -150.0) {
+        } else if (driveTrain.getAngle() <= -90.0 || driveTrain.getAngle() >= -150.0) {
             angleToFace = -120.0;
         } else if (driveTrain.getAngle() <= -150.0 || driveTrain.getAngle() >= 150.0) {
             angleToFace = 180.0;
-        } else if (driveTrain.getAngle() <= 150.0 && driveTrain.getAngle() >= 90.0) {
+        } else if (driveTrain.getAngle() <= 150.0 || driveTrain.getAngle() >= 90.0) {
             angleToFace = 120.0;
-        } else if (driveTrain.getAngle() >= 30.0 && driveTrain.getAngle() <= 90.0) {
+        } else if (driveTrain.getAngle() >= 30.0 || driveTrain.getAngle() <= 90.0) {
             angleToFace = 60.0;
         }
     }
@@ -88,11 +88,11 @@ public class SnapDrivebaseToAngle extends Command {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {}
-
+;
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return Math.abs(driveTrain.getAngle() - angleToFace) <= 1.0;
+        return driveTrain.isAtSetpoint();
     }
 }
 

@@ -6,6 +6,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.Objects;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -14,6 +16,7 @@ import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -99,7 +102,6 @@ public class RobotContainer {
                 break;
             case OLD_COMP_BOT:
                 //ocb stuff
-
                 vision =
                     new Vision(
                         new VisionIOLimelight(
@@ -120,6 +122,7 @@ public class RobotContainer {
                     Constants.OldCompBotConstants.translationKI,
                     Constants.OldCompBotConstants.translationKD
                 );
+                break;
             case PRACTICE:
                 //practice bot stuff
                 break;
@@ -179,27 +182,33 @@ public class RobotContainer {
         //         Constants.OldCompBotConstants.maxAngularRate
         //     );
 
-        levelFour = commandFactory.setElevatorHeight(33.0);
-        levelThree = commandFactory.setElevatorHeight(18.0);
-        levelTwo = commandFactory.setElevatorHeight(8.5);
-        zero = commandFactory.setElevatorHeight(0.0);
+        if(Objects.nonNull(elevator)){
+            levelFour = commandFactory.setElevatorHeight(33.0);
+            levelThree = commandFactory.setElevatorHeight(18.0);
+            levelTwo = commandFactory.setElevatorHeight(8.5);
+            zero = commandFactory.setElevatorHeight(0.0);
+
+            
+            NamedCommands.registerCommand(
+                "raise to l4",
+                commandFactory.setElevatorHeight(33.0).raceWith(elevator.isAtHeight(33.0))
+            );
+            NamedCommands.registerCommand(
+                "zero",
+                commandFactory.setElevatorHeight(0.0).raceWith(elevator.isAtHeight(0.0))
+            );
+        }
 
         allignToReefWoodBot = commandFactory.allignToReefWoodbotLeft();
 
-        setCoralIntake = new SetCoralIntake(coralShooter);
-
-        NamedCommands.registerCommand(
-            "raise to l4",
-            commandFactory.setElevatorHeight(33.0).raceWith(elevator.isAtHeight(33.0))
-        );
-        NamedCommands.registerCommand(
-            "zero",
-            commandFactory.setElevatorHeight(0.0).raceWith(elevator.isAtHeight(0.0))
-        );
-
-        NamedCommands.registerCommand("shoot", coralShooter.shootCmd());
-
-        NamedCommands.registerCommand("intake", coralShooter.intakeCmd());
+        if(Objects.nonNull(coralShooter)){
+         
+            setCoralIntake = new SetCoralIntake(coralShooter);
+            
+            NamedCommands.registerCommand("shoot", coralShooter.shootCmd());
+            
+            NamedCommands.registerCommand("intake", coralShooter.intakeCmd());
+        }
     }
 
     private void setUpDrivetrain(
@@ -226,20 +235,26 @@ public class RobotContainer {
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
         driverCont.pov(180).onTrue(allignToReefWoodBot);
 
-        driverCont.a().onTrue(zero);
-        driverCont.b().onTrue(snapDrivebaseToAngle);
-        driverCont.x().onTrue(levelThree);
-        driverCont.y().onTrue(levelFour);
+        if(Objects.nonNull(elevator)){
+            driverCont.a().onTrue(zero);
+            driverCont.b().onTrue(snapDrivebaseToAngle);
+            driverCont.x().onTrue(levelThree);
+            driverCont.y().onTrue(levelFour);
+        }
 
-        driverCont.leftBumper().whileTrue(setCoralIntake);
-        driverCont.rightBumper().whileTrue(coralShooter.shootCmd()); //add end T-T
+        if(Objects.nonNull(coralShooter)){
+            driverCont.leftBumper().whileTrue(setCoralIntake);
+            driverCont.rightBumper().whileTrue(coralShooter.shootCmd());
+        }
         //driverCont.rightBumper().whileTrue(new InstantCommand(() -> coralShooter.setDutyCycle(-0.3), coralShooter)); //add end T-T
 
         //driveTrain.registerTelemetry(logger::telemeterize);
     }
 
     public void onDisable() {
-        elevator.stop();
+        if(Objects.nonNull(elevator)){
+            elevator.stop();
+        }
     }
 
     public Command getAutonomousCommand() {

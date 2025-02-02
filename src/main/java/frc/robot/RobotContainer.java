@@ -87,7 +87,7 @@ public class RobotContainer {
                     Constants.VisionConstants.WOODBOT_PITCH_FUDGE_FACTOR));
 
                 driveTrain = WoodBotDriveTrain.createDrivetrain();
-                logger = new Telemetry(WoodBotDriveTrain.maxSpeed);
+                logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
 
                 elevator = new Elevator(new ElevatorIOWB());
                 break;
@@ -102,7 +102,7 @@ public class RobotContainer {
                         )
                     );
                 driveTrain = OldCompBot.createDrivetrain();
-                logger = new Telemetry(OldCompBot.maxSpeed);
+                logger = new Telemetry(OldCompBot.kSpeedAt12Volts.in(MetersPerSecond));
                 break;
             case PRACTICE:
                 //practice bot stuff
@@ -117,7 +117,7 @@ public class RobotContainer {
                         )
                     );
                 driveTrain = WoodBotDriveTrain.createDrivetrain();
-                logger = new Telemetry(WoodBotDriveTrain.maxSpeed);
+                logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
                 elevator = new Elevator(new ElevatorIOSim());
                 coralShooter = new CoralShooter(new CoralShooterIOSim(() -> elevator.getPosition()));
                 break;

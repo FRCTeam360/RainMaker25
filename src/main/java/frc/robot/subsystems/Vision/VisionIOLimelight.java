@@ -39,6 +39,7 @@ public class VisionIOLimelight implements VisionIO {
     inputs.ty = getTYRaw();
     inputs.tyAdjusted = getTYAdjusted();
     inputs.pipeline = getPipeline();
+    inputs.tagID = getAprilTagID();
 
   }
   public int getAprilTagID() {

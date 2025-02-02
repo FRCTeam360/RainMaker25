@@ -106,16 +106,6 @@ public class Vision extends SubsystemBase {
 
   @Override
   public void periodic() {
-
-    if (DriverStation.isDSAttached()) {
-      Optional<Alliance> alliance = DriverStation.getAlliance();
-      if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Blue) {
-        setPipeline(0);
-      } else if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
-        setPipeline(1);
-      }
-    }
-    
     io.updateInputs(inputs);
     Logger.processInputs("Limelight", inputs);
   }

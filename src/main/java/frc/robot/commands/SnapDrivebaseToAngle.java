@@ -40,33 +40,34 @@ public class SnapDrivebaseToAngle extends Command {
     @Override
     public void initialize() {
         
-        // if (vision.getAprilTagID() == 18 || vision.getAprilTagID() == 7) {
-        //     angleToFace = 0.0;
-        // } else if (vision.getAprilTagID() == 19 || vision.getAprilTagID() == 6)  {
-        //     angleToFace = -60.0;
-        // } else if (vision.getAprilTagID() == 20 || vision.getAprilTagID() == 11) {
-        //     angleToFace = -120.0;
-        // } else if (vision.getAprilTagID() == 21 || vision.getAprilTagID() == 10) {
-        //     angleToFace = 180.0;
-        // } else if (vision.getAprilTagID() == 22 || vision.getAprilTagID() == 9) {
-        //     angleToFace = 120.0;
-        // } else if (vision.getAprilTagID() == 17 || vision.getAprilTagID() == 8) {
-        //     angleToFace = 60.0;
-        // }
-
-    if (driveTrain.getAngle() >= -30.0 || driveTrain.getAngle() <= 30.0) {
-            angleToFace = 0.0;
-        } else if (driveTrain.getAngle() <= -30.0 || driveTrain.getAngle() >= -90.0) {
-            angleToFace = -60.0;
-        } else if (driveTrain.getAngle() <= -90.0 || driveTrain.getAngle() >= -150.0) {
-            angleToFace = -120.0;
-        } else if (driveTrain.getAngle() <= -150.0 || driveTrain.getAngle() >= 150.0) {
+        if (vision.getAprilTagID() == 21 || vision.getAprilTagID() == 7) {
             angleToFace = 180.0;
-        } else if (driveTrain.getAngle() <= 150.0 || driveTrain.getAngle() >= 90.0) {
+        } else if (vision.getAprilTagID() == 22 || vision.getAprilTagID() == 6)  {
             angleToFace = 120.0;
-        } else if (driveTrain.getAngle() >= 30.0 || driveTrain.getAngle() <= 90.0) {
+       } else if (vision.getAprilTagID() == 17 || vision.getAprilTagID() == 11) {
             angleToFace = 60.0;
+      } else if (vision.getAprilTagID() == 18 || vision.getAprilTagID() == 10) {
+            angleToFace = 0.0;
+        } else if (vision.getAprilTagID() == 19 || vision.getAprilTagID() == 9) {
+            angleToFace = -60.0;
+        } else if (vision.getAprilTagID() == 20 || vision.getAprilTagID() == 8) {
+            angleToFace = -120.0;
+            
         }
+
+    // if (driveTrain.getAngle() >= -30.0 || driveTrain.getAngle() <= 30.0) {
+    //         angleToFace = 0.0;
+    //     } else if (driveTrain.getAngle() <= -30.0 || driveTrain.getAngle() >= -90.0) {
+    //         angleToFace = -60.0;
+    //     } else if (driveTrain.getAngle() <= -90.0 || driveTrain.getAngle() >= -150.0) {
+    //         angleToFace = -120.0;
+    //     } else if (driveTrain.getAngle() <= -150.0 || driveTrain.getAngle() >= 150.0) {
+    //         angleToFace = 180.0;
+    //     } else if (driveTrain.getAngle() <= 150.0 || driveTrain.getAngle() >= 90.0) {
+    //         angleToFace = 120.0;
+    //     } else if (driveTrain.getAngle() >= 30.0 || driveTrain.getAngle() <= 90.0) {
+    //         angleToFace = 60.0;
+    //     }
     }
 
     

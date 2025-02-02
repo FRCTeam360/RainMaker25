@@ -20,6 +20,7 @@ public interface VisionIO {
         public double tyAdjusted;
         public double tv;
         public double pipeline;
+        public double tagID;
     }
 
     public void updateInputs(VisionIOInputs inputs);

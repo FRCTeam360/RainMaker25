@@ -1,9 +1,12 @@
 package frc.robot;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AlignWithLimelight;
 import frc.robot.commands.SnapDrivebaseToAngle;
+import frc.robot.generated.WoodBotDriveTrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Catapult.Catapult;
 import frc.robot.subsystems.CoralIntake.CoralIntake;
@@ -46,10 +49,15 @@ public class CommandFactory {
         return elevator.setElevatorHeight(height);
     }
 
+    public Command AlignWithLimelightTimeout(double goalTY, double goalTX){
+        return new AlignWithLimelight(vision, drivetrain, goalTY, goalTX,
+                WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond)).withTimeout(1);
+    }
+
     public Command allignToReefWoodbotLeft(){
         return new SequentialCommandGroup(
             new SnapDrivebaseToAngle(drivetrain, 0, vision),
-            new AlignWithLimelight(vision, drivetrain, -12.64, -11.16, 1, Constants.OldCompBotConstants.maxAngularRate)
+            new AlignWithLimelight(vision, drivetrain, -12.64, -11.16, 1)
         );
     }
 }

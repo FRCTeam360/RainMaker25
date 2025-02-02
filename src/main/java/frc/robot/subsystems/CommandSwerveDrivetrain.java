@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.List;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
@@ -43,6 +44,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.generated.OldCompBot;
 import frc.robot.generated.OldCompBot.TunerSwerveDrivetrain;
 import frc.robot.subsystems.Vision.Vision;
+import frc.robot.subsystems.Vision.VisionMeasurement;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -326,9 +328,14 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     //     return false;
     // }
 
+     public void addVisionMeasurements(List<VisionMeasurement> measurements) {
+        for (VisionMeasurement measurement : measurements) {
+            this.addVisionMeasurement(measurement.estimatedPose(), measurement.timestamp(), measurement.standardDeviation());
+        }
+    }
+
     @Override
     public void periodic() {
-        
         Logger.recordOutput("Swerve: Current Pose", this.getPose());
         Logger.recordOutput("Swerve: Rotation", this.getRotation2d());
         Logger.recordOutput("Swerve: Angle", this.getAngle());

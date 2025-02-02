@@ -47,6 +47,8 @@ import frc.robot.subsystems.Elevator.ElevatorIO;
 import frc.robot.subsystems.Elevator.ElevatorIOWB;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
+import frc.robot.subsystems.AlgaeArm.AlgaeArm;
+import frc.robot.subsystems.AlgaeArm.AlgaeArmIOSim;
 
 public class RobotContainer {
     private final Field2d field;
@@ -71,6 +73,7 @@ public class RobotContainer {
     private CoralIntake coralIntake;
     private CoralShooter coralShooter;
     private Elevator elevator;
+    private AlgaeArm algaeArm;
 
     private ShuffleboardTab diagnosticTab;
 
@@ -120,6 +123,7 @@ public class RobotContainer {
                 logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
                 elevator = new Elevator(new ElevatorIOSim());
                 coralShooter = new CoralShooter(new CoralShooterIOSim(() -> elevator.getPosition()));
+                algaeArm = new AlgaeArm(new AlgaeArmIOSim(() -> elevator.getPosition()));
                 break;
             case COMPETITION:
             default:
@@ -135,7 +139,7 @@ public class RobotContainer {
         PathPlannerLogging.setLogTargetPoseCallback(
         pose -> Logger.recordOutput("Swerve/TargetPathPose", pose));
         
-        commandFactory = new CommandFactory(catapult, coralIntake, coralShooter, elevator, vision);
+        commandFactory = new CommandFactory(catapult, coralIntake, coralShooter, elevator, vision, algaeArm);
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);

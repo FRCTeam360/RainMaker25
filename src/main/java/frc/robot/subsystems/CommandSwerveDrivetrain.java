@@ -55,8 +55,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public PhoenixPIDController headingController;
     public PIDController translationController;
-    
-    private Vision vision;
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -72,7 +70,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
 
-    public final Command fieldOrientedDrive(double maxSpeed, double maxAngularRate, CommandXboxController driveCont) { //field oriented drive command!
+    public final Command fieldOrientedDrive(double maxAngularRate, CommandXboxController driveCont) { //field oriented drive command!
         SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric() //creates a fieldcentric drive
             .withDeadband(maxSpeed * 0.1).withRotationalDeadband(maxAngularRate * 0.1) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
@@ -88,10 +86,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         this.tareEverything();
     }
 
-    public final void assignVision(Vision vision) {
-        this.vision = vision;
-    }
-
     public void addHeadingController(double kP, double kI, double kD, double kIZone) {
         headingController = new PhoenixPIDController(kP, kI, kD);
         
@@ -103,7 +97,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         translationController = new PIDController(kP, kI, kD);
     }
 
-    public void driveFieldCentricFacingAngle(double x, double y, double desiredAngle, double maxSpeed) {
+    public void driveFieldCentricFacingAngle(double x, double y, double desiredAngle) {
         FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle()
                 .withVelocityX(x * maxSpeed)
                 .withVelocityY(y * maxSpeed)
@@ -112,7 +106,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         this.setControl(request);
     }
 
-    public void robotCentricDrive(double x, double y, double rotation, double maxSpeed, double maxAngularRate) {
+    public void robotCentricDrive(double x, double y, double rotation) {
         this.setControl(new SwerveRequest.RobotCentric()
                 .withVelocityX(x * maxSpeed)
                 .withVelocityY(y * maxSpeed)
@@ -181,6 +175,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     /* The SysId routine to test */
     private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
 
+    private double maxSpeed;
+    private double maxAngularRate;
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.
      * <p>
@@ -192,14 +188,26 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
      * @param modules               Constants for each specific module
      */
     public CommandSwerveDrivetrain(
+        double headingKP,
+        double headingKI,
+        double headingKD,
+        double headingKIZone,
+        double translationKP,
+        double translationKI,
+        double translationKD,
+        double maxSpeed,
+        double maxAngularRate,
         SwerveDrivetrainConstants drivetrainConstants,
         SwerveModuleConstants<?, ?, ?>... modules
     ) {
-        
         super(drivetrainConstants, modules);
         if (Utils.isSimulation()) {
             startSimThread();
         }
+        addHeadingController(headingKP, headingKI, headingKD, headingKIZone);
+        addTranslationController(translationKP, translationKI, translationKD);
+
+        this.maxSpeed = maxSpeed;
 
         configureAutoBuilder();
     }

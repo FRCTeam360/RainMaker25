@@ -22,18 +22,7 @@ import frc.robot.subsystems.Vision.VisionIOLimelight;
 // https://v6.docs.ctr-electronics.com/en/stable/docs/tuner/tuner-swerve/index.html
 public class WoodBotDriveTrain {
 
-        // private final Vision visionvision = new Vision(new VisionIOLimelight(
-        //     Constants.VisionConstants.WOODBOT_LIMELIGHT_NAME, 
-        //     Constants.VisionConstants.WOODBOT_YAW_FUDGE_FACTOR,
-        //     Constants.VisionConstants.WOODBOT_PITCH_FUDGE_FACTOR)
-        // );
-
-        //change these
-        public static final String OCB_LIMELIGHT_NAME = "limelight";
-        public static final double OCB_YAW_FUDGE_FACTOR = 0;
-        public static final double OCB_PITCH_FUDGE_FACTOR = 0;
-
-        public static final double maxSpeed = OldCompBot.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+        public static final double maxSpeed = WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
         public static final double maxAngularRate = RotationsPerSecond.of(15).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
         public static final double headingKP = 4.0;

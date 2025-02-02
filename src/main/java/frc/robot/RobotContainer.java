@@ -77,7 +77,6 @@ public class RobotContainer {
                 elevator = new Elevator(new ElevatorIOWB());
                 break;
             case OLD_COMP_BOT:
-                //ocb stuff
 
                 vision =
                     new Vision(
@@ -88,7 +87,8 @@ public class RobotContainer {
                         )
                     );
                 driveTrain = OldCompBot.createDrivetrain();
-                
+                logger = new Telemetry(OldCompBot.maxSpeed);
+                break;
             case PRACTICE:
                 //practice bot stuff
                 break;
@@ -101,7 +101,8 @@ public class RobotContainer {
                             Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR
                         )
                     );
-                driveTrain = OldCompBot.createDrivetrain();
+                driveTrain = WoodBotDriveTrain.createDrivetrain();
+                logger = new Telemetry(WoodBotDriveTrain.maxSpeed);
                 break;
             case COMPETITION:
             default:
@@ -136,21 +137,6 @@ public class RobotContainer {
                 3.0
             );
     }
-
-    // private static void setUpDrivetrain(
-        // Vision vision,
-        // double headingKP,
-        // double headingKI,
-        // double headingKD,
-        // double headingKIZone,
-        // double translationKP,
-        // double translationKI,
-        // double translationKD
-    // ) {
-        // driveTrain.addHeadingController(headingKP, headingKI, headingKD, headingKIZone);
-        // driveTrain.addTranslationController(translationKP, translationKI, translationKD);
-        // driveTrain.assignVision(vision);
-    // }
 
     private void configureBindings() {
         driveTrain.setDefaultCommand(

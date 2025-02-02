@@ -1,5 +1,9 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Catapult.Catapult;
+import frc.robot.subsystems.CoralIntake.CoralIntake;
+// import frc.robot.subsystems.CoralShooter.CoralShooter;
 import frc.robot.subsystems.Catapult.Catapult;
 import frc.robot.subsystems.CoralIntake.CoralIntake;
 import frc.robot.subsystems.CoralShooter.CoralShooter;
@@ -29,5 +33,8 @@ public CommandFactory(
     this.vision = vision;
 }
 
+public Command setElevatorHeight(double height) {
+    return elevator.setElevatorHeight(height);
+}
 
 }

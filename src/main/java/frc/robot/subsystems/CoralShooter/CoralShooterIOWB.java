@@ -44,10 +44,6 @@ public class CoralShooterIOWB implements CoralShooterIO {
         outtakeMotor.set(dutyCycle);
     }
 
-    public boolean getOuttakeSensor() {
-        return !outtakeSensor.get();
-    }
-
     public void stop() {
         outtakeMotor.stopMotor();
     }
@@ -57,5 +53,6 @@ public class CoralShooterIOWB implements CoralShooterIO {
         inputs.outtakePosition = encoder.getPosition();
         inputs.outtakeVelocity = encoder.getVelocity();
         inputs.outtakeVoltage = outtakeMotor.getAppliedOutput() * outtakeMotor.getBusVoltage();
+        inputs.outtakeSensor = !outtakeSensor.get();
     }
 }

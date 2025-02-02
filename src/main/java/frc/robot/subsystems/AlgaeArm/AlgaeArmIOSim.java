@@ -25,30 +25,32 @@ import edu.wpi.first.wpilibj.simulation.PWMSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.CoralShooter.CoralShooterIO.CoralShooterIOInputs;
+import frc.robot.subsystems.CoralShooter.CoralShooterIOSim;
 
-public class AlgaeArmSim implements AlgaeArmIO {
+public class AlgaeArmIOSim implements AlgaeArmIO {
   
   private DoubleSupplier heightSupplier;
   private DCMotor gearbox = DCMotor.getNeo550(1);
-  private Encoder encoder = new Encoder(2, 3);
+  private Encoder encoder = new Encoder(5, 6);
 
-  private final PWMSparkMax motor = new PWMSparkMax(2);
+  private final PWMSparkMax motor = new PWMSparkMax(3);
   private final PWMSim simMotor = new PWMSim(motor);
 
-  private final SingleJointedArmSim armSim = new SingleJointedArmSim(gearbox, 1.0, SingleJointedArmSim.estimateMOI(Units.inchesToMeters(30) /*placeholder*/ , 8.0/*placeist*/),Units.inchesToMeters(30)/*placeholder*/ , Units.degreesToRadians(-75)/*placehold */, Units.degreesToRadians(255)/*place */, true, 0 , (2.0 * Math.PI/4096));
+  private final SingleJointedArmSim armSim = new SingleJointedArmSim(gearbox, 1.0, SingleJointedArmSim.estimateMOI(Units.inchesToMeters(30) /*placeholder*/ , 2.0/*placeist*/),Units.inchesToMeters(30)/*placeholder*/ , Units.degreesToRadians(-75)/*placehold */, Units.degreesToRadians(255)/*place */, true, 0);
  
   private final EncoderSim encoderSim = new EncoderSim(encoder);
  
-  private final LoggedMechanism2d mech2d = new LoggedMechanism2d(50, 50, new Color8Bit(Color.kPapayaWhip));
-  private final LoggedMechanismRoot2d mechRoot2D = mech2d.getRoot("algea arm root", 0, 0);
-  private final LoggedMechanismLigament2d mechLigiment2D = mechRoot2D.append(new LoggedMechanismLigament2d("algea arm",0.3 , 0,0.05, new Color8Bit(Color.kTomato)));
+  private final LoggedMechanism2d mech2d = new LoggedMechanism2d(30, 50, new Color8Bit(Color.kPapayaWhip));
+  private final LoggedMechanismRoot2d mechRoot2D = mech2d.getRoot("algae arm root", 18, 0);
+  private final LoggedMechanismLigament2d mechLigiment2D = mechRoot2D.append(new LoggedMechanismLigament2d("algea arm",5 , 0,5, new Color8Bit(Color.kTomato)));
   
   /** Creates a new AlgaeArmSim. */
-  public AlgaeArmSim(DoubleSupplier heightSupplier) {
+  public AlgaeArmIOSim(DoubleSupplier heightSupplier) {
     this.heightSupplier = heightSupplier;
     encoderSim.setDistancePerPulse(2.0 * Math.PI/4096);
   }
@@ -63,8 +65,9 @@ public class AlgaeArmSim implements AlgaeArmIO {
     inputs.algaeArmVelocity = armSim.getVelocityRadPerSec();
 
     mechLigiment2D.setAngle(new Rotation2d(armSim.getAngleRads()));
-    mechRoot2D.setPosition(0, heightSupplier.getAsDouble());
-    Logger.recordOutput("elevter sim", mech2d);
+    mechRoot2D.setPosition(19.5, heightSupplier.getAsDouble() - 3.5);
+    Logger.recordOutput("elevator sim", mech2d);
+    SmartDashboard.putData("algae arm sim", mech2d);
   }
 
   @Override

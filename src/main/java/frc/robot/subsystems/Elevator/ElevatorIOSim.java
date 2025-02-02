@@ -44,8 +44,8 @@ public class ElevatorIOSim implements ElevatorIO {
   private DCMotor gearbox = DCMotor.getFalcon500(1);
   public static Encoder encoder = new Encoder(0, 1);
 
-  final double UPPER_LIMIT = 2;
-  final double LOWER_LIMIT = 0;
+  final double UPPER_LIMIT = 20;
+  final double LOWER_LIMIT = 2;
 
   final double kA = 0.0;
   final double kD = 0.35;

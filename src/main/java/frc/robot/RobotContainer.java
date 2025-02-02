@@ -47,6 +47,8 @@ import frc.robot.subsystems.Elevator.ElevatorIO;
 import frc.robot.subsystems.Elevator.ElevatorIOWB;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
+import frc.robot.subsystems.AlgaeArm.AlgaeArm;
+import frc.robot.subsystems.AlgaeArm.AlgaeArmIOSim;
 
 public class RobotContainer {
     private final Field2d field;
@@ -72,6 +74,7 @@ public class RobotContainer {
     private CoralIntake coralIntake;
     private CoralShooter coralShooter;
     private Elevator elevator;
+    private AlgaeArm algaeArm;
 
     private ShuffleboardTab diagnosticTab;
 
@@ -135,6 +138,7 @@ public class RobotContainer {
                     );
                 elevator = new Elevator(new ElevatorIOSim());
                 coralShooter = new CoralShooter(new CoralShooterIOSim(() -> elevator.getPosition()));
+                algaeArm = new AlgaeArm(new AlgaeArmIOSim(() -> elevator.getPosition()));
                 driveTrain = OldCompBot.createDrivetrain();
                 //constants = Constants.OldCompBotConstants;
                 setUpDrivetrain(

@@ -17,13 +17,11 @@ import java.util.Optional;
 public class SnapDrivebaseToAngle extends Command {
     private CommandSwerveDrivetrain driveTrain;
     private CommandXboxController driverCont = new CommandXboxController(0);
-    private double maxSpeed;
     private double angleToFace = 0.0;
 
     /** Creates a new SnapDrivebaseToAngle. */
-    public SnapDrivebaseToAngle(CommandSwerveDrivetrain driveTrain, double maxSpeed) {
+    public SnapDrivebaseToAngle(CommandSwerveDrivetrain driveTrain) {
         this.driveTrain = driveTrain;
-        this.maxSpeed = maxSpeed;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(driveTrain);
     }
@@ -52,8 +50,7 @@ public class SnapDrivebaseToAngle extends Command {
         driveTrain.driveFieldCentricFacingAngle(
             Math.pow(MathUtil.applyDeadband(-driverCont.getLeftY(), 0.1), 2.0),
             Math.pow(MathUtil.applyDeadband(-driverCont.getLeftX(), 0.1), 2.0),
-            angleToFace,
-            maxSpeed
+            angleToFace
         );
     }
 

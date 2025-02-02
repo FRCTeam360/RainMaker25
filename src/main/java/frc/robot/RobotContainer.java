@@ -52,10 +52,9 @@ import frc.robot.subsystems.Vision.VisionIOLimelight;
 public class RobotContainer {
     private final Field2d field;
     private final SendableChooser<Command> autoChooser;
-    private double MaxSpeed = OldCompBot.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
-    private final Telemetry logger = new Telemetry(MaxSpeed);
+    private Telemetry logger;
 
     private CommandFactory commandFactory;
 
@@ -84,29 +83,21 @@ public class RobotContainer {
             case WOODBOT:
                 //woodbot stuff
                 driveTrain = WoodBotDriveTrain.createDrivetrain();
+                logger = new Telemetry(WoodBotDriveTrain.maxSpeed);
                 vision = new Vision(new VisionIO[]{
-                            new VisionIOLimelight(
-                                Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
-                                Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
-                                Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR,
-                                () -> driveTrain.getAngle()
-                            )
-                        });
-                setUpDrivetrain(
-                    vision,
-                    Constants.OldCompBotConstants.headingKP,
-                    Constants.OldCompBotConstants.headingKI,
-                    Constants.OldCompBotConstants.headingKD,
-                    Constants.OldCompBotConstants.headingKIZone,
-                    Constants.OldCompBotConstants.translationKP,
-                    Constants.OldCompBotConstants.translationKI,
-                    Constants.OldCompBotConstants.translationKD
-                );
+                    new VisionIOLimelight(
+                        Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
+                        Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
+                        Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR,
+                        () -> driveTrain.getAngle()
+                    )
+                });
                 elevator = new Elevator(new ElevatorIOWB());
                 break;
             case OLD_COMP_BOT:
                 //ocb stuff
                 driveTrain = OldCompBot.createDrivetrain();
+                logger = new Telemetry(OldCompBot.maxSpeed);
                 vision = new Vision(new VisionIO[]{
                             new VisionIOLimelight(
                                 Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
@@ -115,43 +106,23 @@ public class RobotContainer {
                                 () -> driveTrain.getAngle()
                             )
                         });
-                //constants = Constants.OldCompBotConstants;
-                setUpDrivetrain(
-                    vision,
-                    Constants.OldCompBotConstants.headingKP,
-                    Constants.OldCompBotConstants.headingKI,
-                    Constants.OldCompBotConstants.headingKD,
-                    Constants.OldCompBotConstants.headingKIZone,
-                    Constants.OldCompBotConstants.translationKP,
-                    Constants.OldCompBotConstants.translationKI,
-                    Constants.OldCompBotConstants.translationKD
-                );
+                break;
             case PRACTICE:
                 //practice bot stuff
                 break;
             case SIM:
+                driveTrain = WoodBotDriveTrain.createDrivetrain();
+                logger = new Telemetry(WoodBotDriveTrain.maxSpeed);
                 vision = new Vision(new VisionIO[]{
-                            new VisionIOLimelight(
-                                Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
-                                Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
-                                Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR,
-                                () -> driveTrain.getAngle()
-                            )
-                        });
+                    new VisionIOLimelight(
+                        Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
+                        Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
+                        Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR,
+                        () -> driveTrain.getAngle()
+                    )
+                });
                 elevator = new Elevator(new ElevatorIOSim());
                 coralShooter = new CoralShooter(new CoralShooterIOSim(() -> elevator.getPosition()));
-                driveTrain = OldCompBot.createDrivetrain();
-                //constants = Constants.OldCompBotConstants;
-                setUpDrivetrain(
-                    vision,
-                    Constants.OldCompBotConstants.headingKP,
-                    Constants.OldCompBotConstants.headingKI,
-                    Constants.OldCompBotConstants.headingKD,
-                    Constants.OldCompBotConstants.headingKIZone,
-                    Constants.OldCompBotConstants.translationKP,
-                    Constants.OldCompBotConstants.translationKI,
-                    Constants.OldCompBotConstants.translationKD
-                );
                 break;
             case COMPETITION:
             default:
@@ -192,15 +163,13 @@ public class RobotContainer {
         // );
 
         snapDrivebaseToAngle =
-            new SnapDrivebaseToAngle(driveTrain, Constants.OldCompBotConstants.maxSpeed);
+            new SnapDrivebaseToAngle(driveTrain);
         alignWithLimelight =
             new AlignWithLimelight(
                 vision,
                 driveTrain,
                 0.0,
-                3.0,
-                0.25,
-                Constants.OldCompBotConstants.maxAngularRate
+                3.0
             );
 
         levelFour = commandFactory.setElevatorHeight(34.0);
@@ -209,24 +178,9 @@ public class RobotContainer {
         zero = commandFactory.setElevatorHeight(0.0);
     }
 
-    private static void setUpDrivetrain(
-        Vision vision,
-        double headingKP,
-        double headingKI,
-        double headingKD,
-        double headingKIZone,
-        double translationKP,
-        double translationKI,
-        double translationKD
-    ) {
-        driveTrain.addHeadingController(headingKP, headingKI, headingKD, headingKIZone);
-        driveTrain.addTranslationController(translationKP, translationKI, translationKD);
-        driveTrain.assignVision(vision);
-    }
-
     private void configureBindings() {
         driveTrain.setDefaultCommand(
-            driveTrain.fieldOrientedDrive(MaxSpeed, MaxAngularRate, driverCont)
+            driveTrain.fieldOrientedDrive(MaxAngularRate, driverCont)
         );
 
         driverCont.pov(90).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));

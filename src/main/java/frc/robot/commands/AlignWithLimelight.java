@@ -4,7 +4,9 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -24,6 +26,10 @@ public class AlignWithLimelight extends Command {
     private double goalTX;
     private double maxSpeed;
     private double maxAngularRate;
+    private double angleToFace = 0.0;
+    private XboxController driverCont;
+    private double lastTXValue;
+    private double lastTYValue;
 
     /** Creates a new AlignWithLimelight. */
     public AlignWithLimelight(
@@ -47,19 +53,40 @@ public class AlignWithLimelight extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        System.out.println("HUHEIUIUHIUHUISHEIFUHUSHIUE");
+        if (driveTrain.getAngle() >= -30.0 || driveTrain.getAngle() <= 30.0) {
+            angleToFace = 0.0;
+        } else if (driveTrain.getAngle() <= -30.0 || driveTrain.getAngle() >= -90.0) {
+            angleToFace = -60.0;
+        } else if (driveTrain.getAngle() <= -90.0 || driveTrain.getAngle() >= -150.0) {
+            angleToFace = -120.0;
+        } else if (driveTrain.getAngle() <= -150.0 || driveTrain.getAngle() >= 150.0) {
+            angleToFace = 180.0;
+        } else if (driveTrain.getAngle() <= 150.0 || driveTrain.getAngle() >= 90.0) {
+            angleToFace = 120.0;
+        } else if (driveTrain.getAngle() >= 30.0 || driveTrain.getAngle() <= 90.0) {
+            angleToFace = 60.0;
+        }
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        driveTrain.robotCentricDrive(
-            driveTrain.translationController.calculate(vision.getTYRaw(), goalTY), //forward & backward motion
-            driveTrain.translationController.calculate(vision.getTXRaw(), goalTX), //side to side motion
-            0.0,
-            maxSpeed,
-            maxAngularRate
-        );
+        lastTXValue = vision.getTXRaw();
+        lastTYValue = vision.getTYRaw();
+
+     if(vision.getTV() == 1) {
+            driveTrain.driveFieldCentricFacingAngle(
+                driveTrain.translationController.calculate(vision.getTYRaw(), goalTY), //forward & backward motion
+                   -driveTrain.translationController.calculate(vision.getTXRaw(), goalTX),
+                    angleToFace, //side to side motion
+                    maxSpeed
+                );
+        } else {
+           driveTrain.driveFieldCentricFacingAngle(0.0, 0.0, angleToFace, maxSpeed);
+       withTimeout(1);
+        }
+       
+
     }
 
     // Called once the command ends or is interrupted.
@@ -69,8 +96,7 @@ public class AlignWithLimelight extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        System.out.println("HELLOHELLOEHHOEJOJFEJIHFIE");
-        return false;
-        // return Math.abs( (vision.getTXRaw()) - goalTX) > 0.5 &&  Math.abs(vision.getTYRaw()  - goalTY) > 0.5;
+        // return false;
+        return Math.abs( vision.getTXRaw() - goalTX) < 2.0 &&  Math.abs(vision.getTYRaw()  - goalTY) < 0.5;
     }
 }

@@ -26,6 +26,7 @@ public class SetCoralIntake extends Command {
   public void execute() {
     coralShooter.setDutyCycle(-0.3);
   }
+  
 
   // Called once the command ends or is interrupted.
   @Override

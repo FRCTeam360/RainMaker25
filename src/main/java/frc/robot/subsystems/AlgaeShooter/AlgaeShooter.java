@@ -13,6 +13,10 @@ public class AlgaeShooter extends SubsystemBase{
         this.io = io;
     }
 
+    public void setDutyCycle (double dutyCycle){
+        io.setDutyCycle(dutyCycle);
+    }
+
     @Override
     public void periodic(){
         io.updateInputs(inputs);

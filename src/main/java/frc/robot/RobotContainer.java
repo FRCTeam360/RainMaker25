@@ -83,7 +83,7 @@ public class RobotContainer {
             case WOODBOT:
                 //woodbot stuff
                 driveTrain = WoodBotDriveTrain.createDrivetrain();
-                logger = new Telemetry(WoodBotDriveTrain.maxSpeed);
+                logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
                 vision = new Vision(new VisionIO[]{
                     new VisionIOLimelight(
                         Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
@@ -97,7 +97,7 @@ public class RobotContainer {
             case OLD_COMP_BOT:
                 //ocb stuff
                 driveTrain = OldCompBot.createDrivetrain();
-                logger = new Telemetry(OldCompBot.maxSpeed);
+                logger = new Telemetry(OldCompBot.kSpeedAt12Volts.in(MetersPerSecond));
                 vision = new Vision(new VisionIO[]{
                             new VisionIOLimelight(
                                 Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
@@ -112,7 +112,7 @@ public class RobotContainer {
                 break;
             case SIM:
                 driveTrain = WoodBotDriveTrain.createDrivetrain();
-                logger = new Telemetry(WoodBotDriveTrain.maxSpeed);
+                logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
                 vision = new Vision(new VisionIO[]{
                     new VisionIOLimelight(
                         Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,

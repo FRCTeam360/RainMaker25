@@ -22,4 +22,6 @@ public interface AlgaeArmIO {
   public default void updateInputs(AlgaeArmIOInputs inputs) {}
 
   public void setDutyCycle(double dutyCycle);
+
+  public void setPosition(double position);
 } 

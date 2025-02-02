@@ -6,6 +6,7 @@ package frc.robot.subsystems.AlgaeArm;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.CoralIntake.CoralIntakeIOInputsAutoLogged;
 
@@ -17,6 +18,22 @@ public class AlgaeArm extends SubsystemBase {
   public AlgaeArm(AlgaeArmIO io) {
     this.io = io;
   }
+
+  public void setPosition(double position) {
+    io.setPosition(position);
+  }
+
+  public void setDutyCycle(double dutyCycle) {
+    io.setDutyCycle(dutyCycle);
+  }
+
+  public Command setAlgaeArmAngle(double angle) {
+    return this.runEnd(
+      () -> this.setPosition(angle),
+      () -> this.setPosition(angle)
+    );
+  }
+
 
   @Override
   public void periodic() {

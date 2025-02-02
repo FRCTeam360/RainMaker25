@@ -19,6 +19,7 @@ import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+import edu.wpi.first.wpilibj.motorcontrol.PWMTalonFX;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.PWMSim;
@@ -35,10 +36,10 @@ import frc.robot.subsystems.CoralShooter.CoralShooterIOSim;
 public class AlgaeArmIOSim implements AlgaeArmIO {
   
   private DoubleSupplier heightSupplier;
-  private DCMotor gearbox = DCMotor.getNeo550(1);
+  private DCMotor gearbox = DCMotor.getKrakenX60Foc(1);
   private Encoder encoder = new Encoder(5, 6);
 
-  private final PWMSparkMax motor = new PWMSparkMax(3);
+  private final PWMTalonFX motor = new PWMTalonFX(3);
   private final PWMSim simMotor = new PWMSim(motor);
 
   private final SingleJointedArmSim armSim = new SingleJointedArmSim(gearbox, 1.0, SingleJointedArmSim.estimateMOI(Units.inchesToMeters(30) /*placeholder*/ , 2.0/*placeist*/),Units.inchesToMeters(30)/*placeholder*/ , Units.degreesToRadians(-75)/*placehold */, Units.degreesToRadians(255)/*place */, true, 0);
@@ -70,9 +71,12 @@ public class AlgaeArmIOSim implements AlgaeArmIO {
     SmartDashboard.putData("algae arm sim", mech2d);
   }
 
-  @Override
   public void setDutyCycle(double dutyCycle) {
     simMotor.setSpeed(dutyCycle);
+  }
+
+  public void setPosition(double position) {
+    simMotor.setPosition(position);
   }
 
 }

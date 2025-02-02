@@ -124,7 +124,6 @@ public class RobotContainer {
                 elevator = new Elevator(new ElevatorIOSim());
                 coralShooter = new CoralShooter(new CoralShooterIOSim(() -> elevator.getPosition()));
                 algaeArm = new AlgaeArm(new AlgaeArmIOSim(() -> elevator.getPosition()));
-                driveTrain = OldCompBot.createDrivetrain();
                 break;
             case COMPETITION:
             default:
@@ -140,7 +139,7 @@ public class RobotContainer {
         PathPlannerLogging.setLogTargetPoseCallback(
         pose -> Logger.recordOutput("Swerve/TargetPathPose", pose));
         
-        commandFactory = new CommandFactory(catapult, coralIntake, coralShooter, elevator, vision);
+        commandFactory = new CommandFactory(catapult, coralIntake, coralShooter, elevator, vision, algaeArm);
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);

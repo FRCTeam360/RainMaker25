@@ -57,7 +57,7 @@ public class CoralShooterIOSim implements CoralShooterIO {
   private final Color8Bit color = new Color8Bit(Color.kCoral);
   private final LoggedMechanism2d mech2d = new LoggedMechanism2d(30, 50, new Color8Bit(Color.kBlue));
   private final LoggedMechanismRoot2d mech2dRoot = mech2d.getRoot("shooter root", 10, 0);
-  public final LoggedMechanismLigament2d mech2dSide1 = mech2dRoot.append(new LoggedMechanismLigament2d("side1", 10, 340, 5, color));
+  private final LoggedMechanismLigament2d mech2dSide1 = mech2dRoot.append(new LoggedMechanismLigament2d("side1", 10, 340, 5, color));
   private final LoggedMechanismLigament2d mech2dSide2 = mech2dRoot.append(new LoggedMechanismLigament2d("side2", 5, 270, 5, color));
   private final LoggedMechanismLigament2d mech2dSide3 = mech2dSide1.append(new LoggedMechanismLigament2d("side3", 5, 290, 5, color));
   private final LoggedMechanismLigament2d mech2dSide4 = mech2dSide2.append(new LoggedMechanismLigament2d("side4", 10, 70, 5, color));
@@ -65,10 +65,10 @@ public class CoralShooterIOSim implements CoralShooterIO {
   /** Creates a new CoralOuttakeIOSim. */
   public CoralShooterIOSim(DoubleSupplier heightSupplier) {
     this.heightSupplier = heightSupplier;
-    simEncoder.setDistancePerPulse(2.0 * Math.PI * (Units.inchesToMeters(2.0)) / 4096);
   }
 
   public void updateInputs(CoralShooterIOInputs inputs) {
+    simEncoder.setDistancePerPulse(2.0 * Math.PI * (Units.inchesToMeters(2.0)) / 4096);
     shooterSim.setInput(simMotor.getSpeed() * RobotController.getBatteryVoltage());
     shooterSim.update(0.02);
     simEncoder.setDistance(simMotor.getPosition());

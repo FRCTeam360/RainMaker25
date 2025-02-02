@@ -80,7 +80,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return this.applyRequest(() ->
             drive.withVelocityX(Math.pow(driveCont.getLeftY(), 2) * maxSpeed * -Math.signum(driveCont.getLeftY())) // Drive forward with negative Y (forward)
                 .withVelocityY(Math.pow(driveCont.getLeftX(), 2) * maxSpeed * -Math.signum(driveCont.getLeftX()))// Drive left with negative X (left)
-                .withRotationalRate(Math.pow(-driveCont.getRightX(), 2) * maxAngularRate * -Math.signum(driveCont.getRightX())) // Drive counterclockwise with negative X (left)
+                .withRotationalRate(Math.pow(driveCont.getRightX(), 2) * maxAngularRate * Math.signum(driveCont.getRightX())) // Drive counterclockwise with negative X (left)
         );
     }
 

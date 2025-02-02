@@ -64,6 +64,7 @@ public class RobotContainer {
 
     private SnapDrivebaseToAngle snapDrivebaseToAngle;
     private AlignWithLimelight alignWithLimelight;
+    private Command alignWithLimelightTimeout;
 
     private Command levelFour;
     private Command levelThree;
@@ -173,8 +174,11 @@ public class RobotContainer {
         alignWithLimelight = 
             new AlignWithLimelight(vision, driveTrain, Constants.WoodbotConstants.WBGOALSCORETY, 
             Constants.WoodbotConstants.WBGOALSCORETX,
-            WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond),
-            Constants.OldCompBotConstants.maxAngularRate);
+            WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
+
+        alignWithLimelightTimeout =
+            commandFactory.AlignWithLimelightTimeout(Constants.WoodbotConstants.WBGOALSCORETY, 
+            Constants.WoodbotConstants.WBGOALSCORETX);
 
         snapDrivebaseToAngle =
             new SnapDrivebaseToAngle(driveTrain, Constants.OldCompBotConstants.maxSpeed, vision);
@@ -239,8 +243,8 @@ public class RobotContainer {
         );
 
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
-        driverCont.pov(180).onTrue(allignToReefWoodBot);
-        driverCont.pov(90).onTrue(alignWithLimelight);
+       // driverCont.pov(180).onTrue(allignToReefWoodBot);
+        driverCont.pov(90).onTrue(alignWithLimelightTimeout);
 
         if(Objects.nonNull(elevator)){
             driverCont.a().onTrue(zero);

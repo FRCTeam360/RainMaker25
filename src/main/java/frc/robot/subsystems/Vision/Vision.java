@@ -51,36 +51,44 @@ public class Vision extends SubsystemBase {
   }
 
   public double getTXRaw() {
+    // TODO: replace with more robust code
     return ios[0].getTXRaw();
   }
 
   public double getTXAdjusted() {
+    // TODO: replace with more robust code
     return ios[0].getTXAdjusted();
   }
 
   public double getTYRaw() {
+    // TODO: replace with more robust code
     return ios[0].getTYRaw();
   }
 
   public double getTYAdjusted() {
+    // TODO: replace with more robust code
     return ios[0].getTYAdjusted();
   }
 
   public double getTV() {
+    // TODO: replace with more robust code
     return ios[0].getTV();
   }
 
   public double getPipeline() {
+    // TODO: replace with more robust code
     return ios[0].getPipeline();
   }
 
   public void setPipeline(int pipeline) {
+    // TODO: replace with more robust code
     if (ios[0].getPipeline() != pipeline) {
       ios[0].setPipeline(pipeline);
     }
   }
 
   public void takeSnapshot() {
+    // TODO: replace with more robust code
     ios[0].takeSnapshot();
     Logger.recordOutput(VISION_LOGGING_PREFIX + "snapshot", true);
     snapshotTimer.stop();
@@ -89,12 +97,14 @@ public class Vision extends SubsystemBase {
   }
 
   public void resetSnapshot() {
+    // TODO: replace with more robust code
     ios[0].resetSnapshot();
     Logger.recordOutput(VISION_LOGGING_PREFIX + "snapshot", false);
     snapshotTimer.stop();
   }
 
   public boolean isOnTargetTX(double goal) {
+    // TODO: replace with more robust code
     if (Math.abs(getTXAdjusted()) < goal) {
       return true;
     }
@@ -102,6 +112,7 @@ public class Vision extends SubsystemBase {
   }
 
   public boolean isOnTargetTY(double goal) {
+    // TODO: replace with more robust code
     if (Math.abs(getTYAdjusted()) < goal) {
       return true;
     }
@@ -111,6 +122,7 @@ public class Vision extends SubsystemBase {
 
   // Returns true if the target is in view
   public boolean isTargetInView() {
+    // TODO: replace with more robust code
     return getTV() == 1;
   }
 

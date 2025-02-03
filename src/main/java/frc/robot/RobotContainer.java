@@ -7,6 +7,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import java.lang.ModuleLayer.Controller;
+import java.util.Objects;
 import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -172,10 +173,12 @@ public class RobotContainer {
                 3.0
             );
 
-        levelFour = commandFactory.setElevatorHeight(34.0);
-        levelThree = commandFactory.setElevatorHeight(25.0);
-        levelTwo = commandFactory.setElevatorHeight(10.0);
-        zero = commandFactory.setElevatorHeight(0.0);
+        if(Objects.nonNull(elevator)){
+            levelFour = commandFactory.setElevatorHeight(34.0);
+            levelThree = commandFactory.setElevatorHeight(25.0);
+            levelTwo = commandFactory.setElevatorHeight(10.0);
+            zero = commandFactory.setElevatorHeight(0.0);
+        }
     }
 
     private void configureBindings() {
@@ -190,10 +193,12 @@ public class RobotContainer {
 
         driveTrain.registerTelemetry(logger::telemeterize);
 
-        driverCont.a().onTrue(zero);
-        driverCont.b().onTrue(levelTwo);
-        driverCont.x().onTrue(levelThree);
-        driverCont.y().onTrue(levelFour);
+        if(Objects.nonNull(elevator)){
+            driverCont.a().onTrue(zero);
+            driverCont.b().onTrue(levelTwo);
+            driverCont.x().onTrue(levelThree);
+            driverCont.y().onTrue(levelFour);
+        }
     }
 
     public Command getAutonomousCommand() {

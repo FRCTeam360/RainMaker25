@@ -28,8 +28,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Vision extends SubsystemBase {
-  private VisionIO[] ios;
-  private VisionIOInputsAutoLogged[] inputs;
+  private final VisionIO[] ios;
+  private final VisionIOInputsAutoLogged[] visionInputs;
   private Timer snapshotTimer = new Timer();
   List<VisionMeasurement> acceptedMeasurements = Collections.emptyList();
 
@@ -43,11 +43,11 @@ public class Vision extends SubsystemBase {
   }
 
   /** Creates a new Vision. */
-  public Vision(VisionIO[] ios) {
-    this.ios = ios;
+  public Vision(VisionIO[] visionIos) {
+    this.ios = visionIos;
     // Creates the same number of inputs as vision IO layers
-    VisionIOInputsAutoLogged[] array = new VisionIOInputsAutoLogged[ios.length];
-    Arrays.fill(array, new VisionIOInputsAutoLogged());
+    visionInputs = new VisionIOInputsAutoLogged[visionIos.length];
+    Arrays.fill(visionInputs, new VisionIOInputsAutoLogged());
   }
 
   public double getTXRaw() {
@@ -130,7 +130,7 @@ public class Vision extends SubsystemBase {
   public void periodic() {
     for (int i = 0; i < ios.length; i++) {
       VisionIO io = ios[i];
-      VisionIOInputsAutoLogged input = inputs[i];
+      VisionIOInputsAutoLogged input = visionInputs[i];
 
       io.updateInputs(input);
       Logger.processInputs("Limelight", input);
@@ -138,7 +138,7 @@ public class Vision extends SubsystemBase {
 
     List<VisionMeasurement> acceptedMeasurements = new ArrayList<>();
 
-    for (VisionIOInputsAutoLogged input : inputs) {
+    for (VisionIOInputsAutoLogged input : visionInputs) {
       // skip input if not updated
       if (!input.poseUpdated)
         continue;

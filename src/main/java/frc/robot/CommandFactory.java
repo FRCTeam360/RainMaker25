@@ -2,6 +2,7 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AlignWithLimelight;
@@ -22,7 +23,7 @@ public class CommandFactory {
     private final Elevator elevator;
     private final Vision vision;
     private final CommandSwerveDrivetrain drivetrain;
-    
+    private final XboxController driverCont;    
     // ↓ constructor ↓ //
     public CommandFactory(
         Catapult catapult,
@@ -30,7 +31,8 @@ public class CommandFactory {
         CoralShooter coralShooter,
         Elevator elevator,
         Vision vision,
-        CommandSwerveDrivetrain driveTrain
+        CommandSwerveDrivetrain driveTrain,
+        XboxController driverCont
     ) 
     
     {
@@ -40,6 +42,7 @@ public class CommandFactory {
         this.elevator = elevator;
         this.vision = vision;
         this.drivetrain = driveTrain;
+        this.driverCont = driverCont;
     }
 
     /*
@@ -49,15 +52,16 @@ public class CommandFactory {
         return elevator.setElevatorHeight(height);
     }
 
-    public Command AlignWithLimelightTimeout(double goalTY, double goalTX){
-        return new AlignWithLimelight(vision, drivetrain, goalTY, goalTX,
-                WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond)).withTimeout(1);
+    public Command AlignWithLimelight(double goalTY, double goalTX) {
+        return vision.waitUntilTargetTxTy(goalTX, goalTY)
+                .deadlineFor(new AlignWithLimelight(vision, drivetrain, goalTY, goalTX,
+                        WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond), driverCont)); // no more timeout
     }
 
     public Command allignToReefWoodbotLeft(){
         return new SequentialCommandGroup(
             new SnapDrivebaseToAngle(drivetrain, 0, vision),
-            new AlignWithLimelight(vision, drivetrain, -12.64, -11.16, 1)
+            new AlignWithLimelight(vision, drivetrain, -12.64, -11.16, 1, driverCont)
         );
     }
 }

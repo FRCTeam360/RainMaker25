@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OldCompBotConstants;
@@ -63,8 +64,7 @@ public class RobotContainer {
     private ShuffleboardTab diagnosticTab;
 
     private SnapDrivebaseToAngle snapDrivebaseToAngle;
-    private AlignWithLimelight alignWithLimelight;
-    private Command alignWithLimelightTimeout;
+    private Command alignWithLimelight;
 
     private Command levelFour;
     private Command levelThree;
@@ -154,7 +154,7 @@ public class RobotContainer {
                 //competition bot stuff
                 break;
         }
-        commandFactory = new CommandFactory(catapult, coralIntake, coralShooter, elevator, vision, driveTrain);
+        commandFactory = new CommandFactory(catapult, coralIntake, coralShooter, elevator, vision, driveTrain, driverCont.getHID());
         initializeCommands();
 
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -171,13 +171,10 @@ public class RobotContainer {
     }
 
     public void initializeCommands() {
-        alignWithLimelight = 
-            new AlignWithLimelight(vision, driveTrain, Constants.WoodbotConstants.WBGOALSCORETY, 
-            Constants.WoodbotConstants.WBGOALSCORETX,
-            WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
 
-        alignWithLimelightTimeout =
-            commandFactory.AlignWithLimelightTimeout(Constants.WoodbotConstants.WBGOALSCORETY, 
+
+        alignWithLimelight =
+            commandFactory.AlignWithLimelight(Constants.WoodbotConstants.WBGOALSCORETY, 
             Constants.WoodbotConstants.WBGOALSCORETX);
 
         snapDrivebaseToAngle =
@@ -193,7 +190,7 @@ public class RobotContainer {
         //     );
 
         if(Objects.nonNull(elevator)){
-            levelFour = commandFactory.setElevatorHeight(33.0);
+            levelFour = commandFactory.setElevatorHeight(34.0);
             levelThree = commandFactory.setElevatorHeight(18.0);
             levelTwo = commandFactory.setElevatorHeight(8.5);
             zero = commandFactory.setElevatorHeight(0.0);
@@ -244,11 +241,11 @@ public class RobotContainer {
 
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
        // driverCont.pov(180).onTrue(allignToReefWoodBot);
-        driverCont.pov(90).onTrue(alignWithLimelightTimeout);
+        driverCont.pov(90).onTrue(snapDrivebaseToAngle);
 
         if(Objects.nonNull(elevator)){
             driverCont.a().onTrue(zero);
-            driverCont.b().onTrue(snapDrivebaseToAngle);
+            driverCont.b().whileTrue(alignWithLimelight);
             driverCont.x().onTrue(levelThree);
             driverCont.y().onTrue(levelFour);
         }

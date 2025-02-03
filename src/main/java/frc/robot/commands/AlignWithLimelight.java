@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -41,6 +42,9 @@ public class AlignWithLimelight extends Command {
     private double rotatedVelocityX;
     private double rotatedVelocityY;
     private boolean endEarly = false;
+    private XboxController driverCont;
+    private SlewRateLimiter forwardsAccelerationLimit = new SlewRateLimiter(1);
+    private SlewRateLimiter leftAccelerationLimit = new SlewRateLimiter(.15);
 
     private static final Map<Integer, Double> tagIDToAngle = Map.ofEntries(
             Map.entry(21, 180.0),
@@ -62,12 +66,14 @@ public class AlignWithLimelight extends Command {
             CommandSwerveDrivetrain driveTrain,
             double goalTY,
             double goalTX,
-            double maxSpeed) {
+            double maxSpeed,
+            XboxController driverCont) {
         this.vision = vision;
         this.driveTrain = driveTrain;
         this.goalTY = goalTY;
         this.maxSpeed = maxSpeed;
         this.goalTX = goalTX;
+        this.driverCont = driverCont;
 
         addRequirements(driveTrain);
     }
@@ -75,6 +81,9 @@ public class AlignWithLimelight extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        leftAccelerationLimit.reset(0);
+        forwardsAccelerationLimit.reset(0);
+        
         double angleToFace = 0;
 
         endEarly = true;
@@ -109,32 +118,38 @@ public class AlignWithLimelight extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double velX = driveTrain.translationController.calculate(vision.getTYRaw(), goalTY);
-        double velY = driveTrain.translationController.calculate(vision.getTXRaw(), goalTX);
 
-        velX = 0;
-
+        double velX = -driveTrain.translationController.calculate(vision.getTYRaw(), goalTY);
+        double velY = 0.1 * driveTrain.translationController.calculate(vision.getTXRaw(), goalTX);
+        double scale =   Math.abs(velY/velX) ;
+        //double joystickInput = MathUtil.applyDeadband(driverCont.getLeftY(), 0.1);
+       // velX = -Math.signum(joystickInput) * Math.pow(joystickInput, 2);
+       Logger.recordOutput("AlignWLimelight PID OutputX", velX);
+       Logger.recordOutput("AlignWLimelight PID OutputX", velY);
+       
         Translation2d PIDSpeed = new Translation2d(
-                velX,
-                velY);
+               forwardsAccelerationLimit.calculate(velX),
+             leftAccelerationLimit.calculate( scale  * velY)
+                );
                 
         Translation2d rotatedPIDSpeeds = rotateTranslation(PIDSpeed, angleToFaceRotation2d);
 
         rotatedVelocityX = rotatedPIDSpeeds.getX();
-        rotatedVelocityY = rotatedPIDSpeeds.getY();
+        rotatedVelocityY =   rotatedPIDSpeeds.getY();
 
         Logger.recordOutput("AlignWLimelight BaseOutput", PIDSpeed);
         Logger.recordOutput("AlignWLimelight RotatedOutput", rotatedPIDSpeeds);
 
-        if (vision.getTV() == 1) {
+        if (vision.getTV() == 1 ) {
             driveTrain.driveFieldCentricFacingAngle(
-                    rotatedVelocityX, // forward & backward motion
-                    rotatedVelocityY,
+                 rotatedVelocityX, // forward & backward motion
+                   rotatedVelocityY,
                     angleToFaceRotation2d.getDegrees(), // side to side motion
                     maxSpeed);
 
         } else {
-            driveTrain.driveFieldCentricFacingAngle(0.0, 0.0, angleToFaceRotation2d.getDegrees(), maxSpeed);
+          driveTrain.driveFieldCentricFacingAngle(0.0, 0.0, angleToFaceRotation2d.getDegrees(), maxSpeed);
+
         }
 
     }
@@ -148,7 +163,7 @@ public class AlignWithLimelight extends Command {
     @Override
     public boolean isFinished() {
         // return false;
-        return endEarly ||
-            Math.abs(vision.getTXRaw() - goalTX) < 2.0;// && //Math.abs(vision.getTYRaw() - goalTY) < 0.5;
+        return endEarly 
+          ;// && //Math.abs(vision.getTYRaw() - goalTY) < 0.5; &&   Math.abs(vision.getTXRaw() - goalTX) <  1.0
     }//
 }

@@ -17,6 +17,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Vision extends SubsystemBase {
@@ -24,6 +26,7 @@ public class Vision extends SubsystemBase {
   private VisionIO io;
   private VisionIOInputsAutoLogged inputs = new VisionIOInputsAutoLogged();
   private Timer snapshotTimer = new Timer();
+
 
   private final String VISION_LOGGING_PREFIX = "Vision: ";
 
@@ -70,6 +73,10 @@ public class Vision extends SubsystemBase {
     }
   }
 
+  public Command waitUntilTargetTxTy(double goalTX, double goalTY) {
+    return Commands.waitUntil(() -> isTargetInView() && isOnTargetTX(goalTX) && isOnTargetTY(goalTY));
+  }
+
   public void takeSnapshot() {
     io.takeSnapshot();
     Logger.recordOutput(VISION_LOGGING_PREFIX + "snapshot", true);
@@ -85,14 +92,14 @@ public class Vision extends SubsystemBase {
   }
 
   public boolean isOnTargetTX(double goal) {
-    if (Math.abs(getTXAdjusted()) < goal) {
+    if (Math.abs(getTXRaw() - goal) < 1.0) {
       return true;
     }
     return false;
   }
 
   public boolean isOnTargetTY(double goal) {
-    if (Math.abs(getTYAdjusted()) < goal) {
+    if (Math.abs(getTYRaw() - goal) < 1.0) {
       return true;
     }
 

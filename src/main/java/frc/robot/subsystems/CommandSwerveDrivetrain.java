@@ -97,7 +97,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         headingController = new PhoenixPIDController(kP, kI, kD);
         
         headingController.enableContinuousInput(-Math.PI, Math.PI);
-        headingController.setTolerance(Math.toRadians(1));
+        headingController.setTolerance(Math.toRadians(3));
     }
 
     public void addTranslationController(double kP, double kI, double kD) {
@@ -118,6 +118,18 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 .withVelocityX(x * maxSpeed)
                 .withVelocityY(y * maxSpeed)
                 .withRotationalRate(-rotation * maxAngularRate));
+    }
+
+    public final Command robotCentricDrive(double maxSpeed, double maxAngularRate, CommandXboxController driveCont) { //field oriented drive command!
+        SwerveRequest.RobotCentric drive = new SwerveRequest.RobotCentric() //creates a fieldcentric drive
+            .withDeadband(maxSpeed * 0.1).withRotationalDeadband(maxAngularRate * 0.1) // Add a 10% deadband
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+
+        return this.applyRequest(() ->
+            drive.withVelocityX(-Math.pow(driveCont.getLeftY(), 2) * maxSpeed * -Math.signum(driveCont.getLeftY())) // Drive forward with negative Y (forward)
+                .withVelocityY(-Math.pow(driveCont.getLeftX(), 2) * maxSpeed * -Math.signum(driveCont.getLeftX()))// Drive left with negative X (left)
+                .withRotationalRate(-Math.pow(driveCont.getRightX(), 2) * maxAngularRate * Math.signum(driveCont.getRightX())) // Drive counterclockwise with negative X (left)
+        );
     }
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */

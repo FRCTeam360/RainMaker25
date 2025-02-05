@@ -45,13 +45,13 @@ public final class Constants {
         public static final double maxSpeed = OldCompBot.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
         public static final double maxAngularRate = RotationsPerSecond.of(5).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
-        public static final double headingKP = 3.0;
+        public static final double headingKP = 2.0;
         public static final double headingKI = 0.0;
         public static final double headingKD = 0.0;
         public static final double headingKIZone = 0.0;
 
-        public static final double translationKP = 0.05;
-        public static final double translationKI = 0.0;
+        public static final double translationKP = 0.03;
+        public static final double translationKI = 0.0003;
         public static final double translationKD = 0.0;
     }
 
@@ -65,8 +65,8 @@ public final class Constants {
       public static final double headingKD = 0.0;
       public static final double headingKIZone = 0.0;
 
-      public static final double WBGOALSCORETX = -14.0;
-      public static final double WBGOALSCORETY = -9.0;
+      public static final double WBGOALSCORETX = 0.0;
+      public static final double WBGOALSCORETY = 0.0;
 
     public static final int ELEVATOR_BOTTOM_SWITCH = 2;
       public static final int OUTTAKE_SENSOR = 0; //DIO port

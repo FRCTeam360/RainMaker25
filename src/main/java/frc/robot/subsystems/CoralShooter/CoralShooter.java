@@ -26,7 +26,7 @@ public class CoralShooter extends SubsystemBase {
     }
 
     public boolean getOuttakeSensor() {
-        return inputs.shooterSensor;
+        return inputs.outtakeSensor;
     }
 
     public void stop() {

@@ -125,4 +125,12 @@ public class ElevatorIOSim implements ElevatorIO {
   public void setDutyCycle(double dutyCycle) {
     simMotor.setSpeed(dutyCycle);
   }
+
+  public void zeroElevatorEncoder(){
+
+  }
+
+  public void stop(){
+    simMotor.setSpeed(0.0);
+  }
 }

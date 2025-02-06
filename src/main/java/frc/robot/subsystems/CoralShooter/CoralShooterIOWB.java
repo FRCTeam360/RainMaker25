@@ -57,6 +57,6 @@ public class CoralShooterIOWB implements CoralShooterIO {
         inputs.outtakePosition = encoder.getPosition();
         inputs.outtakeVelocity = encoder.getVelocity();
         inputs.outtakeVoltage = outtakeMotor.getAppliedOutput() * outtakeMotor.getBusVoltage();
-        inputs.shooterSensor = this.getOuttakeSensor();
+        inputs.outtakeSensor = this.getOuttakeSensor();
     }
 }

@@ -79,7 +79,6 @@ public class VisionIOLimelight implements VisionIO {
     return Optional.ofNullable(mt2);
   }
 
-  }
   public int getAprilTagID() {
     return (int)table.getEntry("tid").getInteger(0);
   }

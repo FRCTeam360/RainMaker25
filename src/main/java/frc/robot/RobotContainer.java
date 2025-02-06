@@ -173,7 +173,7 @@ public class RobotContainer {
             Constants.WoodbotConstants.WBGOALSCORETX);
 
         snapDrivebaseToAngle =
-            new SnapDrivebaseToAngle(driveTrain, Constants.OldCompBotConstants.maxSpeed, vision);
+            new SnapDrivebaseToAngle(driveTrain);
         // alignWithLimelight =
         //     new AlignWithLimelight(
         //         vision,

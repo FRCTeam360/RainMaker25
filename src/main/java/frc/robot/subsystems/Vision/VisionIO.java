@@ -21,6 +21,11 @@ public interface VisionIO {
         public double tv;
         public double pipeline;
         public double tagID;
+        public Pose2d estimatedPose;
+        public double timestampSeconds;
+        public int[] targetIds;
+        public double[] distancesToTargets;
+        public boolean poseUpdated;
     }
 
     public void updateInputs(VisionIOInputs inputs);
@@ -36,8 +41,6 @@ public interface VisionIO {
     public double getTYAdjusted();
 
     public double getTV();
-
-    public Pose2d getBotPose();
 
     public double getPipeline();
 

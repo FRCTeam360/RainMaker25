@@ -5,17 +5,23 @@
 package frc.robot.subsystems.Vision;
 
 import java.lang.reflect.Array;
+import java.util.Optional;
+import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import frc.robot.subsystems.Vision.LimelightHelpers.RawFiducial;
+import frc.robot.utils.LimelightHelpers;
+import frc.robot.utils.LimelightHelpers.PoseEstimate;
+import frc.robot.utils.LimelightHelpers.RawFiducial;
 
 public class VisionIOLimelight implements VisionIO {
   private final NetworkTable table;
+  private final String name;
   private final double yawFudgeFactor;
   private final double pitchFudgeFactor;
+  private final DoubleSupplier gyroAngleSupplier;
 
   private RawFiducial[] fiducials = LimelightHelpers.getRawFiducials("");
 
@@ -26,13 +32,21 @@ public class VisionIOLimelight implements VisionIO {
    * @param yawFudgeFactor    fudge factor for camera yaw in degrees
    * @param pitchFudgeFactor  fudge factor for camera pitch in degrees
    */
-  public VisionIOLimelight(String name, double yawFudgeFactor, double pitchFudgeFactor) {
+  public VisionIOLimelight(String name, double yawFudgeFactor, double pitchFudgeFactor, DoubleSupplier gyroAngleSupplier) {
     table = NetworkTableInstance.getDefault().getTable(name);
+    this.name = name;
     this.yawFudgeFactor = yawFudgeFactor;
     this.pitchFudgeFactor = pitchFudgeFactor;
+    this.gyroAngleSupplier = gyroAngleSupplier;
   }
 
   public void updateInputs(VisionIOInputs inputs) {
+    // Get the pose estimate from limelight helpers
+    Optional<PoseEstimate> newPoseEstimate = getMegatagPoseEst();
+
+    // Assume that the pose hasn't been updated
+    inputs.poseUpdated = false;
+
     inputs.tv = getTV();
     inputs.tx = getTXRaw();
     inputs.txAdjusted = getTXAdjusted();
@@ -40,6 +54,30 @@ public class VisionIOLimelight implements VisionIO {
     inputs.tyAdjusted = getTYAdjusted();
     inputs.pipeline = getPipeline();
     inputs.tagID = getAprilTagID();
+    // if the new pose estimate is null, then don't update further
+    if(newPoseEstimate.isEmpty()) return;
+
+    PoseEstimate poseEstimate = newPoseEstimate.get();
+
+    inputs.estimatedPose = poseEstimate.pose;
+    inputs.timestampSeconds = poseEstimate.timestampSeconds;
+    int[] targetIds = new int[poseEstimate.rawFiducials.length];
+    double[] distancesToTargets = new double[poseEstimate.rawFiducials.length];
+    for (int i = 0; i < poseEstimate.rawFiducials.length; i++){
+      RawFiducial rawFiducial = poseEstimate.rawFiducials[i];
+      targetIds[i] = rawFiducial.id;
+      distancesToTargets[i] = rawFiducial.distToRobot;
+    }
+    inputs.targetIds = targetIds;
+    inputs.distancesToTargets = distancesToTargets;
+    inputs.poseUpdated = true;
+  }
+
+  private Optional<PoseEstimate> getMegatagPoseEst(){
+    LimelightHelpers.SetRobotOrientation(name, gyroAngleSupplier.getAsDouble(), 0, 0, 0, 0, 0);
+    PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(name);
+    return Optional.ofNullable(mt2);
+  }
 
   }
   public int getAprilTagID() {
@@ -68,14 +106,6 @@ public class VisionIOLimelight implements VisionIO {
 
   private boolean targetInView() {
     return getTV() == 1.0;
-  }
-
-  public Pose2d getBotPose() {
-    if (targetInView()) {
-      double[] botPoseArray = table.getEntry("botpose").getDoubleArray(new double[6]);
-      return new Pose2d(botPoseArray[0], botPoseArray[1], Rotation2d.fromDegrees(botPoseArray[5]));
-    }
-    return null;
   }
 
   public double getPipeline() {

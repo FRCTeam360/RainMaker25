@@ -22,16 +22,13 @@ import org.ejml.interfaces.decomposition.SingularValueDecomposition;
 public class SnapDrivebaseToAngle extends Command {
     private CommandSwerveDrivetrain driveTrain;
     private CommandXboxController driverCont = new CommandXboxController(0);
-    private double maxSpeed;
     private double angleToFace = 0.0;
     private Vision vision;
     private Vision aprilTagID;
 
     /** Creates a new SnapDrivebaseToAngle. */
-    public SnapDrivebaseToAngle(CommandSwerveDrivetrain driveTrain, double maxSpeed, Vision vision) {
+    public SnapDrivebaseToAngle(CommandSwerveDrivetrain driveTrain) {
         this.driveTrain = driveTrain;
-        this.maxSpeed = maxSpeed;
-        this.vision = vision;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(driveTrain);
     }
@@ -76,14 +73,11 @@ public class SnapDrivebaseToAngle extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        // System.out.println(angleToFace);
-        // System.out.println(vision.getAprilTagID());
-            driveTrain.driveFieldCentricFacingAngle(
-                Math.pow(MathUtil.applyDeadband(-driverCont.getLeftY(), 0.1), 2.0),
-                Math.pow(MathUtil.applyDeadband(-driverCont.getLeftX(), 0.1), 2.0),
-                angleToFace,
-                maxSpeed);
-        ;
+        driveTrain.driveFieldCentricFacingAngle(
+            Math.pow(MathUtil.applyDeadband(-driverCont.getLeftY(), 0.1), 2.0),
+            Math.pow(MathUtil.applyDeadband(-driverCont.getLeftX(), 0.1), 2.0),
+            angleToFace
+        );
     }
 
     // Called once the command ends or is interrupted.

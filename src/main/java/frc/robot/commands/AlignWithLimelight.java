@@ -150,14 +150,13 @@ public class AlignWithLimelight extends Command {
             driveTrain.driveFieldCentricFacingAngle(
                     rotatedVelocityX, // forward & backward motion
                     rotatedVelocityY,
-                    angleToFaceRotation2d.getDegrees(), // side to side motion
-                    maxSpeed);
+                    angleToFaceRotation2d.getDegrees() // side to side motion
+                    );
 
         } else {
-       driveTrain.driveFieldCentricFacingAngle(0.0, 0.0, angleToFaceRotation2d.getDegrees(), maxSpeed);
+       driveTrain.driveFieldCentricFacingAngle(0.0, 0.0, angleToFaceRotation2d.getDegrees());
 
         }
-
     }
 
     // Called once the command ends or is interrupted.

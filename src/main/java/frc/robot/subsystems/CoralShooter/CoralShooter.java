@@ -13,8 +13,8 @@ import frc.robot.CommandLogger;
 import org.littletonrobotics.junction.Logger;
 
 public class CoralShooter extends SubsystemBase {
-    private final CoralShooterIO io;
-    private final CoralShooterIOInputsAutoLogged inputs = new CoralShooterIOInputsAutoLogged();
+  private final CoralShooterIO io;
+  public final CoralShooterIOInputsAutoLogged inputs = new CoralShooterIOInputsAutoLogged();
 
     /** Creates a new CoralOutake. */
     public CoralShooter(CoralShooterIO io) {

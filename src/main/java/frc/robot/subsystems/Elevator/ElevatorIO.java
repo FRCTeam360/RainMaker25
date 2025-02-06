@@ -6,6 +6,7 @@ package frc.robot.subsystems.Elevator;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public interface ElevatorIO {
@@ -18,6 +19,7 @@ public interface ElevatorIO {
     public double elevatorVoltage = 0.0;
     public double elevatorVelocity = 0.0;
     public double elevatorPosition = 0.0;
+    public boolean elevatorSensor = false;
       // insert inputs
   }
 

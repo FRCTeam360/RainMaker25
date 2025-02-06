@@ -73,10 +73,10 @@ public class CoralShooterIOSim implements CoralShooterIO {
     shooterSim.update(0.02);
     simEncoder.setDistance(simMotor.getPosition());
     RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(shooterSim.getCurrentDrawAmps()));
-    mech2dRoot.setPosition(10, (heightSupplier.getAsDouble() + 5.0)); 
+    mech2dRoot.setPosition(10, (heightSupplier.getAsDouble() + 5.0));
 
     Logger.recordOutput("elevator sim", mech2d);
-    SmartDashboard.putData("shooter sim", mech2d);                                 
+    SmartDashboard.putData("shooter sim", mech2d);
     inputs.outtakePosition = simMotor.getPosition();
     inputs.outtakeVelocity = shooterSim.getAngularVelocityRPM();
     inputs.outtakeVoltage = shooterSim.getInputVoltage();

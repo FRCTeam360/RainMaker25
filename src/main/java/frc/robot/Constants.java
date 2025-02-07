@@ -89,8 +89,8 @@ public final class Constants {
         public static final double headingKD = 0.0;
         public static final double headingKIZone = 0.0;
 
-        public static final double translationKP = 0.03;
-        public static final double translationKI = 0.0003;
+        public static final double translationKP = 0.0;
+        public static final double translationKI = 0.0;
         public static final double translationKD = 0.0;
     }
     
@@ -105,7 +105,7 @@ public final class Constants {
       public static final double headingKIZone = 0.0;
 
       public static final double WBGOALSCORETX = 0.0;
-      public static final double WBGOALSCORETY = 0.0;
+      public static final double WBGOALSCORETY = -10.0;
 
     public static final int ELEVATOR_BOTTOM_SWITCH = 2;
       public static final int OUTTAKE_SENSOR = 0; //DIO port

@@ -36,7 +36,6 @@ import frc.robot.Constants;
 
 public class Vision extends SubsystemBase {
   private NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-  private VisionIO io;
   private VisionIOInputsAutoLogged inputs = new VisionIOInputsAutoLogged();
   private final VisionIO[] ios;
   private final VisionIOInputsAutoLogged[] visionInputs;
@@ -62,7 +61,7 @@ public class Vision extends SubsystemBase {
   }
 
   public int getAprilTagID() {
-    return io.getAprilTagID();
+    return ios[0].getAprilTagID();
   }
 
   public double getTXRaw() {

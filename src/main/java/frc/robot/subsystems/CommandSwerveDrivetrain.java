@@ -93,7 +93,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         headingController = new PhoenixPIDController(kP, kI, kD);
         
         headingController.enableContinuousInput(-Math.PI, Math.PI);
-        headingController.setTolerance(Math.toRadians(3));
+        headingController.setTolerance(Math.toRadians(5));
     }
 
     public void addTranslationController(double kP, double kI, double kD) {
@@ -106,6 +106,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 .withVelocityY(-y * maxSpeed)
                 .withTargetDirection(Rotation2d.fromDegrees(desiredAngle));
         request.HeadingController = headingController;
+        request.withDeadband(0.07);
+        request.withRotationalDeadband(0.01);
         this.setControl(request);
     }
 

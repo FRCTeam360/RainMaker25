@@ -29,9 +29,9 @@ public class WoodBotDriveTrain {
         public static final double headingKD = 0.0;
         public static final double headingKIZone = 0.0;
 
-        public static final double translationKP = 0.5;
+        public static final double translationKP = 0.01; //0.02 pre x and y combine
         public static final double translationKI = 0.0;
-        public static final double translationKD = 0.0;
+        public static final double translationKD = 0.006;
 
     // Both sets of gains need to be tuned to your individual robot.
 

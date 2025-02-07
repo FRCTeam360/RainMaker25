@@ -15,8 +15,10 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Vision.Vision;
+import frc.robot.utils.LimelightHelpers;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,10 +45,12 @@ public class AlignWithLimelight extends Command {
     private double rotatedVelocityY;
     private boolean endEarly = false;
     private XboxController driverCont;
-    private SlewRateLimiter forwardsAccelerationLimit = new SlewRateLimiter(1);
-    private SlewRateLimiter leftAccelerationLimit = new SlewRateLimiter(.3);
+    private SlewRateLimiter forwardsAccelerationLimit = new SlewRateLimiter(0.75);
+    private SlewRateLimiter leftAccelerationLimit = new SlewRateLimiter(0.75);
 
     private int[] aprilTagID;
+
+    private PIDController forwardController = new PIDController(0.045, 0.0, 0.0);
 
     private static final Map<Integer, Double> tagIDToAngle = Map.ofEntries(
             Map.entry(21, 180.0),
@@ -114,6 +118,8 @@ public class AlignWithLimelight extends Command {
         Logger.recordOutput("AlignWLimelight AngleToFace", angleToFace);
         Logger.recordOutput("AlignWLimelight GoalTx", goalTX);
         Logger.recordOutput("AlignWLimelight GoalTy", goalTY);
+
+        LimelightHelpers.setPriorityTagID("limelight", 7); // TODO: CHANGE
     }
 
     public static Translation2d rotateTranslation(Translation2d translationToRotate, Rotation2d rotation) {
@@ -124,18 +130,16 @@ public class AlignWithLimelight extends Command {
     @Override
     public void execute() {
 
-        double velX = -driveTrain.translationController.calculate(vision.getTYRaw(), goalTY);
-        double velY = 0.05 * driveTrain.translationController.calculate(vision.getTXRaw(), goalTX);
-        MathUtil.applyDeadband(velX, 0.04);
-     //   double scale = Math.abs(velY / velX);
+        double velX = -forwardController.calculate(vision.getTYRaw(), goalTY);
+        double velY = driveTrain.translationController.calculate(vision.getTXRaw(), goalTX);
+        // MathUtil.applyDeadband(velX, 0.04);
+        // double scale = Math.abs(velY / velX);
         // double joystickInput = MathUtil.applyDeadband(driverCont.getLeftY(), 0.1);
         // velX = -Math.signum(joystickInput) * Math.pow(joystickInput, 2);
         Logger.recordOutput("AlignWLimelight PID OutputX", velX);
         Logger.recordOutput("AlignWLimelight PID OutputY", velY);
 
-        Translation2d PIDSpeed = new Translation2d(
-                forwardsAccelerationLimit.calculate(velX),
-                leftAccelerationLimit.calculate(velY));
+        Translation2d PIDSpeed = new Translation2d(forwardsAccelerationLimit.calculate(velX), leftAccelerationLimit.calculate(velY));
 
         Translation2d rotatedPIDSpeeds = rotateTranslation(PIDSpeed, angleToFaceRotation2d);
 
@@ -150,10 +154,10 @@ public class AlignWithLimelight extends Command {
                     rotatedVelocityX, // forward & backward motion
                     rotatedVelocityY,
                     angleToFaceRotation2d.getDegrees() // side to side motion
-                    );
+            );
 
         } else {
-       driveTrain.driveFieldCentricFacingAngle(0.0, 0.0, angleToFaceRotation2d.getDegrees());
+            driveTrain.driveFieldCentricFacingAngle(0.0, 0.0, angleToFaceRotation2d.getDegrees());
 
         }
     }

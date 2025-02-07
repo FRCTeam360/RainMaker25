@@ -37,6 +37,7 @@ public class SnapDrivebaseToAngle extends Command {
     @Override
     public void initialize() {
         
+        //TODO: fix "not right" angles - alex
         if (vision.getAprilTagID() == 21 || vision.getAprilTagID() == 7) {
             angleToFace = 180.0;
         } else if (vision.getAprilTagID() == 22 || vision.getAprilTagID() == 6)  {

@@ -52,8 +52,8 @@ public class AlgaeShooterIOSim implements AlgaeShooterIO {
   
 public void updateInputs(AlgaeShooterIOInputs inputs){
   inputs.algaeShooterVoltage = algaeShooterSim.getInputVoltage();
-  inputs.outtakePosition = simMotor.getPosition();
-  inputs.outtakeVelocity = algaeShooterSim.getAngularVelocityRPM();
+  inputs.algaeShooterPosition = simMotor.getPosition();
+  inputs.algaeShooterVelocity = algaeShooterSim.getAngularVelocityRPM();
 }
 
 
@@ -61,6 +61,13 @@ public void updateInputs(AlgaeShooterIOInputs inputs){
 public void setDutyCycle(double dutyCycle) {
 simMotor.setSpeed(dutyCycle);
   
+}
+
+
+@Override
+public void setVelocity(double velocity) {
+  // TODO Auto-generated method stub
+  throw new UnsupportedOperationException("Unimplemented method 'setVelocity'");
 }
   
 }

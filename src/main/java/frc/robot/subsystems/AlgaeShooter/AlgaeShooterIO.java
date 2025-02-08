@@ -12,14 +12,15 @@ public interface AlgaeShooterIO {
   /** Creates a new AlgaeShooterIO. */
   @AutoLog
   public static class AlgaeShooterIOInputs {
- public double algaeShooterVoltage = 0.0;
- public double algaeShooterVelocity = 0.0; 
- public double algaeShooterPosition = 0.0;
- // insert inputs
-public double outtakeVelocity;
-public double outtakePosition;
+    public double algaeShooterVoltage = 0.0;
+    public double algaeShooterVelocity = 0.0;
+    public double algaeShooterPosition = 0.0;
+    // insert inputs
   }
+
   public default void updateInputs(AlgaeShooterIOInputs inputs) {}
-  
+
   public void setDutyCycle(double dutyCycle);
+
+  public void setVelocity(double velocity);
 }

@@ -13,10 +13,11 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class AlgaeArmIOPB implements AlgaeArmIO {
 
-  private final TalonFX armMotor = new TalonFX(12, "Default Name"); // placeholder ID
+  private final TalonFX armMotor = new TalonFX(Constants.PracticeBotConstants.ALGAE_ARM_ID, "Default Name"); // placeholder ID
 
   private TalonFXConfiguration talonFXConfiguration = new TalonFXConfiguration();
   private MotorOutputConfigs outputConfigs = new MotorOutputConfigs();

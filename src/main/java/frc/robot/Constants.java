@@ -91,6 +91,10 @@ public final class Constants {
       public static final int OUTTAKE_SENSOR = 1;
     }
 
+    public static final class PracticeBotConstants {
+        public static final int ALGAE_ARM_ID = 5;
+    }
+
     public static RobotType getRobotType() {
         String serialAddress = HALUtil.getSerialNumber();
 

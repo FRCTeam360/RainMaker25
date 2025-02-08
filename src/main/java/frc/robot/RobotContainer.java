@@ -70,6 +70,8 @@ public class RobotContainer {
     private Command levelTwo;
     private Command zero;
 
+    private Command setAngle;
+
     public static CommandSwerveDrivetrain driveTrain;
     private Vision vision;
     private Catapult catapult;

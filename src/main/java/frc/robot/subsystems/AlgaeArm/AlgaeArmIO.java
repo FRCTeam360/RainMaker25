@@ -6,9 +6,6 @@ package frc.robot.subsystems.AlgaeArm;
 
 import org.littletonrobotics.junction.AutoLog;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 public interface AlgaeArmIO {
   /** Creates a new AlgeaArmIO. */
   @AutoLog
@@ -18,6 +15,7 @@ public interface AlgaeArmIO {
     public double algaeArmVoltage = 0.0;
     public double algaeArmVelocity = 0.0;
     public double algaeArmPosition = 0.0;
+    public double algaeArmAngleRads = 0.0;
   }
 
   public default void updateInputs(AlgaeArmIOInputs inputs) {}

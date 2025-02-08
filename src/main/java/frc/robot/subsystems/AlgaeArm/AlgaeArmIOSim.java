@@ -48,7 +48,7 @@ public class AlgaeArmIOSim implements AlgaeArmIO {
  
   private final LoggedMechanism2d mech2d = new LoggedMechanism2d(30, 50, new Color8Bit(Color.kPapayaWhip));
   private final LoggedMechanismRoot2d mechRoot2D = mech2d.getRoot("algae arm root", 18, 0);
-  private final LoggedMechanismLigament2d mechLigiment2D = mechRoot2D.append(new LoggedMechanismLigament2d("algea arm",5 , 0,5, new Color8Bit(Color.kTomato)));
+  private final LoggedMechanismLigament2d mechLigiment2D = mechRoot2D.append(new LoggedMechanismLigament2d("algae arm",5 , 0,5, new Color8Bit(Color.kTomato)));
   
   /** Creates a new AlgaeArmSim. */
   public AlgaeArmIOSim(DoubleSupplier heightSupplier) {
@@ -64,6 +64,7 @@ public class AlgaeArmIOSim implements AlgaeArmIO {
     inputs.algaeArmPosition = simMotor.getPosition();
     inputs.algaeArmStatorCurrent = armSim.getCurrentDrawAmps();
     inputs.algaeArmVelocity = armSim.getVelocityRadPerSec();
+    inputs.algaeArmAngleRads = armSim.getAngleRads();
 
     mechLigiment2D.setAngle(new Rotation2d(armSim.getAngleRads()));
     mechRoot2D.setPosition(19.5, heightSupplier.getAsDouble() - 3.5);
@@ -76,7 +77,7 @@ public class AlgaeArmIOSim implements AlgaeArmIO {
   }
 
   public void setPosition(double position) {
-    simMotor.setPosition(position);
+    armSim.setState(position, armSim.getVelocityRadPerSec());
   }
 
 }

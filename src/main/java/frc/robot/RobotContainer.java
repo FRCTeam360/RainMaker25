@@ -161,7 +161,6 @@ public class RobotContainer {
 
     public void initializeCommands() {
         // Periodically adds the vision measurement to drivetrain for pose estimation
-        // UNCOMMENT THIS IF YOU WANT TO BE A GAMER AND USE THE LIMELIGHT TO LOCALIZE THE ROBOT
         vision.setDefaultCommand(
                 vision.consumeVisionMeasurements(driveTrain::addVisionMeasurements).ignoringDisable(true)
         );

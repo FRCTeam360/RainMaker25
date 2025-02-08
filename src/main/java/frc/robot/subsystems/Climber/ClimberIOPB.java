@@ -4,9 +4,16 @@
 
 package frc.robot.subsystems.Climber;
 
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClimberIOPB implements ClimberIO {
+
+  private final SparkMax bottomMotor = new SparkMax(10, MotorType.kBrushless);
+  private final SparkMax topMotor = new SparkMax(11, MotorType.kBrushless);
+  
   /** Creates a new ClimberIOPB. */
   public ClimberIOPB() {}
 

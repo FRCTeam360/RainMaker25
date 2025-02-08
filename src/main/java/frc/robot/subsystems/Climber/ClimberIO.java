@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public interface ClimberIO {
   /** Creates a new ClimberIO. */
+
   @AutoLog
   public static class ClimberIOInputs {
     public double climberVelocity = 0.0;
@@ -17,5 +18,5 @@ public interface ClimberIO {
     public double climberDutyCycle = 0.0;
   }
 
-  public static void updateInputs(ClimberIOInputs inputs) {}
+  public default void updateInputs(ClimberIOInputs inputs) {}
 }

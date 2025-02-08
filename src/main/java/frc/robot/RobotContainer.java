@@ -148,7 +148,7 @@ public class RobotContainer {
         PathPlannerLogging.setLogTargetPoseCallback(
         pose -> Logger.recordOutput("Swerve/TargetPathPose", pose));
         
-        commandFactory = new CommandFactory(catapult, coralIntake, coralShooter, elevator, vision);
+        commandFactory = new CommandFactory(catapult, coralIntake, coralShooter, elevator, vision, algaeShooter);
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);

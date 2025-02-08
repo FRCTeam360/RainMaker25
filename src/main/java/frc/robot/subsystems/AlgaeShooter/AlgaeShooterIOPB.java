@@ -68,6 +68,9 @@ public class AlgaeShooterIOPB implements AlgaeShooterIO {
     inputs.algaeShooterVoltage = algaeShooterMotor.getMotorVoltage().getValueAsDouble();
     inputs.algaeShooterPosition = algaeShooterMotor.getPosition().getValueAsDouble();
     inputs.algaeShooterVelocity = algaeShooterMotor.getVelocity().getValueAsDouble();
+    inputs.algaeShooterStatorCurrent = algaeShooterMotor.getStatorCurrent().getValueAsDouble();
+    inputs.algaeShooterSupplyCurrent = algaeShooterMotor.getSupplyCurrent().getValueAsDouble();
+    inputs.algaeShooterTemperature = algaeShooterMotor.getDeviceTemp().getValueAsDouble();
   }
 
   public void setDutyCycle(double dutyCycle) {
@@ -75,7 +78,7 @@ public class AlgaeShooterIOPB implements AlgaeShooterIO {
   }
 
   public void setVelocity(double velocity) {
-    final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0);
+    final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0).withEnableFOC(true);
     algaeShooterMotor.setControl(velocityRequest.withVelocity(velocity));
   }
 }

@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AlignWithLimelight;
 import frc.robot.commands.SnapDrivebaseToAngle;
@@ -57,7 +58,7 @@ public class CommandFactory {
     }
 
     public Command AlignWithLimelight(double goalTY, double goalTX) {
-        return vision.waitUntilTargetTxTy(goalTX, goalTY)
+        return vision.waitUntilTargetTxTy(goalTX, goalTY).alongWith(drivetrain.waitUntilDrivetrainAtHeadingSetpoint())
                 .deadlineFor(new AlignWithLimelight(vision, drivetrain, goalTY, goalTX,
                         WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond), driverCont)); // no more timeout
     }

@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -335,8 +336,20 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return this.getRotation2d().getDegrees();
     }
 
-    public boolean isAtSetpoint() {
+    /**
+     * Checks the heading controller for the drivetrain's rotation
+     * @return true if the drivetrain has reached its rotation setpoint within tolerance
+     */
+    public boolean isAtRotationSetpoint() {
         return headingController.atSetpoint();
+    }
+
+    /**
+     * A command that waits until the drivebase is facing the setpoint angle
+     * @return A wait until command that ends when the drivetrain is facing its rotational setpoint
+     */
+    public Command waitUntilDrivetrainAtHeadingSetpoint(){
+        return Commands.waitUntil(() -> isAtRotationSetpoint());
     }
 
     // public boolean isFlat() {
@@ -362,6 +375,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         Logger.recordOutput("Rotation2d", this.getPigeon2().getRotation2d());
         Logger.recordOutput("Swerve: CurrentState", this.getState().ModuleStates);
         Logger.recordOutput("Swerve: TargetState", this.getState().ModuleTargets);
+        Logger.recordOutput("Swerve: Heading Controller: Setpoint", headingController.getSetpoint());
+        Logger.recordOutput("Swerve: Heading Controller: Error", headingController.getPositionError());
+        Logger.recordOutput("Swerve: Heading Controller: AtSetpoint", headingController.atSetpoint());
+        Logger.recordOutput("Swerve: Heading Controller: PositionTolerance", headingController.getPositionTolerance());
         /*
          * Periodically try to apply the operator perspective.
          * If we haven't applied the operator perspective before, then we should apply it regardless of DS state.

@@ -309,7 +309,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public Pose2d getPose() {
-        return this.getState().Pose;
+        return this.getStateCopy().Pose;
     }
 
     public Rotation2d getRotation2d() {
@@ -318,6 +318,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public double getAngle() {
         return this.getRotation2d().getDegrees();
+    }
+
+    public double getAngularRate() {
+        return Math.toDegrees(this.getStateCopy().Speeds.omegaRadiansPerSecond);
     }
 
     // public boolean isFlat() {
@@ -341,8 +345,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         Logger.recordOutput("Swerve: Angle", this.getAngle());
         // Logger.recordOutput("swerve: pithc", this.isFlat());
         Logger.recordOutput("Rotation2d", this.getPigeon2().getRotation2d());
-        Logger.recordOutput("Swerve: CurrentState", this.getState().ModuleStates);
-        Logger.recordOutput("Swerve: TargetState", this.getState().ModuleTargets);
+        Logger.recordOutput("Swerve: CurrentState", this.getStateCopy().ModuleStates);
+        Logger.recordOutput("Swerve: TargetState", this.getStateCopy().ModuleTargets);
         /*
          * Periodically try to apply the operator perspective.
          * If we haven't applied the operator perspective before, then we should apply it regardless of DS state.
@@ -387,9 +391,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             RobotConfig config = RobotConfig.fromGUISettings();
 
             AutoBuilder.configure(
-                    () -> getState().Pose, // Supplier of current robot pose
+                    () -> getStateCopy().Pose, // Supplier of current robot pose
                     this::resetPose, // Consumer for seeding pose against auto
-                    () -> getState().Speeds, // Supplier of current robot speeds
+                    () -> getStateCopy().Speeds, // Supplier of current robot speeds
                     // Consumer of ChassisSpeeds and feedforwards to drive the robot
                     (speeds, feedforwards) -> this.setControl(this.driveRobotRelativeRequest(speeds, feedforwards)),
                     new PPHolonomicDriveController(

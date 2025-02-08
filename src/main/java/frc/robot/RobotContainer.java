@@ -90,7 +90,8 @@ public class RobotContainer {
                         Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
                         Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
                         Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR,
-                        () -> driveTrain.getAngle()
+                        () -> driveTrain.getAngle(),
+                        () -> driveTrain.getAngularRate()
                     )
                 });
                 elevator = new Elevator(new ElevatorIOWB());
@@ -104,7 +105,8 @@ public class RobotContainer {
                                 Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
                                 Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
                                 Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR,
-                                () -> driveTrain.getAngle()
+                                () -> driveTrain.getAngle(),
+                                () -> driveTrain.getAngularRate()
                             )
                         });
                 break;
@@ -119,7 +121,8 @@ public class RobotContainer {
                         Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
                         Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
                         Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR,
-                        () -> driveTrain.getAngle()
+                        () -> driveTrain.getAngle(),
+                        () -> driveTrain.getAngularRate()
                     )
                 });
                 elevator = new Elevator(new ElevatorIOSim());

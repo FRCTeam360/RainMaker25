@@ -7,6 +7,7 @@ package frc.robot.subsystems.Vision;
 import org.littletonrobotics.junction.AutoLog;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 
 public interface VisionIO {
   /** Creates a new VisionIO. */
@@ -23,6 +24,7 @@ public interface VisionIO {
         public int[] targetIds;
         public double[] distancesToTargets;
         public boolean poseUpdated;
+        public Pose3d[] tagPoses;
     }
 
     public void updateInputs(VisionIOInputs inputs);

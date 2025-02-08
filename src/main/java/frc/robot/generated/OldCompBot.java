@@ -20,7 +20,6 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 // https://v6.docs.ctr-electronics.com/en/stable/docs/tuner/tuner-swerve/index.html
 public class OldCompBot {
 
-     public static final double maxSpeed = OldCompBot.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
      public static final double maxAngularRate = RotationsPerSecond.of(15).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
      public static final double headingKP = 4.0;
@@ -209,7 +208,7 @@ public class OldCompBot {
      */
     public static CommandSwerveDrivetrain createDrivetrain() {
         return new CommandSwerveDrivetrain(
-            headingKP,headingKI,headingKD,headingKIZone,translationKP,translationKI, translationKD, maxSpeed,
+            headingKP,headingKI,headingKD,headingKIZone,translationKP,translationKI, translationKD, kSpeedAt12Volts.in(MetersPerSecond),
             maxAngularRate, DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight
         );
     }

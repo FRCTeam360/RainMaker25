@@ -33,6 +33,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OldCompBotConstants;
 import frc.robot.commands.AlignWithLimelight;
@@ -223,11 +224,18 @@ public class RobotContainer {
        // driverCont.pov(180).onTrue(allignToReefWoodBot);
         driverCont.pov(90).onTrue(snapDrivebaseToAngle);
 
+        driverCont.a().onTrue(new InstantCommand( () -> driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse)));
+        driverCont.x().onTrue(new InstantCommand( () -> driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward)));
+
+
+        driverCont.b().onTrue(new InstantCommand( () -> driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse)));
+        driverCont.y().onTrue(new InstantCommand( () -> driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward)));
+
         if(Objects.nonNull(elevator)){
-            driverCont.a().onTrue(zero);
-            driverCont.b().whileTrue(alignWithLimelight);
-            driverCont.x().onTrue(levelThree);
-            driverCont.y().onTrue(levelFour);
+            // driverCont.a().onTrue(zero);
+            // driverCont.b().whileTrue(alignWithLimelight);
+            // driverCont.x().onTrue(levelThree);
+            // driverCont.y().onTrue(levelFour);
         }
 
         if(Objects.nonNull(coralShooter)){

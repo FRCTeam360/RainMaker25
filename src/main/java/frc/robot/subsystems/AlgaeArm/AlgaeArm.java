@@ -27,6 +27,7 @@ public class AlgaeArm extends SubsystemBase {
   public void setDutyCycle(double dutyCycle) {
     io.setDutyCycle(dutyCycle);
   }
+
   public Command setDutyCycleCommand(double dutyCycle) {
     return this.runEnd(
         () -> this.setDutyCycle(dutyCycle),
@@ -35,11 +36,9 @@ public class AlgaeArm extends SubsystemBase {
 
   public Command setAlgaeArmAngle(double angle) {
     return this.runEnd(
-      () -> this.setPosition(angle),
-      () -> this.setPosition(angle)
-    );
+        () -> this.setPosition(angle),
+        () -> this.setPosition(angle));
   }
-
 
   @Override
   public void periodic() {

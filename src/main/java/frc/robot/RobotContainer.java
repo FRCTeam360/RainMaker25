@@ -39,6 +39,7 @@ import frc.robot.Constants.OldCompBotConstants;
 import frc.robot.commands.AlignWithLimelight;
 import frc.robot.commands.SetCoralIntake;
 import frc.robot.commands.SnapDrivebaseToAngle;
+import frc.robot.commands.SysIdBLANKDirection;
 import frc.robot.generated.OldCompBot;
 import frc.robot.generated.WoodBotDriveTrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -85,6 +86,7 @@ public class RobotContainer {
     private Command levelThree;
     private Command levelTwo;
     private Command zero;
+    private SysIdBLANKDirection sysIdBLANKDirection;
 
     private Command allignToReefWoodBot;
 
@@ -168,7 +170,7 @@ public class RobotContainer {
 
     public void initializeCommands() {
 
-
+        sysIdBLANKDirection = new SysIdBLANKDirection(driveTrain);
         alignWithLimelight =
             commandFactory.AlignWithLimelight(Constants.WoodbotConstants.WBGOALSCORETY, 
             Constants.WoodbotConstants.WBGOALSCORETX);
@@ -216,20 +218,15 @@ public class RobotContainer {
 
 
     private void configureBindings() {
-        driveTrain.setDefaultCommand(
-            driveTrain.fieldOrientedDrive(MaxAngularRate, driverCont)
-        );
+        driveTrain.setDefaultCommand(sysIdBLANKDirection
+            //driveTrain.fieldOrientedDrive(MaxAngularRate, driverCont)
+            
+  );
 
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
        // driverCont.pov(180).onTrue(allignToReefWoodBot);
         driverCont.pov(90).onTrue(snapDrivebaseToAngle);
 
-        driverCont.a().onTrue(new InstantCommand( () -> driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse)));
-        driverCont.x().onTrue(new InstantCommand( () -> driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward)));
-
-
-        driverCont.b().onTrue(new InstantCommand( () -> driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse)));
-        driverCont.y().onTrue(new InstantCommand( () -> driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward)));
 
         if(Objects.nonNull(elevator)){
             // driverCont.a().onTrue(zero);

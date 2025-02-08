@@ -332,9 +332,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     //     return false;
     // }
 
-     public void addVisionMeasurements(List<VisionMeasurement> measurements) {
+    public void addVisionMeasurements(List<VisionMeasurement> measurements) {
         for (VisionMeasurement measurement : measurements) {
-            this.addVisionMeasurement(measurement.estimatedPose(), measurement.timestamp(), measurement.standardDeviation());
+            this.addVisionMeasurement(measurement.estimatedPose(), Utils.fpgaToCurrentTime(measurement.timestamp()), measurement.standardDeviation());
         }
     }
 

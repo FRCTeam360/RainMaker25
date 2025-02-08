@@ -42,6 +42,8 @@ public class Vision extends SubsystemBase {
     MEASUREMENT_STD_DEV_DISTANCE_MAP.put(8.0, VecBuilder.fill(10.0, 10.0, 10.0));
   }
 
+  private static final Matrix<N3, N1> stdDevMatrix = VecBuilder.fill(.7, .7, 999999);
+
   /** Creates a new Vision. */
   public Vision(VisionIO[] visionIos) {
     this.ios = visionIos;
@@ -156,7 +158,7 @@ public class Vision extends SubsystemBase {
 
       Matrix<N3, N1> stdDevs = MEASUREMENT_STD_DEV_DISTANCE_MAP.get(closestTagDistance.orElse(Double.MAX_VALUE));
 
-      acceptedMeasurements.add(new VisionMeasurement(timestamp, pose, stdDevs));
+      acceptedMeasurements.add(new VisionMeasurement(timestamp, pose, stdDevMatrix));
     }
     this.acceptedMeasurements = acceptedMeasurements;
   }

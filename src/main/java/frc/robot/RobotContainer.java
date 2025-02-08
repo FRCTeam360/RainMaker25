@@ -191,6 +191,7 @@ public class RobotContainer {
         if (Objects.nonNull(command)) {
             NamedCommands.registerCommand(commandName, command);
         } else {
+            System.err.println(commandName + " is null");
             NamedCommands.registerCommand(commandName,
                     new InstantCommand(() -> System.err.println(commandName + " is null")));
         }

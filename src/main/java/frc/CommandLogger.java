@@ -15,6 +15,6 @@ public class CommandLogger {
   }
 
   private static void logCommand(String commandName, boolean isRunning) {
-    Logger.recordOutput("CommandRunning " + commandName, isRunning);
+    Logger.recordOutput("CommandRunning/" + commandName, isRunning);
   }
 }

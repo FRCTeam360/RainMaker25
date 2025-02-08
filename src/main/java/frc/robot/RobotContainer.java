@@ -40,7 +40,6 @@ import frc.robot.generated.WoodBotDriveTrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorIOSim;
-import frc.robot.subsystems.Catapult.Catapult;
 import frc.robot.subsystems.CoralIntake.CoralIntake;
 import frc.robot.subsystems.CoralShooter.CoralShooter;
 import frc.robot.subsystems.CoralShooter.CoralShooterIOSim;
@@ -70,7 +69,6 @@ public class RobotContainer {
 
     public static CommandSwerveDrivetrain driveTrain;
     private Vision vision;
-    private Catapult catapult;
     private CoralIntake coralIntake;
     private CoralShooter coralShooter;
     private Elevator elevator;
@@ -143,7 +141,7 @@ public class RobotContainer {
         PathPlannerLogging.setLogTargetPoseCallback(
         pose -> Logger.recordOutput("Swerve/TargetPathPose", pose));
         
-        commandFactory = new CommandFactory(catapult, coralIntake, coralShooter, elevator, vision);
+        commandFactory = new CommandFactory(coralIntake, coralShooter, elevator, vision);
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);

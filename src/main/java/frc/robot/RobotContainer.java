@@ -16,6 +16,7 @@ import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.hal.HALUtil;
@@ -180,6 +181,21 @@ public class RobotContainer {
             levelThree = commandFactory.setElevatorHeight(25.0);
             levelTwo = commandFactory.setElevatorHeight(10.0);
             zero = commandFactory.setElevatorHeight(0.0);
+        }
+    }
+
+    /**
+     * This method registers the given command to as a named pathplanner command if the command is present. If not, it registers in its place a placeholder command that outputs a warning to the console
+     * @param string the registered name of the command as shown in the pathplanner auto/path file
+     * @param command the actual command
+     */
+    private void registerPathplannerCommand(String commandName, Command command) {
+        if (Objects.nonNull(command)) {
+            NamedCommands.registerCommand(commandName, command);
+        } else {
+            System.err.println(commandName + " is null");
+            NamedCommands.registerCommand(commandName,
+                    new InstantCommand(() -> System.err.println(commandName + " is null")));
         }
     }
 

@@ -127,7 +127,7 @@ public class ElevatorIOSim implements ElevatorIO {
   }
 
   public void zeroElevatorEncoder(){
-
+    
   }
 
   public void stop(){

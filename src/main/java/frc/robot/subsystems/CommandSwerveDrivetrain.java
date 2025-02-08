@@ -57,7 +57,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private double m_lastSimTime;
 
     public PhoenixPIDController headingController;
-    public PIDController translationController;
+    public PIDController strafeController;
+    public PIDController forwardController;
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -96,8 +97,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         headingController.setTolerance(Math.toRadians(5));
     }
 
-    public void addTranslationController(double kP, double kI, double kD) {
-        translationController = new PIDController(kP, kI, kD);
+    public void addStrafeController(double kP, double kI, double kD) {
+        strafeController = new PIDController(kP, kI, kD);
+    }
+
+    public void addForwardContrller(double kP, double kI, double kD) {
+        forwardController = new PIDController(kP, kI, kD);
     }
 
     public void driveFieldCentricFacingAngle(double x, double y, double desiredAngle) {
@@ -209,9 +214,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         double headingKI,
         double headingKD,
         double headingKIZone,
-        double translationKP,
-        double translationKI,
-        double translationKD,
+        double stafeKP,
+        double stafeKI,
+        double stafeKD,
+        double forwardKP,
+        double forwardKI,
+        double forwardKD,
         double maxSpeed,
         double maxAngularRate,
         SwerveDrivetrainConstants drivetrainConstants,
@@ -222,7 +230,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             startSimThread();
         }
         addHeadingController(headingKP, headingKI, headingKD, headingKIZone);
-        addTranslationController(translationKP, translationKI, translationKD);
+        addStrafeController(stafeKP, stafeKI, stafeKD);
+        addForwardContrller(forwardKP, forwardKI, forwardKD);
 
         this.maxSpeed = maxSpeed;
 

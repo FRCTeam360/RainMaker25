@@ -19,8 +19,6 @@ import frc.robot.utils.LimelightHelpers.RawFiducial;
 public class VisionIOLimelight implements VisionIO {
   private final NetworkTable table;
   private final String name;
-  private final double yawFudgeFactor;
-  private final double pitchFudgeFactor;
   private final DoubleSupplier gyroAngleSupplier;
 
   private RawFiducial[] fiducials = LimelightHelpers.getRawFiducials("");
@@ -29,14 +27,10 @@ public class VisionIOLimelight implements VisionIO {
    * Creates a new Limelight hardware layer.
    * 
    * @param name              the name of the limelight
-   * @param yawFudgeFactor    fudge factor for camera yaw in degrees
-   * @param pitchFudgeFactor  fudge factor for camera pitch in degrees
    */
-  public VisionIOLimelight(String name, double yawFudgeFactor, double pitchFudgeFactor, DoubleSupplier gyroAngleSupplier) {
+  public VisionIOLimelight(String name, DoubleSupplier gyroAngleSupplier) {
     table = NetworkTableInstance.getDefault().getTable(name);
     this.name = name;
-    this.yawFudgeFactor = yawFudgeFactor;
-    this.pitchFudgeFactor = pitchFudgeFactor;
     this.gyroAngleSupplier = gyroAngleSupplier;
   }
 
@@ -88,7 +82,7 @@ public class VisionIOLimelight implements VisionIO {
   }
 
   public double getTXAdjusted() {
-    return getTXRaw() - yawFudgeFactor;
+    return getTXRaw();
   }
 
   public double getTYRaw() {
@@ -96,7 +90,7 @@ public class VisionIOLimelight implements VisionIO {
   }
 
   public double getTYAdjusted() {
-    return getTYRaw() - pitchFudgeFactor;
+    return getTYRaw();
   }
 
   public double getTV() {

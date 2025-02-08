@@ -33,12 +33,9 @@ public final class Constants {
 
   public static class VisionConstants {
     public static final String WOODBOT_LIMELIGHT_NAME = "limelight";
-    public static final double WOODBOT_YAW_FUDGE_FACTOR = 0;
-    public static final double WOODBOT_PITCH_FUDGE_FACTOR = 0;
 
     public static final String OCB_LIMELIGHT_NAME = "limelight";
-    public static final double OCB_YAW_FUDGE_FACTOR = 0;
-    public static final double OCB_PITCH_FUDGE_FACTOR = 0;
+  
   }
 
   // public static final Mode currentMode = Mode.SIM;
@@ -78,20 +75,11 @@ public final class Constants {
 
     public static class OldCompBotConstants {
         public static final String OCB_LIMELIGHT_NAME = "limelight";
-        public static final double OCB_YAW_FUDGE_FACTOR = 0;
-        public static final double OCB_PITCH_FUDGE_FACTOR = 0;
 
         public static final double maxSpeed = OldCompBot.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
         public static final double maxAngularRate = RotationsPerSecond.of(5).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
-        public static final double headingKP = 2.0;
-        public static final double headingKI = 0.0;
-        public static final double headingKD = 0.0;
-        public static final double headingKIZone = 0.0;
 
-        public static final double translationKP = 0.0;
-        public static final double translationKI = 0.0;
-        public static final double translationKD = 0.0;
     }
     
     public static final class WoodbotConstants {

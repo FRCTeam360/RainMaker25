@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.function.Consumer;
+import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.Logger;
 

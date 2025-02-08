@@ -86,6 +86,8 @@ public class RobotContainer {
     private Command levelTwo;
     private Command levelOne;
 
+    private Command zeroElevatorEncoder;
+
     private Command allignToReefWoodBot;
 
     private SetCoralIntake setCoralIntake;
@@ -167,21 +169,15 @@ public class RobotContainer {
                 Constants.WoodbotConstants.WBGOALSCORETX);
 
         snapDrivebaseToAngle = new SnapDrivebaseToAngle(driveTrain);
-        // alignWithLimelight =
-        // new AlignWithLimelight(
-        // vision,
-        // driveTrain,
-        // 0.0,
-        // 3.0,
-        // 0.25,
-        // Constants.OldCompBotConstants.maxAngularRate
-        // );
+
 
         if (Objects.nonNull(elevator)) {
             levelFour = commandFactory.setElevatorHeight(34.0);
-            levelThree = commandFactory.setElevatorHeight(18.0);
-            levelTwo = commandFactory.setElevatorHeight(8.5);
+            levelThree = commandFactory.setElevatorHeight(23.0);
+            levelTwo = commandFactory.setElevatorHeight(10.5);
             levelOne = commandFactory.setElevatorHeight(0.0);
+
+            zeroElevatorEncoder = elevator.zeroElevatorCmd();
 
             NamedCommands.registerCommand(
                     "raise to l4",
@@ -198,7 +194,6 @@ public class RobotContainer {
             setCoralIntake = new SetCoralIntake(coralShooter);
 
             NamedCommands.registerCommand("shoot", coralShooter.shootCmd());
-
             NamedCommands.registerCommand("intake", coralShooter.intakeCmd());
         }
     }
@@ -208,11 +203,12 @@ public class RobotContainer {
                 driveTrain.fieldOrientedDrive(MaxAngularRate, driverCont));
 
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
-        driverCont.pov(90).onTrue(snapDrivebaseToAngle);
+        driverCont.pov(90).whileTrue(alignWithLimelight); //todo needs to end use racewith txty
+        driverCont.pov(270).whileTrue(zeroElevatorEncoder);
 
         if (Objects.nonNull(elevator)) {
             driverCont.a().onTrue(levelOne);
-            driverCont.b().whileTrue(alignWithLimelight);
+            driverCont.b().whileTrue(levelTwo);
             driverCont.x().onTrue(levelThree);
             driverCont.y().onTrue(levelFour);
         }

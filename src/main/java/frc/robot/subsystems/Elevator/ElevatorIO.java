@@ -31,5 +31,6 @@ public interface ElevatorIO {
 
   public void stop();
 
-  public void zeroElevatorEncoder();
+  public void setEncoder(double value);
+
 }

@@ -99,7 +99,13 @@ public class ElevatorIOWB implements ElevatorIO {
 
     public void stop() {
         elevatorMotor.stopMotor();
-        
+    }
+    
+    /*
+     * value is new encoder value in rotations
+     */
+    public void setEncoder(double value) {
+        elevatorMotor.setPosition(value);
     }
 
     /*
@@ -110,13 +116,4 @@ public class ElevatorIOWB implements ElevatorIO {
         elevatorMotor.setControl(motionMagicVoltage);
     }
 
-    public void zeroElevatorEncoder() {
-        elevatorMotor.set(-0.1); //dutycycle
-        double amp = elevatorMotor.getStatorCurrent().getValueAsDouble();   
-
-        if (amp >= 20.0) {
-            elevatorMotor.stopMotor();
-            elevatorMotor.setPosition(0.0);
-        }
-    }
 }

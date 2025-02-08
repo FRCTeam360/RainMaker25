@@ -77,16 +77,14 @@ public class AlignWithLimelight extends Command {
         leftAccelerationLimit.reset(0);
         forwardsAccelerationLimit.reset(0);
 
-        double angleToFace = 0;
+        double angleToFace = driveTrain.getAngle();
         int priorityID = vision.getAprilTagID();
 
         endEarly = true;
         if (vision.getTV() == 1) {
             endEarly = false;
-
             double angle = tagIDToAngle.get(priorityID);
-            angleToFace = Objects.nonNull(angle) ? angle : 180.0; //TODO: fix this?? 2/7
-
+            angleToFace = Objects.nonNull(angle) ? angle : driveTrain.getAngle(); //TODO: fix this?? 2/7
         }
 
         Optional<Alliance> alliance = DriverStation.getAlliance();
@@ -149,10 +147,10 @@ public class AlignWithLimelight extends Command {
     public void end(boolean interrupted) {
         LimelightHelpers.SetFiducialIDFiltersOverride("limelight", new int[] {6, 7, 8});
     }
-
+    
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return endEarly;
+        return endEarly; //TODO: THIS DONEST END
     }
 }

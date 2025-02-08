@@ -7,6 +7,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import java.lang.ModuleLayer.Controller;
+import java.util.Objects;
 import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -15,6 +16,7 @@ import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.hal.HALUtil;
@@ -46,15 +48,15 @@ import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorIO;
 import frc.robot.subsystems.Elevator.ElevatorIOWB;
 import frc.robot.subsystems.Vision.Vision;
+import frc.robot.subsystems.Vision.VisionIO;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
 
 public class RobotContainer {
     private final Field2d field;
     private final SendableChooser<Command> autoChooser;
-    private double MaxSpeed = OldCompBot.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
-    private final Telemetry logger = new Telemetry(MaxSpeed);
+    private Telemetry logger;
 
     private CommandFactory commandFactory;
 
@@ -82,71 +84,50 @@ public class RobotContainer {
         switch (Constants.getRobotType()) {
             case WOODBOT:
                 //woodbot stuff
-                vision = new Vision(new VisionIOLimelight(
-                    Constants.VisionConstants.WOODBOT_LIMELIGHT_NAME, 
-                    Constants.VisionConstants.WOODBOT_YAW_FUDGE_FACTOR,
-                    Constants.VisionConstants.WOODBOT_PITCH_FUDGE_FACTOR));
                 driveTrain = WoodBotDriveTrain.createDrivetrain();
-                setUpDrivetrain(
-                    vision,
-                    Constants.OldCompBotConstants.headingKP,
-                    Constants.OldCompBotConstants.headingKI,
-                    Constants.OldCompBotConstants.headingKD,
-                    Constants.OldCompBotConstants.headingKIZone,
-                    Constants.OldCompBotConstants.translationKP,
-                    Constants.OldCompBotConstants.translationKI,
-                    Constants.OldCompBotConstants.translationKD
-                );
+                logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
+                vision = new Vision(new VisionIO[]{
+                    new VisionIOLimelight(
+                        Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
+                        Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
+                        Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR,
+                        () -> driveTrain.getAngle(),
+                        () -> driveTrain.getAngularRate()
+                    )
+                });
                 elevator = new Elevator(new ElevatorIOWB());
                 break;
             case OLD_COMP_BOT:
                 //ocb stuff
-                vision =
-                    new Vision(
-                        new VisionIOLimelight(
-                            Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
-                            Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
-                            Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR
-                        )
-                    );
                 driveTrain = OldCompBot.createDrivetrain();
-                //constants = Constants.OldCompBotConstants;
-                setUpDrivetrain(
-                    vision,
-                    Constants.OldCompBotConstants.headingKP,
-                    Constants.OldCompBotConstants.headingKI,
-                    Constants.OldCompBotConstants.headingKD,
-                    Constants.OldCompBotConstants.headingKIZone,
-                    Constants.OldCompBotConstants.translationKP,
-                    Constants.OldCompBotConstants.translationKI,
-                    Constants.OldCompBotConstants.translationKD
-                );
+                logger = new Telemetry(OldCompBot.kSpeedAt12Volts.in(MetersPerSecond));
+                vision = new Vision(new VisionIO[]{
+                            new VisionIOLimelight(
+                                Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
+                                Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
+                                Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR,
+                                () -> driveTrain.getAngle(),
+                                () -> driveTrain.getAngularRate()
+                            )
+                        });
+                break;
             case PRACTICE:
                 //practice bot stuff
                 break;
             case SIM:
-                vision =
-                    new Vision(
-                        new VisionIOLimelight(
-                            Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
-                            Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
-                            Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR
-                        )
-                    );
+                driveTrain = WoodBotDriveTrain.createDrivetrain();
+                logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
+                vision = new Vision(new VisionIO[]{
+                    new VisionIOLimelight(
+                        Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
+                        Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
+                        Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR,
+                        () -> driveTrain.getAngle(),
+                        () -> driveTrain.getAngularRate()
+                    )
+                });
                 elevator = new Elevator(new ElevatorIOSim());
                 coralShooter = new CoralShooter(new CoralShooterIOSim(() -> elevator.getPosition()));
-                driveTrain = OldCompBot.createDrivetrain();
-                //constants = Constants.OldCompBotConstants;
-                setUpDrivetrain(
-                    vision,
-                    Constants.OldCompBotConstants.headingKP,
-                    Constants.OldCompBotConstants.headingKI,
-                    Constants.OldCompBotConstants.headingKD,
-                    Constants.OldCompBotConstants.headingKIZone,
-                    Constants.OldCompBotConstants.translationKP,
-                    Constants.OldCompBotConstants.translationKI,
-                    Constants.OldCompBotConstants.translationKD
-                );
                 break;
             case COMPETITION:
             default:
@@ -180,42 +161,47 @@ public class RobotContainer {
     }
 
     public void initializeCommands() {
+        // Periodically adds the vision measurement to drivetrain for pose estimation
+        vision.setDefaultCommand(
+                vision.consumeVisionMeasurements(driveTrain::addVisionMeasurements).ignoringDisable(true)
+        );
+
         snapDrivebaseToAngle =
-            new SnapDrivebaseToAngle(driveTrain, Constants.OldCompBotConstants.maxSpeed);
+            new SnapDrivebaseToAngle(driveTrain);
         alignWithLimelight =
             new AlignWithLimelight(
                 vision,
                 driveTrain,
                 0.0,
-                3.0,
-                0.25,
-                Constants.OldCompBotConstants.maxAngularRate
+                3.0
             );
 
-        levelFour = commandFactory.setElevatorHeight(34.0);
-        levelThree = commandFactory.setElevatorHeight(25.0);
-        levelTwo = commandFactory.setElevatorHeight(10.0);
-        zero = commandFactory.setElevatorHeight(0.0);
+        if(Objects.nonNull(elevator)){
+            levelFour = commandFactory.setElevatorHeight(34.0);
+            levelThree = commandFactory.setElevatorHeight(25.0);
+            levelTwo = commandFactory.setElevatorHeight(10.0);
+            zero = commandFactory.setElevatorHeight(0.0);
+        }
     }
 
-    private static void setUpDrivetrain(
-        Vision vision,
-        double headingKP,
-        double headingKI,
-        double headingKD,
-        double headingKIZone,
-        double translationKP,
-        double translationKI,
-        double translationKD
-    ) {
-        driveTrain.addHeadingController(headingKP, headingKI, headingKD, headingKIZone);
-        driveTrain.addTranslationController(translationKP, translationKI, translationKD);
-        driveTrain.assignVision(vision);
+    /**
+     * This method registers the given command to as a named pathplanner command if the command is present. If not, it registers in its place a placeholder command that outputs a warning to the console
+     * @param string the registered name of the command as shown in the pathplanner auto/path file
+     * @param command the actual command
+     */
+    private void registerPathplannerCommand(String commandName, Command command) {
+        if (Objects.nonNull(command)) {
+            NamedCommands.registerCommand(commandName, command);
+        } else {
+            System.err.println(commandName + " is null");
+            NamedCommands.registerCommand(commandName,
+                    new InstantCommand(() -> System.err.println(commandName + " is null")));
+        }
     }
 
     private void configureBindings() {
         driveTrain.setDefaultCommand(
-            driveTrain.fieldOrientedDrive(MaxSpeed, MaxAngularRate, driverCont)
+            driveTrain.fieldOrientedDrive(MaxAngularRate, driverCont)
         );
 
         driverCont.pov(90).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
@@ -225,10 +211,12 @@ public class RobotContainer {
 
         driveTrain.registerTelemetry(logger::telemeterize);
 
-        driverCont.a().onTrue(zero);
-        driverCont.b().onTrue(levelTwo);
-        driverCont.x().onTrue(levelThree);
-        driverCont.y().onTrue(levelFour);
+        if(Objects.nonNull(elevator)){
+            driverCont.a().onTrue(zero);
+            driverCont.b().onTrue(levelTwo);
+            driverCont.x().onTrue(levelThree);
+            driverCont.y().onTrue(levelFour);
+        }
     }
 
     public Command getAutonomousCommand() {

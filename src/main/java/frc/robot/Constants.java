@@ -7,6 +7,9 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.signals.ConnectedMotorValue;
+
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.util.function.BooleanConsumer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,6 +29,7 @@ import frc.robot.generated.OldCompBot;
  */
 
 public final class Constants {
+    public static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
   public static class VisionConstants {
     public static final String WOODBOT_LIMELIGHT_NAME = "limelight";
@@ -76,20 +80,8 @@ public final class Constants {
         public static final String OCB_LIMELIGHT_NAME = "limelight";
         public static final double OCB_YAW_FUDGE_FACTOR = 0;
         public static final double OCB_PITCH_FUDGE_FACTOR = 0;
-
-        public static final double maxSpeed = OldCompBot.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-        public static final double maxAngularRate = RotationsPerSecond.of(15).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
-
-        public static final double headingKP = 4.0;
-        public static final double headingKI = 0.0;
-        public static final double headingKD = 0.0;
-        public static final double headingKIZone = 0.0;
-
-        public static final double translationKP = 0.5;
-        public static final double translationKI = 0.0;
-        public static final double translationKD = 0.0;
     }
-
+    
     public static final class WoodbotConstants {
       public static final int CORAL_INTAKE_ID = 1;
       public static final int CORAL_OUTTAKE_ID = 2;

@@ -38,6 +38,8 @@ import frc.robot.commands.SnapDrivebaseToAngle;
 import frc.robot.generated.OldCompBot;
 import frc.robot.generated.WoodBotDriveTrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.AlgaeShooter.AlgaeShooter;
+import frc.robot.subsystems.AlgaeShooter.AlgaeShooterIOSim;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorIOSim;
 import frc.robot.subsystems.Catapult.Catapult;
@@ -74,6 +76,7 @@ public class RobotContainer {
     private CoralIntake coralIntake;
     private CoralShooter coralShooter;
     private Elevator elevator;
+    private AlgaeShooter algaeShooter;
 
     private ShuffleboardTab diagnosticTab;
 
@@ -128,6 +131,8 @@ public class RobotContainer {
                 });
                 elevator = new Elevator(new ElevatorIOSim());
                 coralShooter = new CoralShooter(new CoralShooterIOSim(() -> elevator.getPosition()));
+                algaeShooter = new AlgaeShooter(new AlgaeShooterIOSim());
+
                 break;
             case COMPETITION:
             default:

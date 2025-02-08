@@ -22,23 +22,21 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.CoralShooter.CoralShooterIO.CoralShooterIOInputs;
 
 public class AlgaeShooterIOSim implements AlgaeShooterIO {
- private DCMotor gearbox = DCMotor.getKrakenX60Foc(1);
- private Encoder encoder = new Encoder(7, 8); 
+  private DCMotor gearbox = DCMotor.getKrakenX60Foc(1);
+  private Encoder encoder = new Encoder(7, 8);
 
- private final PWMTalonFX motor = new PWMTalonFX(4);
+  private final PWMTalonFX motor = new PWMTalonFX(4);
 
- private final LinearSystem<N1, N1, N1> plant =
-    LinearSystemId.createFlywheelSystem(
-      gearbox,0.00113951385, 1.0); // TODO: find actual MOI
+  private final LinearSystem<N1, N1, N1> plant = LinearSystemId.createFlywheelSystem(
+      gearbox, 0.00113951385, 1.0); // TODO: find actual MOI
 
-      private final FlywheelSim algaeShooterSim = new FlywheelSim(
-    plant, // 
-    gearbox, // gearbox
-    0.01);
+  private final FlywheelSim algaeShooterSim = new FlywheelSim(
+      plant, //
+      gearbox, // gearbox
+      0.01);
 
-    private final EncoderSim simEncoder = new EncoderSim(encoder); 
-    private final PWMSim simMotor = new PWMSim(motor);
-
+  private final EncoderSim simEncoder = new EncoderSim(encoder);
+  private final PWMSim simMotor = new PWMSim(motor);
 
   /** Creates a new AlgaeShooterIOSim. */
   public AlgaeShooterIOSim() {
@@ -49,28 +47,18 @@ public class AlgaeShooterIOSim implements AlgaeShooterIO {
     RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(algaeShooterSim.getCurrentDrawAmps()));
   }
 
-  
-public void updateInputs(AlgaeShooterIOInputs inputs){
-  inputs.algaeShooterVoltage = algaeShooterSim.getInputVoltage();
-  inputs.algaeShooterPosition = simMotor.getPosition();
-  inputs.algaeShooterVelocity = algaeShooterSim.getAngularVelocityRPM();
+  public void updateInputs(AlgaeShooterIOInputs inputs) {
+    inputs.algaeShooterVoltage = algaeShooterSim.getInputVoltage();
+    inputs.algaeShooterPosition = simMotor.getPosition();
+    inputs.algaeShooterVelocity = algaeShooterSim.getAngularVelocityRPM();
+  }
+
+  public void setDutyCycle(double dutyCycle) {
+    simMotor.setSpeed(dutyCycle);
+  }
+
+  @Override
+  public void setVelocity(double velocity) {
+    algaeShooterSim.setAngularVelocity(velocity);
+  }
 }
-
-
-
-public void setDutyCycle(double dutyCycle) {
-simMotor.setSpeed(dutyCycle);
-  
-}
-
-
-@Override
-public void setVelocity(double velocity) {
-  // TODO Auto-generated method stub
-  throw new UnsupportedOperationException("Unimplemented method 'setVelocity'");
-}
-  
-}
-
-
-

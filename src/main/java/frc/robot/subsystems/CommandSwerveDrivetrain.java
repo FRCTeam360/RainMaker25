@@ -2,12 +2,6 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.*;
 
-import java.util.List;
-import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
-
-import org.littletonrobotics.junction.Logger;
-
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.Utils;
@@ -15,15 +9,14 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.SwerveRequest.FieldCentricFacingAngle;
+import com.ctre.phoenix6.swerve.SwerveRequest.ForwardPerspectiveValue;
+import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.DriveFeedforwards;
-import com.ctre.phoenix6.swerve.SwerveRequest.FieldCentricFacingAngle;
-import com.ctre.phoenix6.swerve.SwerveRequest.ForwardPerspectiveValue;
-import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
-
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -47,6 +40,10 @@ import frc.robot.generated.OldCompBot;
 import frc.robot.generated.OldCompBot.TunerSwerveDrivetrain;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionMeasurement;
+import java.util.List;
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -75,16 +72,34 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
 
-    public final Command fieldOrientedDrive(double maxAngularRate, CommandXboxController driveCont) { //field oriented drive command!
+    public final Command fieldOrientedDrive(
+        double maxAngularRate,
+        CommandXboxController driveCont
+    ) { //field oriented drive command!
         SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric() //creates a fieldcentric drive
-            .withDeadband(maxSpeed * 0.1).withRotationalDeadband(maxAngularRate * 0.1) // Add a 10% deadband
+            .withDeadband(maxSpeed * 0.1)
+            .withRotationalDeadband(maxAngularRate * 0.1) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.Velocity); // Use open-loop control for drive motors
 
-        return this.applyRequest(() ->
-            drive.withVelocityX(-Math.pow(driveCont.getLeftY(), 2) * maxSpeed * -Math.signum(driveCont.getLeftY())) // Drive forward with negative Y (forward)
-                .withVelocityY(-Math.pow(driveCont.getLeftX(), 2) * maxSpeed * -Math.signum(driveCont.getLeftX()))// Drive left with negative X (left)
-                .withRotationalRate(-Math.pow(driveCont.getRightX(), 2) * maxAngularRate * Math.signum(driveCont.getRightX())) // Drive counterclockwise with negative X (left)
-        );
+        return this.applyRequest(
+                () ->
+                    drive
+                        .withVelocityX(
+                            -Math.pow(driveCont.getLeftY(), 2) *
+                            maxSpeed *
+                            -Math.signum(driveCont.getLeftY())
+                        ) // Drive forward with negative Y (forward)
+                        .withVelocityY(
+                            -Math.pow(driveCont.getLeftX(), 2) *
+                            maxSpeed *
+                            -Math.signum(driveCont.getLeftX())
+                        ) // Drive left with negative X (left)
+                        .withRotationalRate(
+                            -Math.pow(driveCont.getRightX(), 2) *
+                            maxAngularRate *
+                            Math.signum(driveCont.getRightX())
+                        ) // Drive counterclockwise with negative X (left)
+            );
     }
 
     public final void zero() {
@@ -93,7 +108,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public void addHeadingController(double kP, double kI, double kD, double kIZone) {
         headingController = new PhoenixPIDController(kP, kI, kD);
-        
+
         headingController.enableContinuousInput(-Math.PI, Math.PI);
         headingController.setTolerance(Math.toRadians(15));
     }
@@ -107,46 +122,66 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public void addForwardContrller(double kP, double kI, double kD) {
         forwardController = new PhoenixPIDController(kP, kI, kD);
         forwardController.setTolerance(1);
-
     }
 
     public void driveFieldCentricFacingAngle(double x, double y, double desiredAngle) {
         FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle()
-                .withVelocityX(-x * maxSpeed)
-                .withVelocityY(-y * maxSpeed)
-                .withTargetDirection(Rotation2d.fromDegrees(desiredAngle));
+            .withVelocityX(-x * maxSpeed)
+            .withVelocityY(-y * maxSpeed)
+            .withTargetDirection(Rotation2d.fromDegrees(desiredAngle));
         request.HeadingController = headingController;
         request.withDeadband(0.1);
         request.withRotationalDeadband(0.04);
         this.setControl(request);
- //   request.withDriveRequestType(DriveRequestType.Velocity);
+        //   request.withDriveRequestType(DriveRequestType.Velocity);
     }
 
     public void robotCentricDrive(double x, double y, double rotation) {
-        this.setControl(new SwerveRequest.RobotCentric()
-                .withVelocityX(x * maxSpeed)
-                .withVelocityY(y * maxSpeed)
-                .withRotationalRate(-rotation * maxAngularRate));
+        this.setControl(
+                new SwerveRequest.RobotCentric()
+                    .withVelocityX(x * maxSpeed)
+                    .withVelocityY(y * maxSpeed)
+                    .withRotationalRate(-rotation * maxAngularRate)
+            );
     }
 
-    public final Command robotCentricDrive(double maxSpeed, double maxAngularRate, CommandXboxController driveCont) { //field oriented drive command!
+    public final Command robotCentricDrive(
+        double maxSpeed,
+        double maxAngularRate,
+        CommandXboxController driveCont
+    ) { //field oriented drive command!
         SwerveRequest.RobotCentric drive = new SwerveRequest.RobotCentric() //creates a fieldcentric drive
-            .withDeadband(maxSpeed * 0.1).withRotationalDeadband(maxAngularRate * 0.1) // Add a 10% deadband
+            .withDeadband(maxSpeed * 0.1)
+            .withRotationalDeadband(maxAngularRate * 0.1) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
 
-        return this.applyRequest(() ->
-            drive.withVelocityX(-Math.pow(driveCont.getLeftY(), 2) * maxSpeed * -Math.signum(driveCont.getLeftY())) // Drive forward with negative Y (forward)
-                .withVelocityY(-Math.pow(driveCont.getLeftX(), 2) * maxSpeed * -Math.signum(driveCont.getLeftX()))// Drive left with negative X (left)
-                .withRotationalRate(-Math.pow(driveCont.getRightX(), 2) * maxAngularRate * Math.signum(driveCont.getRightX())) // Drive counterclockwise with negative X (left)
-        );
+        return this.applyRequest(
+                () ->
+                    drive
+                        .withVelocityX(
+                            -Math.pow(driveCont.getLeftY(), 2) *
+                            maxSpeed *
+                            -Math.signum(driveCont.getLeftY())
+                        ) // Drive forward with negative Y (forward)
+                        .withVelocityY(
+                            -Math.pow(driveCont.getLeftX(), 2) *
+                            maxSpeed *
+                            -Math.signum(driveCont.getLeftX())
+                        ) // Drive left with negative X (left)
+                        .withRotationalRate(
+                            -Math.pow(driveCont.getRightX(), 2) *
+                            maxAngularRate *
+                            Math.signum(driveCont.getRightX())
+                        ) // Drive counterclockwise with negative X (left)
+            );
     }
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
         new SysIdRoutine.Config(
-            null,        // Use default ramp rate (1 V/s)
+            null, // Use default ramp rate (1 V/s)
             Volts.of(4), // Reduce dynamic step voltage to 4 V to prevent brownout
-            null,        // Use default timeout (10 s)
+            null, // Use default timeout (10 s)
             // Log state with SignalLogger class
             state -> SignalLogger.writeString("SysIdTranslation_State", state.toString())
         ),
@@ -160,9 +195,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     /* SysId routine for characterizing steer. This is used to find PID gains for the steer motors. */
     private final SysIdRoutine m_sysIdRoutineSteer = new SysIdRoutine(
         new SysIdRoutine.Config(
-            null,        // Use default ramp rate (1 V/s)
+            null, // Use default ramp rate (1 V/s)
             Volts.of(7), // Use dynamic voltage of 7 V
-            null,        // Use default timeout (10 s)
+            null, // Use default timeout (10 s)
             // Log state with SignalLogger class
             state -> SignalLogger.writeString("SysIdSteer_State", state.toString())
         ),
@@ -205,6 +240,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     private double maxSpeed;
     private double maxAngularRate;
+
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.
      * <p>
@@ -296,14 +332,18 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         Matrix<N3, N1> visionStandardDeviation,
         SwerveModuleConstants<?, ?, ?>... modules
     ) {
-        super(drivetrainConstants, odometryUpdateFrequency, odometryStandardDeviation, visionStandardDeviation, modules);
+        super(
+            drivetrainConstants,
+            odometryUpdateFrequency,
+            odometryStandardDeviation,
+            visionStandardDeviation,
+            modules
+        );
         if (Utils.isSimulation()) {
             startSimThread();
         }
 
-
         configureAutoBuilder();
-
     }
 
     /**
@@ -339,7 +379,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public Pose2d getPose() {
-        return this.getState().Pose;
+        return this.getStateCopy().Pose;
     }
 
     public Rotation2d getRotation2d() {
@@ -362,8 +402,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
      * A command that waits until the drivebase is facing the setpoint angle
      * @return A wait until command that ends when the drivetrain is facing its rotational setpoint
      */
-    public Command waitUntilDrivetrainAtHeadingSetpoint(){
+    public Command waitUntilDrivetrainAtHeadingSetpoint() {
         return Commands.waitUntil(() -> isAtRotationSetpoint());
+    }
+
+    public double getAngularRate() {
+        return Math.toDegrees(this.getStateCopy().Speeds.omegaRadiansPerSecond);
     }
 
     // public boolean isFlat() {
@@ -374,9 +418,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     //     return false;
     // }
 
-     public void addVisionMeasurements(List<VisionMeasurement> measurements) {
+    public void addVisionMeasurements(List<VisionMeasurement> measurements) {
         for (VisionMeasurement measurement : measurements) {
-            this.addVisionMeasurement(measurement.estimatedPose(), measurement.timestamp(), measurement.standardDeviation());
+            this.addVisionMeasurement(
+                    measurement.estimatedPose(),
+                    Utils.fpgaToCurrentTime(measurement.timestamp()),
+                    measurement.standardDeviation()
+                );
         }
     }
 
@@ -387,12 +435,24 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         Logger.recordOutput("Swerve: Angle", this.getAngle());
         // Logger.recordOutput("swerve: pithc", this.isFlat());
         Logger.recordOutput("Rotation2d", this.getPigeon2().getRotation2d());
-        Logger.recordOutput("Swerve: CurrentState", this.getState().ModuleStates);
-        Logger.recordOutput("Swerve: TargetState", this.getState().ModuleTargets);
-        Logger.recordOutput("Swerve: Heading Controller: Setpoint", headingController.getSetpoint());
-        Logger.recordOutput("Swerve: Heading Controller: Error", headingController.getPositionError());
-        Logger.recordOutput("Swerve: Heading Controller: AtSetpoint", headingController.atSetpoint());
-        Logger.recordOutput("Swerve: Heading Controller: PositionTolerance", headingController.getPositionTolerance());
+        Logger.recordOutput(
+            "Swerve: Heading Controller: Setpoint",
+            headingController.getSetpoint()
+        );
+        Logger.recordOutput(
+            "Swerve: Heading Controller: Error",
+            headingController.getPositionError()
+        );
+        Logger.recordOutput(
+            "Swerve: Heading Controller: AtSetpoint",
+            headingController.atSetpoint()
+        );
+        Logger.recordOutput(
+            "Swerve: Heading Controller: PositionTolerance",
+            headingController.getPositionTolerance()
+        );
+        Logger.recordOutput("Swerve: CurrentState", this.getStateCopy().ModuleStates);
+        Logger.recordOutput("Swerve: TargetState", this.getStateCopy().ModuleTargets);
         /*
          * Periodically try to apply the operator perspective.
          * If we haven't applied the operator perspective before, then we should apply it regardless of DS state.
@@ -401,15 +461,18 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
          * This ensures driving behavior doesn't change until an explicit disable event occurs during testing.
          */
         if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
-            
-            DriverStation.getAlliance().ifPresent(allianceColor -> {
-                setOperatorPerspectiveForward(
-                    allianceColor == Alliance.Red
-                        ? kRedAlliancePerspectiveRotation
-                        : kBlueAlliancePerspectiveRotation
+            DriverStation
+                .getAlliance()
+                .ifPresent(
+                    allianceColor -> {
+                        setOperatorPerspectiveForward(
+                            allianceColor == Alliance.Red
+                                ? kRedAlliancePerspectiveRotation
+                                : kBlueAlliancePerspectiveRotation
+                        );
+                        m_hasAppliedOperatorPerspective = true;
+                    }
                 );
-                m_hasAppliedOperatorPerspective = true;
-            });
         }
     }
 
@@ -417,18 +480,19 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         m_lastSimTime = Utils.getCurrentTimeSeconds();
 
         /* Run simulation at a faster rate so PID gains behave more reasonably */
-        m_simNotifier = new Notifier(() -> {
-            final double currentTime = Utils.getCurrentTimeSeconds();
-            double deltaTime = currentTime - m_lastSimTime;
-            m_lastSimTime = currentTime;
+        m_simNotifier =
+            new Notifier(
+                () -> {
+                    final double currentTime = Utils.getCurrentTimeSeconds();
+                    double deltaTime = currentTime - m_lastSimTime;
+                    m_lastSimTime = currentTime;
 
-            /* use the measured time delta, get battery voltage from WPILib */
-            updateSimState(deltaTime, RobotController.getBatteryVoltage());
-        });
+                    /* use the measured time delta, get battery voltage from WPILib */
+                    updateSimState(deltaTime, RobotController.getBatteryVoltage());
+                }
+            );
         m_simNotifier.startPeriodic(kSimLoopPeriod);
     }
-
-
 
     private void configureAutoBuilder() {
         try {
@@ -437,34 +501,40 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             RobotConfig config = RobotConfig.fromGUISettings();
 
             AutoBuilder.configure(
-                    () -> getState().Pose, // Supplier of current robot pose
-                    this::resetPose, // Consumer for seeding pose against auto
-                    () -> getState().Speeds, // Supplier of current robot speeds
-                    // Consumer of ChassisSpeeds and feedforwards to drive the robot
-                    (speeds, feedforwards) -> this.setControl(this.driveRobotRelativeRequest(speeds, feedforwards)),
-                    new PPHolonomicDriveController(
-                            // PID constants for translation
-                            new PIDConstants(10, 0, 0),
-                            // PID constants for rotation
-                            new PIDConstants(7, 0, 0)),
-                    config,
-                    // For our team, the path does not need to be flipped for Red vs Blue.
-                    // The reasoning for this is that the fields are not constructed the same for
-                    // each event, each side is a bit different.
-                    () -> false,
-                    this // Subsystem for requirements
+                () -> getStateCopy().Pose, // Supplier of current robot pose
+                this::resetPose, // Consumer for seeding pose against auto
+                () -> getStateCopy().Speeds, // Supplier of current robot speeds
+                // Consumer of ChassisSpeeds and feedforwards to drive the robot
+                (speeds, feedforwards) ->
+                    this.setControl(this.driveRobotRelativeRequest(speeds, feedforwards)),
+                new PPHolonomicDriveController(
+                    // PID constants for translation
+                    new PIDConstants(10, 0, 0),
+                    // PID constants for rotation
+                    new PIDConstants(7, 0, 0)
+                ),
+                config,
+                // For our team, the path does not need to be flipped for Red vs Blue.
+                // The reasoning for this is that the fields are not constructed the same for
+                // each event, each side is a bit different.
+                () -> false,
+                this // Subsystem for requirements
             );
         } catch (Exception ex) {
-            DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder",
-                    ex.getStackTrace());
+            DriverStation.reportError(
+                "Failed to load PathPlanner config and configure AutoBuilder",
+                ex.getStackTrace()
+            );
         }
     }
-    
-    private SwerveRequest driveRobotRelativeRequest(ChassisSpeeds speeds, DriveFeedforwards feedforwards) {
-        return new SwerveRequest.ApplyRobotSpeeds().withSpeeds(speeds)
+
+    private SwerveRequest driveRobotRelativeRequest(
+        ChassisSpeeds speeds,
+        DriveFeedforwards feedforwards
+    ) {
+        return new SwerveRequest.ApplyRobotSpeeds()
+            .withSpeeds(speeds)
             .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
             .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons());
     }
-
-
 }

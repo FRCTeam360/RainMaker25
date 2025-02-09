@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -34,7 +35,10 @@ import frc.robot.commands.SetCoralIntake;
 import frc.robot.commands.SnapDrivebaseToAngle;
 import frc.robot.generated.OldCompBot;
 import frc.robot.generated.WoodBotDriveTrain;
+import frc.robot.subsystems.AlgaeShooter.AlgaeShooter;
+import frc.robot.subsystems.AlgaeShooter.AlgaeShooterIOSim;
 import frc.robot.subsystems.Catapult.Catapult;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CoralIntake.CoralIntake;
@@ -43,7 +47,9 @@ import frc.robot.subsystems.CoralShooter.CoralShooterIOSim;
 import frc.robot.subsystems.CoralShooter.CoralShooterIOWB;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.Elevator;
+import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorIO;
+import frc.robot.subsystems.Elevator.ElevatorIOSim;
 import frc.robot.subsystems.Elevator.ElevatorIOSim;
 import frc.robot.subsystems.Elevator.ElevatorIOWB;
 import frc.robot.subsystems.Vision.Vision;
@@ -74,6 +80,7 @@ public class RobotContainer {
     private CoralIntake coralIntake;
     private CoralShooter coralShooter;
     private Elevator elevator;
+    private AlgaeShooter algaeShooter;
 
     private ShuffleboardTab diagnosticTab;
 
@@ -87,6 +94,8 @@ public class RobotContainer {
     private Command levelOne;
 
     private Command zeroElevatorEncoder;
+
+    private SequentialCommandGroup levelOneAndZero;
 
     private Command allignToReefWoodBot;
     private SetCoralIntake setCoralIntake;
@@ -102,7 +111,8 @@ public class RobotContainer {
                         new VisionIO[] {
                             new VisionIOLimelight(
                                 Constants.VisionConstants.WOODBOT_LIMELIGHT_NAME,
-                                () -> driveTrain.getAngle()
+                                () -> driveTrain.getAngle(),
+                                () -> driveTrain.getAngularRate()
                             ),
                         }
                     );
@@ -117,7 +127,8 @@ public class RobotContainer {
                         new VisionIO[] {
                             new VisionIOLimelight(
                                 Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
-                                () -> driveTrain.getAngle()
+                                () -> driveTrain.getAngle(),
+                                () -> driveTrain.getAngularRate()
                             ),
                         }
                     );
@@ -134,18 +145,23 @@ public class RobotContainer {
                         new VisionIO[] {
                             new VisionIOLimelight(
                                 Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
-                                () -> driveTrain.getAngle()
+                                () -> driveTrain.getAngle(),
+                                () -> driveTrain.getAngularRate()
                             ),
                         }
                     );
                 elevator = new Elevator(new ElevatorIOSim());
                 coralShooter = new CoralShooter(new CoralShooterIOSim(() -> elevator.getHeight()));
+                algaeShooter = new AlgaeShooter(new AlgaeShooterIOSim());
+
                 break;
             case COMPETITION:
             default:
                 //competition bot stuff
                 break;
         }
+
+        
         commandFactory =
             new CommandFactory(
                 catapult,
@@ -153,6 +169,7 @@ public class RobotContainer {
                 coralShooter,
                 elevator,
                 vision,
+                algaeShooter,
                 driveTrain,
                 driverCont.getHID()
             );
@@ -184,12 +201,19 @@ public class RobotContainer {
     }
 
     public void initializeCommands() {
+        vision.setDefaultCommand(
+            vision
+                .consumeVisionMeasurements(driveTrain::addVisionMeasurements)
+                .ignoringDisable(true)
+        );
+
         rightAlign =
             commandFactory.AlignWithLimelight(
                 Constants.WoodbotConstants.WBGOALSCORETY,
                 Constants.WoodbotConstants.WBGOALSCORETX,
                 0
             );
+        // Periodically adds the vision measurement to drivetrain for pose estimation
 
         leftAlign =
             commandFactory.AlignWithLimelight(
@@ -201,7 +225,7 @@ public class RobotContainer {
         snapDrivebaseToAngle = new SnapDrivebaseToAngle(driveTrain);
 
         if (Objects.nonNull(elevator)) {
-            levelFour = commandFactory.setElevatorHeight(34.0);
+            levelFour = commandFactory.setElevatorHeight(33.5);
             levelThree = commandFactory.setElevatorHeight(23.0);
             levelTwo = commandFactory.setElevatorHeight(10.5);
             levelOne = commandFactory.setElevatorHeight(0.0);
@@ -218,6 +242,8 @@ public class RobotContainer {
             );
         }
 
+        levelOneAndZero = new SequentialCommandGroup(levelOne, zeroElevatorEncoder);
+
         allignToReefWoodBot = commandFactory.allignToReefWoodbotLeft();
 
         if (Objects.nonNull(coralShooter)) {
@@ -228,25 +254,36 @@ public class RobotContainer {
         }
     }
 
+    /**
+     * This method registers the given command to as a named pathplanner command if the command is present. If not, it registers in its place a placeholder command that outputs a warning to the console
+     * @param string the registered name of the command as shown in the pathplanner auto/path file
+     * @param command the actual command
+     */
+    private void registerPathplannerCommand(String commandName, Command command) {
+        if (Objects.nonNull(command)) {
+            NamedCommands.registerCommand(commandName, command);
+        } else {
+            System.err.println(commandName + " is null");
+            NamedCommands.registerCommand(
+                commandName,
+                new InstantCommand(() -> System.err.println(commandName + " is null"))
+            );
+        }
+    }
+
     private void configureBindings() {
         driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(MaxAngularRate, driverCont));
 
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
-        // driverCont.pov(90).whileTrue(rightAlign); 
-        // driverCont.pov(270).whileTrue(leftAlign);
-        driverCont.pov(180).whileTrue(zeroElevatorEncoder);
-
-        System.out.println(driverCont.getLeftTriggerAxis());
-
+    
         driverCont.axisGreaterThan(2, 0.25).whileTrue(coralShooter.intakeCmd()); //2 is the number of the axis?
         driverCont.axisGreaterThan(3, 0.25).whileTrue(coralShooter.shootCmd());
 
         driverCont.getLeftTriggerAxis();
 
-
         if (Objects.nonNull(elevator)) {
-            driverCont.a().onTrue(levelOne);
-            driverCont.b().whileTrue(levelTwo);
+            driverCont.a().onTrue(levelOneAndZero);
+            driverCont.b().onTrue(levelTwo);
             driverCont.x().onTrue(levelThree);
             driverCont.y().onTrue(levelFour);
         }

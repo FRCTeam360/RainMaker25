@@ -11,6 +11,7 @@ import frc.robot.commands.SnapDrivebaseToAngle;
 import frc.robot.generated.WoodBotDriveTrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.AlgaeShooter.AlgaeShooter;
 import frc.robot.subsystems.Catapult.Catapult;
 import frc.robot.subsystems.CoralIntake.CoralIntake;
 // import frc.robot.subsystems.CoralShooter.CoralShooter;
@@ -27,6 +28,7 @@ public class CommandFactory {
     private final CoralShooter coralShooter;
     private final Elevator elevator;
     private final Vision vision;
+    private final AlgaeShooter algaeShooter;
     private final CommandSwerveDrivetrain drivetrain;
     private final XboxController driverCont;    
     // ↓ constructor ↓ //
@@ -36,6 +38,7 @@ public class CommandFactory {
         CoralShooter coralShooter,
         Elevator elevator,
         Vision vision,
+        AlgaeShooter algaeShooter,
         CommandSwerveDrivetrain driveTrain,
         XboxController driverCont
     ) 
@@ -46,6 +49,7 @@ public class CommandFactory {
         this.coralShooter = coralShooter;
         this.elevator = elevator;
         this.vision = vision;
+        this.algaeShooter = algaeShooter;
         this.drivetrain = driveTrain;
         this.driverCont = driverCont;
     }

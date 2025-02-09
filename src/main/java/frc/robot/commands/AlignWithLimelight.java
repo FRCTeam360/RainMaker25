@@ -36,6 +36,7 @@ public class AlignWithLimelight extends Command {
     private XboxController driverCont;
     private SlewRateLimiter forwardsAccelerationLimit = new SlewRateLimiter(0.75);
     private SlewRateLimiter leftAccelerationLimit = new SlewRateLimiter(0.75);
+    private int pipeline;
 
     private static final Map<Integer, Double> tagIDToAngle = Map.ofEntries(
         Map.entry(21, 180.0),
@@ -59,14 +60,15 @@ public class AlignWithLimelight extends Command {
         double goalTY,
         double goalTX,
         double maxSpeed,
+        int pipeline,
         XboxController driverCont
     ) {
         this.vision = vision;
         this.driveTrain = driveTrain;
         this.goalTY = goalTY;
         this.goalTX = goalTX;
+        this.pipeline = pipeline;
         this.driverCont = driverCont;
-
         addRequirements(driveTrain);
     }
 
@@ -75,6 +77,8 @@ public class AlignWithLimelight extends Command {
     public void initialize() {
         leftAccelerationLimit.reset(0);
         forwardsAccelerationLimit.reset(0);
+
+        vision.setPipeline(pipeline);
 
         double angleToFace = driveTrain.getAngle();
         int priorityID = vision.getAprilTagID();

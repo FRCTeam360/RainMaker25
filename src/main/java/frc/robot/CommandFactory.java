@@ -57,16 +57,16 @@ public class CommandFactory {
         return elevator.setElevatorHeight(height);
     }
 
-    public Command AlignWithLimelight(double goalTY, double goalTX) {
+    public Command AlignWithLimelight(double goalTY, double goalTX, int pipeline) {
         return //vision.waitUntilTargetTxTy(goalTX, goalTY).alongWith(drivetrain.waitUntilDrivetrainAtHeadingSetpoint())
             (new AlignWithLimelight(vision, drivetrain, goalTY, goalTX,
-                        WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond), driverCont)); // no more timeout
+                        WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond), pipeline, driverCont)); // no more timeout
     }
 
     public Command allignToReefWoodbotLeft(){
         return new SequentialCommandGroup(
             new SnapDrivebaseToAngle(drivetrain),
-            new AlignWithLimelight(vision, drivetrain, -12.64, -11.16, 1, driverCont)
+            new AlignWithLimelight(vision, drivetrain, -12.64, -11.16, 1, 0, driverCont)
         );
     }
 }

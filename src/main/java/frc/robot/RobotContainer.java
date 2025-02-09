@@ -78,7 +78,8 @@ public class RobotContainer {
     private ShuffleboardTab diagnosticTab;
 
     private SnapDrivebaseToAngle snapDrivebaseToAngle;
-    private Command alignWithLimelight;
+    private Command rightAlign;
+    private Command leftAlign;
 
     private Command levelFour;
     private Command levelThree;
@@ -88,7 +89,6 @@ public class RobotContainer {
     private Command zeroElevatorEncoder;
 
     private Command allignToReefWoodBot;
-
     private SetCoralIntake setCoralIntake;
 
     public RobotContainer() {
@@ -184,10 +184,18 @@ public class RobotContainer {
     }
 
     public void initializeCommands() {
-        alignWithLimelight =
+        rightAlign =
             commandFactory.AlignWithLimelight(
                 Constants.WoodbotConstants.WBGOALSCORETY,
-                Constants.WoodbotConstants.WBGOALSCORETX
+                Constants.WoodbotConstants.WBGOALSCORETX,
+                0
+            );
+
+        leftAlign =
+            commandFactory.AlignWithLimelight(
+                Constants.WoodbotConstants.WBGOALSCORETY,
+                Constants.WoodbotConstants.WBGOALSCORETX,
+                1
             );
 
         snapDrivebaseToAngle = new SnapDrivebaseToAngle(driveTrain);
@@ -224,8 +232,17 @@ public class RobotContainer {
         driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(MaxAngularRate, driverCont));
 
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
-        driverCont.pov(90).whileTrue(alignWithLimelight); //todo needs to end use racewith txty
-        driverCont.pov(270).whileTrue(zeroElevatorEncoder);
+        // driverCont.pov(90).whileTrue(rightAlign); 
+        // driverCont.pov(270).whileTrue(leftAlign);
+        driverCont.pov(180).whileTrue(zeroElevatorEncoder);
+
+        System.out.println(driverCont.getLeftTriggerAxis());
+
+        driverCont.axisGreaterThan(2, 0.25).whileTrue(coralShooter.intakeCmd()); //2 is the number of the axis?
+        driverCont.axisGreaterThan(3, 0.25).whileTrue(coralShooter.shootCmd());
+
+        driverCont.getLeftTriggerAxis();
+
 
         if (Objects.nonNull(elevator)) {
             driverCont.a().onTrue(levelOne);
@@ -235,10 +252,9 @@ public class RobotContainer {
         }
 
         if (Objects.nonNull(coralShooter)) {
-            driverCont.leftBumper().whileTrue(coralShooter.intakeCmd());
-            driverCont.rightBumper().whileTrue(coralShooter.shootCmd());
+            driverCont.leftBumper().whileTrue(leftAlign);
+            driverCont.rightBumper().whileTrue(rightAlign);
         }
-
         // driverCont.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
         // driverCont.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
         /*

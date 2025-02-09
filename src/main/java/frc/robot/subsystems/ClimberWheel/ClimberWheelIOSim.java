@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.ClimberWheel.ClimberWheelIO.ClimberWheelIOInputs;
 
-public class ClimberWheelIOSim extends SubsystemBase {
+public class ClimberWheelIOSim implements ClimberWheelIO {
   private final DCMotor gearbox = DCMotor.getNeo550(1);
   private final Encoder encoder = new Encoder(10, 11);
 
@@ -39,6 +39,10 @@ public class ClimberWheelIOSim extends SubsystemBase {
 
   /** Creates a new ClimberWheelIOSim. */
   public ClimberWheelIOSim() {}
+
+  public void setDutyCycle(double dutyCycle) {
+    simWheelMotor.setSpeed(dutyCycle);
+}
 
   public void updateInputs(ClimberWheelIOInputs inputs) {
     simWheelEncoder.setDistancePerPulse(2.0 * Math.PI * (Units.inchesToMeters(2.0)) / 4096);

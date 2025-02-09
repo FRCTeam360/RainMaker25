@@ -13,10 +13,11 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.PracticeBotConstants;
 
 public class ClimberWinchIOPB implements ClimberWinchIO {
 
-  private final SparkMax winchMotor = new SparkMax(10, MotorType.kBrushless);
+  private final SparkMax winchMotor = new SparkMax(PracticeBotConstants.CLIMBER_WINCH_ID, MotorType.kBrushless);
   private final RelativeEncoder winchEncoder = winchMotor.getEncoder();
   
   private final SparkMaxConfig config = new SparkMaxConfig();

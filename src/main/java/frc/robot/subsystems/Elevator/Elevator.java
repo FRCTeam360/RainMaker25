@@ -5,12 +5,11 @@
 package frc.robot.subsystems.Elevator;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.littletonrobotics.junction.Logger;
-
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
     private final ElevatorIO io;
@@ -37,21 +36,30 @@ public class Elevator extends SubsystemBase {
         return inputs.elevatorPosition;
     }
 
-    public Command setElevatorHeight(double height) {
-        return this.runEnd(
-                () -> io.setElevatorPostion(height),
-                () -> io.setElevatorPostion(height)
-            );
-    }
-
     public void stop() {
         io.stop();
     }
 
+    public Command setElevatorHeight(double height) {
+        return Commands
+            .waitUntil(() -> Math.abs(inputs.elevatorPosition) <= 0.5)
+            .deadlineFor(
+                this.runEnd(
+                        () -> io.setElevatorPostion(height),
+                        () -> io.setElevatorPostion(height)
+                    )
+            );
+    }
+
     public Command zeroElevatorCmd() {
-        return Commands.waitUntil(() -> inputs.elevatorStatorCurrent > 10.0)
-                .deadlineFor(this.runEnd(() -> io.setDutyCycle(-0.05), () -> io.setDutyCycle(0.0))
-                .andThen(() -> io.setEncoder(0.0)));
+        return Commands
+            .waitUntil(
+                () ->
+                    Math.abs(inputs.elevatorStatorCurrent) > 30.0 &&
+                    Math.abs(inputs.elevatorVelocity) == 0.0
+            )
+            .deadlineFor(this.runEnd(() -> io.setDutyCycle(-0.1), () -> io.setDutyCycle(0.0)))
+            .andThen(this.runOnce(() -> io.setEncoder(0.0)));
     }
 
     public Command isAtHeight(double position) {

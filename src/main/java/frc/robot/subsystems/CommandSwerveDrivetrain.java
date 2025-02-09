@@ -101,7 +101,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public void addStrafeController(double kP, double kI, double kD) {
         strafeController = new PhoenixPIDController(kP, kI, kD);
         strafeController.setIZone(1);
-        strafeController.setTolerance(1);
+        strafeController.setTolerance(0.5);
     }
 
     public void addForwardContrller(double kP, double kI, double kD) {
@@ -116,10 +116,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 .withVelocityY(-y * maxSpeed)
                 .withTargetDirection(Rotation2d.fromDegrees(desiredAngle));
         request.HeadingController = headingController;
-        request.withDeadband(0.07);
-        request.withRotationalDeadband(0.02);
+        request.withDeadband(0.1);
+        request.withRotationalDeadband(0.04);
         this.setControl(request);
-    //    request.withDriveRequestType(DriveRequestType.Velocity);
+ //   request.withDriveRequestType(DriveRequestType.Velocity);
     }
 
     public void robotCentricDrive(double x, double y, double rotation) {

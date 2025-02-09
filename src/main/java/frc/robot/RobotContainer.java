@@ -38,8 +38,8 @@ import frc.robot.commands.SnapDrivebaseToAngle;
 import frc.robot.generated.OldCompBot;
 import frc.robot.generated.WoodBotDriveTrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.Climber.Climber;
-import frc.robot.subsystems.Climber.ClimberIOSim;
+import frc.robot.subsystems.ClimberWinch.ClimberWinch;
+import frc.robot.subsystems.ClimberWinch.ClimberWinchIOSim;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorIOSim;
 import frc.robot.subsystems.CoralIntake.CoralIntake;
@@ -74,7 +74,7 @@ public class RobotContainer {
     private CoralIntake coralIntake;
     private CoralShooter coralShooter;
     private Elevator elevator;
-    private Climber climber;
+    private ClimberWinch climber;
 
     private ShuffleboardTab diagnosticTab;
 
@@ -129,7 +129,7 @@ public class RobotContainer {
                 });
                 elevator = new Elevator(new ElevatorIOSim());
                 coralShooter = new CoralShooter(new CoralShooterIOSim(() -> elevator.getPosition()));
-                climber = new Climber(new ClimberIOSim());
+                climber = new ClimberWinch(new ClimberWinchIOSim());
                 break;
             case COMPETITION:
             default:

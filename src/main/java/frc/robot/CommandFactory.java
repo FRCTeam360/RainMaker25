@@ -1,7 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Climber.Climber;
+import frc.robot.subsystems.ClimberWinch.ClimberWinch;
 import frc.robot.subsystems.CoralIntake.CoralIntake;
 // import frc.robot.subsystems.CoralShooter.CoralShooter;
 import frc.robot.subsystems.CoralIntake.CoralIntake;
@@ -15,7 +15,7 @@ public class CommandFactory {
     private final CoralShooter coralShooter;
     private final Elevator elevator;
     private final Vision vision; 
-    private final Climber climber;
+    private final ClimberWinch climber;
 
     // ↓ constructor ↓ //
 public CommandFactory(
@@ -23,7 +23,7 @@ public CommandFactory(
     CoralShooter coralShooter,
     Elevator elevator,
     Vision vision,
-    Climber climber
+    ClimberWinch climber
 ) {
     this.coralIntake = coralIntake;
     this.coralShooter = coralShooter;

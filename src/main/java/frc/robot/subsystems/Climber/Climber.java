@@ -17,6 +17,14 @@ public class Climber extends SubsystemBase {
     this.io = io;
   }
 
+  public void setWinchDutyCycle(double dutyCycle) {
+    io.setWinchDutyCycle(dutyCycle);
+  }
+
+  public void setWheelDutyCycle(double dutyCycle) {
+    io.setWheelDutyCycle(dutyCycle);
+  }
+
   @Override
   public void periodic() {
     io.updateInputs(inputs);

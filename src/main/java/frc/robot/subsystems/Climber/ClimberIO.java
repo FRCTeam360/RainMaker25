@@ -13,10 +13,18 @@ public interface ClimberIO {
 
   @AutoLog
   public static class ClimberIOInputs {
-    public double climberVelocity = 0.0;
-    public double climberPosition = 0.0;
-    public double climberDutyCycle = 0.0;
+    public double winchVelocity = 0.0;
+    public double winchPosition = 0.0;
+    public double winchDutyCycle = 0.0;
+
+    public double wheelVelocity = 0.0;
+    public double wheelPosition = 0.0;
+    public double wheelDutyCycle = 0.0;
   }
 
   public default void updateInputs(ClimberIOInputs inputs) {}
+
+  public void setWinchDutyCycle(double dutyCycle);
+
+  public void setWheelDutyCycle(double dutyCycle);
 }

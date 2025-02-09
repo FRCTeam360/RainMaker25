@@ -58,8 +58,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private double m_lastSimTime;
 
     public PhoenixPIDController headingController;
-    public PIDController strafeController;
-    public PIDController forwardController;
+    public PhoenixPIDController strafeController;
+    public PhoenixPIDController forwardController;
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -78,7 +78,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public final Command fieldOrientedDrive(double maxAngularRate, CommandXboxController driveCont) { //field oriented drive command!
         SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric() //creates a fieldcentric drive
             .withDeadband(maxSpeed * 0.1).withRotationalDeadband(maxAngularRate * 0.1) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+            .withDriveRequestType(DriveRequestType.Velocity); // Use open-loop control for drive motors
 
         return this.applyRequest(() ->
             drive.withVelocityX(-Math.pow(driveCont.getLeftY(), 2) * maxSpeed * -Math.signum(driveCont.getLeftY())) // Drive forward with negative Y (forward)
@@ -95,15 +95,19 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         headingController = new PhoenixPIDController(kP, kI, kD);
         
         headingController.enableContinuousInput(-Math.PI, Math.PI);
-        headingController.setTolerance(Math.toRadians(5));
+        headingController.setTolerance(Math.toRadians(15));
     }
 
     public void addStrafeController(double kP, double kI, double kD) {
-        strafeController = new PIDController(kP, kI, kD);
+        strafeController = new PhoenixPIDController(kP, kI, kD);
+        strafeController.setIZone(1);
+        strafeController.setTolerance(1);
     }
 
     public void addForwardContrller(double kP, double kI, double kD) {
-        forwardController = new PIDController(kP, kI, kD);
+        forwardController = new PhoenixPIDController(kP, kI, kD);
+        forwardController.setTolerance(1);
+
     }
 
     public void driveFieldCentricFacingAngle(double x, double y, double desiredAngle) {
@@ -113,8 +117,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 .withTargetDirection(Rotation2d.fromDegrees(desiredAngle));
         request.HeadingController = headingController;
         request.withDeadband(0.07);
-        request.withRotationalDeadband(0.01);
+        request.withRotationalDeadband(0.02);
         this.setControl(request);
+    //    request.withDriveRequestType(DriveRequestType.Velocity);
     }
 
     public void robotCentricDrive(double x, double y, double rotation) {

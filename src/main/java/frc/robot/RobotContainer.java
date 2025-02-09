@@ -6,19 +6,12 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
-import java.lang.ModuleLayer.Controller;
-import java.util.Objects;
-import java.util.function.DoubleSupplier;
-
-import org.littletonrobotics.junction.AutoLogOutput;
-import org.littletonrobotics.junction.Logger;
-
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.PathPlannerLogging;
-
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -33,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OldCompBotConstants;
 import frc.robot.commands.AlignWithLimelight;
@@ -40,27 +34,32 @@ import frc.robot.commands.SetCoralIntake;
 import frc.robot.commands.SnapDrivebaseToAngle;
 import frc.robot.generated.OldCompBot;
 import frc.robot.generated.WoodBotDriveTrain;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.Elevator.Elevator;
-import frc.robot.subsystems.Elevator.ElevatorIOSim;
 import frc.robot.subsystems.Catapult.Catapult;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CoralIntake.CoralIntake;
 import frc.robot.subsystems.CoralShooter.CoralShooter;
-import frc.robot.subsystems.CoralShooter.CoralShooterIOWB;
 import frc.robot.subsystems.CoralShooter.CoralShooterIOSim;
+import frc.robot.subsystems.CoralShooter.CoralShooterIOWB;
+import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorIO;
+import frc.robot.subsystems.Elevator.ElevatorIOSim;
 import frc.robot.subsystems.Elevator.ElevatorIOWB;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIO;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
+import java.lang.ModuleLayer.Controller;
+import java.util.Objects;
+import java.util.function.DoubleSupplier;
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
     private final Field2d field;
     private final SendableChooser<Command> autoChooser;
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
-                                                                                      // max angular velocity
+    // max angular velocity
 
     private Telemetry logger;
 
@@ -98,23 +97,30 @@ public class RobotContainer {
                 //woodbot stuff
                 driveTrain = WoodBotDriveTrain.createDrivetrain();
                 logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
-                vision = new Vision(new VisionIO[]{
-                    new VisionIOLimelight(
-                        Constants.VisionConstants.WOODBOT_LIMELIGHT_NAME,
-                        () -> driveTrain.getAngle()
-                    )
-                });
+                vision =
+                    new Vision(
+                        new VisionIO[] {
+                            new VisionIOLimelight(
+                                Constants.VisionConstants.WOODBOT_LIMELIGHT_NAME,
+                                () -> driveTrain.getAngle()
+                            ),
+                        }
+                    );
                 elevator = new Elevator(new ElevatorIOWB());
                 coralShooter = new CoralShooter(new CoralShooterIOWB());
                 break;
             case OLD_COMP_BOT:
                 //ocb stuff
                 driveTrain = OldCompBot.createDrivetrain();
-                vision = new Vision(new VisionIO[] {
-                        new VisionIOLimelight(
+                vision =
+                    new Vision(
+                        new VisionIO[] {
+                            new VisionIOLimelight(
                                 Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
-                                
-                                () -> driveTrain.getAngle()) });
+                                () -> driveTrain.getAngle()
+                            ),
+                        }
+                    );
                 //constants = Constants.OldCompBotConstants;
                 break;
             case PRACTICE:
@@ -123,12 +129,15 @@ public class RobotContainer {
             case SIM:
                 driveTrain = WoodBotDriveTrain.createDrivetrain();
                 logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
-                vision = new Vision(new VisionIO[]{
-                    new VisionIOLimelight(
-                        Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
-                        () -> driveTrain.getAngle()
-                    )
-                });
+                vision =
+                    new Vision(
+                        new VisionIO[] {
+                            new VisionIOLimelight(
+                                Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
+                                () -> driveTrain.getAngle()
+                            ),
+                        }
+                    );
                 elevator = new Elevator(new ElevatorIOSim());
                 coralShooter = new CoralShooter(new CoralShooterIOSim(() -> elevator.getHeight()));
                 break;
@@ -137,17 +146,28 @@ public class RobotContainer {
                 //competition bot stuff
                 break;
         }
-        commandFactory = new CommandFactory(catapult, coralIntake, coralShooter, elevator, vision, driveTrain, driverCont.getHID());
+        commandFactory =
+            new CommandFactory(
+                catapult,
+                coralIntake,
+                coralShooter,
+                elevator,
+                vision,
+                driveTrain,
+                driverCont.getHID()
+            );
         initializeCommands();
 
         field = new Field2d();
         SmartDashboard.putData("Field", field);
 
         PathPlannerLogging.setLogActivePathCallback(
-        (poses -> Logger.recordOutput("Swerve/ActivePath", poses.toArray(new Pose2d[0]))));
+            (poses -> Logger.recordOutput("Swerve/ActivePath", poses.toArray(new Pose2d[0])))
+        );
         PathPlannerLogging.setLogTargetPoseCallback(
-        pose -> Logger.recordOutput("Swerve/TargetPathPose", pose));
-        
+            pose -> Logger.recordOutput("Swerve/TargetPathPose", pose)
+        );
+
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -164,12 +184,13 @@ public class RobotContainer {
     }
 
     public void initializeCommands() {
-
-        alignWithLimelight = commandFactory.AlignWithLimelight(Constants.WoodbotConstants.WBGOALSCORETY,
-                Constants.WoodbotConstants.WBGOALSCORETX);
+        alignWithLimelight =
+            commandFactory.AlignWithLimelight(
+                Constants.WoodbotConstants.WBGOALSCORETY,
+                Constants.WoodbotConstants.WBGOALSCORETX
+            );
 
         snapDrivebaseToAngle = new SnapDrivebaseToAngle(driveTrain);
-
 
         if (Objects.nonNull(elevator)) {
             levelFour = commandFactory.setElevatorHeight(34.0);
@@ -180,17 +201,18 @@ public class RobotContainer {
             zeroElevatorEncoder = elevator.zeroElevatorCmd();
 
             NamedCommands.registerCommand(
-                    "raise to l4",
-                    commandFactory.setElevatorHeight(33.0).raceWith(elevator.isAtHeight(33.0)));
+                "raise to l4",
+                commandFactory.setElevatorHeight(33.0).raceWith(elevator.isAtHeight(33.0))
+            );
             NamedCommands.registerCommand(
-                    "zero",
-                    commandFactory.setElevatorHeight(0.0).raceWith(elevator.isAtHeight(0.0)));
+                "zero",
+                commandFactory.setElevatorHeight(0.0).raceWith(elevator.isAtHeight(0.0))
+            );
         }
 
         allignToReefWoodBot = commandFactory.allignToReefWoodbotLeft();
 
         if (Objects.nonNull(coralShooter)) {
-
             setCoralIntake = new SetCoralIntake(coralShooter);
 
             NamedCommands.registerCommand("shoot", coralShooter.shootCmd());
@@ -199,8 +221,7 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        driveTrain.setDefaultCommand(
-                driveTrain.fieldOrientedDrive(MaxAngularRate, driverCont));
+        driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(MaxAngularRate, driverCont));
 
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
         driverCont.pov(90).whileTrue(alignWithLimelight); //todo needs to end use racewith txty
@@ -217,7 +238,20 @@ public class RobotContainer {
             driverCont.leftBumper().whileTrue(coralShooter.intakeCmd());
             driverCont.rightBumper().whileTrue(coralShooter.shootCmd());
         }
-    
+
+        // driverCont.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
+        // driverCont.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
+        /*
+         * Joystick Y = quasistatic forward
+         * Joystick A = quasistatic reverse
+         * Joystick X = dyanmic reverse
+         * Joystick B = dynamic forward
+         */
+
+        // driverCont.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        // driverCont.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        // driverCont.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        // driverCont.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
 
     public void onDisable() {

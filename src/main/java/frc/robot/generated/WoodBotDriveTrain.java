@@ -27,14 +27,14 @@ public class WoodBotDriveTrain {
                                                                                                 // second max angular
                                                                                                 // velocity
 
-    public static final double headingKP = 4.0;
+    public static final double headingKP = 2.019; //sysid number
     public static final double headingKI = 0.0;
     public static final double headingKD = 0.0;
     public static final double headingKIZone = 0.0;
 
     public static final double stafeKP = 0.01;
-    public static final double stafeKI = 0.0;
-    public static final double stafeKD = 0.006;
+    public static final double stafeKI = 0.0003;
+    public static final double stafeKD = 0.003;
 
     public static final double forwardKP = 0.045;
     public static final double forwardKI = 0.0;
@@ -52,8 +52,9 @@ public class WoodBotDriveTrain {
     // When using closed-loop control, the drive motor uses the control
     // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
     private static final Slot0Configs driveGains = new Slot0Configs()
-            .withKP(0.1).withKI(0).withKD(0)
-            .withKS(0).withKV(0.124);
+            .withKP(0.1).withKI(0).withKD(0.0)
+            .withKS(0.31).withKV(0.124)
+            .withKA(0.013); //added after sysid
 
     // The closed-loop output type to use for the steer motors;
     // This affects the PID/FF gains for the steer motors

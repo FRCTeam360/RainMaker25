@@ -43,6 +43,7 @@ public class AdjustToScoreReef extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
     currentTranslation = drivetrain.getPose().getTranslation();
     double distance = Math.abs(currentTranslation.getDistance(initialTranslation));
     drivetrain.robotCentricDrive(0.1 * maxSpeed, 0.0, 0.0);

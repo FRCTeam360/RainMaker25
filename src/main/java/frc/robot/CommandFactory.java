@@ -58,8 +58,8 @@ public class CommandFactory {
     }
 
     public Command AlignWithLimelight(double goalTY, double goalTX) {
-        return vision.waitUntilTargetTxTy(goalTX, goalTY).alongWith(drivetrain.waitUntilDrivetrainAtHeadingSetpoint())
-                .deadlineFor(new AlignWithLimelight(vision, drivetrain, goalTY, goalTX,
+        return //vision.waitUntilTargetTxTy(goalTX, goalTY).alongWith(drivetrain.waitUntilDrivetrainAtHeadingSetpoint())
+            (new AlignWithLimelight(vision, drivetrain, goalTY, goalTX,
                         WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond), driverCont)); // no more timeout
     }
 

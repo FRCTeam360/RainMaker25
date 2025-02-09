@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
@@ -23,10 +24,12 @@ import com.pathplanner.lib.util.DriveFeedforwards;
 import com.ctre.phoenix6.swerve.SwerveRequest.FieldCentricFacingAngle;
 import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
@@ -324,6 +327,16 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return Math.toDegrees(this.getStateCopy().Speeds.omegaRadiansPerSecond);
     }
 
+    public double getVelocity(){
+        return Math.hypot(this.getStateCopy().Speeds.vxMetersPerSecond, this.getStateCopy().Speeds.vyMetersPerSecond);
+    }
+
+    private Rotation2d heading;
+
+    public Rotation2d getHeading(){
+        return heading;
+    }
+
     // public boolean isFlat() {
     //     double currentPitch = this.getPigeon2().getPitch().getValueAsDouble();
     //     if (Math.abs(currentPitch - Constants.DRIVETRAIN_PITCH_AUTO_INIT) < 2.0 || DriverStation.isTeleop()) {
@@ -338,6 +351,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
     }
 
+    private Optional<Pose2d> previousPose = Optional.empty();
+
     @Override
     public void periodic() {
         Logger.recordOutput("Swerve: Current Pose", this.getPose());
@@ -347,6 +362,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         Logger.recordOutput("Rotation2d", this.getPigeon2().getRotation2d());
         Logger.recordOutput("Swerve: CurrentState", this.getStateCopy().ModuleStates);
         Logger.recordOutput("Swerve: TargetState", this.getStateCopy().ModuleTargets);
+        if(previousPose.isPresent()){
+            heading = this.getPose().minus(previousPose.get()).getTranslation().getAngle().plus(this.getRotation2d());
+            Logger.recordOutput("Swerve: Heading", this.getHeading());  
+        }
+        Logger.recordOutput("Swerve: Speed", this.getVelocity());
         /*
          * Periodically try to apply the operator perspective.
          * If we haven't applied the operator perspective before, then we should apply it regardless of DS state.
@@ -365,6 +385,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 m_hasAppliedOperatorPerspective = true;
             });
         }
+
+        previousPose = Optional.of(getPose());
     }
 
     private void startSimThread() {

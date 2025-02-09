@@ -12,9 +12,9 @@ public interface AlgaeIntakeArmIO {
   /** Creates a new AlgaeIntakeIO. */
   @AutoLog
   public static class AlgaeIntakeArmIOInputs {
-    public double intakePosition = 0.0;
-    public double intakeDutyCycle = 0.0;
-    public double intakeVelocity = 0.0;
+    public double armPosition = 0.0;
+    public double armDutyCycle = 0.0;
+    public double armVelocity = 0.0;
   }
 
   public void setDutyCycle(double dutyCycle);

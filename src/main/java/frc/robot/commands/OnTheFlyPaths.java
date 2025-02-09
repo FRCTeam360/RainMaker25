@@ -23,24 +23,15 @@ public class OnTheFlyPaths {
         TEST_PATH2
     }
 
-    public static PathPlannerPath makeOnTheFlyPaths(OnFlyPath currentPathTemporary, Pose2d robotStartingPose){
+    public static PathPlannerPath makeOnTheFlyPaths(OnFlyPath currentPath, Pose2d robotStartingPose, Rotation2d robotDriveHeading, double robotSpeedMeterPerSec){
         List<Waypoint> wayPoints = new ArrayList<Waypoint>();
-        switch(currentPathTemporary){
+        switch(currentPath){
             case TEST_PATH:
                     wayPoints = PathPlannerPath.waypointsFromPoses(
                     robotStartingPose,
-                    new Pose2d(3.0, 1.0, Rotation2d.fromDegrees(0)),
-                    new Pose2d(5.094, 5.302, Rotation2d.fromDegrees(90))
+                    new Pose2d(5.094, 5.302, Rotation2d.fromDegrees(-33.917))
                 );
-                break;
-            case TEST_PATH2:
-                wayPoints = PathPlannerPath.waypointsFromPoses(
-                robotStartingPose,
-                new Pose2d(3.0, 1.0, Rotation2d.fromDegrees(0)),
-                new Pose2d(5.0, 3.0, Rotation2d.fromDegrees(90))
-                );
-                break;
-                
+                break;         
         }
     
         PathConstraints constraints = new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI); // test constraints(to be changed)

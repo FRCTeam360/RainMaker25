@@ -13,29 +13,13 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
  */
 public class CommandLogger {
     /**
-     * Log the command that is starting
-     * @param command The command that is starting
+     * Logs when the command starts and ends, labelling it with the given name
+     * 
+     * @param command the command to log
+     * @param commandName the unique name of the command
+     * 
+     * @return The provided command with appended logging when the command starts and ends
      */
-    public static void logCommandStart(String command) {
-        Logger.recordOutput("Command Running: " + command, true);
-    }
-
-    /**
-     * Log the command that is running
-     * @param command The command that is running
-     */
-    public static void logCommandRunning(String command) {
-        Logger.recordOutput("Command Running: " + command, true);
-    }
-
-    /**
-     * Log the command that is ending
-     * @param command The command that is ending
-     */
-    public static void logCommandEnd(String command) {
-        Logger.recordOutput("Command Running: " + command, false);
-    }
-
     public static Command logCommand(Command command, String commandName) {
         return command.beforeStarting(() -> logCommand(commandName, true))
                 .finallyDo(() -> logCommand(commandName, false));

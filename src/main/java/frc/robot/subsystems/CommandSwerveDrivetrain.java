@@ -36,6 +36,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants;
 import frc.robot.generated.OldCompBot;
 import frc.robot.generated.OldCompBot.TunerSwerveDrivetrain;
 import frc.robot.subsystems.Vision.Vision;
@@ -84,19 +85,22 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 () ->
                     drive
                         .withVelocityX(
-                            -Math.pow(driveCont.getLeftY(), 2) *
+                            Math.pow(driveCont.getLeftY(), 2) *
                             maxSpeed *
-                            -Math.signum(driveCont.getLeftY())
+                            -Math.signum(driveCont.getLeftY()) *
+                            (Constants.isWoodBot() ? -1.0 : 1.0)
                         ) // Drive forward with negative Y (forward)
                         .withVelocityY(
-                            -Math.pow(driveCont.getLeftX(), 2) *
+                            Math.pow(driveCont.getLeftX(), 2) *
                             maxSpeed *
-                            -Math.signum(driveCont.getLeftX())
+                            -Math.signum(driveCont.getLeftX()) *
+                            (Constants.isWoodBot() ? -1.0 : 1.0)
                         ) // Drive left with negative X (left)
                         .withRotationalRate(
-                            -Math.pow(driveCont.getRightX(), 2) *
+                            Math.pow(driveCont.getRightX(), 2) *
                             maxAngularRate *
-                            Math.signum(driveCont.getRightX())
+                            Math.signum(driveCont.getRightX()) *
+                            (Constants.isWoodBot() ? -1.0 : 1.0)
                         ) // Drive counterclockwise with negative X (left)
             );
     }
@@ -125,8 +129,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public void driveFieldCentricFacingAngle(double x, double y, double desiredAngle) {
         FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle()
-            .withVelocityX(-x * maxSpeed)
-            .withVelocityY(-y * maxSpeed)
+            .withVelocityX(x * maxSpeed * (Constants.isWoodBot() ? -1.0 : 1.0))
+            .withVelocityY(y * maxSpeed * (Constants.isWoodBot() ? -1.0 : 1.0))
             .withTargetDirection(Rotation2d.fromDegrees(desiredAngle));
         request.HeadingController = headingController;
         request.withDeadband(0.1);
@@ -138,8 +142,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public void robotCentricDrive(double x, double y, double rotation) {
         this.setControl(
                 new SwerveRequest.RobotCentric()
-                    .withVelocityX(x * maxSpeed)
-                    .withVelocityY(y * maxSpeed)
+                    .withVelocityX(x * maxSpeed * (Constants.isWoodBot() ? -1.0 : 1.0))
+                    .withVelocityY(y * maxSpeed * (Constants.isWoodBot() ? -1.0 : 1.0))
                     .withRotationalRate(-rotation * maxAngularRate)
             );
     }
@@ -156,19 +160,22 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 () ->
                     drive
                         .withVelocityX(
-                            -Math.pow(driveCont.getLeftY(), 2) *
+                            Math.pow(driveCont.getLeftY(), 2) *
                             maxSpeed *
-                            -Math.signum(driveCont.getLeftY())
+                            -Math.signum(driveCont.getLeftY()) *
+                            (Constants.isWoodBot() ? -1.0 : 1.0)
                         ) // Drive forward with negative Y (forward)
                         .withVelocityY(
-                            -Math.pow(driveCont.getLeftX(), 2) *
+                            Math.pow(driveCont.getLeftX(), 2) *
                             maxSpeed *
-                            -Math.signum(driveCont.getLeftX())
+                            -Math.signum(driveCont.getLeftX()) *
+                            (Constants.isWoodBot() ? -1.0 : 1.0)
                         ) // Drive left with negative X (left)
                         .withRotationalRate(
-                            -Math.pow(driveCont.getRightX(), 2) *
+                            Math.pow(driveCont.getRightX(), 2) *
                             maxAngularRate *
-                            Math.signum(driveCont.getRightX())
+                            Math.signum(driveCont.getRightX()) *
+                            (Constants.isWoodBot() ? -1.0 : 1.0)
                         ) // Drive counterclockwise with negative X (left)
             );
     }

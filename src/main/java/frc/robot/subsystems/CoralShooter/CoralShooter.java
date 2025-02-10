@@ -9,7 +9,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.CommandLogger;
+import frc.robot.utils.CommandLogger;
+
 import org.littletonrobotics.junction.Logger;
 
 public class CoralShooter extends SubsystemBase {
@@ -47,16 +48,12 @@ public class CoralShooter extends SubsystemBase {
 
     public Command shootCmd() {
         String cmdName = "ShootCoral";
-        return new InstantCommand(() -> CommandLogger.logCommandStart(cmdName))
-            .andThen(waitUntilEmpty().raceWith(runCmd(-0.6)))
-            .andThen(() -> CommandLogger.logCommandEnd(cmdName));
+        return CommandLogger.logCommand(waitUntilEmpty().raceWith(runCmd(-0.6)), cmdName);
     }
 
     public Command intakeCmd() {
         String cmdName = "IntakeCoral";
-        return new InstantCommand(() -> CommandLogger.logCommandStart(cmdName))
-            .andThen(waitUntilFull().raceWith(runCmd(-0.25)))
-            .andThen(() -> CommandLogger.logCommandEnd(cmdName));
+        return CommandLogger.logCommand(waitUntilFull().raceWith(runCmd(-0.25)), cmdName);
     }
 
     @Override

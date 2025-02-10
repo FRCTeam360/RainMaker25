@@ -61,13 +61,13 @@ public class CommandFactory {
         return elevator.setElevatorHeight(height);
     }
 
-    public Command AlignWithLimelight(double goalTY, double goalTX, int pipeline) {
+    public Command alignWithLimelight(double goalTY, double goalTX, int pipeline) {
         return //vision.waitUntilTargetTxTy(goalTX, goalTY).alongWith(drivetrain.waitUntilDrivetrainAtHeadingSetpoint())
             (new AlignWithLimelight(vision, drivetrain, goalTY, goalTX,
                         pipeline, driverCont)); // no more timeout
     }
 
-    public Command allignToReefWoodbotLeft(){
+    public Command alignToReefWoodbotLeft(){
         return new SequentialCommandGroup(
             new SnapDrivebaseToAngle(drivetrain),
             new AlignWithLimelight(vision, drivetrain, -12.64, -11.16, 0, driverCont)

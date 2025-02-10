@@ -207,7 +207,7 @@ public class RobotContainer {
         );
 
         rightAlign =
-            commandFactory.AlignWithLimelight(
+            commandFactory.alignWithLimelight(
                 Constants.WoodbotConstants.WBGOALSCORETY,
                 Constants.WoodbotConstants.WBGOALSCORETX,
                 0
@@ -215,7 +215,7 @@ public class RobotContainer {
         // Periodically adds the vision measurement to drivetrain for pose estimation
 
         leftAlign =
-            commandFactory.AlignWithLimelight(
+            commandFactory.alignWithLimelight(
                 Constants.WoodbotConstants.WBGOALSCORETY,
                 Constants.WoodbotConstants.WBGOALSCORETX,
                 1
@@ -243,7 +243,7 @@ public class RobotContainer {
 
         levelOneAndZero = new SequentialCommandGroup(levelOne, zeroElevatorEncoder);
 
-        allignToReefWoodBot = commandFactory.allignToReefWoodbotLeft();
+        allignToReefWoodBot = commandFactory.alignToReefWoodbotLeft();
 
         if (Objects.nonNull(coralShooter)) {
             setCoralIntake = new SetCoralIntake(coralShooter);

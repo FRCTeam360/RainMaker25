@@ -7,7 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RP bottom 1"
+            "pathName": "left bulletproof"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "zero"
           }
         }
       ]

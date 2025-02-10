@@ -4,35 +4,62 @@
 
 package frc.robot.subsystems.CoralShooter;
 
-import org.littletonrobotics.junction.Logger;
-
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.CommandLogger;
+
+import org.littletonrobotics.junction.Logger;
 
 public class CoralShooter extends SubsystemBase {
   private final CoralShooterIO io;
   public final CoralShooterIOInputsAutoLogged inputs = new CoralShooterIOInputsAutoLogged();
 
-  /** Creates a new CoralOutake. */
-  public CoralShooter(CoralShooterIO io) {
-    this.io = io;
-  }
+    /** Creates a new CoralOutake. */
+    public CoralShooter(CoralShooterIO io) {
+        this.io = io;
+    }
 
-  public void setDutyCycle(double speed) {
-    io.setDutyCycle(speed);
-  }
+    public void setDutyCycle(double speed) {
+        io.setDutyCycle(speed);
+    }
 
-  public void stop() {
-    io.stop();
-  }
+    public boolean getOuttakeSensor() {
+        return inputs.outtakeSensor;
+    }
 
-  public boolean getOuttakeSensor() {
-    return inputs.outtakeSensor;
-  }
+    public void stop() {
+        io.stop();
+    }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    io.updateInputs(inputs);
-    Logger.processInputs("Coral Outtake", inputs);
-  }
+    public Command runCmd(double dutyCycle) {
+        return this.runEnd(() -> this.setDutyCycle(dutyCycle), () -> this.stop());
+    }
+
+    public Command waitUntilEmpty() {
+        return Commands.waitUntil(() -> !this.getOuttakeSensor());
+    }
+
+    public Command waitUntilFull() {
+        return Commands.waitUntil(() -> this.getOuttakeSensor());
+    }
+
+    public Command shootCmd() {
+        String cmdName = "ShootCoral";
+        return CommandLogger.logCommand(waitUntilEmpty().raceWith(runCmd(-0.6)), cmdName);
+    }
+
+    public Command intakeCmd() {
+        String cmdName = "IntakeCoral";
+        return CommandLogger.logCommand(waitUntilFull().raceWith(runCmd(-0.25)), cmdName);
+    }
+
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+        io.updateInputs(inputs);
+        Logger.processInputs("Coral Outtake", inputs);
+    }
 }

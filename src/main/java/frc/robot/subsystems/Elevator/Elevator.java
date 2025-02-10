@@ -4,46 +4,72 @@
 
 package frc.robot.subsystems.Elevator;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 public class Elevator extends SubsystemBase {
-  private final ElevatorIO io;
-  private final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
-  
-  /** Creates a new Elevator. */
-  public Elevator(ElevatorIO io) {
-    this.io = io;
-  }
+    private final ElevatorIO io;
+    private final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
 
-  public void setElevatorPostion(double height) {
-    io.setElevatorPostion(height);
-  }
+    /** Creates a new Elevator. */
+    public Elevator(ElevatorIO io) {
+        this.io = io;
+    }
 
-  public void setDutyCycle(double dutyCycle) {
-    io.setDutyCycle(dutyCycle);
-  }
+    public void setElevatorPostion(double height) {
+        io.setElevatorPostion(height);
+    }
 
-  public double getPosition() {
-    return inputs.elevatorPosition;
-  }
+    public void setDutyCycle(double dutyCycle) {
+        io.setDutyCycle(dutyCycle);
+    }
 
-  public boolean getBottomSwitch() {
-    return inputs.elevatorSensor;
-  }
+    public boolean getBottomSwitch() {
+        return inputs.elevatorSensor;
+    }
 
-  public Command setElevatorHeight(double height) {
-    return this.runEnd(
-        () -> this.setElevatorPostion(height),
-        () -> this.setElevatorPostion(height));
-  }
+    public double getHeight() {
+        return inputs.elevatorPosition;
+    }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    io.updateInputs(inputs);
-    Logger.processInputs("Elevator", inputs);
-  }
+    public void stop() {
+        io.stop();
+    }
+
+    public Command setElevatorHeight(double height) {
+        return Commands
+            .waitUntil(() -> Math.abs(inputs.elevatorPosition) <= 0.5)
+            .deadlineFor(
+                this.runEnd(
+                        () -> io.setElevatorPostion(height),
+                        () -> io.setElevatorPostion(height)
+                    )
+            );
+    }
+
+    public Command zeroElevatorCmd() {
+        return Commands
+            .waitUntil(
+                () ->
+                    Math.abs(inputs.elevatorStatorCurrent) > 30.0 &&
+                    Math.abs(inputs.elevatorVelocity) == 0.0
+            )
+            .deadlineFor(this.runEnd(() -> io.setDutyCycle(-0.1), () -> io.setDutyCycle(0.0)))
+            .andThen(this.runOnce(() -> io.setEncoder(0.0)));
+    }
+
+    public Command isAtHeight(double position) {
+        return Commands.waitUntil(() -> Math.abs(inputs.elevatorPosition - position) <= 1.0);
+    }
+
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+        io.updateInputs(inputs);
+        Logger.processInputs("Elevator", inputs);
+    }
 }

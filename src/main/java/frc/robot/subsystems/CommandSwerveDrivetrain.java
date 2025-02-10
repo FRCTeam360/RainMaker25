@@ -73,7 +73,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
 
     public final Command fieldOrientedDrive(
-        double maxAngularRate,
         CommandXboxController driveCont
     ) { //field oriented drive command!
         SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric() //creates a fieldcentric drive
@@ -146,8 +145,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public final Command robotCentricDrive(
-        double maxSpeed,
-        double maxAngularRate,
         CommandXboxController driveCont
     ) { //field oriented drive command!
         SwerveRequest.RobotCentric drive = new SwerveRequest.RobotCentric() //creates a fieldcentric drive
@@ -276,6 +273,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         addForwardContrller(forwardKP, forwardKI, forwardKD);
 
         this.maxSpeed = maxSpeed;
+        this.maxAngularRate = maxAngularRate;
 
         configureAutoBuilder();
     }

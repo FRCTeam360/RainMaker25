@@ -18,17 +18,11 @@ public class AdjustToScoreReef extends Command {
   private CommandSwerveDrivetrain drivetrain;
   private Translation2d initialTranslation;
   private Translation2d currentTranslation;
-  private double maxSpeed;
-  private double maxAngularRate;
   /** Creates a new ScoreInReef. */
   public AdjustToScoreReef(
-    CommandSwerveDrivetrain drivetrain,
-    double maxSpeed,
-    double maxAngularRate) 
+    CommandSwerveDrivetrain drivetrain) 
     { 
     this.drivetrain = drivetrain;
-    this.maxSpeed = maxSpeed;
-    this.maxAngularRate = maxAngularRate;
     
     addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -46,7 +40,7 @@ public class AdjustToScoreReef extends Command {
     
     currentTranslation = drivetrain.getPose().getTranslation();
     double distance = Math.abs(currentTranslation.getDistance(initialTranslation));
-    drivetrain.robotCentricDrive(0.1 * maxSpeed, 0.0, 0.0);
+    drivetrain.robotCentricDrive(0.1, 0.0, 0.0);
     if (distance > Units.inchesToMeters(6)) {
       drivetrain.robotCentricDrive(0.0, 0.0, 0.0);
     }

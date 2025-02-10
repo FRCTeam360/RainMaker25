@@ -64,7 +64,6 @@ import org.littletonrobotics.junction.Logger;
 public class RobotContainer {
     private final Field2d field;
     private final SendableChooser<Command> autoChooser;
-    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
     // max angular velocity
 
     private Telemetry logger;
@@ -272,7 +271,7 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(MaxAngularRate, driverCont));
+        driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
 
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
     

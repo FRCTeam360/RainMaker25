@@ -59,7 +59,6 @@ public class AlignWithLimelight extends Command {
         CommandSwerveDrivetrain driveTrain,
         double goalTY,
         double goalTX,
-        double maxSpeed,
         int pipeline,
         XboxController driverCont
     ) {

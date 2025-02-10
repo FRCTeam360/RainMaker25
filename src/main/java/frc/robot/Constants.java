@@ -76,8 +76,6 @@ public final class Constants {
     public static class OldCompBotConstants {
         public static final String OCB_LIMELIGHT_NAME = "limelight";
 
-        public static final double maxSpeed = OldCompBot.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-        public static final double maxAngularRate = RotationsPerSecond.of(5).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
 
     }

@@ -81,20 +81,20 @@ public final class Constants {
     }
     
     public static final class WoodbotConstants {
-      public static final int CORAL_INTAKE_ID = 25;
-      public static final int CORAL_SHOOTER_ID = 20;
-      public static final int ELEVATOR_ID = 14;
+        public static final int CORAL_INTAKE_ID = 25;
+        public static final int CORAL_SHOOTER_ID = 20;
+        public static final int ELEVATOR_ID = 14;
 
-      public static final double headingKP = 4.0;
-      public static final double headingKI = 0.0;
-      public static final double headingKD = 0.0;
-      public static final double headingKIZone = 0.0;
+        public static final double headingKP = 4.0;
+        public static final double headingKI = 0.0;
+        public static final double headingKD = 0.0;
+        public static final double headingKIZone = 0.0;
 
-      public static final double WBGOALSCORETX = 0.0;
-      public static final double WBGOALSCORETY = -10.0;
+        public static final double WBGOALSCORETX = 0.0;
+        public static final double WBGOALSCORETY = -10.0;
 
-    public static final int ELEVATOR_BOTTOM_SWITCH = 2;
-      public static final int OUTTAKE_SENSOR = 0; //DIO port
+        public static final int ELEVATOR_BOTTOM_SWITCH = 2;
+        public static final int OUTTAKE_SENSOR = 0; //DIO port
     }
 
     public static final class PracticeBotConstants {

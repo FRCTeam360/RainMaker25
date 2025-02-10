@@ -4,14 +4,11 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Vision.Vision;
@@ -27,13 +24,10 @@ public class AlignWithLimelight extends Command {
     private CommandSwerveDrivetrain driveTrain;
     private double goalTY;
     private double goalTX;
-    private double lastTXValue;
-    private double lastTYValue;
     private Rotation2d angleToFaceRotation2d;
     private double rotatedVelocityX;
     private double rotatedVelocityY;
     private boolean endEarly = false;
-    private XboxController driverCont;
     private SlewRateLimiter forwardsAccelerationLimit = new SlewRateLimiter(0.75);
     private SlewRateLimiter leftAccelerationLimit = new SlewRateLimiter(0.75);
     private int pipeline;
@@ -59,15 +53,13 @@ public class AlignWithLimelight extends Command {
         CommandSwerveDrivetrain driveTrain,
         double goalTY,
         double goalTX,
-        int pipeline,
-        XboxController driverCont
+        int pipeline
     ) {
         this.vision = vision;
         this.driveTrain = driveTrain;
         this.goalTY = goalTY;
         this.goalTX = goalTX;
         this.pipeline = pipeline;
-        this.driverCont = driverCont;
         addRequirements(driveTrain);
     }
 

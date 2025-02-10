@@ -278,8 +278,6 @@ public class RobotContainer {
         driverCont.axisGreaterThan(2, 0.25).whileTrue(coralShooter.intakeCmd()); //2 is the number of the axis?
         driverCont.axisGreaterThan(3, 0.25).whileTrue(coralShooter.shootCmd());
 
-        driverCont.getLeftTriggerAxis();
-
         if (Objects.nonNull(elevator)) {
             driverCont.a().onTrue(levelOneAndZero);
             driverCont.b().onTrue(levelTwo);

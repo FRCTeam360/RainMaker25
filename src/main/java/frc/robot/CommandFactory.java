@@ -64,13 +64,13 @@ public class CommandFactory {
     public Command alignWithLimelight(double goalTY, double goalTX, int pipeline) {
         return //vision.waitUntilTargetTxTy(goalTX, goalTY).alongWith(drivetrain.waitUntilDrivetrainAtHeadingSetpoint())
             (new AlignWithLimelight(vision, drivetrain, goalTY, goalTX,
-                        pipeline, driverCont)); // no more timeout
+                        pipeline)); // no more timeout
     }
 
     public Command alignToReefWoodbotLeft(){
         return new SequentialCommandGroup(
             new SnapDrivebaseToAngle(drivetrain),
-            new AlignWithLimelight(vision, drivetrain, -12.64, -11.16, 0, driverCont)
+            new AlignWithLimelight(vision, drivetrain, -12.64, -11.16, 0)
         );
     }
 }

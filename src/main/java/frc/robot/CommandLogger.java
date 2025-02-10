@@ -36,4 +36,12 @@ public class CommandLogger {
         Logger.recordOutput("Command Running: " + command, false);
     }
 
+    public static Command logCommand(Command command, String commandName) {
+        return command.beforeStarting(() -> logCommand(commandName, true))
+                .finallyDo(() -> logCommand(commandName, false));
+    }
+
+    private static void logCommand(String commandName, boolean isRunning) {
+        Logger.recordOutput("Command Running: " + commandName, isRunning);
+    }
 }

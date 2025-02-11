@@ -20,6 +20,10 @@ public class Elevator extends SubsystemBase {
         this.io = io;
     }
 
+    /**
+     * 
+     * @param height is in rotations
+     */
     public void setElevatorPostion(double height) {
         io.setElevatorPostion(height);
     }
@@ -40,6 +44,10 @@ public class Elevator extends SubsystemBase {
         io.stop();
     }
 
+    /**
+     * @param height is in rotations
+     * @return
+     */
     public Command setElevatorHeight(double height) {
         return Commands
             .waitUntil(() -> Math.abs(inputs.elevatorPosition) <= 0.5)

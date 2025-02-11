@@ -61,6 +61,13 @@ public class CommandFactory {
         return elevator.setElevatorHeight(height);
     }
 
+    /**
+     * 
+     * @param goalTY
+     * @param goalTX
+     * @param pipeline 0 is right, 1 is left
+     * @return
+     */
     public Command alignWithLimelight(double goalTY, double goalTX, int pipeline) {
         return //vision.waitUntilTargetTxTy(goalTX, goalTY).alongWith(drivetrain.waitUntilDrivetrainAtHeadingSetpoint())
             (new AlignWithLimelight(vision, drivetrain, goalTY, goalTX,

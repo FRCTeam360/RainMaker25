@@ -105,8 +105,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         List<Waypoint> wayPoints = new ArrayList<Waypoint>();
                     wayPoints = PathPlannerPath.waypointsFromPoses(
-                    this.getPose(),
-                    new Pose2d(5.094, 5.302, Rotation2d.fromDegrees(-33.917))
+                    //this.getPose(),
+                    new Pose2d(20.094, 10.302, Rotation2d.fromDegrees(-33.917)),
+                    new Pose2d(5.094,5.302, Rotation2d.fromDegrees(-33.917))
+
                 );
                    
 

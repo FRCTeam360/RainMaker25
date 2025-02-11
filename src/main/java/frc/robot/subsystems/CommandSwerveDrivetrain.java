@@ -101,7 +101,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
 
     
-    public final Command followingPath() {
+    public final Command PathOnTheFly() {
 
         List<Waypoint> wayPoints = new ArrayList<Waypoint>();
                     wayPoints = PathPlannerPath.waypointsFromPoses(

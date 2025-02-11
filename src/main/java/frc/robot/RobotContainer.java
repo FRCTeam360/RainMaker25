@@ -79,7 +79,6 @@ public class RobotContainer {
 
     private SnapDrivebaseToAngle snapDrivebaseToAngle;
     private AlignWithLimelight alignWithLimelight;
-
     public RobotContainer() {
         switch (Constants.getRobotType()) {
             case WOODBOT:
@@ -217,6 +216,9 @@ public class RobotContainer {
             driverCont.x().onTrue(levelThree);
             driverCont.y().onTrue(levelFour);
         }
+
+        driverCont.leftBumper().onTrue(driveTrain.PathOnTheFly());
+        
     }
 
     public Command getAutonomousCommand() {

@@ -33,18 +33,6 @@ public class OnTheFlyPaths {
                 );
                 break;         
         }
-    
-        PathConstraints constraints = new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI); // test constraints(to be changed)
-    
-        PathPlannerPath path = new PathPlannerPath(
-                wayPoints,
-                constraints,
-                null,
-                new GoalEndState(0.0, Rotation2d.fromDegrees(-90)));
-
-        path.preventFlipping = true;
-
-        return path;
     }
 
 }

@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.DoubleSupplier;
@@ -20,6 +21,10 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.Waypoint;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import com.ctre.phoenix6.swerve.SwerveRequest.FieldCentricFacingAngle;
 import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
@@ -75,6 +80,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
 
+
+
+
     public final Command fieldOrientedDrive(double maxAngularRate, CommandXboxController driveCont) { //field oriented drive command!
         SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric() //creates a fieldcentric drive
             .withDeadband(maxSpeed * 0.1).withRotationalDeadband(maxAngularRate * 0.1) // Add a 10% deadband
@@ -90,6 +98,32 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public final void zero() {
         this.tareEverything();
     }
+
+
+    
+    public final Command followingPath() {
+
+        List<Waypoint> wayPoints = new ArrayList<Waypoint>();
+                    wayPoints = PathPlannerPath.waypointsFromPoses(
+                    this.getPose(),
+                    new Pose2d(5.094, 5.302, Rotation2d.fromDegrees(-33.917))
+                );
+                   
+
+        PathConstraints constraints = new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI); // test constraints(to be changed)
+    
+        PathPlannerPath path = new PathPlannerPath(
+                wayPoints,
+                constraints,
+                null,
+                new GoalEndState(0.0, Rotation2d.fromDegrees(-90)));
+
+        path.preventFlipping = true;
+
+        return AutoBuilder.followPath(path);
+    }
+
+
 
     public void addHeadingController(double kP, double kI, double kD, double kIZone) {
         headingController = new PhoenixPIDController(kP, kI, kD);

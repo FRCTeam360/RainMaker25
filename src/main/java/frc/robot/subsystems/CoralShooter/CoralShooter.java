@@ -35,7 +35,14 @@ public class CoralShooter extends SubsystemBase {
     }
 
     public Command runCmd(double dutyCycle) {
-        return this.runEnd(() -> this.setDutyCycle(dutyCycle), () -> this.stop());
+        return Commands
+            .waitUntil(() -> this.getOuttakeSensor())
+            .deadlineFor(
+                this.runEnd(
+                    () -> this.setDutyCycle(dutyCycle),
+                    () -> this.stop()
+                )
+            );
     }
 
     public Command waitUntilEmpty() {

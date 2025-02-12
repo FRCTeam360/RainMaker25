@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.Vision;
 
+import java.lang.reflect.Array;
 import java.util.Optional;
 import java.util.function.DoubleSupplier;
 
@@ -21,23 +22,19 @@ import frc.robot.utils.LimelightHelpers.RawFiducial;
 public class VisionIOLimelight implements VisionIO {
   private final NetworkTable table;
   private final String name;
-  private final double yawFudgeFactor;
-  private final double pitchFudgeFactor;
   private final DoubleSupplier gyroAngleSupplier;
   private final DoubleSupplier gryoAngleRateSupplier;
+
+  private RawFiducial[] fiducials = LimelightHelpers.getRawFiducials("");
 
   /**
    * Creates a new Limelight hardware layer.
    * 
    * @param name              the name of the limelight
-   * @param yawFudgeFactor    fudge factor for camera yaw in degrees
-   * @param pitchFudgeFactor  fudge factor for camera pitch in degrees
    */
-  public VisionIOLimelight(String name, double yawFudgeFactor, double pitchFudgeFactor, DoubleSupplier gyroAngleSupplier, DoubleSupplier gryoAngleRateSupplier) {
+  public VisionIOLimelight(String name, DoubleSupplier gyroAngleSupplier, DoubleSupplier gryoAngleRateSupplier) {
     table = NetworkTableInstance.getDefault().getTable(name);
     this.name = name;
-    this.yawFudgeFactor = yawFudgeFactor;
-    this.pitchFudgeFactor = pitchFudgeFactor;
     this.gyroAngleSupplier = gyroAngleSupplier;
     this.gryoAngleRateSupplier = gryoAngleRateSupplier;
   }
@@ -49,13 +46,15 @@ public class VisionIOLimelight implements VisionIO {
     // Assume that the pose hasn't been updated
     inputs.poseUpdated = false;
 
-    inputs.pipeline = getPipeline();
-
     inputs.tv = getTV();
     inputs.tx = getTXRaw();
     inputs.txAdjusted = getTXAdjusted();
     inputs.ty = getTYRaw();
     inputs.tyAdjusted = getTYAdjusted();
+    inputs.pipeline = getPipeline();
+    inputs.tagID = getAprilTagID();
+    // if the new pose estimate is null, then don't update further
+    if(newPoseEstimate.isEmpty()) return;
     // if the new pose estimate is null or angle rate is greater than 720 degrees per, then don't update further
     if(inputs.tv == 0.0 || newPoseEstimate.isEmpty() || gryoAngleRateSupplier.getAsDouble() > 720.0) return;
 
@@ -88,12 +87,16 @@ public class VisionIOLimelight implements VisionIO {
     return Optional.ofNullable(mt2);
   }
 
+  public int getAprilTagID() {
+    return (int)table.getEntry("tid").getInteger(0);
+  }
+  
   public double getTXRaw() {
     return table.getEntry("tx").getDouble(0.0);
   }
 
   public double getTXAdjusted() {
-    return getTXRaw() - yawFudgeFactor;
+    return getTXRaw();
   }
 
   public double getTYRaw() {
@@ -101,7 +104,7 @@ public class VisionIOLimelight implements VisionIO {
   }
 
   public double getTYAdjusted() {
-    return getTYRaw() - pitchFudgeFactor;
+    return getTYRaw();
   }
 
   public double getTV() {

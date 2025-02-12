@@ -6,84 +6,101 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
-import java.lang.ModuleLayer.Controller;
-import java.util.Objects;
-import java.util.function.DoubleSupplier;
-
-import org.littletonrobotics.junction.AutoLogOutput;
-import org.littletonrobotics.junction.Logger;
-
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.PathPlannerLogging;
-
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OldCompBotConstants;
 import frc.robot.commands.AlignWithLimelight;
+import frc.robot.commands.SetCoralIntake;
 import frc.robot.commands.SnapDrivebaseToAngle;
 import frc.robot.generated.OldCompBot;
 import frc.robot.generated.WoodBotDriveTrain;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.Elevator.Elevator;
-import frc.robot.subsystems.Elevator.ElevatorIOSim;
+import frc.robot.subsystems.AlgaeShooter.AlgaeShooter;
+import frc.robot.subsystems.AlgaeShooter.AlgaeShooterIOSim;
 import frc.robot.subsystems.Catapult.Catapult;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CoralIntake.CoralIntake;
 import frc.robot.subsystems.CoralShooter.CoralShooter;
 import frc.robot.subsystems.CoralShooter.CoralShooterIOSim;
+import frc.robot.subsystems.CoralShooter.CoralShooterIOWB;
+import frc.robot.subsystems.Elevator.Elevator;
+import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorIO;
+import frc.robot.subsystems.Elevator.ElevatorIOSim;
+import frc.robot.subsystems.Elevator.ElevatorIOSim;
 import frc.robot.subsystems.Elevator.ElevatorIOWB;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIO;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
 import frc.robot.subsystems.AlgaeArm.AlgaeArm;
 import frc.robot.subsystems.AlgaeArm.AlgaeArmIOSim;
+import java.lang.ModuleLayer.Controller;
+import java.util.Objects;
+import java.util.function.DoubleSupplier;
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
     private final Field2d field;
     private final SendableChooser<Command> autoChooser;
-    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+    // max angular velocity
 
     private Telemetry logger;
-
-    private CommandFactory commandFactory;
 
     private final CommandXboxController driverCont = new CommandXboxController(0);
     private final CommandXboxController operatorCont = new CommandXboxController(1);
 
-    private Command levelFour;
-    private Command levelThree;
-    private Command levelTwo;
-    private Command zero;
-
+    private CommandFactory commandFactory;
     private Command setAngle;
-
-    public static CommandSwerveDrivetrain driveTrain;
+    private CommandSwerveDrivetrain driveTrain;
     private Vision vision;
     private Catapult catapult;
     private CoralIntake coralIntake;
     private CoralShooter coralShooter;
     private Elevator elevator;
     private AlgaeArm algaeArm;
+    private AlgaeShooter algaeShooter;
 
     private ShuffleboardTab diagnosticTab;
 
+    private Command rightAlign;
+    private Command leftAlign;
     private SnapDrivebaseToAngle snapDrivebaseToAngle;
-    private AlignWithLimelight alignWithLimelight;
+
+    private Command levelFour;
+    private Command levelThree;
+    private Command levelTwo;
+    private Command levelOne;
+
+    private Command zeroElevatorEncoder;
+
+    private SequentialCommandGroup levelOneAndZero;
+
+    private Command allignToReefWoodBot;
+    private SetCoralIntake setCoralIntake;
 
     public RobotContainer() {
         switch (Constants.getRobotType()) {
@@ -91,30 +108,33 @@ public class RobotContainer {
                 //woodbot stuff
                 driveTrain = WoodBotDriveTrain.createDrivetrain();
                 logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
-                vision = new Vision(new VisionIO[]{
-                    new VisionIOLimelight(
-                        Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
-                        Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
-                        Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR,
-                        () -> driveTrain.getAngle(),
-                        () -> driveTrain.getAngularRate()
-                    )
-                });
+                vision =
+                    new Vision(
+                        new VisionIO[] {
+                            new VisionIOLimelight(
+                                Constants.VisionConstants.WOODBOT_LIMELIGHT_NAME,
+                                () -> driveTrain.getAngle(),
+                                () -> driveTrain.getAngularRate()
+                            ),
+                        }
+                    );
                 elevator = new Elevator(new ElevatorIOWB());
+                coralShooter = new CoralShooter(new CoralShooterIOWB());
                 break;
             case OLD_COMP_BOT:
                 //ocb stuff
                 driveTrain = OldCompBot.createDrivetrain();
-                logger = new Telemetry(OldCompBot.kSpeedAt12Volts.in(MetersPerSecond));
-                vision = new Vision(new VisionIO[]{
+                vision =
+                    new Vision(
+                        new VisionIO[] {
                             new VisionIOLimelight(
                                 Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
-                                Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
-                                Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR,
                                 () -> driveTrain.getAngle(),
                                 () -> driveTrain.getAngularRate()
-                            )
-                        });
+                            ),
+                        }
+                    );
+                //constants = Constants.OldCompBotConstants;
                 break;
             case PRACTICE:
                 //practice bot stuff
@@ -122,18 +142,21 @@ public class RobotContainer {
             case SIM:
                 driveTrain = WoodBotDriveTrain.createDrivetrain();
                 logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
-                vision = new Vision(new VisionIO[]{
-                    new VisionIOLimelight(
-                        Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
-                        Constants.OldCompBotConstants.OCB_YAW_FUDGE_FACTOR,
-                        Constants.OldCompBotConstants.OCB_PITCH_FUDGE_FACTOR,
-                        () -> driveTrain.getAngle(),
-                        () -> driveTrain.getAngularRate()
-                    )
-                });
+                vision =
+                    new Vision(
+                        new VisionIO[] {
+                            new VisionIOLimelight(
+                                Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
+                                () -> driveTrain.getAngle(),
+                                () -> driveTrain.getAngularRate()
+                            ),
+                        }
+                    );
                 elevator = new Elevator(new ElevatorIOSim());
-                coralShooter = new CoralShooter(new CoralShooterIOSim(() -> elevator.getPosition()));
-                algaeArm = new AlgaeArm(new AlgaeArmIOSim(() -> elevator.getPosition()));
+                algaeArm = new AlgaeArm(new AlgaeArmIOSim(() -> elevator.getHeight()));
+                coralShooter = new CoralShooter(new CoralShooterIOSim(() -> elevator.getHeight()));
+                algaeShooter = new AlgaeShooter(new AlgaeShooterIOSim());
+
                 break;
             case COMPETITION:
             default:
@@ -141,16 +164,30 @@ public class RobotContainer {
                 break;
         }
 
+        
+        commandFactory =
+            new CommandFactory(
+                catapult,
+                coralIntake,
+                coralShooter,
+                elevator,
+                vision,
+                algaeShooter,
+                algaeArm,
+                driveTrain,
+                driverCont.getHID()
+            );
+        initializeCommands();
+
         field = new Field2d();
         SmartDashboard.putData("Field", field);
 
         PathPlannerLogging.setLogActivePathCallback(
-        (poses -> Logger.recordOutput("Swerve/ActivePath", poses.toArray(new Pose2d[0]))));
+            (poses -> Logger.recordOutput("Swerve/ActivePath", poses.toArray(new Pose2d[0])))
+        );
         PathPlannerLogging.setLogTargetPoseCallback(
         pose -> Logger.recordOutput("Swerve/TargetPathPose", pose));
         
-        commandFactory = new CommandFactory(catapult, coralIntake, coralShooter, elevator, vision, algaeArm);
-
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -167,26 +204,56 @@ public class RobotContainer {
     }
 
     public void initializeCommands() {
-        // Periodically adds the vision measurement to drivetrain for pose estimation
         vision.setDefaultCommand(
-                vision.consumeVisionMeasurements(driveTrain::addVisionMeasurements).ignoringDisable(true)
+            vision
+                .consumeVisionMeasurements(driveTrain::addVisionMeasurements)
+                .ignoringDisable(true)
         );
 
-        snapDrivebaseToAngle =
-            new SnapDrivebaseToAngle(driveTrain);
-        alignWithLimelight =
-            new AlignWithLimelight(
-                vision,
-                driveTrain,
-                0.0,
-                3.0
+        rightAlign =
+            commandFactory.alignWithLimelight(
+                Constants.WoodbotConstants.WBGOALSCORETY,
+                Constants.WoodbotConstants.WBGOALSCORETX,
+                0
+            );
+        // Periodically adds the vision measurement to drivetrain for pose estimation
+
+        leftAlign =
+            commandFactory.alignWithLimelight(
+                Constants.WoodbotConstants.WBGOALSCORETY,
+                Constants.WoodbotConstants.WBGOALSCORETX,
+                1
             );
 
-        if(Objects.nonNull(elevator)){
-            levelFour = commandFactory.setElevatorHeight(34.0);
-            levelThree = commandFactory.setElevatorHeight(25.0);
-            levelTwo = commandFactory.setElevatorHeight(10.0);
-            zero = commandFactory.setElevatorHeight(0.0);
+        snapDrivebaseToAngle = new SnapDrivebaseToAngle(driveTrain);
+
+        if (Objects.nonNull(elevator)) {
+            levelFour = commandFactory.setElevatorHeight(33.5);
+            levelThree = commandFactory.setElevatorHeight(23.0);
+            levelTwo = commandFactory.setElevatorHeight(10.5);
+            levelOne = commandFactory.setElevatorHeight(0.0);
+
+            zeroElevatorEncoder = elevator.zeroElevatorCmd();
+
+            NamedCommands.registerCommand(
+                "raise to l4",
+                commandFactory.setElevatorHeight(33.0).raceWith(elevator.isAtHeight(33.0))
+            );
+            NamedCommands.registerCommand(
+                "zero",
+                commandFactory.setElevatorHeight(0.0).raceWith(elevator.isAtHeight(0.0))
+            );
+        }
+
+        levelOneAndZero = new SequentialCommandGroup(levelOne, zeroElevatorEncoder);
+
+        allignToReefWoodBot = commandFactory.alignToReefWoodbotLeft();
+
+        if (Objects.nonNull(coralShooter)) {
+            setCoralIntake = new SetCoralIntake(coralShooter);
+
+            NamedCommands.registerCommand("shoot", coralShooter.shootCmd());
+            NamedCommands.registerCommand("intake", coralShooter.intakeCmd());
         }
     }
 
@@ -200,28 +267,51 @@ public class RobotContainer {
             NamedCommands.registerCommand(commandName, command);
         } else {
             System.err.println(commandName + " is null");
-            NamedCommands.registerCommand(commandName,
-                    new InstantCommand(() -> System.err.println(commandName + " is null")));
+            NamedCommands.registerCommand(
+                commandName,
+                new InstantCommand(() -> System.err.println(commandName + " is null"))
+            );
         }
     }
 
     private void configureBindings() {
-        driveTrain.setDefaultCommand(
-            driveTrain.fieldOrientedDrive(MaxAngularRate, driverCont)
-        );
+        driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
 
-        driverCont.pov(90).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
+        driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
+    
+        driverCont.axisGreaterThan(2, 0.25).whileTrue(coralShooter.intakeCmd()); //2 is the number of the axis?
+        driverCont.axisGreaterThan(3, 0.25).whileTrue(coralShooter.shootCmd());
 
-        // driverCont.a().onTrue(alignWithLimelight);
-        // driverCont.b().onTrue(snapDrivebaseToAngle);
-
-        driveTrain.registerTelemetry(logger::telemeterize);
-
-        if(Objects.nonNull(elevator)){
-            driverCont.a().onTrue(zero);
+        if (Objects.nonNull(elevator)) {
+            driverCont.a().onTrue(levelOneAndZero);
             driverCont.b().onTrue(levelTwo);
             driverCont.x().onTrue(levelThree);
             driverCont.y().onTrue(levelFour);
+        }
+
+        if (Objects.nonNull(coralShooter)) {
+            driverCont.leftBumper().whileTrue(leftAlign);
+            driverCont.rightBumper().whileTrue(rightAlign);
+        }
+        
+        // driverCont.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
+        // driverCont.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
+        /*
+         * Joystick Y = quasistatic forward
+         * Joystick A = quasistatic reverse
+         * Joystick X = dyanmic reverse
+         * Joystick B = dynamic forward
+         */
+
+        // driverCont.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        // driverCont.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        // driverCont.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        // driverCont.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    }
+
+    public void onDisable() {
+        if (Objects.nonNull(elevator)) {
+            elevator.stop();
         }
     }
 

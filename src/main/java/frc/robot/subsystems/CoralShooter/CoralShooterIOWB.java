@@ -23,7 +23,7 @@ import frc.robot.subsystems.CoralShooter.CoralShooterIO.CoralShooterIOInputs;
 /** Add your docs here. */
 public class CoralShooterIOWB implements CoralShooterIO {
 
-    private final SparkMax outtakeMotor = new SparkMax(WoodbotConstants.CORAL_OUTTAKE_ID, MotorType.kBrushless);
+    private final SparkMax outtakeMotor = new SparkMax(WoodbotConstants.CORAL_SHOOTER_ID, MotorType.kBrushless);
     private final RelativeEncoder encoder = outtakeMotor.getEncoder();
     private final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
 
@@ -44,6 +44,10 @@ public class CoralShooterIOWB implements CoralShooterIO {
         outtakeMotor.set(dutyCycle);
     }
 
+    private boolean getOuttakeSensor() {
+        return !outtakeSensor.get();
+    }
+
     public void stop() {
         outtakeMotor.stopMotor();
     }
@@ -53,6 +57,6 @@ public class CoralShooterIOWB implements CoralShooterIO {
         inputs.outtakePosition = encoder.getPosition();
         inputs.outtakeVelocity = encoder.getVelocity();
         inputs.outtakeVoltage = outtakeMotor.getAppliedOutput() * outtakeMotor.getBusVoltage();
-        inputs.outtakeSensor = !outtakeSensor.get();
+        inputs.outtakeSensor = this.getOuttakeSensor();
     }
 }

@@ -19,6 +19,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -26,6 +27,7 @@ public class AlgaeArmIOPB implements AlgaeArmIO {
 
   private final SparkMax armMotor = new SparkMax(Constants.PracticeBotConstants.ALGAE_ARM_ID, MotorType.kBrushless); // placeholder                                                                                                                    // ID
   private final RelativeEncoder encoder = armMotor.getEncoder();
+  private final PIDController pid = new PIDController(0, 0, 0); // TODO: find pid values
 
   private final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
 
@@ -39,6 +41,8 @@ public class AlgaeArmIOPB implements AlgaeArmIO {
   public void updateInputs(AlgaeArmIOInputs inputs) {
     inputs.algaeArmPosition = encoder.getPosition();
     inputs.algaeArmVoltage = armMotor.getBusVoltage() * armMotor.getAppliedOutput();
+    inputs.algaeArmCurrent = armMotor.getOutputCurrent();
+    inputs.algaeArmTemp = armMotor.getMotorTemperature();
   }
 
   public void setDutyCycle(double dutyCycle) {
@@ -46,6 +50,6 @@ public class AlgaeArmIOPB implements AlgaeArmIO {
   }
 
   public void setPosition(double position) {
-    encoder.setPosition(position);
+    pid.setSetpoint(position);
   }
 }

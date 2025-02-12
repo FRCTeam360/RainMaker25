@@ -11,23 +11,34 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class AlgaeArmIOPB implements AlgaeArmIO {
 
-  private final TalonFX armMotor = new TalonFX(Constants.PracticeBotConstants.ALGAE_ARM_ID, "Default Name"); // placeholder ID
+  private final SparkMax armMotor = new SparkMax(Constants.PracticeBotConstants.ALGAE_ARM_ID, MotorType.kBrushless); // placeholder                                                                                                                    // ID
+  private final RelativeEncoder encoder = armMotor.getEncoder();
 
-  private TalonFXConfiguration talonFXConfiguration = new TalonFXConfiguration();
-  private MotorOutputConfigs outputConfigs = new MotorOutputConfigs();
-
+  private final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
 
   /** Creates a new AlgaeArmIOPB. */
   public AlgaeArmIOPB() {
-    armMotor.getConfigurator().apply((talonFXConfiguration));
-    outputConfigs.withNeutralMode(NeutralModeValue.Brake);
-    outputConfigs.withInverted(InvertedValue.Clockwise_Positive);
+    sparkMaxConfig.idleMode(IdleMode.kBrake);
+    sparkMaxConfig.inverted(false);
+    armMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+  }
+
+  public void updateInputs(AlgaeArmIOInputs inputs) {
+    inputs.algaeArmPosition = encoder.getPosition();
+    inputs.algaeArmVoltage = armMotor.getBusVoltage() * armMotor.getAppliedOutput();
   }
 
   public void setDutyCycle(double dutyCycle) {
@@ -35,6 +46,6 @@ public class AlgaeArmIOPB implements AlgaeArmIO {
   }
 
   public void setPosition(double position) {
-    armMotor.setPosition(position);
+    encoder.setPosition(position);
   }
 }

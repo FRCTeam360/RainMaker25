@@ -36,10 +36,10 @@ import frc.robot.subsystems.CoralShooter.CoralShooterIOSim;
 public class AlgaeArmIOSim implements AlgaeArmIO {
   
   private DoubleSupplier heightSupplier;
-  private DCMotor gearbox = DCMotor.getKrakenX60Foc(1);
+  private DCMotor gearbox = DCMotor.getNeo550(1);
   private Encoder encoder = new Encoder(5, 6);
 
-  private final PWMTalonFX motor = new PWMTalonFX(3);
+  private final PWMSparkMax motor = new PWMSparkMax(3);
   private final PWMSim simMotor = new PWMSim(motor);
 
   private final SingleJointedArmSim armSim = new SingleJointedArmSim(gearbox, 1.0, SingleJointedArmSim.estimateMOI(Units.inchesToMeters(30) /*placeholder*/ , 2.0/*placeist*/),Units.inchesToMeters(30)/*placeholder*/ , Units.degreesToRadians(-75)/*placehold */, Units.degreesToRadians(255)/*place */, true, 0);
@@ -64,7 +64,7 @@ public class AlgaeArmIOSim implements AlgaeArmIO {
     inputs.algaeArmPosition = simMotor.getPosition();
     inputs.algaeArmStatorCurrent = armSim.getCurrentDrawAmps();
     inputs.algaeArmVelocity = armSim.getVelocityRadPerSec();
-    inputs.algaeArmAngleRads = armSim.getAngleRads();
+    inputs.algaeArmAngle = armSim.getAngleRads();
 
     mechLigiment2D.setAngle(new Rotation2d(armSim.getAngleRads()));
     mechRoot2D.setPosition(19.5, heightSupplier.getAsDouble() - 3.5);

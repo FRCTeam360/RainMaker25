@@ -15,7 +15,7 @@ public interface AlgaeArmIO {
     public double algaeArmVoltage = 0.0;
     public double algaeArmVelocity = 0.0;
     public double algaeArmPosition = 0.0;
-    public double algaeArmAngleRads = 0.0;
+    public double algaeArmAngle = 0.0;
   }
 
   public default void updateInputs(AlgaeArmIOInputs inputs) {}

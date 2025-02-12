@@ -62,4 +62,10 @@ public class ClimberWinchIOSim implements ClimberWinchIO {
   public void setDutyCycle(double dutyCycle) {
     simWinchMotor.setSpeed(dutyCycle);
   }
+
+  @Override
+  public void setPosition(double position) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'setPosition'");
+  }
 }

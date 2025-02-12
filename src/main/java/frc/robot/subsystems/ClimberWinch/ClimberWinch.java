@@ -6,6 +6,7 @@ package frc.robot.subsystems.ClimberWinch;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClimberWinch extends SubsystemBase {
@@ -19,6 +20,18 @@ public class ClimberWinch extends SubsystemBase {
 
   public void setDutyCycle(double dutyCycle) {
     io.setDutyCycle(dutyCycle);
+  }
+
+  public Command setDutyCycleCmd(double dutyCycle) {
+      return this.runEnd(() -> this.setDutyCycle(dutyCycle), () -> this.setDutyCycle(0));
+  }
+
+  public void setPosition(double position) {
+    io.setPosition(position);
+  }
+
+  public Command setPositionCmd(double position) {
+    return this.runEnd(() -> this.setPosition(position), () -> this.setPosition(position));
   }
 
   @Override

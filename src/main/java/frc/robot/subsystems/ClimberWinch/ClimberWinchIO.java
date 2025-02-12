@@ -16,9 +16,13 @@ public interface ClimberWinchIO {
     public double winchVelocity = 0.0;
     public double winchPosition = 0.0;
     public double winchDutyCycle = 0.0;
+    public double winchCurrent = 0.0;
+    public double winchTemp = 0.0;
   }
 
   public default void updateInputs(ClimberWinchIOInputs inputs) {}
 
   public void setDutyCycle(double dutyCycle);
+
+  public void setPosition(double position);
 }

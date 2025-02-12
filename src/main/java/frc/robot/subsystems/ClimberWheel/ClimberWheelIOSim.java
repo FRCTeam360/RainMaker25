@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.ClimberWheel.ClimberWheelIO.ClimberWheelIOInputs;
 
 public class ClimberWheelIOSim implements ClimberWheelIO {
-  private final DCMotor gearbox = DCMotor.getNeo550(1);
+  private final DCMotor gearbox = DCMotor.getNEO(1);
   private final Encoder encoder = new Encoder(10, 11);
 
   private final PWMSparkMax wheelMotor = new PWMSparkMax(5);
@@ -54,5 +54,11 @@ public class ClimberWheelIOSim implements ClimberWheelIO {
     inputs.wheelPosition = simWheelMotor.getPosition();
     inputs.wheelVelocity = climberSim.getAngularVelocityRPM();
     inputs.wheelDutyCycle = climberSim.getInputVoltage();
+  }
+
+  @Override
+  public void setPosition(double position) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'setPosition'");
   }
 }

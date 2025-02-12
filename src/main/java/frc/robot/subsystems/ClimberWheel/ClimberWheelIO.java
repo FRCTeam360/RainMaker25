@@ -15,9 +15,13 @@ public interface ClimberWheelIO {
     public double wheelPosition = 0.0;
     public double wheelVelocity = 0.0;
     public double wheelDutyCycle = 0.0;
+    public double wheelCurrent = 0.0;
+    public double wheelTemp = 0.0;
   }
 
   public default void updateInputs(ClimberWheelIOInputs inputs) {}
 
   public void setDutyCycle(double dutyCycle);
+
+  public void setPosition(double position);
 }

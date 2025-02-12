@@ -103,10 +103,6 @@ public final class Constants {
         public static final int CLIMBER_ID = 6;
     }
 
-    public static final class PracticeBotConstants {
-        public static final int ALGAE_ARM_ID = 5;
-    }
-
     public static RobotType getRobotType() {
         String serialAddress = HALUtil.getSerialNumber();
 

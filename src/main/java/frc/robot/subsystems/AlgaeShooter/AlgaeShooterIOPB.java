@@ -61,7 +61,6 @@ public class AlgaeShooterIOPB implements AlgaeShooterIO {
 
     talonFXConfiguration.MotionMagic.withMotionMagicAcceleration(motionMagicAcceleration)
         .withMotionMagicCruiseVelocity(motionMagicCruiseVelocity).withMotionMagicJerk(motionMagicCruiseJerk);
-
   }
 
   public void updateInputs(AlgaeShooterIOInputs inputs) {

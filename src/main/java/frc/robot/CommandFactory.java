@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.AlgaeArm.AlgaeArm;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AlignWithLimelight;
@@ -29,8 +30,10 @@ public class CommandFactory {
     private final Elevator elevator;
     private final Vision vision;
     private final AlgaeShooter algaeShooter;
+    private final AlgaeArm algaeArm;
     private final CommandSwerveDrivetrain drivetrain;
-    private final XboxController driverCont;    
+    private final XboxController driverCont;  
+
     // ↓ constructor ↓ //
     public CommandFactory(
         Catapult catapult,
@@ -39,6 +42,7 @@ public class CommandFactory {
         Elevator elevator,
         Vision vision,
         AlgaeShooter algaeShooter,
+        AlgaeArm algaeArm,
         CommandSwerveDrivetrain driveTrain,
         XboxController driverCont
     ) 
@@ -50,6 +54,7 @@ public class CommandFactory {
         this.elevator = elevator;
         this.vision = vision;
         this.algaeShooter = algaeShooter;
+        this.algaeArm = algaeArm;
         this.drivetrain = driveTrain;
         this.driverCont = driverCont;
     }
@@ -61,6 +66,9 @@ public class CommandFactory {
         return elevator.setElevatorHeight(height);
     }
 
+public Command setAlgaeArmAngle(double angle) {
+    return algaeArm.setAlgaeArmAngle(angle);
+}
     /**
      * 
      * @param goalTY

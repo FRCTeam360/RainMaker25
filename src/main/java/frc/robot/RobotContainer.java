@@ -222,12 +222,13 @@ public class RobotContainer {
             );
 
         snapDrivebaseToAngle = new SnapDrivebaseToAngle(driveTrain);
+ 
 
         if (Objects.nonNull(elevator)) {
-            levelFour = commandFactory.setElevatorHeight(33.5);
-            levelThree = commandFactory.setElevatorHeight(23.0);
-            levelTwo = commandFactory.setElevatorHeight(10.5);
-            levelOne = commandFactory.setElevatorHeight(0.0);
+            levelFour = commandFactory.setElevatorLevelFour();
+            levelThree = commandFactory.setElevatorLevelThree();
+            levelTwo = commandFactory.setElevatorLevelTwo();
+            levelOne = commandFactory.setElevatorLevelOne();
 
             zeroElevatorEncoder = elevator.zeroElevatorCmd();
 
@@ -241,16 +242,52 @@ public class RobotContainer {
             );
         }
 
+        registerPathplannerCommand("Elevator L4", levelFour);
+        registerPathplannerCommand("Elevator L3", levelThree);
+        registerPathplannerCommand("Elevator L2", levelTwo);
+        registerPathplannerCommand("Elevator L1", levelOne);
+
         levelOneAndZero = new SequentialCommandGroup(levelOne, zeroElevatorEncoder);
 
         allignToReefWoodBot = commandFactory.alignToReefWoodbotLeft();
 
+        Command scoreCoralL4Left=null;
+        Command scoreCoralL4Right=null;
+        Command scoreCoralL3Left=null;
+        Command scoreCoralL3Right=null;
+        Command scoreCoralL2Left=null;
+        Command scoreCoralL2Right=null;
+        Command scoreCoralL1=null;
+
+        if (Objects.nonNull(coralShooter)&& Objects.nonNull(elevator)){
+            scoreCoralL4Left=commandFactory.scoringRoutine(4, true);
+            scoreCoralL4Right=commandFactory.scoringRoutine(4, false);
+            scoreCoralL3Left=commandFactory.scoringRoutine(3, true);
+            scoreCoralL3Right=commandFactory.scoringRoutine(3, false);
+            scoreCoralL2Left=commandFactory.scoringRoutine(2, true);
+            scoreCoralL2Right=commandFactory.scoringRoutine(2, false);
+            scoreCoralL1=commandFactory.scoreLevelOne();
+        }
+
+        registerPathplannerCommand("Score Coral L4 Left", scoreCoralL4Left);
+        registerPathplannerCommand("Score Coral L4 Right", scoreCoralL4Right);
+        registerPathplannerCommand("Score Coral L3 Left", scoreCoralL3Left);
+        registerPathplannerCommand("Score Coral L3 Right", scoreCoralL3Right);
+        registerPathplannerCommand("Score Coral L2 Left", scoreCoralL2Left);
+        registerPathplannerCommand("Score Coral L2 Right", scoreCoralL2Right);
+        registerPathplannerCommand("Score Coral L1", scoreCoralL1);
+
+        Command intake=null;
+
         if (Objects.nonNull(coralShooter)) {
             setCoralIntake = new SetCoralIntake(coralShooter);
+            intake = coralShooter.intakeCmd();
 
             NamedCommands.registerCommand("shoot", coralShooter.shootCmd());
             NamedCommands.registerCommand("intake", coralShooter.intakeCmd());
         }
+
+        registerPathplannerCommand("Intake Coral", intake);
     }
 
     /**

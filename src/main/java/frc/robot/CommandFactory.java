@@ -140,6 +140,10 @@ public class CommandFactory {
                         () -> level)).andThen(coralShooter.shootCmd());
     }
 
+    public Command scoreLevelOne(){
+        return setElevatorLevelOne().andThen(coralShooter.shootCmd());
+    }
+
     public Command scoringRoutineTeleop(int level, boolean isLeft){
         return scoringRoutine(level, isLeft).andThen(setElevatorLevelOneAndZero());
     }

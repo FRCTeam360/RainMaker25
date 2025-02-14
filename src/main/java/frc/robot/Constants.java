@@ -7,6 +7,9 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.signals.ConnectedMotorValue;
+
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.util.function.BooleanConsumer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,66 +29,78 @@ import frc.robot.generated.OldCompBot;
  */
 
 public final class Constants {
+    public static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+
+  public static class VisionConstants {
+    public static final String WOODBOT_LIMELIGHT_NAME = "limelight";
+
+    public static final String OCB_LIMELIGHT_NAME = "limelight";
+  
+  }
+
+  // public static final Mode currentMode = Mode.SIM;
+
+  public static enum RobotType {
+    // real robot
+    REAL,
+    // physics sim
+    SIM,
+    // log file
+    REPLAY,
+    // woodbot
+    WOODBOT,
+    // practice bot
+    PRACTICE,
+    // comp bot
+    COMPETITION,
+    // last year's comp bot; abbreviated to OCB
+    OLD_COMP_BOT
+  }
+
+  public static final class SerialAddressConstants {
+    public static String OCB_SERIAL_ADDRESS = "032BE44A";
+    public static String WOOD_SERIAL_ADDRESS = "031b5208";
+    public static String PRACTICE_SERIAL_ADDRESS = "c";
+    public static String COMP_SERIAL_ADDRESS = "d";
+  }
+
+// placeholders for now until we got woodbot working
+  public static final int CORAL_INTAKE_ID = 0;
+  public static final int CORAL_OUTTAKE_ID = 1;
+  public static final int ELEVATOR_ID = 2;
 
     public static class OperatorConstants {
         public static final int kDriverControllerPort = 0;
     }
 
-    public static class VisionConstants {
-        public static final String WOODBOT_LIMELIGHT_NAME = "limelight";
-        public static final double WOODBOT_YAW_FUDGE_FACTOR = 0;
-        public static final double WOODBOT_PITCH_FUDGE_FACTOR = 0;
-    }
-
     public static class OldCompBotConstants {
         public static final String OCB_LIMELIGHT_NAME = "limelight";
-        public static final double OCB_YAW_FUDGE_FACTOR = 0;
-        public static final double OCB_PITCH_FUDGE_FACTOR = 0;
 
-        public static final double maxSpeed = OldCompBot.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-        public static final double maxAngularRate = RotationsPerSecond.of(15).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+
+
+    }
+    
+    public static final class WoodbotConstants {
+        public static final int CORAL_INTAKE_ID = 25;
+        public static final int CORAL_SHOOTER_ID = 20;
+        public static final int ELEVATOR_ID = 14;
 
         public static final double headingKP = 4.0;
         public static final double headingKI = 0.0;
         public static final double headingKD = 0.0;
         public static final double headingKIZone = 0.0;
 
-        public static final double translationKP = 0.5;
-        public static final double translationKI = 0.0;
-        public static final double translationKD = 0.0;
+        public static final double WBGOALSCORETX = 0.0;
+        public static final double WBGOALSCORETY = -10.0;
+
+        public static final int ELEVATOR_BOTTOM_SWITCH = 2;
+        public static final int OUTTAKE_SENSOR = 0; //DIO port
     }
 
-    public static final class WoodbotConstants {
-      public static final int CORAL_INTAKE_ID = 0;
-      public static final int CORAL_OUTTAKE_ID = 1;
-      public static final int ELEVATOR_ID = 2;
-
-      public static final int ELEVATOR_BOTTOM_SWITCH = 0;
-      public static final int OUTTAKE_SENSOR = 1;
-    }
-
-    public static enum RobotType {
-        // real robot
-        REAL,
-        // physics sim
-        SIM,
-        // log file
-        REPLAY,
-        // woodbot
-        WOODBOT,
-        // practice bot
-        PRACTICE,
-        // comp bot
-        COMPETITION,
-        // last year's comp bot; abbreviated to OCB
-        OLD_COMP_BOT,
-    }
-
-    public static final class SerialAddressConstants {
-        public static String OCB_SERIAL_ADDRESS = "032BE44A";
-        public static String WOOD_SERIAL_ADDRESS = "b";
-        public static String PRACTICE_SERIAL_ADDRESS = "c";
-        public static String COMP_SERIAL_ADDRESS = "d";
+    public static final class PracticeBotConstants {
+        public static final int ALGAE_SHOOTER_ID = 4;
+        public static final int ALGAE_ARM_ID = 5;
+        public static final int CLIMBER_ID = 6;
     }
 
     public static RobotType getRobotType() {
@@ -132,5 +147,12 @@ public final class Constants {
             return true;
         }
         return false;
+    }
+
+    public static boolean isSim() {
+      if (getRobotType() == RobotType.SIM) {
+        return true;
+      }
+      return false;
     }
 }

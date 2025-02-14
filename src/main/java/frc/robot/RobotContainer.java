@@ -96,6 +96,8 @@ public class RobotContainer {
 
     private SequentialCommandGroup levelOneAndZero;
 
+    private Command robotCentricDrive;
+
     private Command allignToReefWoodBot;
     private SetCoralIntake setCoralIntake;
 
@@ -309,6 +311,8 @@ public class RobotContainer {
 
     private void configureBindings() {
         driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
+        
+        driverCont.rightStick().whileTrue(driveTrain.robotCentricDrive(driverCont));
 
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
     
@@ -316,19 +320,19 @@ public class RobotContainer {
         driverCont.axisGreaterThan(3, 0.25).whileTrue(coralShooter.shootCmd());
 
         if (Objects.nonNull(elevator)) {
-            // driverCont.a().onTrue(levelOneAndZero);
-            // driverCont.b().onTrue(levelTwo);
-            // driverCont.x().onTrue(levelThree);
-            // driverCont.y().onTrue(levelFour);
+            driverCont.a().onTrue(levelOneAndZero);
+            driverCont.b().onTrue(levelTwo);
+            driverCont.x().onTrue(levelThree);
+            driverCont.y().onTrue(levelFour);
         }
 
         if (Objects.nonNull(coralShooter)) {
-            // driverCont.leftBumper().whileTrue(leftAlign);
-            // driverCont.rightBumper().whileTrue(rightAlign);
+            driverCont.leftBumper().whileTrue(leftAlign);
+            driverCont.rightBumper().whileTrue(rightAlign);
         }
         
-        driverCont.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
-        driverCont.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
+        // driverCont.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
+        // driverCont.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
         /*
          * Joystick Y = quasistatic forward
          * Joystick A = quasistatic reverse
@@ -336,10 +340,10 @@ public class RobotContainer {
          * Joystick B = dynamic forward
          */
 
-        driverCont.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-        driverCont.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-        driverCont.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
-        driverCont.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        // driverCont.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        // driverCont.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        // driverCont.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        // driverCont.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
 
     public void onDisable() {

@@ -3,7 +3,9 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -99,9 +101,23 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         this.tareEverything();
     }
 
-
     
     public final Command PathOnTheFly() {
+
+        final Map<Integer, Double> tagIDToRotation = Map.ofEntries(
+            Map.entry(21, 180.0),
+            Map.entry(7, 180.0),
+            Map.entry(22, 120.0),
+            Map.entry(6, 120.0),
+            Map.entry(17, 60.0),
+            Map.entry(11, 60.0),
+            Map.entry(18, 0.0),
+            Map.entry(10, 0.0),
+            Map.entry(19, -60.0),
+            Map.entry(9, -60.0),
+            Map.entry(20, -120.0),
+            Map.entry(8, -120.0)
+        );
 
         List<Waypoint> wayPoints = new ArrayList<Waypoint>();
                     wayPoints = PathPlannerPath.waypointsFromPoses(

@@ -27,6 +27,7 @@ import frc.robot.subsystems.CoralIntake.CoralIntake;
 import frc.robot.subsystems.CoralShooter.CoralShooter;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Vision.Vision;
+import frc.robot.utils.CommandLogger;
 
 // ↓ add docs ↓ there ↓ //
 public class CommandFactory {
@@ -65,7 +66,7 @@ public class CommandFactory {
      * height is in motor rotations!
      */
     public Command setElevatorHeight(double height) {
-        return elevator.isAtHeight(height).deadlineFor(elevator.setElevatorHeight(height));
+        return CommandLogger.logCommand(elevator.isAtHeight(height).deadlineFor(elevator.setElevatorHeight(height)), "SetElevatorHeight");
     }
 
     public Command setElevatorLevelFour(){
@@ -101,8 +102,8 @@ public class CommandFactory {
      */
     public Command alignWithLimelight(double goalTY, double goalTX, int pipeline) {
         return //vision.waitUntilTargetTxTy(goalTX, goalTY).alongWith(drivetrain.waitUntilDrivetrainAtHeadingSetpoint())
-            (new AlignWithLimelight(vision, drivetrain, goalTY, goalTX,
-                        pipeline)); // no more timeout
+            CommandLogger.logCommand(new AlignWithLimelight(vision, drivetrain, goalTY, goalTX,
+                        pipeline), "AlignWithLimelightBase"); // no more timeout
     }
 
     /**
@@ -116,19 +117,7 @@ public class CommandFactory {
         double goalTX = Constants.WoodbotConstants.WBGOALSCORETX;
         int pipeline = isLeft ? 1 : 0;
 
-        return Commands.waitUntil(()-> {
-            boolean onTX = drivetrain.strafeController.atSetpoint();
-            boolean onTY = drivetrain.forwardController.atSetpoint();
-            boolean onHeading = drivetrain.isAtRotationSetpoint();
-
-            String cmdTag = "AlignWithLimelightAutomated: ";
-            Logger.recordOutput(cmdTag + "onTX", onTX);
-            Logger.recordOutput(cmdTag + "onTY", onTY);
-            Logger.recordOutput(cmdTag + "setPointTX", goalTX);
-            Logger.recordOutput(cmdTag + "setPointTY", goalTY);
-            Logger.recordOutput(cmdTag + "onHeading", onHeading);
-            return onTX && onTY && onHeading && vision.isTargetInView();
-        }).deadlineFor(alignWithLimelight(goalTY, goalTX, pipeline).repeatedly());
+        return alignWithLimelight(goalTY, goalTX, pipeline);
     }
 
     /**
@@ -144,7 +133,8 @@ public class CommandFactory {
                         Map.entry(2, setElevatorLevelTwo()),
                         Map.entry(3, setElevatorLevelThree()),
                         Map.entry(4, setElevatorLevelFour())),
-                        () -> level)).andThen(coralShooter.shootCmd());
+                        () -> level).raceWith(drivetrain.xOutCmd()))
+                .andThen(coralShooter.shootCmd().raceWith(drivetrain.xOutCmd()));
     }
 
     public Command scoreLevelOne(){

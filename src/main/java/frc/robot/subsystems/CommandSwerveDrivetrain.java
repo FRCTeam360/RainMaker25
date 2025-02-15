@@ -41,6 +41,8 @@ import frc.robot.generated.OldCompBot;
 import frc.robot.generated.OldCompBot.TunerSwerveDrivetrain;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionMeasurement;
+import frc.robot.utils.CommandLogger;
+
 import java.util.List;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -81,7 +83,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             .withRotationalDeadband(maxAngularRate * 0.1) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.Velocity); // Use open-loop control for drive motors
 
-        return this.applyRequest(
+        return CommandLogger.logCommand(this.applyRequest(
                 () ->
                     drive
                         .withVelocityX(
@@ -99,7 +101,17 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                             maxAngularRate *
                             -Math.signum(driveCont.getRightX()) 
                         ) // Drive co\[]unterclockwise with negative X (left)
-            );
+            ), "DrivetrainFieldOriented");
+    }
+
+    public void xOut(){
+        SwerveRequest xOutReq = new SwerveRequest.SwerveDriveBrake();
+        this.setControl(xOutReq);
+    }
+
+    public Command xOutCmd(){
+        SwerveRequest xOutReq = new SwerveRequest.SwerveDriveBrake();
+        return CommandLogger.logCommand(this.applyRequest(() -> xOutReq), "DrivetrainXOut");
     }
 
     public final void zero() {

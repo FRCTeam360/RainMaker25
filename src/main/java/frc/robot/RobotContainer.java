@@ -92,6 +92,8 @@ public class RobotContainer {
     private Command levelTwo;
     private Command levelOne;
 
+    private Command scoreLevel3RightTeleop;
+
     private Command zeroElevatorEncoder;
 
     private SequentialCommandGroup levelOneAndZero;
@@ -269,6 +271,8 @@ public class RobotContainer {
             scoreCoralL2Left=commandFactory.scoringRoutine(2, true);
             scoreCoralL2Right=commandFactory.scoringRoutine(2, false);
             scoreCoralL1=commandFactory.scoreLevelOne();
+
+            scoreLevel3RightTeleop=commandFactory.scoringRoutineTeleop(3, false);
         }
 
         registerPathplannerCommand("Score Coral L4 Left", scoreCoralL4Left);
@@ -278,9 +282,6 @@ public class RobotContainer {
         registerPathplannerCommand("Score Coral L2 Left", scoreCoralL2Left);
         registerPathplannerCommand("Score Coral L2 Right", scoreCoralL2Right);
         registerPathplannerCommand("Score Coral L1", scoreCoralL1);
-
-        
-        driverCont.pov(270).whileTrue(scoreCoralL3Right);
 
         Command intake=null;
 

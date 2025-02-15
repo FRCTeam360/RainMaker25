@@ -7,8 +7,11 @@ package frc.robot.subsystems.ClimberWinch;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.EncoderConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 
@@ -20,14 +23,24 @@ public class ClimberWinchIOPB implements ClimberWinchIO {
 
   private final SparkMax winchMotor = new SparkMax(PracticeBotConstants.CLIMBER_WINCH_ID, MotorType.kBrushless);
   private final RelativeEncoder winchEncoder = winchMotor.getEncoder();
-  private final PIDController pid = new PIDController(0, 0, 0); // TODO: find pid values
+
+  private final double kP = 0.0;
+  private final double kI = 0.0;
+  private final double kD = 0.0;
   
+  private final double positionConversionFactor = 1.0;
   private final SparkMaxConfig config = new SparkMaxConfig();
 
   /** Creates a new ClimberIOPB. */
   public ClimberWinchIOPB() {
     config.idleMode(IdleMode.kBrake);
     config.inverted(false);
+    ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
+    closedLoopConfig.pid(kP, kI, kD);
+    config.apply(closedLoopConfig);
+    EncoderConfig encoderConfig = new EncoderConfig();
+    encoderConfig.positionConversionFactor(positionConversionFactor);
+    config.apply(encoderConfig);
     winchMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
@@ -36,7 +49,7 @@ public class ClimberWinchIOPB implements ClimberWinchIO {
   }
 
   public void setPosition(double position) {
-    pid.setSetpoint(position);
+    winchMotor.getClosedLoopController().setReference(position, ControlType.kPosition);
   }
 
   public void updateInputs(ClimberWinchIOInputs inputs) {

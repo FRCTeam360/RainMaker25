@@ -75,10 +75,9 @@ public class AlignWithLimelight extends Command {
         int priorityID = vision.getAprilTagID();
 
         endEarly = true;
-        if (vision.getTV() == 1) {
+        if (vision.getTV() == 1 && tagIDToAngle.containsKey(priorityID)) {
             endEarly = false;
-            double angle = tagIDToAngle.get(priorityID);
-            angleToFace = Objects.nonNull(angle) ? angle : driveTrain.getAngle(); //TODO: fix this?? 2/7
+            angleToFace = tagIDToAngle.get(priorityID);
         }
 
         Optional<Alliance> alliance = DriverStation.getAlliance();

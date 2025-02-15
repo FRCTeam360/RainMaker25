@@ -33,7 +33,7 @@ public class WoodBotDriveTrain {
     public static final double headingKIZone = 0.0;
 
     public static final double stafeKP = 0.01;
-    public static final double stafeKI = 0.0003;
+    public static final double stafeKI = 0.001;
     public static final double stafeKD = 0.003;
 
     public static final double forwardKP = 0.045;

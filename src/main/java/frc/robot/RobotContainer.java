@@ -230,7 +230,7 @@ public class RobotContainer {
             levelFour = commandFactory.setElevatorLevelFour();
             levelThree = commandFactory.setElevatorLevelThree();
             levelTwo = commandFactory.setElevatorLevelTwo();
-            levelOne = commandFactory.setElevatorLevelOne();
+            levelOne = commandFactory.setElevatorToZero();
 
             zeroElevatorEncoder = elevator.zeroElevatorCmd();
 
@@ -279,6 +279,9 @@ public class RobotContainer {
         registerPathplannerCommand("Score Coral L2 Right", scoreCoralL2Right);
         registerPathplannerCommand("Score Coral L1", scoreCoralL1);
 
+        
+        driverCont.pov(270).whileTrue(scoreCoralL3Right);
+
         Command intake=null;
 
         if (Objects.nonNull(coralShooter)) {
@@ -316,8 +319,9 @@ public class RobotContainer {
 
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
     
-        driverCont.axisGreaterThan(2, 0.25).whileTrue(coralShooter.intakeCmd()); //2 is the number of the axis?
-        driverCont.axisGreaterThan(3, 0.25).whileTrue(coralShooter.shootCmd());
+        driverCont.leftTrigger(0.25).whileTrue(coralShooter.intakeCmd());
+        driverCont.rightTrigger(0.25).whileTrue(coralShooter.shootCmd());
+
 
         if (Objects.nonNull(elevator)) {
             driverCont.a().onTrue(levelOneAndZero);

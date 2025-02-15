@@ -97,8 +97,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                         .withRotationalRate(
                             Math.pow(driveCont.getRightX(), 2) *
                             maxAngularRate *
-                            Math.signum(driveCont.getRightX()) 
-                        ) // Drive counterclockwise with negative X (left)
+                            -Math.signum(driveCont.getRightX()) 
+                        ) // Drive co\[]unterclockwise with negative X (left)
             );
     }
 
@@ -110,18 +110,18 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         headingController = new PhoenixPIDController(kP, kI, kD);
 
         headingController.enableContinuousInput(-Math.PI, Math.PI);
-        headingController.setTolerance(Math.toRadians(15));
+        headingController.setTolerance(Math.toRadians(3));
     }
 
     public void addStrafeController(double kP, double kI, double kD) {
         strafeController = new PhoenixPIDController(kP, kI, kD);
         strafeController.setIZone(1);
-        strafeController.setTolerance(0.5);
+        strafeController.setTolerance(0.5, 0.1);
     }
 
     public void addForwardContrller(double kP, double kI, double kD) {
         forwardController = new PhoenixPIDController(kP, kI, kD);
-        forwardController.setTolerance(1);
+        forwardController.setTolerance(1, 0.1);
     }
 
     public void driveFieldCentricFacingAngle(double x, double y, double desiredAngle) {

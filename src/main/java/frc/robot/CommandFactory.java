@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import java.util.Map;
 
 import org.littletonrobotics.junction.Logger;
+import org.opencv.calib3d.StereoBM;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -79,12 +80,16 @@ public class CommandFactory {
         return setElevatorHeight(10.5);
     }
     
-    public Command setElevatorLevelOne(){
+    public Command setElevatorToZero(){
         return setElevatorHeight(0.0);
     }
 
-    public Command setElevatorLevelOneAndZero(){
-        return new SequentialCommandGroup(setElevatorLevelOne(), elevator.zeroElevatorCmd());
+    public Command setElevatorLevelOne() {
+        return setElevatorHeight(2.0);
+    }
+
+    public Command setElevatorHeightZeroAndZero(){
+        return new SequentialCommandGroup(setElevatorToZero(), elevator.zeroElevatorCmd());
     }
 
     /**
@@ -109,7 +114,7 @@ public class CommandFactory {
     public Command alignWithLimelightAutomated(boolean isLeft){
         double goalTY = Constants.WoodbotConstants.WBGOALSCORETY;
         double goalTX = Constants.WoodbotConstants.WBGOALSCORETX;
-        int pipeline = isLeft ? 0 : 1;
+        int pipeline = isLeft ? 1 : 0;
 
         return Commands.waitUntil(()-> {
             boolean onTX = drivetrain.strafeController.atSetpoint();
@@ -119,6 +124,8 @@ public class CommandFactory {
             String cmdTag = "AlignWithLimelightAutomated: ";
             Logger.recordOutput(cmdTag + "onTX", onTX);
             Logger.recordOutput(cmdTag + "onTY", onTY);
+            Logger.recordOutput(cmdTag + "setPointTX", goalTX);
+            Logger.recordOutput(cmdTag + "setPointTY", goalTY);
             Logger.recordOutput(cmdTag + "onHeading", onHeading);
             return onTX && onTY && onHeading && vision.isTargetInView();
         }).deadlineFor(alignWithLimelight(goalTY, goalTX, pipeline).repeatedly());
@@ -132,7 +139,7 @@ public class CommandFactory {
      */
     public Command scoringRoutine(int level, boolean isLeft) {
         return alignWithLimelightAutomated(isLeft)
-                .alongWith(new SelectCommand<Integer>(Map.ofEntries(
+                .andThen(new SelectCommand<Integer>(Map.ofEntries(
                         Map.entry(1, setElevatorLevelOne()),
                         Map.entry(2, setElevatorLevelTwo()),
                         Map.entry(3, setElevatorLevelThree()),
@@ -145,7 +152,7 @@ public class CommandFactory {
     }
 
     public Command scoringRoutineTeleop(int level, boolean isLeft){
-        return scoringRoutine(level, isLeft).andThen(setElevatorLevelOneAndZero());
+        return scoringRoutine(level, isLeft).andThen(setElevatorHeightZeroAndZero());
     }
 
     public Command alignToReefWoodbotLeft(){

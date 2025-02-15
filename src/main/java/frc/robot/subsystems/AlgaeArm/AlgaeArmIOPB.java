@@ -39,7 +39,7 @@ public class AlgaeArmIOPB implements AlgaeArmIO {
   }
 
   public void updateInputs(AlgaeArmIOInputs inputs) {
-    inputs.algaeArmPosition = encoder.getPosition();
+    inputs.algaeArmAngle = encoder.getPosition();
     inputs.algaeArmVoltage = armMotor.getBusVoltage() * armMotor.getAppliedOutput();
     inputs.algaeArmCurrent = armMotor.getOutputCurrent();
     inputs.algaeArmTemp = armMotor.getMotorTemperature();

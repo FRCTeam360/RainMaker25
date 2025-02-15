@@ -13,7 +13,6 @@ public interface AlgaeArmIO {
     public double algaeArmCurrent = 0.0;
     public double algaeArmVoltage = 0.0;
     public double algaeArmVelocity = 0.0;
-    public double algaeArmPosition = 0.0;
     public double algaeArmAngle = 0.0;
     public double algaeArmTemp = 0.0;
   }

@@ -61,7 +61,6 @@ public class AlgaeArmIOSim implements AlgaeArmIO {
     armSim.update(0.02);
     encoderSim.setDistance(armSim.getAngleRads());
     RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(armSim.getCurrentDrawAmps()));
-    inputs.algaeArmPosition = simMotor.getPosition();
     inputs.algaeArmCurrent = armSim.getCurrentDrawAmps();
     inputs.algaeArmVelocity = armSim.getVelocityRadPerSec();
     inputs.algaeArmAngle = armSim.getAngleRads();

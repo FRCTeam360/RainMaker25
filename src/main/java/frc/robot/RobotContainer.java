@@ -100,6 +100,8 @@ public class RobotContainer {
 
     private Command robotCentricDrive;
 
+    private Command setSteerCoast;
+
     private Command allignToReefWoodBot;
     private SetCoralIntake setCoralIntake;
 
@@ -319,6 +321,7 @@ public class RobotContainer {
         driverCont.rightStick().whileTrue(driveTrain.robotCentricDrive(driverCont));
 
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
+        driverCont.pov(90).toggleOnTrue(new InstantCommand(() -> driveTrain.setSteerCoast(true)));
     
         driverCont.leftTrigger(0.25).whileTrue(coralShooter.intakeCmd());
         driverCont.rightTrigger(0.25).whileTrue(coralShooter.shootCmd());

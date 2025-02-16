@@ -29,7 +29,7 @@ import frc.robot.generated.OldCompBot;
  */
 
 public final class Constants {
-    public static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+    public static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
 
   public static class VisionConstants {
     public static final String WOODBOT_LIMELIGHT_NAME = "limelight";

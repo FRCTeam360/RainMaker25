@@ -51,6 +51,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants;
 import frc.robot.generated.OldCompBot;
 import frc.robot.generated.OldCompBot.TunerSwerveDrivetrain;
 import frc.robot.subsystems.Vision.Vision;
@@ -103,7 +104,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     
     public final Command PathOnTheFly() {
-
+        
         final Map<Integer, Double> tagIDToRotation = Map.ofEntries(
             Map.entry(21, 180.0),
             Map.entry(7, 180.0),
@@ -117,6 +118,36 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             Map.entry(9, -60.0),
             Map.entry(20, -120.0),
             Map.entry(8, -120.0)
+        );
+        
+        final Map<Integer, Pose2d> LeftTagIDToPosition = Map.ofEntries(
+            Map.entry(21, new Pose2d(6.100,3.800,Rotation2d.fromDegrees(-33.917))),
+            Map.entry(7, new Pose2d( 14.623, 3.809,Rotation2d.fromDegrees(-33.917))),
+            Map.entry(22, new Pose2d( 5.139, 2.522,Rotation2d.fromDegrees(-33.917))),
+            Map.entry(6, new Pose2d( 13.628, 2.612,Rotation2d.fromDegrees(-33.917))),
+            Map.entry(17, new Pose2d( 3.471, 2.718,Rotation2d.fromDegrees(-33.917))),
+            Map.entry(11, new Pose2d( 11.955, 2.871,Rotation2d.fromDegrees(-33.917))),
+            Map.entry(18, new Pose2d( 2.930, 4.175,Rotation2d.fromDegrees(-33.917))),
+            Map.entry(10, new Pose2d( 11.522, 4.371,Rotation2d.fromDegrees(-33.917))),
+            Map.entry(19, new Pose2d( 3.832, 5.482,Rotation2d.fromDegrees(-33.917))),
+            Map.entry(9, new Pose2d( 12.503, 5.453,Rotation2d.fromDegrees(-33.917))),
+            Map.entry(20, new Pose2d( 5.529, 5.167,Rotation2d.fromDegrees(-33.917))),
+            Map.entry(8, new Pose2d( 14.176, 5.236,Rotation2d.fromDegrees(-33.917)))
+        );
+
+        final Map<Integer, Pose2d> RightTagIDToPosition = Map.ofEntries(
+            Map.entry(21, new Pose2d( 6.100,4.341,Rotation2d.fromDegrees(-33.917))),
+            Map.entry(7, new Pose2d( 14.536, 4.386,Rotation2d.fromDegrees(-33.917))),
+            Map.entry(22, new Pose2d( 5.529,2.778,Rotation2d.fromDegrees(-33.917))),
+            Map.entry(6, new Pose2d( 14.219, 2.828,Rotation2d.fromDegrees(-33.917))),
+            Map.entry(17, new Pose2d( 3.817, 2.507,Rotation2d.fromDegrees(-33.917))),
+            Map.entry(11, new Pose2d( 12.474, 2.597,Rotation2d.fromDegrees(-33.917))),
+            Map.entry(18, new Pose2d( 2.915, 3.694,Rotation2d.fromDegrees(-33.917))),
+            Map.entry(10, new Pose2d( 11.565, 3.679,Rotation2d.fromDegrees(-33.917))),
+            Map.entry(19, new Pose2d( 3.381, 5.212,Rotation2d.fromDegrees(-33.917))),
+            Map.entry(9, new Pose2d( 12.027, 5.207,Rotation2d.fromDegrees(-33.917))),
+            Map.entry(20, new Pose2d( 5.109, 5.467,Rotation2d.fromDegrees(-33.917))),
+            Map.entry(8, new Pose2d( 13.642, 5.481,Rotation2d.fromDegrees(-33.917)))
         );
 
         List<Waypoint> wayPoints = new ArrayList<Waypoint>();

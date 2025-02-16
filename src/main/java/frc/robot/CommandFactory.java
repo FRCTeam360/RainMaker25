@@ -70,7 +70,7 @@ public class CommandFactory {
     }
 
     public Command setElevatorLevelFour(){
-        return setElevatorHeight(33.5);
+        return setElevatorHeight(34.0);
     }
     
     public Command setElevatorLevelThree(){

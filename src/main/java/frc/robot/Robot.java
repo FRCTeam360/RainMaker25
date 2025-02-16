@@ -119,7 +119,7 @@ public class Robot extends LoggedRobot {
         if (m_autonomousCommand != null) {
             m_autonomousCommand.schedule();
         }
-        drivetrain.setSteerCoast(false);
+      //  drivetrain.setSteerCoast(false);
     }
 
     /** This function is called periodically during autonomous. */

@@ -109,6 +109,8 @@ public class RobotContainer {
     private Command allignToReefWoodBot;
     private SetCoralIntake setCoralIntake;
 
+    private Command consumeVisionMeasurements;
+
     public RobotContainer() {
         switch (Constants.getRobotType()) {
             case WOODBOT:
@@ -212,8 +214,10 @@ public class RobotContainer {
         // vision.setDefaultCommand(
         //     vision
         //         .consumeVisionMeasurements(driveTrain::addVisionMeasurements)
-        //         .ignoringDisable(true)
+        //         .ignoringDisable(false)
         // );
+
+        consumeVisionMeasurements = vision.consumeVisionMeasurements(driveTrain::addVisionMeasurements);
 
         xOut = driveTrain.xOutCmd();
 
@@ -241,6 +245,7 @@ public class RobotContainer {
             levelOne = commandFactory.setElevatorToZero();
 
             autoLevelThree = commandFactory.setElevatorHeight(20.5);
+            autoLevelFour = commandFactory.setElevatorHeight(34.0);
 
             zeroElevatorEncoder = elevator.zeroElevatorCmd();
 
@@ -254,7 +259,7 @@ public class RobotContainer {
             );
         }
 
-        registerPathplannerCommand("Elevator L4", levelFour);
+        registerPathplannerCommand("Elevator L4", autoLevelFour);
         registerPathplannerCommand("Elevator L3", autoLevelThree);
         registerPathplannerCommand("Elevator L2", levelTwo);
         registerPathplannerCommand("Elevator L1", levelOne);
@@ -291,8 +296,11 @@ public class RobotContainer {
         registerPathplannerCommand("Score Coral L2 Right", scoreCoralL2Right);
         registerPathplannerCommand("Score Coral L1", scoreCoralL1);
 
+        registerPathplannerCommand("left align", leftAlign);
 
         registerPathplannerCommand("x out", xOut);
+
+        registerPathplannerCommand("consume vision measurements", consumeVisionMeasurements);
 
         Command intake = null;
 
@@ -330,7 +338,7 @@ public class RobotContainer {
         driverCont.rightStick().whileTrue(driveTrain.robotCentricDrive(driverCont));
 
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
-        driverCont.pov(90).toggleOnTrue(new InstantCommand(() -> driveTrain.setSteerCoast(true)));
+      //  driverCont.pov(90).toggleOnTrue(new InstantCommand(() -> driveTrain.setSteerCoast(true)));
     
         driverCont.leftTrigger(0.25).whileTrue(coralShooter.intakeCmd());
         driverCont.rightTrigger(0.25).whileTrue(coralShooter.shootCmd());

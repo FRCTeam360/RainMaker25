@@ -53,7 +53,7 @@ public class Vision extends SubsystemBase {
     MEASUREMENT_STD_DEV_DISTANCE_MAP.put(8.0, VecBuilder.fill(10.0, 10.0, 10.0));
   }
 
-  private static final Matrix<N3, N1> stdDevMatrix = VecBuilder.fill(.7, .7, 999999);
+  private static final Matrix<N3, N1> stdDevMatrix = VecBuilder.fill(3.0, 3.0, 999999.0);
 
   /** Creates a new Vision. */
   public Vision(VisionIO[] visionIos) {

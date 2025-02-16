@@ -253,7 +253,7 @@ public class RobotContainer {
             levelOne = commandFactory.setElevatorToZero();
 
             autoLevelThree = commandFactory.setElevatorHeight(20.5);
-            autoLevelFour = commandFactory.setElevatorHeight(34.0);
+            autoLevelFour = commandFactory.setElevatorHeight(33.0);
 
             zeroElevatorEncoder = elevator.zeroElevatorCmd();
 

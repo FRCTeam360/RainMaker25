@@ -43,6 +43,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CoralIntake.CoralIntake;
 import frc.robot.subsystems.CoralShooter.CoralShooter;
+import frc.robot.subsystems.CoralShooter.CoralShooterIOPB;
 import frc.robot.subsystems.CoralShooter.CoralShooterIOSim;
 import frc.robot.subsystems.CoralShooter.CoralShooterIOWB;
 import frc.robot.subsystems.Elevator.Elevator;
@@ -136,6 +137,7 @@ public class RobotContainer {
                 //constants = Constants.OldCompBotConstants;
                 break;
             case PRACTICE:
+                coralShooter = new CoralShooter(new CoralShooterIOPB());
                 //practice bot stuff
                 break;
             case SIM:

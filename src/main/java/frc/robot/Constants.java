@@ -58,9 +58,9 @@ public final class Constants {
   }
 
   public static final class SerialAddressConstants {
-    public static String OCB_SERIAL_ADDRESS = "032BE44A";
+    public static String OCB_SERIAL_ADDRESS = "";
     public static String WOOD_SERIAL_ADDRESS = "031b5208";
-    public static String PRACTICE_SERIAL_ADDRESS = "c";
+    public static String PRACTICE_SERIAL_ADDRESS = "03260AD5";
     public static String COMP_SERIAL_ADDRESS = "d";
   }
 
@@ -101,6 +101,9 @@ public final class Constants {
         public static final int ALGAE_SHOOTER_ID = 4;
         public static final int ALGAE_ARM_ID = 5;
         public static final int CLIMBER_ID = 6;
+        public static final int CORAL_SHOOTER_ID = 19;
+        public static final int INTAKE_SENSOR_ID = 20;
+        public static final int OUTTAKE_SENSOR_ID = 21;
     }
 
     public static RobotType getRobotType() {

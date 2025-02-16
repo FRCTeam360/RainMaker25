@@ -520,9 +520,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                     this.setControl(this.driveRobotRelativeRequest(speeds, feedforwards)),
                 new PPHolonomicDriveController(
                     // PID constants for translation
-                    new PIDConstants(10, 0, 0),
+                    new PIDConstants(11, 0, 0),
                     // PID constants for rotation
-                    new PIDConstants(7, 0, 0)
+                    new PIDConstants(9, 0, 0)
                 ),
                 config,
                 // For our team, the path does not need to be flipped for Red vs Blue.
@@ -546,6 +546,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return new SwerveRequest.ApplyRobotSpeeds()
             .withSpeeds(speeds)
             .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
-            .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons());
+            .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
+            .withDriveRequestType(DriveRequestType.Velocity);
     }
 }

@@ -86,8 +86,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 .withDriveRequestType(DriveRequestType.Velocity); // Use open-loop control for drive motors
 
         return CommandLogger.logCommand(this.applyRequest(
-                () ->
-                    drive
+                () -> drive
                         .withVelocityX(
                                 Math.pow(driveCont.getLeftY(), 2) *
                                         maxSpeed *
@@ -97,19 +96,19 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                                         maxSpeed *
                                         -Math.signum(driveCont.getLeftX())) // Drive left with negative X (left)
                         .withRotationalRate(
-                            Math.pow(driveCont.getRightX(), 2) *
-                            maxAngularRate *
-                            -Math.signum(driveCont.getRightX()) 
-                        ) // Drive co\[]unterclockwise with negative X (left)
-            ), "DrivetrainFieldOriented");
+                                Math.pow(driveCont.getRightX(), 2) *
+                                        maxAngularRate *
+                                        -Math.signum(driveCont.getRightX())) // Drive co\[]unterclockwise with negative
+                                                                             // X (left)
+        ), "DrivetrainFieldOriented");
     }
 
-    public void xOut(){
+    public void xOut() {
         SwerveRequest xOutReq = new SwerveRequest.SwerveDriveBrake();
         this.setControl(xOutReq);
     }
 
-    public Command xOutCmd(){
+    public Command xOutCmd() {
         SwerveRequest xOutReq = new SwerveRequest.SwerveDriveBrake();
         return CommandLogger.logCommand(this.applyRequest(() -> xOutReq), "DrivetrainXOut");
     }
@@ -122,18 +121,21 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         headingController = new PhoenixPIDController(kP, kI, kD);
 
         headingController.enableContinuousInput(-Math.PI, Math.PI);
-        headingController.setTolerance(Math.toRadians(3));
+        headingController.setTolerance(Math.toRadians(1));
     }
 
-    public void addStrafeController(double kP, double kI, double kD) {
+    public void addStrafeController(double kP, double kI, double kD, double irMax, double irMin) {
         strafeController = new PhoenixPIDController(kP, kI, kD);
-        strafeController.setIZone(1);
-        strafeController.setTolerance(0.5, 0.1);
+        // strafeController.setIntegratorRange(-irMin, irMax);
+        strafeController.setIZone(3.0);
+        strafeController.setTolerance(0.25, 0.01);
     }
 
-    public void addForwardContrller(double kP, double kI, double kD) {
+    public void addForwardContrller(double kP, double kI, double kD, double irMax, double irMin) {
         forwardController = new PhoenixPIDController(kP, kI, kD);
-        forwardController.setTolerance(1, 0.1);
+        //forwardController.setIntegratorRange(-irMin, irMax);
+        forwardController.setIZone(2.0);
+        forwardController.setTolerance(0.1, 0.05);
     }
 
     public void driveFieldCentricFacingAngle(double x, double y, double desiredAngle) {
@@ -177,7 +179,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                                 Math.pow(driveCont.getRightX(), 2) *
                                         maxAngularRate *
                                         Math.signum(driveCont.getRightX())) // Drive counterclockwise with negative X
-                                                                              // (left)
+                                                                            // (left)
         );
     }
 
@@ -265,9 +267,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             double stafeKP,
             double stafeKI,
             double stafeKD,
+            double strafeIRMax,
+            double strafeIRMin,
             double forwardKP,
             double forwardKI,
             double forwardKD,
+            double forwardIRMax,
+            double forwardIRMin,
             double maxSpeed,
             double maxAngularRate,
             SwerveDrivetrainConstants drivetrainConstants,
@@ -277,8 +283,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             startSimThread();
         }
         addHeadingController(headingKP, headingKI, headingKD, headingKIZone);
-        addStrafeController(stafeKP, stafeKI, stafeKD);
-        addForwardContrller(forwardKP, forwardKI, forwardKD);
+        addStrafeController(stafeKP, stafeKI, stafeKD, strafeIRMax, strafeIRMin);
+        addForwardContrller(forwardKP, forwardKI, forwardKD, forwardIRMax, forwardIRMin);
 
         this.maxSpeed = maxSpeed;
         this.maxAngularRate = maxAngularRate;
@@ -426,7 +432,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
     }
 
-
     /**
      * A command that waits until the drivebase is facing the setpoint angle
      * 
@@ -519,24 +524,22 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             RobotConfig config = RobotConfig.fromGUISettings();
 
             AutoBuilder.configure(
-                () -> getStateCopy().Pose, // Supplier of current robot pose
-                this::resetPose, // Consumer for seeding pose against auto
-                () -> getStateCopy().Speeds, // Supplier of current robot speeds
-                // Consumer of ChassisSpeeds and feedforwards to drive the robot
-                (speeds, feedforwards) ->
-                    this.setControl(this.driveRobotRelativeRequest(speeds, feedforwards)),
-                new PPHolonomicDriveController(
-                    // PID constants for translation
-                    new PIDConstants(11, 0, 0),
-                    // PID constants for rotation
-                    new PIDConstants(9, 0, 0)
-                ),
-                config,
-                // For our team, the path does not need to be flipped for Red vs Blue.
-                // The reasoning for this is that the fields are not constructed the same for
-                // each event, each side is a bit different.
-                () -> false,
-                this // Subsystem for requirements
+                    () -> getStateCopy().Pose, // Supplier of current robot pose
+                    this::resetPose, // Consumer for seeding pose against auto
+                    () -> getStateCopy().Speeds, // Supplier of current robot speeds
+                    // Consumer of ChassisSpeeds and feedforwards to drive the robot
+                    (speeds, feedforwards) -> this.setControl(this.driveRobotRelativeRequest(speeds, feedforwards)),
+                    new PPHolonomicDriveController(
+                            // PID constants for translation
+                            new PIDConstants(11, 0, 0),
+                            // PID constants for rotation
+                            new PIDConstants(9, 0, 0)),
+                    config,
+                    // For our team, the path does not need to be flipped for Red vs Blue.
+                    // The reasoning for this is that the fields are not constructed the same for
+                    // each event, each side is a bit different.
+                    () -> false,
+                    this // Subsystem for requirements
             );
         } catch (Exception ex) {
             DriverStation.reportError(
@@ -549,9 +552,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             ChassisSpeeds speeds,
             DriveFeedforwards feedforwards) {
         return new SwerveRequest.ApplyRobotSpeeds()
-            .withSpeeds(speeds)
-            .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
-            .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
-            .withDriveRequestType(DriveRequestType.Velocity);
+                .withSpeeds(speeds)
+                .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
+                .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
+                .withDriveRequestType(DriveRequestType.Velocity);
     }
 }

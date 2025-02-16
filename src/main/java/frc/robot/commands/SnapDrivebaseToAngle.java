@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -13,10 +14,13 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
+import frc.robot.utils.LimelightHelpers;
 
+import java.util.Map;
 import java.util.Optional;
 
 import org.ejml.interfaces.decomposition.SingularValueDecomposition;
+import org.littletonrobotics.junction.Logger;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class SnapDrivebaseToAngle extends Command {
@@ -24,7 +28,23 @@ public class SnapDrivebaseToAngle extends Command {
     private CommandXboxController driverCont = new CommandXboxController(0);
     private double angleToFace = 0.0;
     private Vision vision;
+    private Rotation2d angleToFaceRotation2d;
     private Vision aprilTagID;
+    private boolean endEarly;
+
+    private static final Map<Integer, Double> tagIDToAngle = Map.ofEntries(
+            Map.entry(21, 180.0),
+            Map.entry(7, 180.0),
+            Map.entry(22, 120.0),
+            Map.entry(6, 120.0),
+            Map.entry(17, 60.0),
+            Map.entry(11, 60.0),
+            Map.entry(18, 0.0),
+            Map.entry(10, 0.0),
+            Map.entry(19, -60.0),
+            Map.entry(9, -60.0),
+            Map.entry(20, -120.0),
+            Map.entry(8, -120.0));
 
     /** Creates a new SnapDrivebaseToAngle. */
     public SnapDrivebaseToAngle(CommandSwerveDrivetrain driveTrain) {
@@ -36,60 +56,52 @@ public class SnapDrivebaseToAngle extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        
-        //TODO: fix "not right" angles - alex
-        if (vision.getAprilTagID() == 21 || vision.getAprilTagID() == 7) {
-            angleToFace = 180.0;
-        } else if (vision.getAprilTagID() == 22 || vision.getAprilTagID() == 6)  {
-            angleToFace = 120.0;
-       } else if (vision.getAprilTagID() == 17 || vision.getAprilTagID() == 11) {
-            angleToFace = 60.0;
-      } else if (vision.getAprilTagID() == 18 || vision.getAprilTagID() == 10) {
-            angleToFace = 0.0;
-        } else if (vision.getAprilTagID() == 19 || vision.getAprilTagID() == 9) {
-            angleToFace = -60.0;
-        } else if (vision.getAprilTagID() == 20 || vision.getAprilTagID() == 8) {
-            angleToFace = -120.0;
-            
-        }
+        double angleToFace = driveTrain.getAngle();
+        int priorityID = vision.getAprilTagID();
+        endEarly = true;
+        if (vision.getTV() == 1 && tagIDToAngle.containsKey(priorityID)) {
+            endEarly = false;
+            angleToFace = tagIDToAngle.get(priorityID);
 
-    // if (driveTrain.getAngle() >= -30.0 || driveTrain.getAngle() <= 30.0) {
-    //         angleToFace = 0.0;
-    //     } else if (driveTrain.getAngle() <= -30.0 || driveTrain.getAngle() >= -90.0) {
-    //         angleToFace = -60.0;
-    //     } else if (driveTrain.getAngle() <= -90.0 || driveTrain.getAngle() >= -150.0) {
-    //         angleToFace = -120.0;
-    //     } else if (driveTrain.getAngle() <= -150.0 || driveTrain.getAngle() >= 150.0) {
-    //         angleToFace = 180.0;
-    //     } else if (driveTrain.getAngle() <= 150.0 || driveTrain.getAngle() >= 90.0) {
-    //         angleToFace = 120.0;
-    //     } else if (driveTrain.getAngle() >= 30.0 || driveTrain.getAngle() <= 90.0) {
-    //         angleToFace = 60.0;
-    //     }
+            angleToFaceRotation2d = Rotation2d.fromDegrees(angleToFace);
+
+            LimelightHelpers.setPriorityTagID("limelight", priorityID);
+        }
+        // if (driveTrain.getAngle() >= -30.0 || driveTrain.getAngle() <= 30.0) {
+        // angleToFace = 0.0;
+        // } else if (driveTrain.getAngle() <= -30.0 || driveTrain.getAngle() >= -90.0)
+        // {
+        // angleToFace = -60.0;
+        // } else if (driveTrain.getAngle() <= -90.0 || driveTrain.getAngle() >= -150.0)
+        // {
+        // angleToFace = -120.0;
+        // } else if (driveTrain.getAngle() <= -150.0 || driveTrain.getAngle() >= 150.0)
+        // {
+        // angleToFace = 180.0;
+        // } else if (driveTrain.getAngle() <= 150.0 || driveTrain.getAngle() >= 90.0) {
+        // angleToFace = 120.0;
+        // } else if (driveTrain.getAngle() >= 30.0 || driveTrain.getAngle() <= 90.0) {
+        // angleToFace = 60.0;
+        // }
     }
 
-    
-
-    
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
         driveTrain.driveFieldCentricFacingAngle(
-            Math.pow(MathUtil.applyDeadband(-driverCont.getLeftY(), 0.1), 2.0),
-            Math.pow(MathUtil.applyDeadband(-driverCont.getLeftX(), 0.1), 2.0),
-            angleToFace
-        );
+                Math.pow(MathUtil.applyDeadband(-driverCont.getLeftY(), 0.1), 2.0),
+                Math.pow(MathUtil.applyDeadband(-driverCont.getLeftX(), 0.1), 2.0),
+                angleToFace);
     }
 
     // Called once the command ends or is interrupted.
     @Override
-    public void end(boolean interrupted) {}
-;
+    public void end(boolean interrupted) {
+    };
+
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
         return driveTrain.isAtRotationSetpoint();
     }
 }
-
-

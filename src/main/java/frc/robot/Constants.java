@@ -33,12 +33,9 @@ public final class Constants {
 
   public static class VisionConstants {
     public static final String WOODBOT_LIMELIGHT_NAME = "limelight";
-    public static final double WOODBOT_YAW_FUDGE_FACTOR = 0;
-    public static final double WOODBOT_PITCH_FUDGE_FACTOR = 0;
 
     public static final String OCB_LIMELIGHT_NAME = "limelight";
-    public static final double OCB_YAW_FUDGE_FACTOR = 0;
-    public static final double OCB_PITCH_FUDGE_FACTOR = 0;
+  
   }
 
   // public static final Mode currentMode = Mode.SIM;
@@ -78,17 +75,26 @@ public final class Constants {
 
     public static class OldCompBotConstants {
         public static final String OCB_LIMELIGHT_NAME = "limelight";
-        public static final double OCB_YAW_FUDGE_FACTOR = 0;
-        public static final double OCB_PITCH_FUDGE_FACTOR = 0;
+
+
+
     }
     
     public static final class WoodbotConstants {
-      public static final int CORAL_INTAKE_ID = 1;
-      public static final int CORAL_OUTTAKE_ID = 2;
-      public static final int ELEVATOR_ID = 3;
+        public static final int CORAL_INTAKE_ID = 25;
+        public static final int CORAL_SHOOTER_ID = 20;
+        public static final int ELEVATOR_ID = 14;
 
-      public static final int ELEVATOR_BOTTOM_SWITCH = 0;
-      public static final int OUTTAKE_SENSOR = 1;
+        public static final double headingKP = 4.0;
+        public static final double headingKI = 0.0;
+        public static final double headingKD = 0.0;
+        public static final double headingKIZone = 0.0;
+
+        public static final double WBGOALSCORETX = 0.0;
+        public static final double WBGOALSCORETY = -10.0;
+
+        public static final int ELEVATOR_BOTTOM_SWITCH = 2;
+        public static final int OUTTAKE_SENSOR = 0; //DIO port
     }
 
     public static final class PracticeBotConstants {

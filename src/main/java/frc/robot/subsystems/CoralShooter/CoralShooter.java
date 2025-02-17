@@ -95,7 +95,7 @@ public class CoralShooter extends SubsystemBase {
     }
 
     private Command repeatOnStall() {
-        return new ConditionalCommand(runCmd(1.0), runCmd(-1.0), () -> isUnjamming()).repeatedly()
+        return new ConditionalCommand(runCmd(1.0), runCmd(-0.3), () -> isUnjamming()).repeatedly()
                 .alongWith(new InstantCommand(() -> {
                     // testStall = true;
                 }));
@@ -107,7 +107,7 @@ public class CoralShooter extends SubsystemBase {
                 waitUntilIntakeSensor().deadlineFor(
                         repeatOnStall()).andThen(
                                 waitUntilFull().deadlineFor(
-                                        runCmd(-0.3))),
+                                        runCmd(-0.2))),
             cmdName);
     }
 

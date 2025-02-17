@@ -165,11 +165,12 @@ public class RobotContainer {
         
         commandFactory =
             new CommandFactory(
-                catapult,
                 coralIntake,
                 coralShooter,
                 elevator,
                 vision,
+                climberWinch,
+                climberWheel,
                 algaeShooter,
                 driveTrain,
                 driverCont.getHID()

@@ -40,12 +40,12 @@ public class CoralShooterIOPB implements CoralShooterIO {
         outtakeMotor.set(dutyCycle);
     }
 
-    private boolean getOuttakeSensor() {
-        return outtakeSensor.getProximity() < 5.0;
+    private boolean isInOuttakeSensor() {
+        return outtakeSensor.getProximity() < 0.1;
     }
 
-    private boolean getIntakeSensor() {
-        return intakeSensor.getProximity() < 5.0;
+    private boolean isInIntakeSensor() {
+        return intakeSensor.getProximity() < 0.04;
     }
 
     public void stop() {
@@ -57,9 +57,9 @@ public class CoralShooterIOPB implements CoralShooterIO {
         inputs.outtakePosition = encoder.getPosition();
         inputs.outtakeVelocity = encoder.getVelocity();
         inputs.outtakeVoltage = outtakeMotor.getAppliedOutput() * outtakeMotor.getBusVoltage();
-        inputs.outtakeSensor = this.getOuttakeSensor();
+        inputs.outtakeSensor = this.isInOuttakeSensor();
         inputs.outtakeSensorProximity = outtakeSensor.getProximity();
-        inputs.intakeSensor = this.getIntakeSensor();
+        inputs.intakeSensor = this.isInIntakeSensor();
         inputs.intakeSensorProximity = intakeSensor.getProximity();
     }
 }

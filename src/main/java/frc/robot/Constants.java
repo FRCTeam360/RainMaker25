@@ -98,12 +98,18 @@ public final class Constants {
     }
 
     public static final class PracticeBotConstants {
-        public static final int ALGAE_SHOOTER_ID = 4;
-        public static final int ALGAE_ARM_ID = 5;
-        public static final int CLIMBER_ID = 6;
+        public static final String CANBUS_NAME = "Default Name";
+        public static final int BACK_ELEVATOR_ID = 14;
+        public static final int FRONT_ELEVATOR_ID = 15;
+        public static final int CLIMBER_ROLLER_ID = 16;
+        public static final int CLIMBER_WINCH_ID = 17;
+        public static final int ALGAE_ARM_ID = 18;
         public static final int CORAL_SHOOTER_ID = 19;
         public static final int INTAKE_SENSOR_ID = 20;
         public static final int OUTTAKE_SENSOR_ID = 21;
+        public static final int ALGAE_SHOOTER_ID = 25;
+        
+        public static final String CORAL_LIMELIGHT_NAME = "limelight-coral";
     }
 
     public static RobotType getRobotType() {

@@ -23,9 +23,7 @@ import frc.robot.subsystems.Vision.VisionIOLimelight;
 // https://v6.docs.ctr-electronics.com/en/stable/docs/tuner/tuner-swerve/index.html
 public class WoodBotDriveTrain {
 
-    public static final double maxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per
-                                                                                                // second max angular
-                                                                                                // velocity
+    public static final double maxAngularRate = RotationsPerSecond.of(1.0).in(RadiansPerSecond);
 
     public static final double headingKP = 3.0; //sysid number was 2.019
     public static final double headingKI = 0.0;

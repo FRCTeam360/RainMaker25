@@ -81,24 +81,24 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public final Command fieldOrientedDrive(
             CommandXboxController driveCont) { // field oriented drive command!
         SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric() // creates a fieldcentric drive
-                .withDeadband(maxSpeed * 0.1)
-                .withRotationalDeadband(maxAngularRate * 0.1) // Add a 10% deadband
+                .withDeadband(maxSpeed * 0.05)
+                .withRotationalDeadband(maxAngularRate * 0.05) // Add a 10% deadband
                 .withDriveRequestType(DriveRequestType.Velocity); // Use open-loop control for drive motors
 
         return CommandLogger.logCommand(this.applyRequest(
                 () -> drive
                         .withVelocityX(
-                                Math.pow(driveCont.getLeftY(), 2) *
+                                Math.pow(driveCont.getLeftY(), 3) *
                                         maxSpeed *
-                                        -Math.signum(driveCont.getLeftY())) // Drive forward with negative Y (forward)
+                                        -1.0) // Drive forward with negative Y (forward)
                         .withVelocityY(
-                                Math.pow(driveCont.getLeftX(), 2) *
+                                Math.pow(driveCont.getLeftX(), 3) *
                                         maxSpeed *
-                                        -Math.signum(driveCont.getLeftX())) // Drive left with negative X (left)
+                                        -1.0) // Drive left with negative X (left)
                         .withRotationalRate(
-                                Math.pow(driveCont.getRightX(), 2) *
+                                Math.pow(driveCont.getRightX(), 3) *
                                         maxAngularRate *
-                                        -Math.signum(driveCont.getRightX())) // Drive co\[]unterclockwise with negative
+                                        -1.0) // Drive co\[]unterclockwise with negative
                                                                              // X (left)
         ), "DrivetrainFieldOriented");
     }
@@ -168,15 +168,15 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return this.applyRequest(
                 () -> drive
                         .withVelocityX(
-                                Math.pow(driveCont.getLeftY(), 2) *
+                                Math.pow(driveCont.getLeftY(), 3) *
                                         maxSpeed *
                                         -Math.signum(driveCont.getLeftY())) // Drive forward with negative Y (forward)
                         .withVelocityY(
-                                Math.pow(driveCont.getLeftX(), 2) *
+                                Math.pow(driveCont.getLeftX(), 3) *
                                         maxSpeed *
                                         -Math.signum(driveCont.getLeftX())) // Drive left with negative X (left)
                         .withRotationalRate(
-                                Math.pow(driveCont.getRightX(), 2) *
+                                Math.pow(driveCont.getRightX(), 3) *
                                         maxAngularRate *
                                         Math.signum(driveCont.getRightX())) // Drive counterclockwise with negative X
                                                                             // (left)

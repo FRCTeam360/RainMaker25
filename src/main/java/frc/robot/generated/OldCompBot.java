@@ -32,10 +32,14 @@ public class OldCompBot {
     public static final double stafeKP = 0.5;
     public static final double stafeKI = 0.0;
     public static final double stafeKD = 0.0;
+    public static final double strafeIRMax = 0.0;
+    public static final double strafeIRMin = 0.0;
 
     public static final double forwardKI = 0.0;
     public static final double forwardKD = 0.0;
     public static final double forwardKP = 0.5;
+    public static final double forwardIRMax = 0.0;
+    public static final double forwardIRMin = 0.0;
 
     // Both sets of gains need to be tuned to your individual robot.
 
@@ -216,12 +220,10 @@ public class OldCompBot {
      */
     public static CommandSwerveDrivetrain createDrivetrain() {
         return new CommandSwerveDrivetrain(
-                headingKP, headingKI, headingKD, headingKIZone, stafeKP, stafeKI, stafeKD, forwardKP, forwardKI,
-                forwardKD,
+                headingKP, headingKI, headingKD, headingKIZone, stafeKP, stafeKI, stafeKD, strafeIRMax, strafeIRMin, forwardKP, forwardKI, forwardKD, forwardIRMax, forwardIRMin,
                 kSpeedAt12Volts.in(MetersPerSecond),
                 maxAngularRate, DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight);
     }
-
     /**
      * Swerve Drive class utilizing CTR Electronics' Phoenix 6 API with the selected
      * device types.

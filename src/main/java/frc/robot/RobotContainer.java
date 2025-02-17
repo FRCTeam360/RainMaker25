@@ -109,6 +109,14 @@ public class RobotContainer {
     private Command allignToReefWoodBot;
     private SetCoralIntake setCoralIntake;
 
+    private Command scoreCoralL4Right = null;
+    private Command scoreCoralL3Left = null;
+    private Command scoreCoralL4Left = null;
+    private Command scoreCoralL3Right = null;
+    private Command scoreCoralL2Left = null;
+    private Command scoreCoralL2Right = null;
+    private Command scoreCoralL1 = null;
+
     private Command consumeVisionMeasurements;
 
     public RobotContainer() {
@@ -266,15 +274,7 @@ public class RobotContainer {
 
         levelOneAndZero = new SequentialCommandGroup(levelOne, zeroElevatorEncoder);
 
-        allignToReefWoodBot = commandFactory.alignToReefWoodbotLeft();
-
-        Command scoreCoralL4Left = null;
-        Command scoreCoralL4Right = null;
-        Command scoreCoralL3Left = null;
-        Command scoreCoralL3Right = null;
-        Command scoreCoralL2Left = null;
-        Command scoreCoralL2Right = null;
-        Command scoreCoralL1 = null;
+        allignToReefWoodBot = commandFactory.alignToReefWoodbotLeft();       
 
         if (Objects.nonNull(coralShooter) && Objects.nonNull(elevator)) {
             scoreCoralL4Left = commandFactory.scoringRoutine(4, true);
@@ -346,8 +346,8 @@ public class RobotContainer {
         if (Objects.nonNull(elevator)) {
             driverCont.a().onTrue(levelOneAndZero);
             driverCont.b().onTrue(levelTwo);
-            driverCont.x().onTrue(levelThree);
-            driverCont.y().onTrue(levelFour);
+            driverCont.x().onTrue(levelFour);
+            driverCont.y().whileTrue(scoreCoralL4Right);
         }
 
         if (Objects.nonNull(coralShooter)) {

@@ -25,7 +25,7 @@ public class WoodBotDriveTrain {
 
     public static final double maxAngularRate = RotationsPerSecond.of(1.0).in(RadiansPerSecond);
 
-    public static final double headingKP = 3.0; //sysid number was 2.019
+    public static final double headingKP = 4.0; //was 3 6:05pm
     public static final double headingKI = 0.0;
     public static final double headingKD = 0.0;
     public static final double headingKIZone = 0.0;

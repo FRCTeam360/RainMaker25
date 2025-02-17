@@ -62,6 +62,7 @@ public class SnapDrivebaseToAngle extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+
         angleToFace = driveTrain.getAngle();
 
         vision.setPipeline(pipeline);
@@ -103,12 +104,11 @@ public class SnapDrivebaseToAngle extends Command {
         if (endEarly)
             return;
 
-        if (vision.getTV() == 1) {
             driveTrain.driveFieldCentricFacingAngle(
                     Math.pow(MathUtil.applyDeadband(-driverCont.getLeftY(), 0.1), 3.0),
                     Math.pow(MathUtil.applyDeadband(-driverCont.getLeftX(), 0.1), 3.0),
                     angleToFace);
-        }
+        
     }
 
     // Called once the command ends or is interrupted.

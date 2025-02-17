@@ -55,6 +55,8 @@ import frc.robot.subsystems.Elevator.ElevatorIOWB;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIO;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
+import frc.robot.subsystems.AlgaeArm.AlgaeArm;
+import frc.robot.subsystems.AlgaeArm.AlgaeArmIOSim;
 import java.lang.ModuleLayer.Controller;
 import java.util.Objects;
 import java.util.function.DoubleSupplier;
@@ -72,20 +74,21 @@ public class RobotContainer {
     private final CommandXboxController operatorCont = new CommandXboxController(1);
 
     private CommandFactory commandFactory;
-
+    private Command setAngle;
     private CommandSwerveDrivetrain driveTrain;
     private Vision vision;
     private Catapult catapult;
     private CoralIntake coralIntake;
     private CoralShooter coralShooter;
     private Elevator elevator;
+    private AlgaeArm algaeArm;
     private AlgaeShooter algaeShooter;
 
     private ShuffleboardTab diagnosticTab;
 
-    private SnapDrivebaseToAngle snapDrivebaseToAngle;
     private Command rightAlign;
     private Command leftAlign;
+    private SnapDrivebaseToAngle snapDrivebaseToAngle;
 
     private Command levelFour;
     private Command levelThree;
@@ -152,6 +155,7 @@ public class RobotContainer {
                         }
                     );
                 elevator = new Elevator(new ElevatorIOSim());
+                algaeArm = new AlgaeArm(new AlgaeArmIOSim(() -> elevator.getHeight()));
                 coralShooter = new CoralShooter(new CoralShooterIOSim(() -> elevator.getHeight()));
                 algaeShooter = new AlgaeShooter(new AlgaeShooterIOSim());
 
@@ -171,6 +175,7 @@ public class RobotContainer {
                 elevator,
                 vision,
                 algaeShooter,
+                algaeArm,
                 driveTrain,
                 driverCont.getHID()
             );
@@ -183,9 +188,8 @@ public class RobotContainer {
             (poses -> Logger.recordOutput("Swerve/ActivePath", poses.toArray(new Pose2d[0])))
         );
         PathPlannerLogging.setLogTargetPoseCallback(
-            pose -> Logger.recordOutput("Swerve/TargetPathPose", pose)
-        );
-
+        pose -> Logger.recordOutput("Swerve/TargetPathPose", pose));
+        
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
 

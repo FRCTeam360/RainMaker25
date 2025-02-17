@@ -22,6 +22,4 @@ public interface ClimberWheelIO {
   public default void updateInputs(ClimberWheelIOInputs inputs) {}
 
   public void setDutyCycle(double dutyCycle);
-
-  public void setPosition(double position);
 }

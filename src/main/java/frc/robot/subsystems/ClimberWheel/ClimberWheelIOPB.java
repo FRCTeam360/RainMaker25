@@ -35,10 +35,6 @@ public class ClimberWheelIOPB implements ClimberWheelIO {
     wheelMotor.set(dutyCycle);
   }
 
-  public void setPosition(double position) {
-    pid.setSetpoint(position);
-  }
-
   public void updateInputs(ClimberWheelIOInputs inputs) {
     inputs.wheelDutyCycle = wheelMotor.get();
     inputs.wheelPosition = encoder.getPosition();

@@ -26,14 +26,6 @@ public class ClimberWheel extends SubsystemBase {
     return this.runEnd(() -> this.setDutyCycle(dutyCycle), () -> this.setDutyCycle(0));
   }
 
-  public void setPosition(double position) {
-    io.setPosition(position);
-  }
-
-  public Command setPositionCmd(double position) {
-    return this.runEnd(() -> this.setPosition(position), () -> this.setPosition(position));
-  }
-
   @Override
   public void periodic() {
     io.updateInputs(inputs);

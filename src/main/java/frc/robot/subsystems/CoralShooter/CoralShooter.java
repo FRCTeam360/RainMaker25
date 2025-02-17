@@ -14,8 +14,8 @@ import frc.robot.utils.CommandLogger;
 import org.littletonrobotics.junction.Logger;
 
 public class CoralShooter extends SubsystemBase {
-  private final CoralShooterIO io;
-  public final CoralShooterIOInputsAutoLogged inputs = new CoralShooterIOInputsAutoLogged();
+    private final CoralShooterIO io;
+    public final CoralShooterIOInputsAutoLogged inputs = new CoralShooterIOInputsAutoLogged();
 
     /** Creates a new CoralOutake. */
     public CoralShooter(CoralShooterIO io) {
@@ -46,6 +46,10 @@ public class CoralShooter extends SubsystemBase {
         return Commands.waitUntil(() -> this.getOuttakeSensor());
     }
 
+    public Command waitUntilIntakeSensor() {
+        return Commands.waitUntil(() -> inputs.intakeSensor);
+    }
+
     public Command shootCmd() {
         String cmdName = "ShootCoral";
         return CommandLogger.logCommand(waitUntilEmpty().raceWith(runCmd(-0.6)), cmdName);
@@ -54,6 +58,16 @@ public class CoralShooter extends SubsystemBase {
     public Command intakeCmd() {
         String cmdName = "IntakeCoral";
         return CommandLogger.logCommand(waitUntilFull().raceWith(runCmd(-0.25)), cmdName);
+    }
+
+    public Command betterIntakeCmd() {
+        String cmdName = "IntakeCoral2";
+        return CommandLogger.logCommand(
+                waitUntilIntakeSensor().deadlineFor(
+                        runCmd(-1.0)).andThen(
+                                waitUntilFull().deadlineFor(
+                                        runCmd(-0.3))),
+                cmdName);
     }
 
     @Override

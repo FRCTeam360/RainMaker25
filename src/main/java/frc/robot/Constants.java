@@ -110,6 +110,7 @@ public final class Constants {
         public static final int ALGAE_SHOOTER_ID = 25;
         
         public static final String CORAL_LIMELIGHT_NAME = "limelight-coral";
+        public static final String ALGAE_LIMELIGHT_NAME = "limelight-algae";
     }
 
     public static RobotType getRobotType() {

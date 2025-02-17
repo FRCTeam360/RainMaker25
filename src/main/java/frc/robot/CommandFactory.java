@@ -8,6 +8,7 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.AlgaeArm.AlgaeArm;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -36,30 +37,34 @@ public class CommandFactory {
     private final ClimberWinch climberWinch;
     private final ClimberWheel climberWheel;
     private final AlgaeShooter algaeShooter;
+    private final AlgaeArm algaeArm;
     private final CommandSwerveDrivetrain drivetrain;
-    private final XboxController driverCont;    
+    private final XboxController driverCont;  
+
     // ↓ constructor ↓ //
-public CommandFactory(
-    CoralIntake coralIntake,
-    CoralShooter coralShooter,
-    Elevator elevator,
-    Vision vision,
-    ClimberWinch climberWinch,
-    ClimberWheel climberWheel,
-    AlgaeShooter algaeShooter,
-    CommandSwerveDrivetrain driveTrain,
-    XboxController driverCont
-) {
-    this.coralIntake = coralIntake;
-    this.coralShooter = coralShooter;
-    this.elevator = elevator; 
-    this.vision = vision;
-    this.climberWinch = climberWinch;
-    this.climberWheel = climberWheel;
-    this.algaeShooter = algaeShooter;
-    this.drivetrain = driveTrain;
-    this.driverCont = driverCont;
-}
+    public CommandFactory(
+        CoralIntake coralIntake,
+        CoralShooter coralShooter,
+        Elevator elevator,
+        Vision vision,
+        ClimberWinch climberWinch,
+        ClimberWheel climberWheel,
+        AlgaeShooter algaeShooter,
+        AlgaeArm algaeArm,
+        CommandSwerveDrivetrain driveTrain,
+        XboxController driverCont
+    ) {
+        this.coralIntake = coralIntake;
+        this.coralShooter = coralShooter;
+        this.elevator = elevator; 
+        this.vision = vision;
+        this.climberWinch = climberWinch;
+        this.climberWheel = climberWheel;
+        this.algaeShooter = algaeShooter;
+        this.algaeArm = algaeArm;
+        this.drivetrain = driveTrain;
+        this.driverCont = driverCont;
+    }
 
     /*
      * height is in motor rotations!
@@ -88,6 +93,9 @@ public CommandFactory(
         return new SequentialCommandGroup(setElevatorLevelOne(), elevator.zeroElevatorCmd());
     }
 
+public Command setAlgaeArmAngle(double angle) {
+    return algaeArm.setAlgaeArmAngle(angle);
+}
     /**
      * 
      * @param goalTY

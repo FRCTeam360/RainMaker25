@@ -100,7 +100,9 @@ public final class Constants {
     public static final class PracticeBotConstants {
         public static final int ALGAE_SHOOTER_ID = 4;
         public static final int ALGAE_ARM_ID = 5;
-        public static final int CLIMBER_ID = 6;
+        public static final int CLIMBER_WINCH_ID = 6;
+        public static final int CLIMBER_WHEEL_ID = 7;
+        
     }
 
     public static RobotType getRobotType() {

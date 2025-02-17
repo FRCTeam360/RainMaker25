@@ -35,22 +35,20 @@ import frc.robot.commands.SetCoralIntake;
 import frc.robot.commands.SnapDrivebaseToAngle;
 import frc.robot.generated.OldCompBot;
 import frc.robot.generated.WoodBotDriveTrain;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.ClimberWinch.ClimberWinch;
+import frc.robot.subsystems.ClimberWinch.ClimberWinchIOSim;
 import frc.robot.subsystems.AlgaeShooter.AlgaeShooter;
 import frc.robot.subsystems.AlgaeShooter.AlgaeShooterIOSim;
-import frc.robot.subsystems.Catapult.Catapult;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.ClimberWheel.ClimberWheel;
+import frc.robot.subsystems.ClimberWheel.ClimberWheelIOSim;
+import frc.robot.subsystems.Elevator.Elevator;
+import frc.robot.subsystems.Elevator.ElevatorIOSim;
 import frc.robot.subsystems.CoralIntake.CoralIntake;
 import frc.robot.subsystems.CoralShooter.CoralShooter;
 import frc.robot.subsystems.CoralShooter.CoralShooterIOSim;
 import frc.robot.subsystems.CoralShooter.CoralShooterIOWB;
-import frc.robot.subsystems.Elevator.Elevator;
-import frc.robot.subsystems.Elevator.Elevator;
-import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorIO;
-import frc.robot.subsystems.Elevator.ElevatorIOSim;
-import frc.robot.subsystems.Elevator.ElevatorIOSim;
 import frc.robot.subsystems.Elevator.ElevatorIOWB;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIO;
@@ -77,10 +75,11 @@ public class RobotContainer {
     private Command setAngle;
     private CommandSwerveDrivetrain driveTrain;
     private Vision vision;
-    private Catapult catapult;
     private CoralIntake coralIntake;
     private CoralShooter coralShooter;
     private Elevator elevator;
+    private ClimberWinch climberWinch;
+    private ClimberWheel climberWheel;
     private AlgaeArm algaeArm;
     private AlgaeShooter algaeShooter;
 
@@ -157,8 +156,9 @@ public class RobotContainer {
                 elevator = new Elevator(new ElevatorIOSim());
                 algaeArm = new AlgaeArm(new AlgaeArmIOSim(() -> elevator.getHeight()));
                 coralShooter = new CoralShooter(new CoralShooterIOSim(() -> elevator.getHeight()));
+                climberWinch = new ClimberWinch(new ClimberWinchIOSim());
+                climberWheel = new ClimberWheel(new ClimberWheelIOSim());
                 algaeShooter = new AlgaeShooter(new AlgaeShooterIOSim());
-
                 break;
             case COMPETITION:
             default:
@@ -169,11 +169,12 @@ public class RobotContainer {
         
         commandFactory =
             new CommandFactory(
-                catapult,
                 coralIntake,
                 coralShooter,
                 elevator,
                 vision,
+                climberWinch,
+                climberWheel,
                 algaeShooter,
                 algaeArm,
                 driveTrain,

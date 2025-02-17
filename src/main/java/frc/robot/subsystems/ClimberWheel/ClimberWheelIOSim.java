@@ -55,9 +55,4 @@ public class ClimberWheelIOSim implements ClimberWheelIO {
     inputs.wheelVelocity = climberSim.getAngularVelocityRPM();
     inputs.wheelDutyCycle = climberSim.getInputVoltage();
   }
-
-  @Override
-  public void setPosition(double position) {
-    simWheelMotor.setPosition(position);
-  }
 }

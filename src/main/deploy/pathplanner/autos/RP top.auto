@@ -7,19 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "right bulletproof"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "zero"
+            "pathName": "RP top 1"
           }
         }
       ]

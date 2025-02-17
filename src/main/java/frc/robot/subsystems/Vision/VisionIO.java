@@ -7,8 +7,6 @@ package frc.robot.subsystems.Vision;
 import org.littletonrobotics.junction.AutoLog;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.math.geometry.Pose3d;
 
 public interface VisionIO {
@@ -21,7 +19,6 @@ public interface VisionIO {
         public double tyAdjusted;
         public double tv;
         public double pipeline;
-        public double tagID;
         public Pose2d estimatedPose;
         public double timestampSeconds;
         public int[] targetIds;
@@ -31,8 +28,6 @@ public interface VisionIO {
     }
 
     public void updateInputs(VisionIOInputs inputs);
-
-    public int getAprilTagID();
 
     public double getTXRaw();
 

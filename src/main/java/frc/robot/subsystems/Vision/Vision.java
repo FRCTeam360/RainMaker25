@@ -11,16 +11,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.function.Consumer;
-import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.Logger;
 
-import com.google.flatbuffers.Table;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.math.InterpolatingMatrixTreeMap;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -31,18 +24,14 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Vision extends SubsystemBase {
-  private NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-  private VisionIOInputsAutoLogged inputs = new VisionIOInputsAutoLogged();
   private final VisionIO[] ios;
   private final VisionIOInputsAutoLogged[] visionInputs;
   private Timer snapshotTimer = new Timer();
   List<VisionMeasurement> acceptedMeasurements = Collections.emptyList();
-
 
   private final String VISION_LOGGING_PREFIX = "Vision: ";
 
@@ -61,10 +50,6 @@ public class Vision extends SubsystemBase {
     // Creates the same number of inputs as vision IO layers
     visionInputs = new VisionIOInputsAutoLogged[visionIos.length];
     Arrays.fill(visionInputs, new VisionIOInputsAutoLogged());
-  }
-
-  public int getAprilTagID() {
-    return ios[0].getAprilTagID();
   }
 
   public double getTXRaw() {
@@ -104,10 +89,6 @@ public class Vision extends SubsystemBase {
     }
   }
 
-  public Command waitUntilTargetTxTy(double goalTX, double goalTY) {
-    return Commands.waitUntil(() -> isTargetInView() && isOnTargetTX(goalTX) && isOnTargetTY(goalTY));
-  }
-
   public void takeSnapshot() {
     // TODO: replace with more robust code
     ios[0].takeSnapshot();
@@ -125,14 +106,16 @@ public class Vision extends SubsystemBase {
   }
 
   public boolean isOnTargetTX(double goal) {
-    if (Math.abs(getTXRaw() - goal) < 1.0) {
+    // TODO: replace with more robust code
+    if (Math.abs(getTXAdjusted()) < goal) {
       return true;
     }
     return false;
   }
 
   public boolean isOnTargetTY(double goal) {
-    if (Math.abs(getTYRaw() - goal) < 1.0) {
+    // TODO: replace with more robust code
+    if (Math.abs(getTYAdjusted()) < goal) {
       return true;
     }
 

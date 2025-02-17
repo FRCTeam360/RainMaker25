@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems.ClimberWheel;
 
-import com.google.flatbuffers.Constants;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;

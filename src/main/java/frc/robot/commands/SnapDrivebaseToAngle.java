@@ -27,10 +27,10 @@ import org.littletonrobotics.junction.Logger;
 public class SnapDrivebaseToAngle extends Command {
     private CommandSwerveDrivetrain driveTrain;
     private CommandXboxController driverCont = new CommandXboxController(0);
-    private double angleToFace = 0.0;
+    private double angleToFace;
     private Rotation2d angleToFaceRotation2d;
-    private Vision aprilTagID;
-    private boolean endEarly;
+    private Vision vision;
+    private boolean endEarly = false;
     private int pipeline;
 
     private final String CMD_NAME = "SnapDrivebaseToAngle: ";
@@ -50,25 +50,26 @@ public class SnapDrivebaseToAngle extends Command {
             Map.entry(8, -120.0));
 
     /** Creates a new SnapDrivebaseToAngle. */
-    public SnapDrivebaseToAngle(Vision aprilTagID, CommandSwerveDrivetrain driveTrain, int pipeline) {
-        this.aprilTagID = aprilTagID;
+    public SnapDrivebaseToAngle(Vision vision, CommandSwerveDrivetrain driveTrain, int pipeline) {
+        this.vision = vision;
         this.driveTrain = driveTrain;
         this.pipeline = pipeline;
         // Use addRequirements() here to declare subsystem dependencies.
+
         addRequirements(driveTrain);
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        angleToFace = driveTrain.getAngle();
 
-        aprilTagID.setPipeline(pipeline);
+        vision.setPipeline(pipeline);
 
-        double angleToFace = driveTrain.getAngle();
-        int priorityID = aprilTagID.getAprilTagID();
+        int priorityID = vision.getAprilTagID();
 
         endEarly = true;
-        if (aprilTagID.getTV() == 1 && tagIDToAngle.containsKey(priorityID)) {
+        if (vision.getTV() == 1 && tagIDToAngle.containsKey(priorityID)) {
             endEarly = false;
             angleToFace = tagIDToAngle.get(priorityID);
         }
@@ -91,24 +92,22 @@ public class SnapDrivebaseToAngle extends Command {
     }
 
     public static Translation2d rotateTranslation(
-        Translation2d translationToRotate,
-        Rotation2d rotation
-    ) {
+            Translation2d translationToRotate,
+            Rotation2d rotation) {
         return translationToRotate.rotateBy(rotation);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if (endEarly) return;
+        if (endEarly)
+            return;
 
-        if (aprilTagID.getTV() == 1) {
+        if (vision.getTV() == 1) {
             driveTrain.driveFieldCentricFacingAngle(
-                Math.pow(MathUtil.applyDeadband(-driverCont.getLeftY(), 0.1), 2.0),
-                Math.pow(MathUtil.applyDeadband(-driverCont.getLeftX(), 0.1), 2.0),
-                angleToFace);
-        } else {
-            driveTrain.driveFieldCentricFacingAngle(0.0, 0.0, angleToFaceRotation2d.getDegrees());
+                    Math.pow(MathUtil.applyDeadband(-driverCont.getLeftY(), 0.1), 3.0),
+                    Math.pow(MathUtil.applyDeadband(-driverCont.getLeftX(), 0.1), 3.0),
+                    angleToFace);
         }
     }
 
@@ -116,14 +115,12 @@ public class SnapDrivebaseToAngle extends Command {
     @Override
     public void end(boolean interrupted) {
         LimelightHelpers.setPriorityTagID("limelight", -1);
-        driveTrain.xOut();
     };
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        boolean onHeading = driveTrain.isAtRotationSetpoint();
-        Logger.recordOutput(CMD_NAME + "onHeading", onHeading);
-        return endEarly || driveTrain.isAtRotationSetpoint();
+
+        return endEarly;
     }
 }

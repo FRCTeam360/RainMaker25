@@ -244,7 +244,7 @@ public class RobotContainer {
                 1
             );
 
-        snapDrivebaseToAngle = new SnapDrivebaseToAngle(driveTrain);
+        snapDrivebaseToAngle = new SnapDrivebaseToAngle(vision, driveTrain, 0);
 
         if (Objects.nonNull(elevator)) {
             levelFour = commandFactory.setElevatorLevelFour();
@@ -274,7 +274,7 @@ public class RobotContainer {
 
         levelOneAndZero = new SequentialCommandGroup(levelOne, zeroElevatorEncoder);
 
-        allignToReefWoodBot = commandFactory.alignToReefWoodbotLeft();       
+        allignToReefWoodBot = commandFactory.alignToReefWoodbotLeft(0);       
 
         if (Objects.nonNull(coralShooter) && Objects.nonNull(elevator)) {
             scoreCoralL4Left = commandFactory.scoringRoutine(4, true);
@@ -335,7 +335,7 @@ public class RobotContainer {
     private void configureBindings() {
         driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
 
-        driverCont.rightStick().whileTrue(driveTrain.robotCentricDrive(driverCont));
+        driverCont.rightStick().whileTrue(snapDrivebaseToAngle);
 
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
       //  driverCont.pov(90).toggleOnTrue(new InstantCommand(() -> driveTrain.setSteerCoast(true)));

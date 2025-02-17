@@ -145,9 +145,9 @@ public class CommandFactory {
         return scoringRoutine(level, isLeft).andThen(setElevatorHeightZeroAndZero());
     }
 
-    public Command alignToReefWoodbotLeft(){
+    public Command alignToReefWoodbotLeft(int pipeline){
         return new SequentialCommandGroup(
-            new SnapDrivebaseToAngle(drivetrain),
+            new SnapDrivebaseToAngle(vision, drivetrain, pipeline),
             new AlignWithLimelight(vision, drivetrain, -12.64, -11.16, 0)
         );
     }

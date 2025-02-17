@@ -58,7 +58,6 @@ public class ClimberWheelIOSim implements ClimberWheelIO {
 
   @Override
   public void setPosition(double position) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setPosition'");
+    simWheelMotor.setPosition(position);
   }
 }

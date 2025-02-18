@@ -42,7 +42,7 @@ public class ElevatorIOWB implements ElevatorIO {
         final double kG = 0.65;
         final double kI = 0.0;
         final double kP = 5.0;
-        final double kS = 0.05;
+        final double kS = 0.01;
         final double kV = 0.0;
 
         Slot0Configs slot0Configs = talonFXConfiguration.Slot0;

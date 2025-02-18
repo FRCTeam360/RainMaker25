@@ -43,16 +43,16 @@ public class ElevatorIOPB implements ElevatorIO {
     private final double GEAR_RATIO = 1.0;
 
     public ElevatorIOPB() {
-        final double UPPER_LIMIT = 0;
-        final double LOWER_LIMIT = 0;
+        final double UPPER_LIMIT = 31.0;
+        final double LOWER_LIMIT = 0.0;
 
-        final double kA = 0.0;
+        final double kA = 0.01;
         final double kD = 0.0;
-        final double kG = 0.65;
+        final double kG = 0.3;
         final double kI = 0.0;
         final double kP = 5.0;
-        final double kS = 0.05;
-        final double kV = 0.0;
+        final double kS = 0.01;
+        final double kV = 0.07;
 
         Slot0Configs slot0Configs = talonFXConfiguration.Slot0;
         slot0Configs.kA = kA;
@@ -63,9 +63,9 @@ public class ElevatorIOPB implements ElevatorIO {
         slot0Configs.kS = kS;
         slot0Configs.kV = kV;
 
-        final double motionMagicCruiseVelocity = 600.0;
-        final double motionMagicAcceleration = 200.0; //used to be 300 - jan 30
-        final double motionMagicCruiseJerk = 1000.0;
+        final double motionMagicCruiseVelocity = 800.0;
+        final double motionMagicAcceleration = 350.0; //used to be 300 - jan 30
+        final double motionMagicCruiseJerk = 1500.0;
 
         backElevatorMotor.getConfigurator().apply((talonFXConfiguration));
         //outputConfigs.withInverted(InvertedValue.Clockwise_Positive);

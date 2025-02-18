@@ -68,7 +68,7 @@ public class CommandFactory {
     }
 
     public Command setElevatorLevelFour(){
-        return setElevatorHeight(33.5);
+        return setElevatorHeight(30.0);
     }
     
     public Command setElevatorLevelThree(){
@@ -76,7 +76,7 @@ public class CommandFactory {
     }
     
     public Command setElevatorLevelTwo(){
-        return setElevatorHeight(10.5);
+        return setElevatorHeight(1.0);
     }
     
     public Command setElevatorLevelOne(){

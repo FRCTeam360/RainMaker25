@@ -50,10 +50,9 @@ public class ElevatorIOPB implements ElevatorIO {
         final double kD = 0.0;
         final double kG = 0.3;
         final double kI = 0.0;
-        final double kP = 5.0;
+        final double kP = 1.0; //5 original
         final double kS = 0.01;
         final double kV = 0.07;
-
         Slot0Configs slot0Configs = talonFXConfiguration.Slot0;
         slot0Configs.kA = kA;
         slot0Configs.kD = kD;
@@ -68,8 +67,10 @@ public class ElevatorIOPB implements ElevatorIO {
         final double motionMagicCruiseJerk = 1500.0;
 
         backElevatorMotor.getConfigurator().apply((talonFXConfiguration));
-        //outputConfigs.withInverted(InvertedValue.Clockwise_Positive);
+        frontElevatorMotor.getConfigurator().apply((talonFXConfiguration));
 
+        //outputConfigs.withInverted(InvertedValue.Clockwise_Positive);
+        
         // talonFXConfiguration.SoftwareLimitSwitch.withForwardSoftLimitThreshold(UPPER_LIMIT);
         // talonFXConfiguration.SoftwareLimitSwitch.withForwardSoftLimitEnable(true);
         // talonFXConfiguration.SoftwareLimitSwitch.withReverseSoftLimitThreshold(LOWER_LIMIT);
@@ -87,11 +88,13 @@ public class ElevatorIOPB implements ElevatorIO {
             .withMotionMagicJerk(motionMagicCruiseJerk);
 
         talonFXConfiguration.MotorOutput = outputConfigs;
-
-
+        
+        
         elevatorDiff = new DifferentialMechanism(backElevatorMotor, frontElevatorMotor, false);
         backElevatorMotor.getConfigurator().apply(talonFXConfiguration, 0.05);
         backElevatorMotor.setNeutralMode(NeutralModeValue.Brake);
+        frontElevatorMotor.setNeutralMode(NeutralModeValue.Brake);
+        frontElevatorMotor.getConfigurator().apply(talonFXConfiguration, 0.05);
         elevatorDiff.applyConfigs();
     }
 

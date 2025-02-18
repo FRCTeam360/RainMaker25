@@ -320,12 +320,12 @@ public class RobotContainer {
         driverCont.leftTrigger(0.25).whileTrue(coralShooter.evenBetterIntakeCmd()); // 2 is the number of the axis?
         driverCont.rightTrigger(0.25).whileTrue(coralShooter.shootCmd());
 
-        // if (Objects.nonNull(elevator)) {
-        //     driverCont.a().onTrue(levelOneAndZero);
-        //     driverCont.b().onTrue(levelTwo);
-        //     driverCont.x().onTrue(levelThree);
-        //     driverCont.y().onTrue(levelFour);
-        // }
+        if (Objects.nonNull(elevator)) {
+            driverCont.a().onTrue(levelOneAndZero);
+            driverCont.b().onTrue(levelTwo);
+            driverCont.x().onTrue(levelThree);
+            driverCont.y().onTrue(levelFour);
+        }
 
         // if (Objects.nonNull(coralShooter)) {
         //     driverCont.leftBumper().whileTrue(leftAlign);

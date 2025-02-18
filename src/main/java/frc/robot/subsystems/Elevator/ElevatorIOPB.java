@@ -9,13 +9,19 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionDutyCycle;
+import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.mechanisms.DifferentialMechanism;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.Constants.PracticeBotConstants;
@@ -26,7 +32,7 @@ import frc.robot.subsystems.CoralIntake.CoralIntakeIO.CoralIntakeIOInputs;
 public class ElevatorIOPB implements ElevatorIO {
     private final TalonFX backElevatorMotor = new TalonFX(PracticeBotConstants.BACK_ELEVATOR_ID, PracticeBotConstants.CANBUS_NAME);
     private final TalonFX frontElevatorMotor = new TalonFX(PracticeBotConstants.FRONT_ELEVATOR_ID, PracticeBotConstants.CANBUS_NAME);
-
+    private final DifferentialMechanism elevatorDiff;
     private TalonFXConfiguration talonFXConfiguration = new TalonFXConfiguration();
     private MotorOutputConfigs outputConfigs = new MotorOutputConfigs();
 
@@ -82,10 +88,11 @@ public class ElevatorIOPB implements ElevatorIO {
 
         talonFXConfiguration.MotorOutput = outputConfigs;
 
+
+        elevatorDiff = new DifferentialMechanism(backElevatorMotor, frontElevatorMotor, false);
         backElevatorMotor.getConfigurator().apply(talonFXConfiguration, 0.05);
         backElevatorMotor.setNeutralMode(NeutralModeValue.Brake);
-        frontElevatorMotor.setControl(new Follower(PracticeBotConstants.BACK_ELEVATOR_ID, true));
-
+        elevatorDiff.applyConfigs();
     }
 
     public void updateInputs(ElevatorIOInputs inputs) {
@@ -98,11 +105,14 @@ public class ElevatorIOPB implements ElevatorIO {
     }
 
     public void setDutyCycle(double dutyCycle) {
-        backElevatorMotor.set(dutyCycle);
+        DutyCycleOut duty = new DutyCycleOut(dutyCycle);
+        PositionDutyCycle positionDuty = new PositionDutyCycle(0); // difference between mechanism position should be zero?
+        elevatorDiff.setControl(duty , positionDuty);
     }
 
     public void stop() {
         backElevatorMotor.stopMotor();
+        frontElevatorMotor.stopMotor();
     }
     
     /*
@@ -110,6 +120,7 @@ public class ElevatorIOPB implements ElevatorIO {
      */
     public void setEncoder(double value) {
         backElevatorMotor.setPosition(value);
+        frontElevatorMotor.setPosition(value);
     }
 
     /*
@@ -117,7 +128,8 @@ public class ElevatorIOPB implements ElevatorIO {
      */
     public void setElevatorPostion(double height) {
         MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(height);
-        backElevatorMotor.setControl(motionMagicVoltage);
+        PositionVoltage positionVoltage = new PositionVoltage(0); // difference between mechanism position should be zero?
+        elevatorDiff.setControl(motionMagicVoltage, positionVoltage);
     }
 
 }

@@ -9,13 +9,19 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionDutyCycle;
+import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.mechanisms.DifferentialMechanism;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.Constants.PracticeBotConstants;
@@ -26,7 +32,7 @@ import frc.robot.subsystems.CoralIntake.CoralIntakeIO.CoralIntakeIOInputs;
 public class ElevatorIOPB implements ElevatorIO {
     private final TalonFX backElevatorMotor = new TalonFX(PracticeBotConstants.BACK_ELEVATOR_ID, PracticeBotConstants.CANBUS_NAME);
     private final TalonFX frontElevatorMotor = new TalonFX(PracticeBotConstants.FRONT_ELEVATOR_ID, PracticeBotConstants.CANBUS_NAME);
-
+    private final DifferentialMechanism elevatorDiff;
     private TalonFXConfiguration talonFXConfiguration = new TalonFXConfiguration();
     private MotorOutputConfigs outputConfigs = new MotorOutputConfigs();
 
@@ -37,17 +43,16 @@ public class ElevatorIOPB implements ElevatorIO {
     private final double GEAR_RATIO = 1.0;
 
     public ElevatorIOPB() {
-        final double UPPER_LIMIT = 0;
-        final double LOWER_LIMIT = 0;
+        final double UPPER_LIMIT = 31.0;
+        final double LOWER_LIMIT = 0.0;
 
-        final double kA = 0.0;
+        final double kA = 0.01;
         final double kD = 0.0;
-        final double kG = 0.65;
+        final double kG = 0.3;
         final double kI = 0.0;
-        final double kP = 5.0;
-        final double kS = 0.05;
-        final double kV = 0.0;
-
+        final double kP = 1.0; //5 original
+        final double kS = 0.01;
+        final double kV = 0.07;
         Slot0Configs slot0Configs = talonFXConfiguration.Slot0;
         slot0Configs.kA = kA;
         slot0Configs.kD = kD;
@@ -57,13 +62,15 @@ public class ElevatorIOPB implements ElevatorIO {
         slot0Configs.kS = kS;
         slot0Configs.kV = kV;
 
-        final double motionMagicCruiseVelocity = 600.0;
-        final double motionMagicAcceleration = 200.0; //used to be 300 - jan 30
-        final double motionMagicCruiseJerk = 1000.0;
+        final double motionMagicCruiseVelocity = 800.0;
+        final double motionMagicAcceleration = 350.0; //used to be 300 - jan 30
+        final double motionMagicCruiseJerk = 1500.0;
 
         backElevatorMotor.getConfigurator().apply((talonFXConfiguration));
-        //outputConfigs.withInverted(InvertedValue.Clockwise_Positive);
+        frontElevatorMotor.getConfigurator().apply((talonFXConfiguration));
 
+        //outputConfigs.withInverted(InvertedValue.Clockwise_Positive);
+        
         // talonFXConfiguration.SoftwareLimitSwitch.withForwardSoftLimitThreshold(UPPER_LIMIT);
         // talonFXConfiguration.SoftwareLimitSwitch.withForwardSoftLimitEnable(true);
         // talonFXConfiguration.SoftwareLimitSwitch.withReverseSoftLimitThreshold(LOWER_LIMIT);
@@ -81,11 +88,14 @@ public class ElevatorIOPB implements ElevatorIO {
             .withMotionMagicJerk(motionMagicCruiseJerk);
 
         talonFXConfiguration.MotorOutput = outputConfigs;
-
+        
+        
+        elevatorDiff = new DifferentialMechanism(backElevatorMotor, frontElevatorMotor, false);
         backElevatorMotor.getConfigurator().apply(talonFXConfiguration, 0.05);
         backElevatorMotor.setNeutralMode(NeutralModeValue.Brake);
-        frontElevatorMotor.setControl(new Follower(PracticeBotConstants.BACK_ELEVATOR_ID, true));
-
+        frontElevatorMotor.setNeutralMode(NeutralModeValue.Brake);
+        frontElevatorMotor.getConfigurator().apply(talonFXConfiguration, 0.05);
+        elevatorDiff.applyConfigs();
     }
 
     public void updateInputs(ElevatorIOInputs inputs) {
@@ -98,11 +108,14 @@ public class ElevatorIOPB implements ElevatorIO {
     }
 
     public void setDutyCycle(double dutyCycle) {
-        backElevatorMotor.set(dutyCycle);
+        DutyCycleOut duty = new DutyCycleOut(dutyCycle);
+        PositionDutyCycle positionDuty = new PositionDutyCycle(0); // difference between mechanism position should be zero?
+        elevatorDiff.setControl(duty , positionDuty);
     }
 
     public void stop() {
         backElevatorMotor.stopMotor();
+        frontElevatorMotor.stopMotor();
     }
     
     /*
@@ -110,6 +123,7 @@ public class ElevatorIOPB implements ElevatorIO {
      */
     public void setEncoder(double value) {
         backElevatorMotor.setPosition(value);
+        frontElevatorMotor.setPosition(value);
     }
 
     /*
@@ -117,7 +131,8 @@ public class ElevatorIOPB implements ElevatorIO {
      */
     public void setElevatorPostion(double height) {
         MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(height);
-        backElevatorMotor.setControl(motionMagicVoltage);
+        PositionVoltage positionVoltage = new PositionVoltage(0); // difference between mechanism position should be zero?
+        elevatorDiff.setControl(motionMagicVoltage, positionVoltage);
     }
 
 }

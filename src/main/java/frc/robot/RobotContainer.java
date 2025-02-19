@@ -322,15 +322,15 @@ public class RobotContainer {
 
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
 
-        driverCont.axisGreaterThan(2, 0.25).whileTrue(coralShooter.intakeCmd()); // 2 is the number of the axis?
-        driverCont.axisGreaterThan(3, 0.25).whileTrue(coralShooter.shootCmd());
+        driverCont.leftTrigger(0.25).whileTrue(coralShooter.evenBetterIntakeCmd()); // 2 is the number of the axis?
+        driverCont.rightTrigger(0.25).whileTrue(coralShooter.shootCmd());
 
-        // if (Objects.nonNull(elevator)) {
-        //     driverCont.a().onTrue(levelOneAndZero);
-        //     driverCont.b().onTrue(levelTwo);
-        //     driverCont.x().onTrue(levelThree);
-        //     driverCont.y().onTrue(levelFour);
-        // }
+        if (Objects.nonNull(elevator)) {
+            driverCont.a().onTrue(levelOneAndZero);
+            driverCont.b().onTrue(levelTwo);
+            driverCont.x().onTrue(levelThree);
+            driverCont.y().onTrue(levelFour);
+        }
 
         // if (Objects.nonNull(coralShooter)) {
         //     driverCont.leftBumper().whileTrue(leftAlign);

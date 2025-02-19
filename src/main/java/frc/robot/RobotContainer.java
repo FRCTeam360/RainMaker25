@@ -58,6 +58,8 @@ import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIO;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
 import java.lang.ModuleLayer.Controller;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -110,12 +112,13 @@ public class RobotContainer {
                 driveTrain = WoodBotDriveTrain.createDrivetrain();
                 logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
                 vision = new Vision(
-                        new VisionIO[] {
-                                new VisionIOLimelight(
-                                        Constants.VisionConstants.WOODBOT_LIMELIGHT_NAME,
-                                        () -> driveTrain.getAngle(),
-                                        () -> driveTrain.getAngularRate()),
-                        });
+                        Map.ofEntries(
+                            Map.entry("0",new VisionIOLimelight(
+                                Constants.VisionConstants.WOODBOT_LIMELIGHT_NAME,
+                                () -> driveTrain.getAngle(),
+                                () -> driveTrain.getAngularRate()))
+                ));
+
                 elevator = new Elevator(new ElevatorIOPB());
                 coralShooter = new CoralShooter(new CoralShooterIOWB());
                 break;
@@ -123,12 +126,12 @@ public class RobotContainer {
                 // ocb stuff
                 driveTrain = OldCompBot.createDrivetrain();
                 vision = new Vision(
-                        new VisionIO[] {
-                                new VisionIOLimelight(
-                                        Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
-                                        () -> driveTrain.getAngle(),
-                                        () -> driveTrain.getAngularRate()),
-                        });
+                    Map.ofEntries(
+                        Map.entry("0", new VisionIOLimelight(
+                            Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
+                            () -> driveTrain.getAngle(),
+                            () -> driveTrain.getAngularRate()))
+                    ));
                 // constants = Constants.OldCompBotConstants;
                 break;
             case PRACTICE:
@@ -137,24 +140,26 @@ public class RobotContainer {
                 coralShooter = new CoralShooter(new CoralShooterIOPB());
                 elevator = new Elevator(new ElevatorIOPB());
                 vision = new Vision(
-                        new VisionIO[] {
+                    Map.ofEntries(
+                        Map.entry("0",
                                 new VisionIOLimelight(
                                         Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
                                         () -> driveTrain.getAngle(),
-                                        () -> driveTrain.getAngularRate()),
-                        });
+                                        () -> driveTrain.getAngularRate()))
+                        ));
                 // practice bot stuff
                 break;
             case SIM:
                 driveTrain = WoodBotDriveTrain.createDrivetrain();
                 logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
                 vision = new Vision(
-                        new VisionIO[] {
+                    Map.ofEntries(
+                        Map.entry("0",
                                 new VisionIOLimelight(
                                         Constants.OldCompBotConstants.OCB_LIMELIGHT_NAME,
                                         () -> driveTrain.getAngle(),
-                                        () -> driveTrain.getAngularRate()),
-                        });
+                                        () -> driveTrain.getAngularRate()))
+                    ));
                 elevator = new Elevator(new ElevatorIOSim());
                 coralShooter = new CoralShooter(new CoralShooterIOSim(() -> elevator.getHeight()));
                 algaeShooter = new AlgaeShooter(new AlgaeShooterIOSim());

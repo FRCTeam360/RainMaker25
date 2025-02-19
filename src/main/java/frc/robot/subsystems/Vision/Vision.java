@@ -7,7 +7,9 @@ package frc.robot.subsystems.Vision;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.function.Consumer;
@@ -38,7 +40,8 @@ import frc.robot.Constants;
 public class Vision extends SubsystemBase {
   private NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
   private VisionIOInputsAutoLogged inputs = new VisionIOInputsAutoLogged();
-  private final VisionIO[] ios;
+  //private final VisionIO[] ios;
+  private final Map<String, VisionIO> ios;
   private final VisionIOInputsAutoLogged[] visionInputs;
   private Timer snapshotTimer = new Timer();
   List<VisionMeasurement> acceptedMeasurements = Collections.emptyList();
@@ -56,51 +59,51 @@ public class Vision extends SubsystemBase {
   private static final Matrix<N3, N1> stdDevMatrix = VecBuilder.fill(.7, .7, 999999);
 
   /** Creates a new Vision. */
-  public Vision(VisionIO[] visionIos) {
+  public Vision( Map<String, VisionIO> visionIos) {
     this.ios = visionIos;
     // Creates the same number of inputs as vision IO layers
-    visionInputs = new VisionIOInputsAutoLogged[visionIos.length];
+    visionInputs = new VisionIOInputsAutoLogged[visionIos.size()];
     Arrays.fill(visionInputs, new VisionIOInputsAutoLogged());
   }
 
   public int getAprilTagID() {
-    return ios[0].getAprilTagID();
+    return ios.get("0").getAprilTagID();
   }
 
   public double getTXRaw() {
     // TODO: replace with more robust code
-    return ios[0].getTXRaw();
+    return ios.get("0").getTXRaw();
   }
 
   public double getTXAdjusted() {
     // TODO: replace with more robust code
-    return ios[0].getTXAdjusted();
+    return ios.get("0").getTXAdjusted();
   }
 
   public double getTYRaw() {
     // TODO: replace with more robust code
-    return ios[0].getTYRaw();
+    return ios.get("0").getTYRaw();
   }
 
   public double getTYAdjusted() {
     // TODO: replace with more robust code
-    return ios[0].getTYAdjusted();
+    return ios.get("0").getTYAdjusted();
   }
 
   public double getTV() {
     // TODO: replace with more robust code
-    return ios[0].getTV();
+    return ios.get("0").getTV();
   }
 
   public double getPipeline() {
     // TODO: replace with more robust code
-    return ios[0].getPipeline();
+    return ios.get("0").getPipeline();
   }
 
   public void setPipeline(int pipeline) {
     // TODO: replace with more robust code
-    if (ios[0].getPipeline() != pipeline) {
-      ios[0].setPipeline(pipeline);
+    if (ios.get("0").getPipeline() != pipeline) {
+      ios.get("0").setPipeline(pipeline);
     }
   }
 
@@ -110,7 +113,7 @@ public class Vision extends SubsystemBase {
 
   public void takeSnapshot() {
     // TODO: replace with more robust code
-    ios[0].takeSnapshot();
+    ios.get("0").takeSnapshot();
     Logger.recordOutput(VISION_LOGGING_PREFIX + "snapshot", true);
     snapshotTimer.stop();
     snapshotTimer.reset();
@@ -119,7 +122,7 @@ public class Vision extends SubsystemBase {
 
   public void resetSnapshot() {
     // TODO: replace with more robust code
-    ios[0].resetSnapshot();
+    ios.get("0").resetSnapshot();
     Logger.recordOutput(VISION_LOGGING_PREFIX + "snapshot", false);
     snapshotTimer.stop();
   }
@@ -147,8 +150,8 @@ public class Vision extends SubsystemBase {
 
   @Override
   public void periodic() {
-    for (int i = 0; i < ios.length; i++) {
-      VisionIO io = ios[i];
+    for (int i = 0; i < ios.size(); i++) {
+      VisionIO io = ios.get(String.valueOf(i));
       VisionIOInputsAutoLogged input = visionInputs[i];
 
       io.updateInputs(input);

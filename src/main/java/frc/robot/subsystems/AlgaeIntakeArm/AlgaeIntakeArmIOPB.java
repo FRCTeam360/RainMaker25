@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems.AlgaeIntakeArm;
 
-import com.revrobotics.RelativeEncoder;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class AlgaeIntakeArmIOPB implements AlgaeIntakeArmIO {
   private final SparkMax motor = new SparkMax(13, MotorType.kBrushless);
-  private final RelativeEncoder encoder = motor.getEncoder();
+  private final AbsoluteEncoder encoder =  motor.getAbsoluteEncoder();
 
   /** Creates a new AlgaeIntakeIOPB. */
   public AlgaeIntakeArmIOPB() {}

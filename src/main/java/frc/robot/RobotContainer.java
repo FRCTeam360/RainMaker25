@@ -379,7 +379,7 @@ public class RobotContainer {
 
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
 
-        driverCont.leftTrigger(0.25).whileTrue(coralShooter.evenBetterIntakeCmd()); 
+        driverCont.leftTrigger(0.25).whileTrue(coralShooter.antiStallIntakeCmd()); // 2 is the number of the axis?
         driverCont.rightTrigger(0.25).whileTrue(coralShooter.shootCmd());
 
         if (Objects.nonNull(elevator)) {
@@ -388,7 +388,7 @@ public class RobotContainer {
             driverCont.x().onTrue(levelThree);
             driverCont.y().onTrue(levelFour);
         }
-        
+
         // if (Objects.nonNull(coralShooter)) {
         //     driverCont.leftBumper().whileTrue(leftAlign);
         //     driverCont.rightBumper().whileTrue(rightAlign);

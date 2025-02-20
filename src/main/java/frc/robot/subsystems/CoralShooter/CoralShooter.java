@@ -101,7 +101,7 @@ public class CoralShooter extends SubsystemBase {
                 }));
     }
 
-    public Command evenBetterIntakeCmd() {
+    public Command antiStallIntakeCmd() {
         String cmdName = "IntakeCoralEvenBetter";
         return CommandLogger.logCommand(
                 waitUntilIntakeSensor().deadlineFor(

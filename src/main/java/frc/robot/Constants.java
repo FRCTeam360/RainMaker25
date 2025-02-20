@@ -93,7 +93,7 @@ public final class Constants {
 
         public static final int ELEVATOR_BOTTOM_SWITCH = 2;
         public static final int OUTTAKE_SENSOR = 0; //DIO port
-
+     
         public static final String CORAL_LIMELIGHT_NAME = "limelight-coral";
         public static final String ALGAE_LIMELIGHT_NAME = "limelight-algae";
     }
@@ -102,13 +102,20 @@ public final class Constants {
         public static final String CANBUS_NAME = "Default Name";
         public static final int BACK_ELEVATOR_ID = 14;
         public static final int FRONT_ELEVATOR_ID = 15;
-        public static final int CLIMBER_ROLLER_ID = 16;
+
+        public static final int CLIMBER_ROLLER_ID = 28;
         public static final int CLIMBER_WINCH_ID = 17;
+        
         public static final int ALGAE_ARM_ID = 18;
         public static final int CORAL_SHOOTER_ID = 19;
+
+        public static final int ALGAE_SHOOTER_FRONT_ID = 25;
+        public static final int ALGE_SHOOTER_BACK_ID = 26;
+        public static final int ALGAE_TILT = 27;
+        public static final int ALGAE_ROLLER = 16;
+
         public static final int INTAKE_SENSOR_ID = 20;
         public static final int OUTTAKE_SENSOR_ID = 21;
-        public static final int ALGAE_SHOOTER_ID = 25;
         
         public static final String CORAL_LIMELIGHT_NAME = "limelight-coral";
         public static final String ALGAE_LIMELIGHT_NAME = "limelight-algae";

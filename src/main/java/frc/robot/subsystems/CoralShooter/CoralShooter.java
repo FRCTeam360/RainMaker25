@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.CommandLogger;
-
 import org.littletonrobotics.junction.Logger;
 
 public class CoralShooter extends SubsystemBase {
@@ -69,12 +68,12 @@ public class CoralShooter extends SubsystemBase {
     private boolean isStalling() {
         boolean stalling = inputs.outtakeStatorCurrent > 15.0;
         // stalling = testStall;
-        if(stalling && !stallTimer.isRunning()) {
+        if (stalling && !stallTimer.isRunning()) {
             stallTimer.restart();
-        } else if(stalling && stallTimer.hasElapsed(0.2)){
+        } else if (stalling && stallTimer.hasElapsed(0.2)) {
             stallTimer.stop();
             return true;
-        } else if(!stalling){
+        } else if (!stalling) {
             stallTimer.stop();
         }
         return false;
@@ -82,43 +81,48 @@ public class CoralShooter extends SubsystemBase {
 
     private boolean isUnjamming() {
         boolean isStalled = isStalling();
-        if(isStalled){
+        if (isStalled) {
             // testStall = false;
             unjamTimer.restart();
             return true;
-        } else if(unjamTimer.isRunning() && !unjamTimer.hasElapsed(0.2)){
+        } else if (unjamTimer.isRunning() && !unjamTimer.hasElapsed(0.2)) {
             return true;
-        } else if(unjamTimer.hasElapsed(0.2)) {
+        } else if (unjamTimer.hasElapsed(0.2)) {
             unjamTimer.stop();
         }
         return false;
     }
 
     private Command repeatOnStall() {
-        return new ConditionalCommand(runCmd(1.0), runCmd(-0.3), () -> isUnjamming()).repeatedly()
-                .alongWith(new InstantCommand(() -> {
-                    // testStall = true;
-                }));
+        return new ConditionalCommand(runCmd(1.0), runCmd(-0.3), () -> isUnjamming())
+            .repeatedly()
+            .alongWith(
+                new InstantCommand(
+                    () -> {
+                        // testStall = true;
+                    }
+                )
+            );
     }
 
     public Command antiStallIntakeCmd() {
         String cmdName = "IntakeCoralEvenBetter";
         return CommandLogger.logCommand(
-                waitUntilIntakeSensor().deadlineFor(
-                        repeatOnStall()).andThen(
-                                waitUntilFull().deadlineFor(
-                                        runCmd(-0.2))),
-            cmdName);
+            waitUntilIntakeSensor()
+                .deadlineFor(repeatOnStall())
+                .andThen(waitUntilFull().deadlineFor(runCmd(-0.2))),
+            cmdName
+        );
     }
 
     public Command betterIntakeCmd() {
         String cmdName = "IntakeCoral2";
         return CommandLogger.logCommand(
-                waitUntilIntakeSensor().deadlineFor(
-                        runCmd(-1.0)).andThen(
-                                waitUntilFull().deadlineFor(
-                                        runCmd(-0.3))),
-                cmdName);
+            waitUntilIntakeSensor()
+                .deadlineFor(runCmd(-1.0))
+                .andThen(waitUntilFull().deadlineFor(runCmd(-0.3))),
+            cmdName
+        );
     }
 
     @Override

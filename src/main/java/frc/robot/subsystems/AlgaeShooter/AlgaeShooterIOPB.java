@@ -19,7 +19,7 @@ import frc.robot.subsystems.Elevator.ElevatorIO.ElevatorIOInputs;
 
 public class AlgaeShooterIOPB implements AlgaeShooterIO {
 
-  private final TalonFX algaeShooterMotor = new TalonFX(Constants.PracticeBotConstants.ALGAE_SHOOTER_ID,
+  private final TalonFX algaeShooterMotor = new TalonFX(Constants.PracticeBotConstants.ALGAE_SHOOTER_FRONT_ID,
       "Default Name"); // no ID
 
   private TalonFXConfiguration talonFXConfiguration = new TalonFXConfiguration();

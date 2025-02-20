@@ -93,10 +93,10 @@ public class ElevatorIOPB implements ElevatorIO {
 
         talonFXConfiguration.MotorOutput = outputConfigs;
         
-        sens.withDifferentialTalonFXSensorID(backElevatorMotor.getDeviceID());
+        sens.withDifferentialTalonFXSensorID(frontElevatorMotor.getDeviceID());
         sens.withDifferentialSensorSource(DifferentialSensorSourceValue.RemoteTalonFX_Diff);
 
-        elevatorDiff = new DifferentialMechanism(frontElevatorMotor, backElevatorMotor, false);
+        elevatorDiff = new DifferentialMechanism( backElevatorMotor,frontElevatorMotor, false);
         backElevatorMotor.getConfigurator().apply(talonFXConfiguration, 0.05);
         backElevatorMotor.setNeutralMode(NeutralModeValue.Brake);
         // FOLLOWER CODE: frontElevatorMotor.setControl(new Follower(PracticeBotConstants.FRONT_ELEVATOR_ID, true));

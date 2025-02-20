@@ -8,6 +8,7 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -80,5 +81,10 @@ public class AlgaeShooterIOPB implements AlgaeShooterIO {
   public void setVelocity(double velocity) {
     final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0).withEnableFOC(true);
     algaeShooterMotor.setControl(velocityRequest.withVelocity(velocity));
+  }
+
+  public void setPosition(double position) {
+    final PositionTorqueCurrentFOC positionRequest = new PositionTorqueCurrentFOC(position);
+    algaeShooterMotor.setControl(positionRequest.withPosition(position));
   }
 }

@@ -26,4 +26,6 @@ public interface AlgaeShooterIO {
   public void setDutyCycle(double dutyCycle);
 
   public void setVelocity(double velocity);
+
+  public void setPosition(double position);
 }

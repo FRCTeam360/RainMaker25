@@ -61,4 +61,10 @@ public class AlgaeShooterIOSim implements AlgaeShooterIO {
   public void setVelocity(double velocity) {
     algaeShooterSim.setAngularVelocity(velocity);
   }
+
+  @Override
+  public void setPosition(double position) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'setPosition'");
+  }
 }

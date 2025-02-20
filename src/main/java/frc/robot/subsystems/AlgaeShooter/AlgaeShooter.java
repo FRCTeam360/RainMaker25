@@ -23,6 +23,10 @@ public class AlgaeShooter extends SubsystemBase {
         io.setDutyCycle(velocity);
     }
 
+    public void setPosition(double position) {
+        io.setPosition(position);
+    }
+
     public Command setDutyCycleCmd(double dutyCycle) {
         return this.runEnd(() -> this.setDutyCycle(dutyCycle), () -> this.setDutyCycle(0));
     }
@@ -33,6 +37,10 @@ public class AlgaeShooter extends SubsystemBase {
 
     public Command waitVelocitySetpoint(double velocitySetpoint) {
         return Commands.waitUntil(() -> Math.abs(velocitySetpoint - inputs.algaeShooterVelocity) < 100);
+    }
+
+    public Command setPositionCmd(double position) {
+        return this.runEnd(() -> io.setPosition(position), () -> io.setPosition(position));
     }
     
     @Override

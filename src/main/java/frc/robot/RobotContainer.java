@@ -249,6 +249,10 @@ public class RobotContainer {
             );
         }
 
+        if (Objects.nonNull(climberWinch)) {
+            
+        }
+
         registerPathplannerCommand("Elevator L4", levelFour);
         registerPathplannerCommand("Elevator L3", levelThree);
         registerPathplannerCommand("Elevator L2", levelTwo);

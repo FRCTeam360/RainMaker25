@@ -42,6 +42,7 @@ public class Vision extends SubsystemBase {
   private VisionIOInputsAutoLogged inputs = new VisionIOInputsAutoLogged();
   //private final VisionIO[] ios;
   private final Map<String, VisionIO> ios;
+
   private final VisionIOInputsAutoLogged[] visionInputs;
   private Timer snapshotTimer = new Timer();
   List<VisionMeasurement> acceptedMeasurements = Collections.emptyList();
@@ -66,88 +67,76 @@ public class Vision extends SubsystemBase {
     Arrays.fill(visionInputs, new VisionIOInputsAutoLogged());
   }
 
-  public int getAprilTagID() {
-    return ios.get("0").getAprilTagID();
+  public int getAprilTagID(String name) {
+    return ios.get(name).getAprilTagID();
   }
 
-  public double getTXRaw() {
+  public double getTXRaw(String name) {
     // TODO: replace with more robust code
-    return ios.get("0").getTXRaw();
+    return ios.get(name).getTXRaw();
   }
 
-  public double getTXAdjusted() {
+
+  public double getTYRaw(String name) {
     // TODO: replace with more robust code
-    return ios.get("0").getTXAdjusted();
+    return ios.get(name).getTYRaw();
   }
 
-  public double getTYRaw() {
+  public double getTV(String name) {
     // TODO: replace with more robust code
-    return ios.get("0").getTYRaw();
+    return ios.get(name).getTV();
   }
 
-  public double getTYAdjusted() {
+  public double getPipeline(String name) {
     // TODO: replace with more robust code
-    return ios.get("0").getTYAdjusted();
+    return ios.get(name).getPipeline();
   }
 
-  public double getTV() {
+  public void setPipeline(String name, int pipeline) {
     // TODO: replace with more robust code
-    return ios.get("0").getTV();
-  }
-
-  public double getPipeline() {
-    // TODO: replace with more robust code
-    return ios.get("0").getPipeline();
-  }
-
-  public void setPipeline(int pipeline) {
-    // TODO: replace with more robust code
-    if (ios.get("0").getPipeline() != pipeline) {
-      ios.get("0").setPipeline(pipeline);
+    if (ios.get(name).getPipeline() != pipeline) {
+      ios.get(name).setPipeline(pipeline);
     }
   }
-
-  public Command waitUntilTargetTxTy(double goalTX, double goalTY) {
-    return Commands.waitUntil(() -> isTargetInView() && isOnTargetTX(goalTX) && isOnTargetTY(goalTY));
-  }
-
-  public void takeSnapshot() {
+  
+  public void takeSnapshot(String name) {
     // TODO: replace with more robust code
-    ios.get("0").takeSnapshot();
+    ios.get(name).takeSnapshot();
     Logger.recordOutput(VISION_LOGGING_PREFIX + "snapshot", true);
     snapshotTimer.stop();
     snapshotTimer.reset();
     snapshotTimer.start();
   }
 
-  public void resetSnapshot() {
+  public void resetSnapshot(String name) {
     // TODO: replace with more robust code
-    ios.get("0").resetSnapshot();
+    ios.get(name).resetSnapshot();
     Logger.recordOutput(VISION_LOGGING_PREFIX + "snapshot", false);
     snapshotTimer.stop();
   }
 
-  public boolean isOnTargetTX(double goal) {
-    if (Math.abs(getTXRaw() - goal) < 1.0) {
+  public boolean isOnTargetTX(String name, double goal) {
+    if (Math.abs(getTXRaw(name) - goal) < 1.0) {
       return true;
     }
     return false;
   }
 
-  public boolean isOnTargetTY(double goal) {
-    if (Math.abs(getTYRaw() - goal) < 1.0) {
+  public boolean isOnTargetTY(String name, double goal) {
+    if (Math.abs(getTYRaw(name) - goal) < 1.0) {
       return true;
     }
-
     return false;
   }
-
-  // Returns true if the target is in view
-  public boolean isTargetInView() {
+  
+  public boolean isTargetInView(String name) {
     // TODO: replace with more robust code
-    return getTV() == 1;
+    return getTV(name) == 1;
   }
-
+  
+  public Command waitUntilTargetTxTy(String name, double goalTX, double goalTY) {
+    return Commands.waitUntil(() -> isTargetInView(name) && isOnTargetTX(name, goalTX) && isOnTargetTY(name, goalTY));
+  }
   @Override
   public void periodic() {
     for (int i = 0; i < ios.size(); i++) {

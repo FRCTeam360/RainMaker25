@@ -48,9 +48,7 @@ public class VisionIOLimelight implements VisionIO {
 
     inputs.tv = getTV();
     inputs.tx = getTXRaw();
-    inputs.txAdjusted = getTXAdjusted();
     inputs.ty = getTYRaw();
-    inputs.tyAdjusted = getTYAdjusted();
     inputs.pipeline = getPipeline();
     inputs.tagID = getAprilTagID();
     // if the new pose estimate is null, then don't update further
@@ -95,24 +93,12 @@ public class VisionIOLimelight implements VisionIO {
     return table.getEntry("tx").getDouble(0.0);
   }
 
-  public double getTXAdjusted() {
-    return getTXRaw();
-  }
-
   public double getTYRaw() {
     return table.getEntry("ty").getDouble(0);
   }
-
-  public double getTYAdjusted() {
-    return getTYRaw();
-  }
-
+ 
   public double getTV() {
     return table.getEntry("tv").getDouble(0);
-  }
-
-  private boolean targetInView() {
-    return getTV() == 1.0;
   }
 
   public double getPipeline() {

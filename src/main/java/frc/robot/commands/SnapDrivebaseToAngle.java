@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
@@ -25,6 +26,7 @@ public class SnapDrivebaseToAngle extends Command {
     private double angleToFace = 0.0;
     private Vision vision;
     private Vision aprilTagID;
+    private String name = Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME;
 
     /** Creates a new SnapDrivebaseToAngle. */
     public SnapDrivebaseToAngle(CommandSwerveDrivetrain driveTrain) {
@@ -38,17 +40,17 @@ public class SnapDrivebaseToAngle extends Command {
     public void initialize() {
         
         //TODO: fix "not right" angles - alex
-        if (vision.getAprilTagID() == 21 || vision.getAprilTagID() == 7) {
+        if (vision.getAprilTagID(name) == 21 || vision.getAprilTagID(name) == 7) {
             angleToFace = 180.0;
-        } else if (vision.getAprilTagID() == 22 || vision.getAprilTagID() == 6)  {
+        } else if (vision.getAprilTagID(name) == 22 || vision.getAprilTagID(name) == 6)  {
             angleToFace = 120.0;
-       } else if (vision.getAprilTagID() == 17 || vision.getAprilTagID() == 11) {
+       } else if (vision.getAprilTagID(name) == 17 || vision.getAprilTagID(name) == 11) {
             angleToFace = 60.0;
-      } else if (vision.getAprilTagID() == 18 || vision.getAprilTagID() == 10) {
+      } else if (vision.getAprilTagID(name) == 18 || vision.getAprilTagID(name) == 10) {
             angleToFace = 0.0;
-        } else if (vision.getAprilTagID() == 19 || vision.getAprilTagID() == 9) {
+        } else if (vision.getAprilTagID(name) == 19 || vision.getAprilTagID(name) == 9) {
             angleToFace = -60.0;
-        } else if (vision.getAprilTagID() == 20 || vision.getAprilTagID() == 8) {
+        } else if (vision.getAprilTagID(name) == 20 || vision.getAprilTagID(name) == 8) {
             angleToFace = -120.0;
             
         }

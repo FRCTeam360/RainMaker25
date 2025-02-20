@@ -103,6 +103,7 @@ public class CommandFactory {
     /**
      * This method is to reliably align the drivebase with the limelight
      * It repeatedly attempts to align the robot with the targetted position and then ends finally when the robot is at the appropriate heading and tx/ty positions
+     * uses the coral limelight 
      * @param isLeft is it on the left reef (true) or right reef (false)
      * @return
      */
@@ -120,7 +121,7 @@ public class CommandFactory {
             Logger.recordOutput(cmdTag + "onTX", onTX);
             Logger.recordOutput(cmdTag + "onTY", onTY);
             Logger.recordOutput(cmdTag + "onHeading", onHeading);
-            return onTX && onTY && onHeading && vision.isTargetInView();
+            return onTX && onTY && onHeading && vision.isTargetInView(Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME);
         }).deadlineFor(alignWithLimelight(goalTY, goalTX, pipeline).repeatedly());
     }
 

@@ -76,8 +76,6 @@ public final class Constants {
     public static class OldCompBotConstants {
         public static final String OCB_LIMELIGHT_NAME = "limelight";
 
-
-
     }
     
     public static final class WoodbotConstants {
@@ -95,6 +93,9 @@ public final class Constants {
 
         public static final int ELEVATOR_BOTTOM_SWITCH = 2;
         public static final int OUTTAKE_SENSOR = 0; //DIO port
+
+        public static final String CORAL_LIMELIGHT_NAME = "limelight-coral";
+        public static final String ALGAE_LIMELIGHT_NAME = "limelight-algae";
     }
 
     public static final class PracticeBotConstants {

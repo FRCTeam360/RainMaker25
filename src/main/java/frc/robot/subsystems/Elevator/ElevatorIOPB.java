@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.Elevator;
 
+import com.ctre.phoenix6.configs.DifferentialSensorsConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -17,6 +18,8 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.mechanisms.DifferentialMechanism;
+import com.ctre.phoenix6.mechanisms.SimpleDifferentialMechanism;
+import com.ctre.phoenix6.signals.DifferentialSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.RelativeEncoder;
@@ -35,6 +38,7 @@ public class ElevatorIOPB implements ElevatorIO {
     private final DifferentialMechanism elevatorDiff;
     private TalonFXConfiguration talonFXConfiguration = new TalonFXConfiguration();
     private MotorOutputConfigs outputConfigs = new MotorOutputConfigs();
+    private DifferentialSensorsConfigs sens = talonFXConfiguration.DifferentialSensors;
 
     private final DigitalInput bottomSwitch = new DigitalInput(
         WoodbotConstants.ELEVATOR_BOTTOM_SWITCH
@@ -89,10 +93,14 @@ public class ElevatorIOPB implements ElevatorIO {
 
         talonFXConfiguration.MotorOutput = outputConfigs;
         
-        
-        elevatorDiff = new DifferentialMechanism(backElevatorMotor, frontElevatorMotor, false);
+        sens.withDifferentialTalonFXSensorID(backElevatorMotor.getDeviceID());
+        sens.withDifferentialSensorSource(DifferentialSensorSourceValue.RemoteTalonFX_Diff);
+
+        elevatorDiff = new DifferentialMechanism(frontElevatorMotor, backElevatorMotor, false);
         backElevatorMotor.getConfigurator().apply(talonFXConfiguration, 0.05);
         backElevatorMotor.setNeutralMode(NeutralModeValue.Brake);
+        // FOLLOWER CODE: frontElevatorMotor.setControl(new Follower(PracticeBotConstants.FRONT_ELEVATOR_ID, true));
+
         frontElevatorMotor.setNeutralMode(NeutralModeValue.Brake);
         frontElevatorMotor.getConfigurator().apply(talonFXConfiguration, 0.05);
         elevatorDiff.applyConfigs();
@@ -111,6 +119,7 @@ public class ElevatorIOPB implements ElevatorIO {
         DutyCycleOut duty = new DutyCycleOut(dutyCycle);
         PositionDutyCycle positionDuty = new PositionDutyCycle(0); // difference between mechanism position should be zero?
         elevatorDiff.setControl(duty , positionDuty);
+        // backElevatorMotor.set(dutyCycle);
     }
 
     public void stop() {
@@ -133,6 +142,7 @@ public class ElevatorIOPB implements ElevatorIO {
         MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(height);
         PositionVoltage positionVoltage = new PositionVoltage(0); // difference between mechanism position should be zero?
         elevatorDiff.setControl(motionMagicVoltage, positionVoltage);
+        // FOLLOWER CODE: backElevatorMotor.setControl(motionMagicVoltage);
     }
 
 }

@@ -70,8 +70,8 @@ public class ElevatorIOPB implements ElevatorIO {
         final double motionMagicAcceleration = 350.0; //used to be 300 - jan 30
         final double motionMagicCruiseJerk = 1500.0;
 
-        backElevatorMotor.getConfigurator().apply((talonFXConfiguration));
-        frontElevatorMotor.getConfigurator().apply((talonFXConfiguration));
+        backElevatorMotor.getConfigurator().apply(new TalonFXConfiguration());
+        frontElevatorMotor.getConfigurator().apply(new TalonFXConfiguration());
 
         //outputConfigs.withInverted(InvertedValue.Clockwise_Positive);
         
@@ -93,10 +93,10 @@ public class ElevatorIOPB implements ElevatorIO {
 
         talonFXConfiguration.MotorOutput = outputConfigs;
         
-        sens.withDifferentialTalonFXSensorID(frontElevatorMotor.getDeviceID());
+        sens.withDifferentialTalonFXSensorID(backElevatorMotor.getDeviceID());
         sens.withDifferentialSensorSource(DifferentialSensorSourceValue.RemoteTalonFX_Diff);
 
-        elevatorDiff = new DifferentialMechanism( backElevatorMotor,frontElevatorMotor, false);
+        elevatorDiff = new DifferentialMechanism(frontElevatorMotor, backElevatorMotor, false);
         backElevatorMotor.getConfigurator().apply(talonFXConfiguration, 0.05);
         backElevatorMotor.setNeutralMode(NeutralModeValue.Brake);
         // FOLLOWER CODE: frontElevatorMotor.setControl(new Follower(PracticeBotConstants.FRONT_ELEVATOR_ID, true));
@@ -118,7 +118,7 @@ public class ElevatorIOPB implements ElevatorIO {
     public void setDutyCycle(double dutyCycle) {
         DutyCycleOut duty = new DutyCycleOut(dutyCycle);
         PositionDutyCycle positionDuty = new PositionDutyCycle(0); // difference between mechanism position should be zero?
-        elevatorDiff.setControl(duty , positionDuty);
+        elevatorDiff.setControl(duty, positionDuty);
         // backElevatorMotor.set(dutyCycle);
     }
 

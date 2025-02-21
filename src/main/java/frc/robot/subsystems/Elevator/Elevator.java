@@ -9,6 +9,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
@@ -57,6 +60,12 @@ public class Elevator extends SubsystemBase {
                         () -> io.setElevatorPostion(height)
                     )
             );
+    }
+
+    public Command setDutyCycleCommand(DoubleSupplier duty) {
+        return this.runEnd(
+            () -> io.setDutyCycle(duty.getAsDouble()),
+            () -> io.setDutyCycle(0.0));
     }
 
     public Command zeroElevatorCmd() {

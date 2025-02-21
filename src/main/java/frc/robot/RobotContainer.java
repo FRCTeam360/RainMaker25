@@ -38,10 +38,15 @@ import frc.robot.generated.PracticeBotDriveTrain;
 import frc.robot.generated.WoodBotDriveTrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ClimberWinch.ClimberWinch;
+import frc.robot.subsystems.ClimberWinch.ClimberWinchIOPB;
 import frc.robot.subsystems.ClimberWinch.ClimberWinchIOSim;
 import frc.robot.subsystems.AlgaeShooter.AlgaeShooter;
+import frc.robot.subsystems.AlgaeShooter.AlgaeShooterIOPB;
 import frc.robot.subsystems.AlgaeShooter.AlgaeShooterIOSim;
+import frc.robot.subsystems.AlgaeTilt.AlgaeTilt;
+import frc.robot.subsystems.AlgaeTilt.AlgaeTiltIOPB;
 import frc.robot.subsystems.ClimberWheel.ClimberWheel;
+import frc.robot.subsystems.ClimberWheel.ClimberWheelIOPB;
 import frc.robot.subsystems.ClimberWheel.ClimberWheelIOSim;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorIOSim;
@@ -59,7 +64,11 @@ import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIO;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
 import frc.robot.subsystems.AlgaeArm.AlgaeArm;
+import frc.robot.subsystems.AlgaeArm.AlgaeArmIOPB;
 import frc.robot.subsystems.AlgaeArm.AlgaeArmIOSim;
+import frc.robot.subsystems.AlgaeRoller.AlgaeRoller;
+import frc.robot.subsystems.AlgaeRoller.AlgaeRollerIOPB;
+
 import java.lang.ModuleLayer.Controller;
 import java.util.HashMap;
 import java.util.Map;
@@ -89,6 +98,8 @@ public class RobotContainer {
     private ClimberWheel climberWheel;
     private AlgaeArm algaeArm;
     private AlgaeShooter algaeShooter;
+    private AlgaeRoller algaeRoller;
+    private AlgaeTilt algaeTilt;
 
     private ShuffleboardTab diagnosticTab;
 
@@ -160,6 +171,13 @@ public class RobotContainer {
                 logger = new Telemetry(PracticeBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
                 coralShooter = new CoralShooter(new CoralShooterIOPB());
                 elevator = new Elevator(new ElevatorIOPB());
+                algaeArm = new AlgaeArm(new AlgaeArmIOPB());
+                algaeRoller = new AlgaeRoller(new AlgaeRollerIOPB());
+                algaeShooter = new AlgaeShooter(new AlgaeShooterIOPB());
+                algaeTilt = new AlgaeTilt(new AlgaeTiltIOPB());
+                climberWheel = new ClimberWheel(new ClimberWheelIOPB());
+                climberWinch = new ClimberWinch(new ClimberWinchIOPB());
+
                 vision =
                     new Vision(
                         Map.ofEntries(

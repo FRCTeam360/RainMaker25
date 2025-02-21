@@ -15,8 +15,7 @@ public interface AlgaeShooterIO {
     public double algaeShooterVoltage = 0.0;
     public double algaeShooterVelocity = 0.0;
     public double algaeShooterPosition = 0.0;
-    public double algaeShooterStatorCurrent = 0.0;
-    public double algaeShooterSupplyCurrent = 0.0;
+    public double algaeShooterCurrent = 0.0;
     public double algaeShooterTemperature = 0.0;
     // insert inputs
   }

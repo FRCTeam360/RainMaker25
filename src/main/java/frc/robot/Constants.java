@@ -110,7 +110,7 @@ public final class Constants {
         public static final int CORAL_SHOOTER_ID = 19;
 
         public static final int ALGAE_SHOOTER_FRONT_ID = 25;
-        public static final int ALGE_SHOOTER_BACK_ID = 26;
+        public static final int ALGAE_SHOOTER_BACK_ID = 26;
         public static final int ALGAE_TILT = 27;
         public static final int ALGAE_ROLLER = 16;
 

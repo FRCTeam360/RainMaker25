@@ -31,7 +31,7 @@ public class AlgaeArmIOPB implements AlgaeArmIO {
   private final SparkMax armMotor = new SparkMax(Constants.PracticeBotConstants.ALGAE_ARM_ID, MotorType.kBrushless); // placeholder                                                                                                                    // ID
   private final RelativeEncoder encoder = armMotor.getEncoder();
   
-  private final double kP = 0.0;
+  private final double kP = 0.035;
   private final double kI = 0.0;
   private final double kD = 0.0;
 

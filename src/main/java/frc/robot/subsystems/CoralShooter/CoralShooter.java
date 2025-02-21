@@ -35,6 +35,10 @@ public class CoralShooter extends SubsystemBase {
         return inputs.outtakeSensor;
     }
 
+    public boolean getIntakeSensor() {
+        return inputs.intakeSensor;
+    }
+
     public void stop() {
         io.stop();
     }
@@ -44,7 +48,7 @@ public class CoralShooter extends SubsystemBase {
     }
 
     public Command waitUntilEmpty() {
-        return Commands.waitUntil(() -> !this.getOuttakeSensor());
+        return Commands.waitUntil(() -> (!this.getOuttakeSensor() && !this.getIntakeSensor()));
     }
 
     public Command waitUntilFull() {
@@ -57,12 +61,12 @@ public class CoralShooter extends SubsystemBase {
 
     public Command basicShootCmd() {
         String cmdName = "ShootCoral";
-        return CommandLogger.logCommand(waitUntilEmpty().raceWith(runCmd(-0.6)), cmdName);
+        return CommandLogger.logCommand(waitUntilEmpty().raceWith(runCmd(-0.50)), cmdName);
     }
 
     public Command basicIntakeCmd() {
         String cmdName = "IntakeCoral";
-        return CommandLogger.logCommand(waitUntilFull().raceWith(runCmd(-0.25)), cmdName);
+        return CommandLogger.logCommand(waitUntilFull().raceWith(runCmd(-0.50)), cmdName);
     }
 
     private boolean isStalling() {
@@ -119,8 +123,8 @@ public class CoralShooter extends SubsystemBase {
         String cmdName = "IntakeCoral2";
         return CommandLogger.logCommand(
             waitUntilIntakeSensor()
-                .deadlineFor(runCmd(-1.0))
-                .andThen(waitUntilFull().deadlineFor(runCmd(-0.3))),
+                .deadlineFor(runCmd(-0.75))
+                .andThen(waitUntilFull().deadlineFor(runCmd(-0.20))),
             cmdName
         );
     }

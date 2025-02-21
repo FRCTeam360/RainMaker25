@@ -28,6 +28,10 @@ public class AlgaeArm extends SubsystemBase {
     io.setDutyCycle(dutyCycle);
   }
 
+  public void setEncoder(double value) {
+    io.setEncoder(value);
+  }
+
   public Command setDutyCycleCommand(double dutyCycle) {
     return this.runEnd(
         () -> this.setDutyCycle(dutyCycle),

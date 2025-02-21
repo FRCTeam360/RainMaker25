@@ -63,7 +63,7 @@ public class Vision extends SubsystemBase {
   public Vision( Map<String, VisionIO> visionIos) {
     this.ios = visionIos;
     // Creates the same number of inputs as vision IO layers
-    visionInputs = Map.of();
+    visionInputs = new HashMap<>();
     for(String key: visionIos.keySet()){
       visionInputs.put(key, new VisionIOInputsAutoLogged());
     }

@@ -22,4 +22,6 @@ public interface AlgaeArmIO {
   public void setDutyCycle(double dutyCycle);
 
   public void setPosition(double position);
+
+  public void setEncoder(double value);
 } 

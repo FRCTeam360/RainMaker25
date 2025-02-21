@@ -75,6 +75,10 @@ public class AlgaeArmIOSim implements AlgaeArmIO {
     simMotor.setSpeed(dutyCycle);
   }
 
+  public void setEncoder(double value) {
+    //idk how to do a setPosition() in sim :(
+  }
+
   public void setPosition(double position) {
     armSim.setState(position, armSim.getVelocityRadPerSec());
   }

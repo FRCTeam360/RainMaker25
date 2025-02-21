@@ -5,6 +5,7 @@
 package frc.robot.subsystems.AlgaeTilt;
 
 import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -20,7 +21,7 @@ import frc.robot.Constants;
 
 public class AlgaeTiltIOPB implements AlgaeTiltIO {
   private final SparkMax motor = new SparkMax(Constants.PracticeBotConstants.ALGAE_TILT, MotorType.kBrushless);
-  private final AbsoluteEncoder encoder =  motor.getAbsoluteEncoder();
+  private final RelativeEncoder encoder =  motor.getEncoder(); //TODO: make absolute when we get one!!
 
   private final double kP = 0.035;
   private final double kI = 0.0;
@@ -33,11 +34,15 @@ public class AlgaeTiltIOPB implements AlgaeTiltIO {
   public AlgaeTiltIOPB() {
     sparkMaxConfig.idleMode(IdleMode.kBrake);
     sparkMaxConfig.inverted(false);
+
     ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
     closedLoopConfig.pid(kP, kI, kD);
+
     sparkMaxConfig.apply(closedLoopConfig);
+
     EncoderConfig encoderConfig = new EncoderConfig();
     encoderConfig.positionConversionFactor(positionConversionFactor);
+
     sparkMaxConfig.apply(encoderConfig);
     motor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 }
@@ -48,6 +53,14 @@ public class AlgaeTiltIOPB implements AlgaeTiltIO {
 
   public void setPosition(double position) {
     motor.getClosedLoopController().setReference(position, ControlType.kPosition);
+  }
+
+  /**
+   * method for updating the encoder value
+   * @param value sets the new encoder value in rotations!!
+   */
+  public void setEncoder(double value) {
+    encoder.setPosition(value);
   }
 
   public void updateInputs(AlgaeTiltIOInputs inputs) {

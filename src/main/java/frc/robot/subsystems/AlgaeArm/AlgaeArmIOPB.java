@@ -65,4 +65,12 @@ public class AlgaeArmIOPB implements AlgaeArmIO {
   public void setPosition(double position) {
     armMotor.getClosedLoopController().setReference(position, ControlType.kPosition);
   }
+
+  /**
+   * method for updating the encoder position
+   * @param value new encoder position in motor rotations
+   */
+  public void setEncoder(double value) {
+    encoder.setPosition(value);
+  }
 }

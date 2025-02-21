@@ -58,7 +58,7 @@ public class ElevatorIOPB implements ElevatorIO {
         final double kD = 0.0;
         final double kG = 0.3;
         final double kI = 0.0;
-        final double kP = 1.0; //5 original
+        final double kP = 5.0; //5 original
         final double kS = 0.01;
         final double kV = 0.07;
         Slot0Configs slot0Configs = backConfig.Slot0;

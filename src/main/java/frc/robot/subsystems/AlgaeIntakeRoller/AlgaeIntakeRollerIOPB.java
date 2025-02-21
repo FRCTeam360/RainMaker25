@@ -9,9 +9,10 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class AlgaeIntakeRollerIOPB implements AlgaeIntakeRollerIO {
-  private final SparkMax motor = new SparkMax(15, MotorType.kBrushless);
+  private final SparkMax motor = new SparkMax(Constants.PracticeBotConstants.ALGAE_ROLLER, MotorType.kBrushless);
   private final RelativeEncoder encoder = motor.getEncoder();
   
   /** Creates a new AlgaeIntakeRollerIOPB. */

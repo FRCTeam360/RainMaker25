@@ -365,6 +365,7 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
+        elevator.setDefaultCommand(elevator.setDutyCycleCommand(() -> operatorCont.getLeftY() * 0.05));
         driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
 
         driverCont.rightStick().whileTrue(driveTrain.robotCentricDrive(driverCont));

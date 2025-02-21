@@ -43,7 +43,7 @@ public class Vision extends SubsystemBase {
   //private final VisionIO[] ios;
   private final Map<String, VisionIO> ios;
 
-  private final VisionIOInputsAutoLogged[] visionInputs;
+  private final Map<String, VisionIOInputsAutoLogged> visionInputs;
   private Timer snapshotTimer = new Timer();
   List<VisionMeasurement> acceptedMeasurements = Collections.emptyList();
 
@@ -63,8 +63,10 @@ public class Vision extends SubsystemBase {
   public Vision( Map<String, VisionIO> visionIos) {
     this.ios = visionIos;
     // Creates the same number of inputs as vision IO layers
-    visionInputs = new VisionIOInputsAutoLogged[visionIos.size()];
-    Arrays.fill(visionInputs, new VisionIOInputsAutoLogged());
+    visionInputs = Map.of();
+    for(String key: visionIos.keySet()){
+      visionInputs.put(key, new VisionIOInputsAutoLogged());
+    }
   }
 
   public int getAprilTagID(String name) {
@@ -139,17 +141,18 @@ public class Vision extends SubsystemBase {
   }
   @Override
   public void periodic() {
-    // for (int i = 0; i < ios.size(); i++) {
-      VisionIO io = ios.get(Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME);
-      VisionIOInputsAutoLogged input1 = visionInputs[0];
+    for (String key : ios.keySet()) {
+      VisionIO io = ios.get(key);
+      VisionIOInputsAutoLogged input = visionInputs.get(key);
 
-      io.updateInputs(input1);
-      Logger.processInputs("Limelight", input1);
-    // }
+      io.updateInputs(input);
+      Logger.processInputs("Limelight: " + key, input);
+    }
 
     List<VisionMeasurement> acceptedMeasurements = new ArrayList<>();
 
-    for (VisionIOInputsAutoLogged input : visionInputs) {
+    for (String key: visionInputs.keySet()) {
+      VisionIOInputsAutoLogged input = visionInputs.get(key);
       // skip input if not updated
       if (!input.poseUpdated)
         continue;

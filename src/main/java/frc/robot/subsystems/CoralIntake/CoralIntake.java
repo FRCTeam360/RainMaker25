@@ -22,7 +22,6 @@ public class CoralIntake extends SubsystemBase {
     io.setDutyCycle(dutyCycle);
   }
 
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

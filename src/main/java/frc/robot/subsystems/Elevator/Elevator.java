@@ -75,7 +75,7 @@ public class Elevator extends SubsystemBase {
                     Math.abs(inputs.elevatorStatorCurrent) > 30.0 &&
                     Math.abs(inputs.elevatorVelocity) == 0.0
             )
-            .deadlineFor(this.runEnd(() -> io.setDutyCycle(-0.1), () -> io.setDutyCycle(0.0)))
+            .deadlineFor(this.runEnd(() -> io.setDutyCycle(-0.08), () -> io.setDutyCycle(0.0)))
             .andThen(this.runOnce(() -> io.setEncoder(0.0)));
     }
 

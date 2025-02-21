@@ -162,6 +162,8 @@ public class ElevatorIOPB implements ElevatorIO {
      */
     public void setElevatorPostion(double height) {
         MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(height);
+        frontElevatorMotor.setControl(new Follower(PracticeBotConstants.BACK_ELEVATOR_ID, true));
+
         // PositionVoltage positionVoltage = new PositionVoltage(0); // difference between mechanism position should be zero?
         // elevatorDiff.setControl(motionMagicVoltage, positionVoltage);
         backElevatorMotor.setControl(motionMagicVoltage);

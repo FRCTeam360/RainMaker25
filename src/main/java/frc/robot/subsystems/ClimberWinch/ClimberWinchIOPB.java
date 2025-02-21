@@ -24,7 +24,7 @@ public class ClimberWinchIOPB implements ClimberWinchIO {
   private final SparkMax winchMotor = new SparkMax(PracticeBotConstants.CLIMBER_WINCH_ID, MotorType.kBrushless);
   private final RelativeEncoder winchEncoder = winchMotor.getEncoder();
 
-  private final double kP = 0.0;
+  private final double kP = 0.2;
   private final double kI = 0.0;
   private final double kD = 0.0;
   
@@ -34,7 +34,7 @@ public class ClimberWinchIOPB implements ClimberWinchIO {
   /** Creates a new ClimberIOPB. */
   public ClimberWinchIOPB() {
     config.idleMode(IdleMode.kBrake);
-    config.inverted(false);
+    config.inverted(true);
     ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
     closedLoopConfig.pid(kP, kI, kD);
     config.apply(closedLoopConfig);

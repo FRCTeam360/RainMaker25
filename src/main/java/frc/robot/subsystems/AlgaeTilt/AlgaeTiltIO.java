@@ -19,5 +19,7 @@ public interface AlgaeTiltIO {
 
   public void setDutyCycle(double dutyCycle);
 
+  public void setPosition(double position);
+
   public default void updateInputs(AlgaeTiltIOInputs inputs) {}
 }

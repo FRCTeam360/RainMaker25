@@ -120,14 +120,6 @@ public class RobotContainer {
                                     () -> driveTrain.getAngle(),
                                     () -> driveTrain.getAngularRate()
                                 )
-                            ),
-                            Map.entry(
-                                Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                                new VisionIOLimelight(
-                                    Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                                    () -> driveTrain.getAngle(),
-                                    () -> driveTrain.getAngularRate()
-                                )
                             )
                         )
                     );
@@ -146,15 +138,15 @@ public class RobotContainer {
                                     () -> driveTrain.getAngle(),
                                     () -> driveTrain.getAngularRate()
                                 )
-                            ),
-                            Map.entry(
-                                Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                                new VisionIOLimelight(
-                                    Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                                    () -> driveTrain.getAngle(),
-                                    () -> driveTrain.getAngularRate()
-                                )
                             )
+                            // Map.entry(
+                            //     Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                            //     new VisionIOLimelight(
+                            //         Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                            //         () -> driveTrain.getAngle(),
+                            //         () -> driveTrain.getAngularRate()
+                            //     )
+                            // )
                         )
                     );
                 break;
@@ -173,15 +165,15 @@ public class RobotContainer {
                                     () -> driveTrain.getAngle(),
                                     () -> driveTrain.getAngularRate()
                                 )
-                            ),
-                            Map.entry(
-                                Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                                new VisionIOLimelight(
-                                    Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                                    () -> driveTrain.getAngle(),
-                                    () -> driveTrain.getAngularRate()
-                                )
                             )
+                            // Map.entry(
+                            //     Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                            //     new VisionIOLimelight(
+                            //         Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                            //         () -> driveTrain.getAngle(),
+                            //         () -> driveTrain.getAngularRate()
+                            //     )
+                            // )
                         )
                     );
                 // practice bot stuff
@@ -199,15 +191,15 @@ public class RobotContainer {
                                     () -> driveTrain.getAngle(),
                                     () -> driveTrain.getAngularRate()
                                 )
-                            ),
-                            Map.entry(
-                                Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                                new VisionIOLimelight(
-                                    Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                                    () -> driveTrain.getAngle(),
-                                    () -> driveTrain.getAngularRate()
-                                )
                             )
+                            // Map.entry(
+                            //     Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                            //     new VisionIOLimelight(
+                            //         Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                            //         () -> driveTrain.getAngle(),
+                            //         () -> driveTrain.getAngularRate()
+                            //     )
+                            // )
                         )
                     );
                 elevator = new Elevator(new ElevatorIOSim());
@@ -342,10 +334,10 @@ public class RobotContainer {
 
         if (Objects.nonNull(coralShooter)) {
             setCoralIntake = new SetCoralIntake(coralShooter);
-            intake = coralShooter.intakeCmd();
+            intake = coralShooter.basicIntakeCmd();
 
-            NamedCommands.registerCommand("shoot", coralShooter.shootCmd());
-            NamedCommands.registerCommand("intake", coralShooter.intakeCmd());
+            NamedCommands.registerCommand("shoot", coralShooter.basicShootCmd());
+            NamedCommands.registerCommand("intake", coralShooter.basicIntakeCmd());
         }
 
         registerPathplannerCommand("Intake Coral", intake);
@@ -381,7 +373,7 @@ public class RobotContainer {
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
 
         driverCont.leftTrigger(0.25).whileTrue(coralShooter.antiStallIntakeCmd()); // 2 is the number of the axis?
-        driverCont.rightTrigger(0.25).whileTrue(coralShooter.shootCmd());
+        driverCont.rightTrigger(0.25).whileTrue(coralShooter.basicShootCmd());
 
         if (Objects.nonNull(elevator)) {
             driverCont.a().onTrue(levelOneAndZero);

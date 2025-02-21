@@ -138,11 +138,11 @@ public class CommandFactory {
                         Map.entry(2, setElevatorLevelTwo()),
                         Map.entry(3, setElevatorLevelThree()),
                         Map.entry(4, setElevatorLevelFour())),
-                        () -> level)).andThen(coralShooter.shootCmd());
+                        () -> level)).andThen(coralShooter.basicShootCmd());
     }
 
     public Command scoreLevelOne(){
-        return setElevatorLevelOne().andThen(coralShooter.shootCmd());
+        return setElevatorLevelOne().andThen(coralShooter.basicShootCmd());
     }
 
     public Command scoringRoutineTeleop(int level, boolean isLeft){

@@ -117,7 +117,7 @@ public final class Constants {
         public static final int INTAKE_SENSOR_ID = 20;
         public static final int OUTTAKE_SENSOR_ID = 21;
         
-        public static final String CORAL_LIMELIGHT_NAME = "limelight-coral";
+        public static final String CORAL_LIMELIGHT_NAME ="limelight-coral";// "limelight-coral";
         public static final String ALGAE_LIMELIGHT_NAME = "limelight-algae";
     }
 

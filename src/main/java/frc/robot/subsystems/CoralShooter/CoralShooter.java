@@ -55,12 +55,12 @@ public class CoralShooter extends SubsystemBase {
         return Commands.waitUntil(() -> inputs.intakeSensor);
     }
 
-    public Command shootCmd() {
+    public Command basicShootCmd() {
         String cmdName = "ShootCoral";
         return CommandLogger.logCommand(waitUntilEmpty().raceWith(runCmd(-0.6)), cmdName);
     }
 
-    public Command intakeCmd() {
+    public Command basicIntakeCmd() {
         String cmdName = "IntakeCoral";
         return CommandLogger.logCommand(waitUntilFull().raceWith(runCmd(-0.25)), cmdName);
     }
@@ -110,12 +110,12 @@ public class CoralShooter extends SubsystemBase {
         return CommandLogger.logCommand(
             waitUntilIntakeSensor()
                 .deadlineFor(repeatOnStall())
-                .andThen(waitUntilFull().deadlineFor(runCmd(-0.2))),
+                .andThen(waitUntilFull().deadlineFor(runCmd(0))),
             cmdName
         );
     }
 
-    public Command betterIntakeCmd() {
+    public Command sensorIntakeCmd() {
         String cmdName = "IntakeCoral2";
         return CommandLogger.logCommand(
             waitUntilIntakeSensor()

@@ -335,6 +335,10 @@ public class RobotContainer {
             driverCont.leftBumper().whileTrue(leftAlign);
             driverCont.rightBumper().whileTrue(rightAlign);
         }
+
+        if(Objects.nonNull(driveTrain)){
+            driverCont.leftTrigger().onTrue(driveTrain.PathOnTheFly(vision));
+        }
         
         // driverCont.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
         // driverCont.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));

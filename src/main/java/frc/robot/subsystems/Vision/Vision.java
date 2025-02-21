@@ -139,13 +139,13 @@ public class Vision extends SubsystemBase {
   }
   @Override
   public void periodic() {
-    for (int i = 0; i < ios.size(); i++) {
-      VisionIO io = ios.get(String.valueOf(i));
-      VisionIOInputsAutoLogged input = visionInputs[i];
+    // for (int i = 0; i < ios.size(); i++) {
+      VisionIO io = ios.get(Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME);
+      VisionIOInputsAutoLogged input1 = visionInputs[0];
 
-      io.updateInputs(input);
-      Logger.processInputs("Limelight", input);
-    }
+      io.updateInputs(input1);
+      Logger.processInputs("Limelight", input1);
+    // }
 
     List<VisionMeasurement> acceptedMeasurements = new ArrayList<>();
 

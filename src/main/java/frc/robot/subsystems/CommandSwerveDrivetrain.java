@@ -45,6 +45,7 @@ import frc.robot.generated.OldCompBot;
 import frc.robot.generated.OldCompBot.TunerSwerveDrivetrain;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionMeasurement;
+import frc.robot.utils.LimelightHelpers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -245,18 +246,21 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                                 new Pose2d(7.100, 8.800, Rotation2d.fromDegrees(-33.917)), // make better
                                 new Pose2d(5.529, 2.778, Rotation2d.fromDegrees(-33.917)))));
 
-        double Tx;
+
+        double Tx = LimelightHelpers.getTX("");
 
         Integer aprilTagID = vision.getAprilTagID();
 
-        // if(aprilTagID == 0){
-        // return new InstantCommand();
-        // }
-        // uncomment once using apriltag
+        if(aprilTagID == 0){
+        return new InstantCommand();
+        }
 
         List<Waypoint> wayPoints = new ArrayList<Waypoint>();
-        wayPoints = LeftTagIDToPosition.get(21);
-        //make check for the tx compared to april tag it sees and make waypoint = left/right and get the apriltag as a key
+        if(Tx < 0){
+                wayPoints = LeftTagIDToPosition.get(aprilTagID);
+        }else if (Tx > 0){
+                wayPoints = RightTagIDToPosition.get(aprilTagID);
+        }
 
         PathConstraints constraints = new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI); // test constraints(to be changed)
 
@@ -264,8 +268,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 wayPoints,
                 constraints,
                 null,
-                new GoalEndState(0.0, Rotation2d.fromDegrees(tagIDToRotation.get(7))));
-        // change key to apriltag id
+                new GoalEndState(0.0, Rotation2d.fromDegrees(tagIDToRotation.get(aprilTagID))));
 
         path.preventFlipping = true;
 

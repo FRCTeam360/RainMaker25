@@ -5,28 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "middle bulletproof"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "raise elevator"
-                }
-              }
-            ]
+            "pathName": "claw start"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "shoot coral L4"
+            "name": "shoot"
           }
         },
         {
@@ -36,13 +23,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "RP auto 2"
+                  "pathName": "front left rts"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "lower elevator"
+                  "name": "zero"
                 }
               }
             ]
@@ -51,7 +38,19 @@
         {
           "type": "named",
           "data": {
-            "name": "collect vertical coral"
+            "name": "intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "back left str right"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         },
         {
@@ -61,13 +60,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "RP auto 3"
+                  "pathName": "back left rts right"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "raise elevator"
+                  "name": "zero"
                 }
               }
             ]
@@ -76,7 +75,62 @@
         {
           "type": "named",
           "data": {
-            "name": "shoot coral L4"
+            "name": "intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "back left str left"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "back left RTS left"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "zero"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "front left str right"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "zero"
           }
         }
       ]

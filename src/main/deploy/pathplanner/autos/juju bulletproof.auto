@@ -20,13 +20,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "zero"
+            "name": "Score Coral L3 Right"
           }
         }
       ]

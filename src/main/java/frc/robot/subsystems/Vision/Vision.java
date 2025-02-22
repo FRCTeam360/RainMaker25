@@ -49,11 +49,11 @@ public class Vision extends SubsystemBase {
   private static final InterpolatingMatrixTreeMap<Double, N3, N1> MEASUREMENT_STD_DEV_DISTANCE_MAP = new InterpolatingMatrixTreeMap<>();
 
   static {
-    MEASUREMENT_STD_DEV_DISTANCE_MAP.put(1.0, VecBuilder.fill(1.0, 1.0, 1.0));
-    MEASUREMENT_STD_DEV_DISTANCE_MAP.put(8.0, VecBuilder.fill(10.0, 10.0, 10.0));
+    MEASUREMENT_STD_DEV_DISTANCE_MAP.put(1.0, VecBuilder.fill(1.5, 1.5,999999999.0));
+    MEASUREMENT_STD_DEV_DISTANCE_MAP.put(8.0, VecBuilder.fill(10.0, 10.0, 999999999.0));
   }
 
-  private static final Matrix<N3, N1> stdDevMatrix = VecBuilder.fill(.7, .7, 999999);
+  private static final Matrix<N3, N1> stdDevMatrix = VecBuilder.fill(3.0, 3.0, 999999.0);
 
   /** Creates a new Vision. */
   public Vision(VisionIO[] visionIos) {
@@ -173,9 +173,9 @@ public class Vision extends SubsystemBase {
       // get standard deviation based on distance to nearest tag
       OptionalDouble closestTagDistance = Arrays.stream(input.distancesToTargets).min();
 
-      Matrix<N3, N1> stdDevs = MEASUREMENT_STD_DEV_DISTANCE_MAP.get(closestTagDistance.orElse(Double.MAX_VALUE));
+      Matrix<N3, N1> cprStdDevs = MEASUREMENT_STD_DEV_DISTANCE_MAP.get(closestTagDistance.orElse(Double.MAX_VALUE));
 
-      acceptedMeasurements.add(new VisionMeasurement(timestamp, pose, stdDevMatrix));
+      acceptedMeasurements.add(new VisionMeasurement(timestamp, pose, cprStdDevs));
     }
     this.acceptedMeasurements = acceptedMeasurements;
   }

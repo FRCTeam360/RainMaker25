@@ -94,14 +94,32 @@ public class RobotContainer {
     private Command levelTwo;
     private Command levelOne;
 
+    private Command autoLevelFour;
+    private Command autoLevelThree;
+
+    private Command scoreLevel3RightTeleop;
+
     private Command zeroElevatorEncoder;
 
     private SequentialCommandGroup levelOneAndZero;
 
     private Command robotCentricDrive;
 
+    private Command xOut;
+    private Command setSteerCoast;
+
     private Command allignToReefWoodBot;
     private SetCoralIntake setCoralIntake;
+
+    private Command scoreCoralL4Right = null;
+    private Command scoreCoralL3Left = null;
+    private Command scoreCoralL4Left = null;
+    private Command scoreCoralL3Right = null;
+    private Command scoreCoralL2Left = null;
+    private Command scoreCoralL2Right = null;
+    private Command scoreCoralL1 = null;
+
+    private Command consumeVisionMeasurements;
 
     public RobotContainer() {
         switch (Constants.getRobotType()) {
@@ -166,7 +184,6 @@ public class RobotContainer {
                 break;
         }
 
-        
         commandFactory =
             new CommandFactory(
                 coralIntake,
@@ -210,8 +227,12 @@ public class RobotContainer {
         // vision.setDefaultCommand(
         //     vision
         //         .consumeVisionMeasurements(driveTrain::addVisionMeasurements)
-        //         .ignoringDisable(true)
+        //         .ignoringDisable(false)
         // );
+
+        consumeVisionMeasurements = vision.consumeVisionMeasurements(driveTrain::addVisionMeasurements);
+
+        xOut = driveTrain.xOutCmd();
 
         rightAlign =
             commandFactory.alignWithLimelight(
@@ -228,14 +249,16 @@ public class RobotContainer {
                 1
             );
 
-        snapDrivebaseToAngle = new SnapDrivebaseToAngle(driveTrain);
- 
+        snapDrivebaseToAngle = new SnapDrivebaseToAngle(vision, driveTrain, 0);
 
         if (Objects.nonNull(elevator)) {
             levelFour = commandFactory.setElevatorLevelFour();
             levelThree = commandFactory.setElevatorLevelThree();
             levelTwo = commandFactory.setElevatorLevelTwo();
-            levelOne = commandFactory.setElevatorLevelOne();
+            levelOne = commandFactory.setElevatorToZero();
+
+            autoLevelThree = commandFactory.setElevatorHeight(20.5);
+            autoLevelFour = commandFactory.setElevatorHeight(33.0);
 
             zeroElevatorEncoder = elevator.zeroElevatorCmd();
 
@@ -249,31 +272,25 @@ public class RobotContainer {
             );
         }
 
-        registerPathplannerCommand("Elevator L4", levelFour);
-        registerPathplannerCommand("Elevator L3", levelThree);
+        registerPathplannerCommand("Elevator L4", autoLevelFour);
+        registerPathplannerCommand("Elevator L3", autoLevelThree);
         registerPathplannerCommand("Elevator L2", levelTwo);
         registerPathplannerCommand("Elevator L1", levelOne);
 
         levelOneAndZero = new SequentialCommandGroup(levelOne, zeroElevatorEncoder);
 
-        allignToReefWoodBot = commandFactory.alignToReefWoodbotLeft();
+        allignToReefWoodBot = commandFactory.alignToReefWoodbotLeft(0);       
 
-        Command scoreCoralL4Left=null;
-        Command scoreCoralL4Right=null;
-        Command scoreCoralL3Left=null;
-        Command scoreCoralL3Right=null;
-        Command scoreCoralL2Left=null;
-        Command scoreCoralL2Right=null;
-        Command scoreCoralL1=null;
+        if (Objects.nonNull(coralShooter) && Objects.nonNull(elevator)) {
+            scoreCoralL4Left = commandFactory.scoringRoutine(4, true);
+            scoreCoralL4Right = commandFactory.scoringRoutine(4, false);
+            scoreCoralL3Left = commandFactory.scoringRoutine(3, true);
+            scoreCoralL3Right = commandFactory.scoringRoutine(3, false);
+            scoreCoralL2Left = commandFactory.scoringRoutine(2, true);
+            scoreCoralL2Right = commandFactory.scoringRoutine(2, false);
+            scoreCoralL1 = commandFactory.scoreLevelOne();
 
-        if (Objects.nonNull(coralShooter)&& Objects.nonNull(elevator)){
-            scoreCoralL4Left=commandFactory.scoringRoutine(4, true);
-            scoreCoralL4Right=commandFactory.scoringRoutine(4, false);
-            scoreCoralL3Left=commandFactory.scoringRoutine(3, true);
-            scoreCoralL3Right=commandFactory.scoringRoutine(3, false);
-            scoreCoralL2Left=commandFactory.scoringRoutine(2, true);
-            scoreCoralL2Right=commandFactory.scoringRoutine(2, false);
-            scoreCoralL1=commandFactory.scoreLevelOne();
+            scoreLevel3RightTeleop = commandFactory.scoringRoutineTeleop(3, false);
         }
 
         registerPathplannerCommand("Score Coral L4 Left", scoreCoralL4Left);
@@ -284,7 +301,13 @@ public class RobotContainer {
         registerPathplannerCommand("Score Coral L2 Right", scoreCoralL2Right);
         registerPathplannerCommand("Score Coral L1", scoreCoralL1);
 
-        Command intake=null;
+        registerPathplannerCommand("left align", leftAlign);
+
+        registerPathplannerCommand("x out", xOut);
+
+        registerPathplannerCommand("consume vision measurements", consumeVisionMeasurements);
+
+        Command intake = null;
 
         if (Objects.nonNull(coralShooter)) {
             setCoralIntake = new SetCoralIntake(coralShooter);
@@ -316,26 +339,26 @@ public class RobotContainer {
 
     private void configureBindings() {
         driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
-        
-        driverCont.rightStick().whileTrue(driveTrain.robotCentricDrive(driverCont));
+
+        driverCont.rightStick().whileTrue(snapDrivebaseToAngle);
 
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
+      //  driverCont.pov(90).toggleOnTrue(new InstantCommand(() -> driveTrain.setSteerCoast(true)));
     
-        driverCont.axisGreaterThan(2, 0.25).whileTrue(coralShooter.intakeCmd()); //2 is the number of the axis?
-        driverCont.axisGreaterThan(3, 0.25).whileTrue(coralShooter.shootCmd());
+        driverCont.leftTrigger(0.25).whileTrue(coralShooter.intakeCmd());
+        driverCont.rightTrigger(0.25).whileTrue(coralShooter.shootCmd());
 
         if (Objects.nonNull(elevator)) {
             driverCont.a().onTrue(levelOneAndZero);
             driverCont.b().onTrue(levelTwo);
-            driverCont.x().onTrue(levelThree);
-            driverCont.y().onTrue(levelFour);
+            driverCont.x().onTrue(levelFour);
+            driverCont.y().whileTrue(scoreCoralL4Right);
         }
 
         if (Objects.nonNull(coralShooter)) {
             driverCont.leftBumper().whileTrue(leftAlign);
             driverCont.rightBumper().whileTrue(rightAlign);
         }
-        
         // driverCont.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
         // driverCont.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
         /*
@@ -358,6 +381,6 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return autoChooser.getSelected();
+        return autoChooser.getSelected().beforeStarting(() -> elevator.zeroEncoder());
     }
 }

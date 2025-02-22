@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import java.util.Map;
 
 import org.littletonrobotics.junction.Logger;
+import org.opencv.calib3d.StereoBM;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -27,6 +28,7 @@ import frc.robot.subsystems.CoralIntake.CoralIntake;
 import frc.robot.subsystems.CoralShooter.CoralShooter;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Vision.Vision;
+import frc.robot.utils.CommandLogger;
 
 // ↓ add docs ↓ there ↓ //
 public class CommandFactory {
@@ -70,11 +72,11 @@ public class CommandFactory {
      * height is in motor rotations!
      */
     public Command setElevatorHeight(double height) {
-        return elevator.isAtHeight(height).deadlineFor(elevator.setElevatorHeight(height));
+        return CommandLogger.logCommand(elevator.isAtHeight(height).deadlineFor(elevator.setElevatorHeight(height)), "SetElevatorHeight");
     }
 
     public Command setElevatorLevelFour(){
-        return setElevatorHeight(33.5);
+        return setElevatorHeight(34.25);
     }
     
     public Command setElevatorLevelThree(){
@@ -85,12 +87,16 @@ public class CommandFactory {
         return setElevatorHeight(10.5);
     }
     
-    public Command setElevatorLevelOne(){
+    public Command setElevatorToZero(){
         return setElevatorHeight(0.0);
     }
 
-    public Command setElevatorLevelOneAndZero(){
-        return new SequentialCommandGroup(setElevatorLevelOne(), elevator.zeroElevatorCmd());
+    public Command setElevatorLevelOne() {
+        return setElevatorHeight(2.0);
+    }
+
+    public Command setElevatorHeightZeroAndZero(){
+        return new SequentialCommandGroup(setElevatorToZero(), elevator.zeroElevatorCmd());
     }
 
 public Command setAlgaeArmAngle(double angle) {
@@ -105,8 +111,8 @@ public Command setAlgaeArmAngle(double angle) {
      */
     public Command alignWithLimelight(double goalTY, double goalTX, int pipeline) {
         return //vision.waitUntilTargetTxTy(goalTX, goalTY).alongWith(drivetrain.waitUntilDrivetrainAtHeadingSetpoint())
-            (new AlignWithLimelight(vision, drivetrain, goalTY, goalTX,
-                        pipeline)); // no more timeout
+            CommandLogger.logCommand(new AlignWithLimelight(vision, drivetrain, goalTY, goalTX,
+                        pipeline), "AlignWithLimelightBase"); // no more timeout
     }
 
     /**
@@ -118,19 +124,9 @@ public Command setAlgaeArmAngle(double angle) {
     public Command alignWithLimelightAutomated(boolean isLeft){
         double goalTY = Constants.WoodbotConstants.WBGOALSCORETY;
         double goalTX = Constants.WoodbotConstants.WBGOALSCORETX;
-        int pipeline = isLeft ? 0 : 1;
+        int pipeline = isLeft ? 1 : 0;
 
-        return Commands.waitUntil(()-> {
-            boolean onTX = drivetrain.strafeController.atSetpoint();
-            boolean onTY = drivetrain.forwardController.atSetpoint();
-            boolean onHeading = drivetrain.isAtRotationSetpoint();
-
-            String cmdTag = "AlignWithLimelightAutomated: ";
-            Logger.recordOutput(cmdTag + "onTX", onTX);
-            Logger.recordOutput(cmdTag + "onTY", onTY);
-            Logger.recordOutput(cmdTag + "onHeading", onHeading);
-            return onTX && onTY && onHeading && vision.isTargetInView();
-        }).deadlineFor(alignWithLimelight(goalTY, goalTX, pipeline).repeatedly());
+        return alignWithLimelight(goalTY, goalTX, pipeline);
     }
 
     /**
@@ -141,12 +137,13 @@ public Command setAlgaeArmAngle(double angle) {
      */
     public Command scoringRoutine(int level, boolean isLeft) {
         return alignWithLimelightAutomated(isLeft)
-                .alongWith(new SelectCommand<Integer>(Map.ofEntries(
+                .andThen(new SelectCommand<Integer>(Map.ofEntries(
                         Map.entry(1, setElevatorLevelOne()),
                         Map.entry(2, setElevatorLevelTwo()),
                         Map.entry(3, setElevatorLevelThree()),
                         Map.entry(4, setElevatorLevelFour())),
-                        () -> level)).andThen(coralShooter.shootCmd());
+                        () -> level).raceWith(drivetrain.xOutCmd()))
+                .andThen(coralShooter.shootCmd().raceWith(drivetrain.xOutCmd()));
     }
 
     public Command scoreLevelOne(){
@@ -154,12 +151,12 @@ public Command setAlgaeArmAngle(double angle) {
     }
 
     public Command scoringRoutineTeleop(int level, boolean isLeft){
-        return scoringRoutine(level, isLeft).andThen(setElevatorLevelOneAndZero());
+        return scoringRoutine(level, isLeft).andThen(setElevatorHeightZeroAndZero());
     }
 
-    public Command alignToReefWoodbotLeft(){
+    public Command alignToReefWoodbotLeft(int pipeline){
         return new SequentialCommandGroup(
-            new SnapDrivebaseToAngle(drivetrain),
+            new SnapDrivebaseToAngle(vision, drivetrain, pipeline),
             new AlignWithLimelight(vision, drivetrain, -12.64, -11.16, 0)
         );
     }

@@ -251,9 +251,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         Integer aprilTagID = vision.getAprilTagID();
 
-        if(aprilTagID == 0){//swutch to april tag n view method
-        return new InstantCommand();
-        }
+        // if(!vision.isTargetInView()){
+        //         return new InstantCommand();
+        // }
 
         List<Waypoint> wayPoints = new ArrayList<Waypoint>();
         if(right){

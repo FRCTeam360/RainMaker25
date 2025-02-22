@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.Elevator;
 
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -18,9 +19,14 @@ public class Elevator extends SubsystemBase {
     private final ElevatorIO io;
     private final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
 
+    private static final InterpolatingDoubleTreeMap offsetMap = new InterpolatingDoubleTreeMap();
+
     /** Creates a new Elevator. */
     public Elevator(ElevatorIO io) {
         this.io = io;
+        offsetMap.put(6.0, 23.0 + 0.0);
+        offsetMap.put(7.0, 23.0 + 0.2);
+        offsetMap.put(8.0, 23.0 + 0.4);
     }
 
     /**
@@ -47,36 +53,49 @@ public class Elevator extends SubsystemBase {
         io.stop();
     }
 
+    public double getElevatorHeightWithOffset(double height, DoubleSupplier tySupplier) {
+        return offsetMap.get(tySupplier.getAsDouble()) + height;
+    }
+
+    public Command setElevatorHeightDynamic(double height, DoubleSupplier tySupplier) {
+        return Commands
+                .waitUntil(() -> tySupplier.getAsDouble() < 0.0) // TODO: replace
+                    .andThen(Commands 
+                    .waitUntil(() -> {
+                    return Math.abs(inputs.elevatorPosition - getElevatorHeightWithOffset(height, tySupplier)) <= 0.5;
+                })
+                .deadlineFor(
+                        this.runEnd(
+                                () -> io.setElevatorPostion(getElevatorHeightWithOffset(height, tySupplier)),
+                                () -> io.setElevatorPostion(getElevatorHeightWithOffset(height, tySupplier)))));
+    }
+
     /**
      * @param height is in rotations
      * @return
      */
     public Command setElevatorHeight(double height) {
         return Commands
-            .waitUntil(() -> Math.abs(inputs.elevatorPosition) <= 0.5)
-            .deadlineFor(
-                this.runEnd(
-                        () -> io.setElevatorPostion(height),
-                        () -> io.setElevatorPostion(height)
-                    )
-            );
+                .waitUntil(() -> Math.abs(inputs.elevatorPosition) <= 0.5)
+                .deadlineFor(
+                        this.runEnd(
+                                () -> io.setElevatorPostion(height),
+                                () -> io.setElevatorPostion(height)));
     }
 
     public Command setDutyCycleCommand(DoubleSupplier duty) {
         return this.runEnd(
-            () -> io.setDutyCycle(duty.getAsDouble()),
-            () -> io.setDutyCycle(0.0));
+                () -> io.setDutyCycle(duty.getAsDouble()),
+                () -> io.setDutyCycle(0.0));
     }
 
     public Command zeroElevatorCmd() {
         return Commands
-            .waitUntil(
-                () ->
-                    Math.abs(inputs.elevatorStatorCurrent) > 30.0 &&
-                    Math.abs(inputs.elevatorVelocity) == 0.0
-            )
-            .deadlineFor(this.runEnd(() -> io.setDutyCycle(-0.08), () -> io.setDutyCycle(0.0)))
-            .andThen(this.runOnce(() -> io.setEncoder(0.0)));
+                .waitUntil(
+                        () -> Math.abs(inputs.elevatorStatorCurrent) > 30.0 &&
+                                Math.abs(inputs.elevatorVelocity) == 0.0)
+                .deadlineFor(this.runEnd(() -> io.setDutyCycle(-0.08), () -> io.setDutyCycle(0.0)))
+                .andThen(this.runOnce(() -> io.setEncoder(0.0)));
     }
 
     public Command isAtHeight(double position) {

@@ -9,6 +9,7 @@ import org.opencv.calib3d.StereoBM;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.AlgaeArm.AlgaeArm;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -18,11 +19,11 @@ import frc.robot.commands.SnapDrivebaseToAngle;
 import frc.robot.generated.WoodBotDriveTrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.ClimberWinch.ClimberWinch;
 import frc.robot.subsystems.AlgaeShooter.AlgaeShooter;
-import frc.robot.subsystems.Catapult.Catapult;
+import frc.robot.subsystems.ClimberWheel.ClimberWheel;
 import frc.robot.subsystems.CoralIntake.CoralIntake;
 // import frc.robot.subsystems.CoralShooter.CoralShooter;
-import frc.robot.subsystems.Catapult.Catapult;
 import frc.robot.subsystems.CoralIntake.CoralIntake;
 import frc.robot.subsystems.CoralShooter.CoralShooter;
 import frc.robot.subsystems.Elevator.Elevator;
@@ -31,33 +32,38 @@ import frc.robot.utils.CommandLogger;
 
 // ↓ add docs ↓ there ↓ //
 public class CommandFactory {
-    private final Catapult catapult;
     private final CoralIntake coralIntake;
     private final CoralShooter coralShooter;
     private final Elevator elevator;
-    private final Vision vision;
+    private final Vision vision; 
+    private final ClimberWinch climberWinch;
+    private final ClimberWheel climberWheel;
     private final AlgaeShooter algaeShooter;
+    private final AlgaeArm algaeArm;
     private final CommandSwerveDrivetrain drivetrain;
-    private final XboxController driverCont;    
+    private final XboxController driverCont;  
+
     // ↓ constructor ↓ //
     public CommandFactory(
-        Catapult catapult,
         CoralIntake coralIntake,
         CoralShooter coralShooter,
         Elevator elevator,
         Vision vision,
+        ClimberWinch climberWinch,
+        ClimberWheel climberWheel,
         AlgaeShooter algaeShooter,
+        AlgaeArm algaeArm,
         CommandSwerveDrivetrain driveTrain,
         XboxController driverCont
-    ) 
-    
-    {
-        this.catapult = catapult;
+    ) {
         this.coralIntake = coralIntake;
         this.coralShooter = coralShooter;
-        this.elevator = elevator;
+        this.elevator = elevator; 
         this.vision = vision;
+        this.climberWinch = climberWinch;
+        this.climberWheel = climberWheel;
         this.algaeShooter = algaeShooter;
+        this.algaeArm = algaeArm;
         this.drivetrain = driveTrain;
         this.driverCont = driverCont;
     }
@@ -93,6 +99,9 @@ public class CommandFactory {
         return new SequentialCommandGroup(setElevatorToZero(), elevator.zeroElevatorCmd());
     }
 
+public Command setAlgaeArmAngle(double angle) {
+    return algaeArm.setAlgaeArmAngle(angle);
+}
     /**
      * 
      * @param goalTY

@@ -28,11 +28,19 @@ public class AlgaeArm extends SubsystemBase {
     io.setDutyCycle(dutyCycle);
   }
 
+  /**
+   * method for setting encoder to a new value (i.e. for zeroing)
+   * @param value new value in motor rotations
+   */
   public void setEncoder(double value) {
     io.setEncoder(value);
   }
 
-  public Command setDutyCycleCommand(double dutyCycle) {
+  public double getCurrent() {
+    return inputs.algaeArmCurrent;
+  }
+
+  public Command setDutyCycleCmd(double dutyCycle) {
     return this.runEnd(
         () -> this.setDutyCycle(dutyCycle),
         () -> this.setDutyCycle(0.0));

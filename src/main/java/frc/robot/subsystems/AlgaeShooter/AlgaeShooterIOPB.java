@@ -72,4 +72,8 @@ public class AlgaeShooterIOPB implements AlgaeShooterIO {
   public void setVelocity(double velocity) {
     algaeShooterMotorFront.getClosedLoopController().setReference(velocity, ControlType.kVelocity);
   }
+
+  public void stop() {
+    algaeShooterMotorFront.stopMotor();
+  }
 }

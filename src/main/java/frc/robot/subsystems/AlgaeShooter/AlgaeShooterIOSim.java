@@ -61,4 +61,9 @@ public class AlgaeShooterIOSim implements AlgaeShooterIO {
   public void setVelocity(double velocity) {
     algaeShooterSim.setAngularVelocity(velocity);
   }
+
+
+  public void stop() {
+    simMotor.setSpeed(0.0);
+  }
 }

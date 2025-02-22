@@ -23,22 +23,24 @@ import frc.robot.subsystems.Vision.VisionIOLimelight;
 // https://v6.docs.ctr-electronics.com/en/stable/docs/tuner/tuner-swerve/index.html
 public class WoodBotDriveTrain {
 
-    public static final double maxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per
-                                                                                                // second max angular
-                                                                                                // velocity
+    public static final double maxAngularRate = RotationsPerSecond.of(1.0).in(RadiansPerSecond);
 
-    public static final double headingKP = 2.019; //sysid number
+    public static final double headingKP = 4.0; //was 3 6:05pm
     public static final double headingKI = 0.0;
     public static final double headingKD = 0.0;
     public static final double headingKIZone = 0.0;
 
     public static final double stafeKP = 0.01;
-    public static final double stafeKI = 0.0003;
+    public static final double stafeKI = 0.00004;
     public static final double stafeKD = 0.003;
+    public static final double strafeIRMax = 0.05;
+    public static final double strafeIRMin = -0.05;
 
-    public static final double forwardKP = 0.045;
-    public static final double forwardKI = 0.0;
-    public static final double forwardKD = 0.0;
+    public static final double forwardKP = 0.04;
+    public static final double forwardKI = 0.000004;
+    public static final double forwardKD = 0.00;
+    public static final double forwardIRMax = 0.05;
+    public static final double forwardIRMin = -0.05;
 
     // Both sets of gains need to be tuned to your individual robot.
 
@@ -224,7 +226,7 @@ public class WoodBotDriveTrain {
      */
     public static CommandSwerveDrivetrain createDrivetrain() {
         return new CommandSwerveDrivetrain(
-                headingKP, headingKI, headingKD, headingKIZone, stafeKP, stafeKI, stafeKD, forwardKP, forwardKI, forwardKD,
+                headingKP, headingKI, headingKD, headingKIZone, stafeKP, stafeKI, stafeKD, strafeIRMax, strafeIRMin, forwardKP, forwardKI, forwardKD, forwardIRMax, forwardIRMin,
                 kSpeedAt12Volts.in(MetersPerSecond),
                 maxAngularRate, DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight);
     }

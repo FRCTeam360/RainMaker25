@@ -32,10 +32,14 @@ public class PracticeBotDriveTrain {
     public static final double stafeKP = 0.01;
     public static final double stafeKI = 0.0003;
     public static final double stafeKD = 0.003;
+    public static final double strafeIRMax = 0.05;
+    public static final double strafeIRMin = -0.05;
 
     public static final double forwardKP = 0.045;
     public static final double forwardKI = 0.0;
     public static final double forwardKD = 0.0;
+    public static final double forwardIRMax = 0.05;
+    public static final double forwardIRMin = -0.05;
     // Both sets of gains need to be tuned to your individual robot.
 
     // The steer motor uses any SwerveModule.SteerRequestType control request with
@@ -218,8 +222,7 @@ public class PracticeBotDriveTrain {
      */
     public static CommandSwerveDrivetrain createDrivetrain() {
         return new CommandSwerveDrivetrain(
-                headingKP, headingKI, headingKD, headingKIZone, stafeKP, stafeKI, stafeKD, forwardKP, forwardKI,
-                forwardKD,
+                headingKP, headingKI, headingKD, headingKIZone, stafeKP, stafeKI, stafeKD, strafeIRMax, strafeIRMin, forwardKP, forwardKI, forwardKD, forwardIRMax, forwardIRMin,
                 kSpeedAt12Volts.in(MetersPerSecond),
                 maxAngularRate, DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight);
     }

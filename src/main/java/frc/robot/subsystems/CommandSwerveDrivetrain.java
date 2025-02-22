@@ -123,6 +123,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 Map.entry(8, -120.0));
 
         final Map<Integer, List<Waypoint>> LeftTagIDToPosition = Map.ofEntries(
+
+        //ADD SELECT COMMAND AND COLLISION AVOIDENCE STUFFFF
                 Map.entry(
                         21,
                         PathPlannerPath.waypointsFromPoses(
@@ -248,7 +250,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         Integer aprilTagID = vision.getAprilTagID();
 
-        if(aprilTagID == 0){
+        if(aprilTagID == 0){//swutch to april tag n view method
         return new InstantCommand();
         }
 

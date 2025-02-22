@@ -94,7 +94,7 @@ public class CommandFactory {
     }
 
 public Command setAlgaeArmAngle(double angle) {
-    return algaeArm.setAlgaeArmAngle(angle);
+    return algaeArm.setAlgaeArmAngleCmd(angle);
 }
     /**
      * 

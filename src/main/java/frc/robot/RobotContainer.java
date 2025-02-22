@@ -392,7 +392,9 @@ public class RobotContainer {
 
     private void configureBindings() {
         // elevator.setDefaultCommand(elevator.setDutyCycleCommand(() -> operatorCont.getLeftY() * 0.05));
-        
+        algaeArm.setDefaultCommand(algaeArm.setAlgaeArmAngleCmd(0.0));
+        algaeTilt.setDefaultCommand(new InstantCommand(() -> algaeTilt.setPosition(0.0), algaeTilt));
+
         driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
 
         driverCont.rightStick().whileTrue(driveTrain.robotCentricDrive(driverCont));
@@ -409,10 +411,10 @@ public class RobotContainer {
             driverCont.y().onTrue(levelFour);
         }
 
-        // if (Objects.nonNull(coralShooter)) {
-        //     driverCont.leftBumper().whileTrue(leftAlign);
-        //     driverCont.rightBumper().whileTrue(rightAlign);
-        // }
+        if (Objects.nonNull(coralShooter)) {
+            driverCont.leftBumper().whileTrue(leftAlign);
+            driverCont.rightBumper().whileTrue(rightAlign);
+        }
 
         // driverCont.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
         // driverCont.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));

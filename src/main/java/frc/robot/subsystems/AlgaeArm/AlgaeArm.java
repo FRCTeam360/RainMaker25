@@ -38,7 +38,7 @@ public class AlgaeArm extends SubsystemBase {
         () -> this.setDutyCycle(0.0));
   }
 
-  public Command setAlgaeArmAngle(double angle) {
+  public Command setAlgaeArmAngleCmd(double angle) {
     return this.runEnd(
         () -> this.setPosition(angle),
         () -> this.setPosition(angle));

@@ -97,7 +97,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                         .withRotationalRate(
                             Math.pow(driveCont.getRightX(), 2) *
                             maxAngularRate *
-                            Math.signum(driveCont.getRightX()) 
+                            -Math.signum(driveCont.getRightX()) 
                         ) // Drive counterclockwise with negative X (left)
             );
     }

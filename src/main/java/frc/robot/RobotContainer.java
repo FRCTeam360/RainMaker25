@@ -337,7 +337,8 @@ public class RobotContainer {
         }
 
         if(Objects.nonNull(driveTrain)){
-            driverCont.leftTrigger().onTrue(driveTrain.PathOnTheFly(vision));
+            driverCont.leftBumper().onTrue(driveTrain.PathOnTheFly(vision, false));
+            driverCont.rightBumper().onTrue(driveTrain.PathOnTheFly(vision, true));
         }
         
         // driverCont.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));

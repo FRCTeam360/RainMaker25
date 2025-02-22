@@ -106,7 +106,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         );
     }
 
-    public final Command PathOnTheFly(Vision vision) {
+    public final Command PathOnTheFly(Vision vision, boolean right) {
 
         final Map<Integer, Double> tagIDToRotation = Map.ofEntries(
                 Map.entry(21, 180.0),
@@ -246,9 +246,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                                 new Pose2d(7.100, 8.800, Rotation2d.fromDegrees(-33.917)), // make better
                                 new Pose2d(5.529, 2.778, Rotation2d.fromDegrees(-33.917)))));
 
-
-        double Tx = LimelightHelpers.getTX("");
-
         Integer aprilTagID = vision.getAprilTagID();
 
         if(aprilTagID == 0){
@@ -256,10 +253,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
 
         List<Waypoint> wayPoints = new ArrayList<Waypoint>();
-        if(Tx < 0){
-                wayPoints = LeftTagIDToPosition.get(aprilTagID);
-        }else if (Tx > 0){
+        if(right){
                 wayPoints = RightTagIDToPosition.get(aprilTagID);
+        }else{
+                wayPoints = LeftTagIDToPosition.get(aprilTagID);
         }
 
         PathConstraints constraints = new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI); // test constraints(to be changed)

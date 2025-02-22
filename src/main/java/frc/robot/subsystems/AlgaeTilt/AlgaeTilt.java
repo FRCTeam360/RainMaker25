@@ -6,6 +6,9 @@ package frc.robot.subsystems.AlgaeTilt;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class AlgaeTilt extends SubsystemBase {
@@ -27,6 +30,13 @@ public class AlgaeTilt extends SubsystemBase {
 
   public void setPosition(double position) {
     io.setPosition(position);
+  }
+
+  public Command setPositionCmd(double position) {
+    return this.runEnd(
+      () -> io.setPosition(position),
+      () -> io.setPosition(position)
+      );
   }
   
   @Override

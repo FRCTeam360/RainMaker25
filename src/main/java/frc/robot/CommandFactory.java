@@ -20,6 +20,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ClimberWinch.ClimberWinch;
 import frc.robot.subsystems.AlgaeShooter.AlgaeShooter;
+import frc.robot.subsystems.AlgaeTilt.AlgaeTilt;
 import frc.robot.subsystems.ClimberWheel.ClimberWheel;
 import frc.robot.subsystems.CoralIntake.CoralIntake;
 // import frc.robot.subsystems.CoralShooter.CoralShooter;
@@ -39,7 +40,8 @@ public class CommandFactory {
     private final AlgaeShooter algaeShooter;
     private final AlgaeArm algaeArm;
     private final CommandSwerveDrivetrain drivetrain;
-    private final XboxController driverCont;  
+    private final XboxController driverCont; 
+    private final AlgaeTilt algaeTilt; 
 
     // ↓ constructor ↓ //
     public CommandFactory(
@@ -52,7 +54,8 @@ public class CommandFactory {
         AlgaeShooter algaeShooter,
         AlgaeArm algaeArm,
         CommandSwerveDrivetrain driveTrain,
-        XboxController driverCont
+        XboxController driverCont,
+        AlgaeTilt algaeTilt
     ) {
         this.coralIntake = coralIntake;
         this.coralShooter = coralShooter;
@@ -64,6 +67,7 @@ public class CommandFactory {
         this.algaeArm = algaeArm;
         this.drivetrain = driveTrain;
         this.driverCont = driverCont;
+        this.algaeTilt = algaeTilt;
     }
 
     /*
@@ -93,9 +97,14 @@ public class CommandFactory {
         return new SequentialCommandGroup(setElevatorLevelOne(), elevator.zeroElevatorCmd());
     }
 
-public Command setAlgaeArmAngle(double angle) {
+    public Command setAlgaeArmAngle(double angle) {
     return algaeArm.setAlgaeArmAngleCmd(angle);
-}
+    }
+
+    public Command setAlgaeTiltPosition(double position) {
+        return algaeTilt.setPositionCmd(position);
+    }
+
     /**
      * 
      * @param goalTY

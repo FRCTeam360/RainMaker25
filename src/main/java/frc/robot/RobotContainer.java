@@ -267,7 +267,8 @@ public class RobotContainer {
                 algaeShooter,
                 algaeArm,
                 driveTrain,
-                driverCont.getHID()
+                driverCont.getHID(),
+                algaeTilt
             );
 
         initializeCommands();
@@ -441,6 +442,7 @@ public class RobotContainer {
         driverCont.rightStick().whileTrue(driveTrain.robotCentricDrive(driverCont));
 
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
+        driverCont.pov(90).onTrue(algaeTilt.setPositionCmd(0.0));
 
         driverCont.leftTrigger(0.25).whileTrue(coralShooter.sensorIntakeCmd()); 
         driverCont.rightTrigger(0.25).whileTrue(coralShooter.basicShootCmd());

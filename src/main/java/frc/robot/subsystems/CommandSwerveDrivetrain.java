@@ -122,14 +122,15 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 Map.entry(20, -120.0),
                 Map.entry(8, -120.0));
 
+        //LEFT STARTS HERE
         final Map<Integer, List<Waypoint>> LeftTagIDToPosition = Map.ofEntries(
 
         //ADD SELECT COMMAND AND COLLISION AVOIDENCE STUFFFF
                 Map.entry(
                         21,
                         PathPlannerPath.waypointsFromPoses(
-                                new Pose2d(7.100, 8.800, Rotation2d.fromDegrees(-33.917)), // make better
-                                new Pose2d(6.100, 3.800, Rotation2d.fromDegrees(-33.917)))),
+                                new Pose2d(6.035, 4.005, Rotation2d.fromDegrees(-33.917)), // x & y configured in pathplanner, untested
+                                new Pose2d(5.743, 3.840, Rotation2d.fromDegrees(-33.917)))), // x & y configured in pathplanner, untested
                 Map.entry(
                         7,
                         PathPlannerPath.waypointsFromPoses(
@@ -143,8 +144,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 Map.entry(
                         17,
                         PathPlannerPath.waypointsFromPoses(
-                                new Pose2d(7.100, 8.800, Rotation2d.fromDegrees(-33.917)), // make better
-                                new Pose2d(3.471, 2.718, Rotation2d.fromDegrees(-33.917)))),
+                                new Pose2d(3.725, 2.582, Rotation2d.fromDegrees(-33.917)), // x & y configured in pathplanner, untested
+                                new Pose2d(3.725, 3.011, Rotation2d.fromDegrees(-33.917)))), // x & y configured in pathplanner, untested
                 Map.entry(
                         11,
                         PathPlannerPath.waypointsFromPoses(
@@ -153,8 +154,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 Map.entry(
                         18,
                         PathPlannerPath.waypointsFromPoses(
-                                new Pose2d(7.100, 8.800, Rotation2d.fromDegrees(-33.917)), // make better
-                                new Pose2d(2.930, 4.175, Rotation2d.fromDegrees(-33.917)))),
+                                new Pose2d(2.652, 3.996, Rotation2d.fromDegrees(-33.917)), // x & y configured in pathplanner, untested
+                                new Pose2d(3.247, 4.181, Rotation2d.fromDegrees(-33.917)))), // x & y configured in pathplanner, untested
                 Map.entry(
                         10,
                         PathPlannerPath.waypointsFromPoses(
@@ -185,13 +186,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                         PathPlannerPath.waypointsFromPoses(
                                 new Pose2d(7.100, 8.800, Rotation2d.fromDegrees(-33.917)), // make better
                                 new Pose2d(5.529, 2.778, Rotation2d.fromDegrees(-33.917)))));// change this pose
-
+        //RIGHT STARTS HERE
         final Map<Integer, List<Waypoint>> RightTagIDToPosition = Map.ofEntries(
                 Map.entry(
                         21,
                         PathPlannerPath.waypointsFromPoses(
-                                new Pose2d(7.100, 8.800, Rotation2d.fromDegrees(-33.917)), // make better
-                                new Pose2d(6.100, 4.341, Rotation2d.fromDegrees(-33.917)))),
+                                new Pose2d(6.035, 4.005, Rotation2d.fromDegrees(-33.917)), // x & y configured in pathplanner, untested
+                                new Pose2d(5.743, 4.132, Rotation2d.fromDegrees(-33.917)))), // x & y configure in pathplanner, untested
                 Map.entry(
                         7,
                         PathPlannerPath.waypointsFromPoses(
@@ -205,8 +206,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 Map.entry(
                         17,
                         PathPlannerPath.waypointsFromPoses(
-                                new Pose2d(7.100, 8.800, Rotation2d.fromDegrees(-33.917)), // make better
-                                new Pose2d(3.817, 2.507, Rotation2d.fromDegrees(-33.917)))),
+                                new Pose2d(3.725, 2.582, Rotation2d.fromDegrees(-33.917)), // x & y configured in pathplanner, untested
+                                new Pose2d(4.046, 2.865, Rotation2d.fromDegrees(-33.917)))), // x & y configured in pathplanner, untested
                 Map.entry(
                         11,
                         PathPlannerPath.waypointsFromPoses(
@@ -215,8 +216,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 Map.entry(
                         18,
                         PathPlannerPath.waypointsFromPoses(
-                                new Pose2d(7.100, 8.800, Rotation2d.fromDegrees(-33.917)), // make better
-                                new Pose2d(2.915, 3.694, Rotation2d.fromDegrees(-33.917)))),
+                                new Pose2d(2.652, 3.996, Rotation2d.fromDegrees(-33.917)), // x & y configured in pathplanner, untested
+                                new Pose2d(3.276, 3.859, Rotation2d.fromDegrees(-33.917)))), // x & y configured in pathplanner, untested
                 Map.entry(
                         10,
                         PathPlannerPath.waypointsFromPoses(

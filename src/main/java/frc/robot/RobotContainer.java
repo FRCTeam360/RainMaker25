@@ -268,7 +268,8 @@ public class RobotContainer {
                 algaeArm,
                 driveTrain,
                 driverCont.getHID(),
-                algaeTilt
+                algaeTilt,
+                algaeRoller
             );
 
         initializeCommands();
@@ -434,15 +435,17 @@ public class RobotContainer {
 
     private void configureBindings() {
         // elevator.setDefaultCommand(elevator.setDutyCycleCommand(() -> operatorCont.getLeftY() * 0.05));
+        algaeTilt.setDefaultCommand(algaeTilt.setDutyCycleCmd(() -> operatorCont.getLeftY() * 0.05));
         algaeArm.setDefaultCommand(algaeArm.setAlgaeArmAngleCmd(0.0));
-        algaeTilt.setDefaultCommand(new InstantCommand(() -> algaeTilt.setPosition(0.0), algaeTilt));
+        operatorCont.pov(270).whileTrue(commandFactory.intakeAlgaeFromGround());
+        // algaeTilt.setDefaultCommand(new InstantCommand(() -> algaeTilt.setPosition(0.0), algaeTilt));
 
         driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
 
         driverCont.rightStick().whileTrue(driveTrain.robotCentricDrive(driverCont));
 
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
-        driverCont.pov(90).onTrue(algaeTilt.setPositionCmd(0.0));
+        operatorCont.pov(90).whileTrue(algaeTilt.setPositionCmd(0.0));
 
         driverCont.leftTrigger(0.25).whileTrue(coralShooter.sensorIntakeCmd()); 
         driverCont.rightTrigger(0.25).whileTrue(coralShooter.basicShootCmd());
@@ -450,8 +453,8 @@ public class RobotContainer {
         if (Objects.nonNull(elevator)) {
             driverCont.a().onTrue(levelOneAndZero);
             driverCont.b().onTrue(levelTwo);
-            driverCont.x().onTrue(levelFour);
-            driverCont.y().whileTrue(scoreCoralL4Right);
+            driverCont.x().onTrue(levelThree);
+            driverCont.y().whileTrue(levelFour);
         }
 
         if (Objects.nonNull(coralShooter)) {

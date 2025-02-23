@@ -10,7 +10,9 @@ import org.opencv.calib3d.StereoBM;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.AlgaeArm.AlgaeArm;
+import frc.robot.subsystems.AlgaeRoller.AlgaeRoller;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AlignWithLimelight;
@@ -44,6 +46,7 @@ public class CommandFactory {
     private final CommandSwerveDrivetrain drivetrain;
     private final XboxController driverCont; 
     private final AlgaeTilt algaeTilt; 
+    private final AlgaeRoller algaeRoller;
 
     // ↓ constructor ↓ //
     public CommandFactory(
@@ -57,7 +60,8 @@ public class CommandFactory {
         AlgaeArm algaeArm,
         CommandSwerveDrivetrain driveTrain,
         XboxController driverCont,
-        AlgaeTilt algaeTilt
+        AlgaeTilt algaeTilt,
+        AlgaeRoller algaeRoller
     ) {
         this.coralIntake = coralIntake;
         this.coralShooter = coralShooter;
@@ -70,6 +74,7 @@ public class CommandFactory {
         this.drivetrain = driveTrain;
         this.driverCont = driverCont;
         this.algaeTilt = algaeTilt;
+        this.algaeRoller = algaeRoller;
     }
 
     /*
@@ -179,5 +184,10 @@ public class CommandFactory {
             new SnapDrivebaseToAngle(vision, drivetrain, pipeline),
             new AlignWithLimelight(vision, drivetrain, -12.64, -11.16, 0)
         );
+    }
+
+    public Command intakeAlgaeFromGround() {
+        return algaeRoller.setDutyCycleCmd(-0.3)
+        .alongWith(algaeShooter.setDutyCycleCmd(0.45));
     }
 }

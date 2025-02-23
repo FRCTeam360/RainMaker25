@@ -439,10 +439,15 @@ public class RobotContainer {
         algaeTilt.setDefaultCommand(algaeTilt.setDutyCycleCmd(() -> operatorCont.getLeftY() * 0.10));
         algaeArm.setDefaultCommand(algaeArm.setAlgaeArmAngleCmd(0.0));
 
-        operatorCont.pov(0).whileTrue(algaeTilt.setPositionCmd(0.0));
-        operatorCont.pov(90).whileTrue(algaeTilt.setPositionCmd(35.0));
+        operatorCont.pov(0).whileTrue(commandFactory.shootAlgae());
         operatorCont.pov(180).whileTrue(commandFactory.outtakeAlgaeFromGround());
         operatorCont.pov(270).whileTrue(commandFactory.intakeAlgaeFromGround());
+
+        operatorCont.b().whileTrue(algaeTilt.setPositionCmd(0.0));
+        operatorCont.x().whileTrue(algaeTilt.setPositionCmd(5.0));
+        operatorCont.y().whileTrue(algaeTilt.setPositionCmd(30.0));
+        operatorCont.a().whileTrue(algaeTilt.setPositionCmd(35.0));
+
 
         driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
 

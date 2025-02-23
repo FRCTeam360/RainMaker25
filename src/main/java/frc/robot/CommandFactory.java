@@ -4,8 +4,6 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.AlgaeArm.AlgaeArm;
-import frc.robot.subsystems.AlgaeRoller.AlgaeRoller;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -17,6 +15,8 @@ import frc.robot.commands.SetCoralIntake;
 import frc.robot.commands.SnapDrivebaseToAngle;
 import frc.robot.generated.WoodBotDriveTrain;
 import frc.robot.subsystems.AlgaeArm.AlgaeArm;
+import frc.robot.subsystems.AlgaeArm.AlgaeArm;
+import frc.robot.subsystems.AlgaeRoller.AlgaeRoller;
 import frc.robot.subsystems.AlgaeShooter.AlgaeShooter;
 import frc.robot.subsystems.AlgaeTilt.AlgaeTilt;
 import frc.robot.subsystems.ClimberWheel.ClimberWheel;
@@ -52,18 +52,19 @@ public class CommandFactory {
 
     // ↓ constructor ↓ //
     public CommandFactory(
-            CoralIntake coralIntake,
-            CoralShooter coralShooter,
-            Elevator elevator,
-            Vision vision,
-            ClimberWinch climberWinch,
-            ClimberWheel climberWheel,
-            AlgaeShooter algaeShooter,
-            AlgaeArm algaeArm,
-            CommandSwerveDrivetrain driveTrain,
-            XboxController driverCont,
-            AlgaeTilt algaeTilt,
-            AlgaeRoller algaeRoller) {
+        CoralIntake coralIntake,
+        CoralShooter coralShooter,
+        Elevator elevator,
+        Vision vision,
+        ClimberWinch climberWinch,
+        ClimberWheel climberWheel,
+        AlgaeShooter algaeShooter,
+        AlgaeArm algaeArm,
+        CommandSwerveDrivetrain driveTrain,
+        XboxController driverCont,
+        AlgaeTilt algaeTilt,
+        AlgaeRoller algaeRoller
+    ) {
         this.coralIntake = coralIntake;
         this.coralShooter = coralShooter;
         this.elevator = elevator;
@@ -188,7 +189,7 @@ public class CommandFactory {
     /**
      * This aligns the robot to the target and raises the elevator to specified
      * level and then runs the coral shooter
-     * 
+     *
      * @param level
      * @param isLeft
      * @return
@@ -220,17 +221,23 @@ public class CommandFactory {
 
     public Command alignToReefWoodbotLeft(int pipeline) {
         return new SequentialCommandGroup(
-                new SnapDrivebaseToAngle(vision, drivetrain, pipeline),
-                new AlignWithLimelight(vision, drivetrain, -12.64, -11.16, 0));
+            new SnapDrivebaseToAngle(vision, drivetrain, pipeline),
+            new AlignWithLimelight(vision, drivetrain, -12.64, -11.16, 0)
+        );
     }
 
     public Command intakeAlgaeFromGround() {
-        return algaeRoller.setDutyCycleCmd(-0.3)
-                .alongWith(algaeShooter.setDutyCycleCmd(1.0));
+        return algaeRoller.setDutyCycleCmd(-0.3).alongWith(algaeShooter.setDutyCycleCmd(1.0));
     }
 
     public Command outtakeAlgaeFromGround() {
-        return algaeRoller.setDutyCycleCmd(0.3)
-                .alongWith(algaeShooter.setDutyCycleCmd(-0.8)).alongWith(algaeTilt.setPositionCmd(30.0));
+        return algaeRoller.setDutyCycleCmd(0.3).alongWith(algaeShooter.setDutyCycleCmd(-0.8));
+    }
+
+    public Command shootAlgae() {
+        return Commands
+            .waitUntil(() -> algaeShooter.getVelocity() < -5500)
+            .andThen(algaeRoller.setDutyCycleCmd(1.0))
+            .alongWith(algaeShooter.setDutyCycleCmd(-1.0));
     }
 }

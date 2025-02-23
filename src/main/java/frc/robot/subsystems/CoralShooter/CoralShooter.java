@@ -63,6 +63,10 @@ public class CoralShooter extends SubsystemBase {
         return Commands.waitUntil(() -> inputs.intakeSensor);
     }
 
+    public Command pullAlgae() {
+        return setDutyCycleCmd(-1);
+    }
+
     public Command basicShootCmd() {
         String cmdName = "ShootCoral";
         return CommandLogger.logCommand(waitUntilEmpty().raceWith(setDutyCycleCmd(-0.40)), cmdName);

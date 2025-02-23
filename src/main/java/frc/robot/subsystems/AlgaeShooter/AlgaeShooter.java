@@ -28,7 +28,7 @@ public class AlgaeShooter extends SubsystemBase {
     }
 
     public double getVelocity() {
-        return inputs.algaeShooterVelocity;
+        return inputs.algaeShooterFrontVelocity;
     }
 
     public Command setDutyCycleCmd(double dutyCycle) {
@@ -40,7 +40,7 @@ public class AlgaeShooter extends SubsystemBase {
     }
 
     public Command waitVelocitySetpoint(double velocitySetpoint) {
-        return Commands.waitUntil(() -> Math.abs(velocitySetpoint - inputs.algaeShooterVelocity) < 100);
+        return Commands.waitUntil(() -> Math.abs(velocitySetpoint - inputs.algaeShooterFrontVelocity) < 100);
     }
     
     @Override

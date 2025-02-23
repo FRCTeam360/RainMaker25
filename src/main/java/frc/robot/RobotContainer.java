@@ -50,7 +50,6 @@ import frc.robot.subsystems.ClimberWheel.ClimberWheelIOPB;
 import frc.robot.subsystems.ClimberWheel.ClimberWheelIOSim;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorIOSim;
-import frc.robot.subsystems.CoralIntake.CoralIntake;
 import frc.robot.subsystems.CoralShooter.CoralShooter;
 import frc.robot.subsystems.CoralShooter.CoralShooterIOPB;
 import frc.robot.subsystems.CoralShooter.CoralShooterIOSim;
@@ -86,12 +85,12 @@ public class RobotContainer {
 
     private final CommandXboxController driverCont = new CommandXboxController(0);
     private final CommandXboxController operatorCont = new CommandXboxController(1);
+    private final CommandXboxController testCont = new CommandXboxController(5);
 
     private CommandFactory commandFactory;
     private Command setAngle;
     private CommandSwerveDrivetrain driveTrain;
     private Vision vision;
-    private CoralIntake coralIntake;
     private CoralShooter coralShooter;
     private Elevator elevator;
     private ClimberWinch climberWinch;
@@ -258,7 +257,6 @@ public class RobotContainer {
 
         commandFactory =
             new CommandFactory(
-                coralIntake,
                 coralShooter,
                 elevator,
                 vision,
@@ -294,7 +292,8 @@ public class RobotContainer {
         diagnosticTab.addString("Serial Address", HALUtil::getSerialNumber);
         diagnosticTab.addBoolean("Sim", Constants::isSim);
 
-        configureBindings();
+        // configureBindings();
+        configureTestController();
     }
 
     public void initializeCommands() {
@@ -483,6 +482,33 @@ public class RobotContainer {
         // driverCont.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
         // driverCont.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
         // driverCont.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    }
+
+    private void configureTestController() {
+        // climberWinch.setDefaultCommand(climberWinch.setDutyCycleCmd(() -> testCont.getLeftY()));
+        algaeArm.setDefaultCommand(algaeArm.setDutyCycleCmd(() -> testCont.getLeftY()));
+
+        // Algae commands`
+        // testCont.a().whileTrue(commandFactory.intakeAlgaeFromGround());
+        // testCont.b().whileTrue(commandFactory.outtakeAlgaeFromGround());
+        // testCont.y().whileTrue(commandFactory.shootAlgae());
+        // testCont.x().whileTrue(commandFactory.intakeAlgaeFromReef());
+        // testCont.a().whileTrue(algaeArm.setAlgaeArmAngleCmd(110.0));
+        testCont.a().whileTrue(commandFactory.setElevatorHeightZeroAndZero());
+        testCont.b().whileTrue(commandFactory.setElevatorLevelTwo());
+        testCont.x().whileTrue(commandFactory.setElevatorLevelThree());
+        testCont.y().whileTrue(commandFactory.setElevatorLevelFour());
+
+        testCont.rightBumper().whileTrue(commandFactory.removeAlgaeL3());
+        testCont.rightTrigger(0.5).whileTrue(commandFactory.removeAlgaeL2());
+        testCont.start().whileTrue(commandFactory.retractAlgaeArm());
+
+        testCont.leftBumper().whileTrue(commandFactory.intakeAlgaeFromReef());
+        testCont.pov(0).whileTrue(algaeTilt.setPositionCmd(0));
+
+        // testCont.b().whileTrue(algaeArm.setAlgaeArmAngleCmd(0));
+
+        // elevator commands
     }
 
     public void onDisable() {

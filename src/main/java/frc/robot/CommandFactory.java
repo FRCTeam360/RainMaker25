@@ -22,9 +22,6 @@ import frc.robot.subsystems.AlgaeTilt.AlgaeTilt;
 import frc.robot.subsystems.ClimberWheel.ClimberWheel;
 import frc.robot.subsystems.ClimberWinch.ClimberWinch;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.CoralIntake.CoralIntake;
-// import frc.robot.subsystems.CoralShooter.CoralShooter;
-import frc.robot.subsystems.CoralIntake.CoralIntake;
 import frc.robot.subsystems.CoralShooter.CoralShooter;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Vision.Vision;
@@ -37,7 +34,6 @@ import org.opencv.calib3d.StereoBM;
 
 // ↓ add docs ↓ there ↓ //
 public class CommandFactory {
-    private final CoralIntake coralIntake;
     private final CoralShooter coralShooter;
     private final Elevator elevator;
     private final Vision vision;
@@ -52,20 +48,17 @@ public class CommandFactory {
 
     // ↓ constructor ↓ //
     public CommandFactory(
-        CoralIntake coralIntake,
-        CoralShooter coralShooter,
-        Elevator elevator,
-        Vision vision,
-        ClimberWinch climberWinch,
-        ClimberWheel climberWheel,
-        AlgaeShooter algaeShooter,
-        AlgaeArm algaeArm,
-        CommandSwerveDrivetrain driveTrain,
-        XboxController driverCont,
-        AlgaeTilt algaeTilt,
-        AlgaeRoller algaeRoller
-    ) {
-        this.coralIntake = coralIntake;
+            CoralShooter coralShooter,
+            Elevator elevator,
+            Vision vision,
+            ClimberWinch climberWinch,
+            ClimberWheel climberWheel,
+            AlgaeShooter algaeShooter,
+            AlgaeArm algaeArm,
+            CommandSwerveDrivetrain driveTrain,
+            XboxController driverCont,
+            AlgaeTilt algaeTilt,
+            AlgaeRoller algaeRoller) {
         this.coralShooter = coralShooter;
         this.elevator = elevator;
         this.vision = vision;
@@ -84,9 +77,8 @@ public class CommandFactory {
      */
     public Command setElevatorHeight(double height) {
         return CommandLogger.logCommand(
-            elevator.isAtHeight(height).deadlineFor(elevator.setElevatorHeight(height)),
-            "SetElevatorHeight"
-        );
+                elevator.isAtHeight(height).deadlineFor(elevator.setElevatorHeight(height)),
+                "SetElevatorHeight");
     }
 
     public Command setElevatorLevelFour() {
@@ -117,23 +109,6 @@ public class CommandFactory {
         return algaeArm.setAlgaeArmAngleCmd(angle);
     }
 
-    public Command removeAlgae() {
-        //set algae arm
-        //run wheel & shooter in until amp spike
-        //arm back
-        //end
-
-        return Commands
-            .waitUntil(() -> coralShooter.getStatorCurrent() >= 30.0)
-            .deadlineFor(
-                algaeArm
-                    .setAlgaeArmAngleCmd(60.0)
-                    .alongWith(coralShooter.setDutyCycleCmd(-0.4))
-                    .alongWith(algaeShooter.setDutyCycleCmd(-0.3))
-            )
-            .andThen(algaeArm.setAlgaeArmAngleCmd(0.0));
-    }
-
     public Command setAlgaeTiltPosition(double position) {
         return algaeTilt.setPositionCmd(position);
     }
@@ -146,16 +121,19 @@ public class CommandFactory {
      * @return
      */
     public Command alignWithLimelight(double goalTY, double goalTX, int pipeline) {
-        return CommandLogger.logCommand( //vision.waitUntilTargetTxTy(goalTX, goalTY).alongWith(drivetrain.waitUntilDrivetrainAtHeadingSetpoint())
-            new AlignWithLimelight(vision, drivetrain, goalTY, goalTX, pipeline),
-            "AlignWithLimelightBase"
-        ); // no more timeout
+        return CommandLogger.logCommand( // vision.waitUntilTargetTxTy(goalTX,
+                                         // goalTY).alongWith(drivetrain.waitUntilDrivetrainAtHeadingSetpoint())
+                new AlignWithLimelight(vision, drivetrain, goalTY, goalTX, pipeline),
+                "AlignWithLimelightBase"); // no more timeout
     }
 
     /**
      * This method is to reliably align the drivebase with the limelight
-     * It repeatedly attempts to align the robot with the targetted position and then ends finally when the robot is at the appropriate heading and tx/ty positions
+     * It repeatedly attempts to align the robot with the targetted position and
+     * then ends finally when the robot is at the appropriate heading and tx/ty
+     * positions
      * uses the coral limelight
+     * 
      * @param isLeft is it on the left reef (true) or right reef (false)
      * @return
      */
@@ -165,25 +143,22 @@ public class CommandFactory {
         int pipeline = isLeft ? 1 : 0;
 
         return Commands
-            .waitUntil(
-                () -> {
-                    boolean onTX = drivetrain.strafeController.atSetpoint();
-                    boolean onTY = drivetrain.forwardController.atSetpoint();
-                    boolean onHeading = drivetrain.isAtRotationSetpoint();
+                .waitUntil(
+                        () -> {
+                            boolean onTX = drivetrain.strafeController.atSetpoint();
+                            boolean onTY = drivetrain.forwardController.atSetpoint();
+                            boolean onHeading = drivetrain.isAtRotationSetpoint();
 
-                    String cmdTag = "AlignWithLimelightAutomated: ";
-                    Logger.recordOutput(cmdTag + "onTX", onTX);
-                    Logger.recordOutput(cmdTag + "onTY", onTY);
-                    Logger.recordOutput(cmdTag + "onHeading", onHeading);
-                    return (
-                        onTX &&
-                        onTY &&
-                        onHeading &&
-                        vision.isTargetInView(Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME)
-                    );
-                }
-            )
-            .deadlineFor(alignWithLimelight(goalTY, goalTX, pipeline).repeatedly());
+                            String cmdTag = "AlignWithLimelightAutomated: ";
+                            Logger.recordOutput(cmdTag + "onTX", onTX);
+                            Logger.recordOutput(cmdTag + "onTY", onTY);
+                            Logger.recordOutput(cmdTag + "onHeading", onHeading);
+                            return (onTX &&
+                                    onTY &&
+                                    onHeading &&
+                                    vision.isTargetInView(Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME));
+                        })
+                .deadlineFor(alignWithLimelight(goalTY, goalTX, pipeline).repeatedly());
     }
 
     /**
@@ -196,19 +171,16 @@ public class CommandFactory {
      */
     public Command scoringRoutine(int level, boolean isLeft) {
         return alignWithLimelightAutomated(isLeft)
-            .andThen(
-                new SelectCommand<Integer>(
-                    Map.ofEntries(
-                        Map.entry(1, setElevatorLevelOne()),
-                        Map.entry(2, setElevatorLevelTwo()),
-                        Map.entry(3, setElevatorLevelThree()),
-                        Map.entry(4, setElevatorLevelFour())
-                    ),
-                    () -> level
-                )
-                .raceWith(drivetrain.xOutCmd())
-            )
-            .andThen(coralShooter.basicShootCmd().raceWith(drivetrain.xOutCmd()));
+                .andThen(
+                        new SelectCommand<Integer>(
+                                Map.ofEntries(
+                                        Map.entry(1, setElevatorLevelOne()),
+                                        Map.entry(2, setElevatorLevelTwo()),
+                                        Map.entry(3, setElevatorLevelThree()),
+                                        Map.entry(4, setElevatorLevelFour())),
+                                () -> level)
+                                .raceWith(drivetrain.xOutCmd()))
+                .andThen(coralShooter.basicShootCmd().raceWith(drivetrain.xOutCmd()));
     }
 
     public Command scoreLevelOne() {
@@ -221,23 +193,52 @@ public class CommandFactory {
 
     public Command alignToReefWoodbotLeft(int pipeline) {
         return new SequentialCommandGroup(
-            new SnapDrivebaseToAngle(vision, drivetrain, pipeline),
-            new AlignWithLimelight(vision, drivetrain, -12.64, -11.16, 0)
-        );
+                new SnapDrivebaseToAngle(vision, drivetrain, pipeline),
+                new AlignWithLimelight(vision, drivetrain, -12.64, -11.16, 0));
     }
 
     public Command intakeAlgaeFromGround() {
-        return algaeRoller.setDutyCycleCmd(-0.3).alongWith(algaeShooter.setDutyCycleCmd(1.0));
+        return algaeTilt.setPositionCmd(35.0).alongWith(algaeRoller.setDutyCycleCmd(-0.3),
+                algaeShooter.setDutyCycleCmd(-1.0));
     }
 
     public Command outtakeAlgaeFromGround() {
-        return algaeRoller.setDutyCycleCmd(0.3).alongWith(algaeShooter.setDutyCycleCmd(-0.8));
+        return algaeTilt.setPositionCmd(30.0).alongWith(algaeRoller.setDutyCycleCmd(0.3),
+                algaeShooter.setDutyCycleCmd(0.8));
     }
 
     public Command shootAlgae() {
         return Commands
-            .waitUntil(() -> algaeShooter.getVelocity() < -5500)
-            .andThen(algaeRoller.setDutyCycleCmd(1.0))
-            .alongWith(algaeShooter.setDutyCycleCmd(-1.0));
+                .waitUntil(() -> algaeShooter.getVelocity() < -5500)
+                .andThen(algaeRoller.setDutyCycleCmd(1.0).alongWith(climberWinch.setPositionCmd(5.0)))
+                .alongWith(algaeShooter.setDutyCycleCmd(1.0), algaeTilt.setPositionCmd(5.0));
+    }
+
+    public Command intakeAlgaeFromReef() {
+        return algaeTilt.setPositionCmd(-3.0).alongWith(algaeRoller.setDutyCycleCmd(-0.3),
+                algaeShooter.setDutyCycleCmd(-1.0));
+    }
+
+    public Command removeAlgaeL2(){
+        return removeAlgae(2);
+    }
+
+    public Command removeAlgaeL3(){
+        return removeAlgae(3);
+    }
+
+    public Command retractAlgaeArm(){
+        return algaeArm.setAlgaeArmAngleCmd(10.0);
+    }
+
+    private Command removeAlgae(int level) {
+        double height;
+        if(level == 2){
+            height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_TWO + 3.0;
+        } else {
+            height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_THREE + 3.0;
+        }
+        return coralShooter.pullAlgae().alongWith(algaeArm.setAlgaeArmAngleCmd(110.0),
+                elevator.setElevatorHeight(height));
     }
 }

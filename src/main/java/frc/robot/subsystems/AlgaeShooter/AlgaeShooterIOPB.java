@@ -50,19 +50,25 @@ public class AlgaeShooterIOPB implements AlgaeShooterIO {
     frontConfig.apply(encoderConfig);
     backConfig.apply(encoderConfig);
     backConfig.follow(Constants.PracticeBotConstants.ALGAE_SHOOTER_FRONT_ID, true);
-    backConfig.inverted(false);
-    frontConfig.inverted(true);
+    backConfig.inverted(true);
+    frontConfig.inverted(false);
     
     algaeShooterMotorFront.configure(frontConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     algaeShooterMotorBack.configure(backConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   public void updateInputs(AlgaeShooterIOInputs inputs) {
-    inputs.algaeShooterVoltage = algaeShooterMotorFront.getBusVoltage();
-    inputs.algaeShooterPosition = algaeShooterMotorFront.getEncoder().getPosition();
-    inputs.algaeShooterVelocity = algaeShooterMotorFront.getEncoder().getVelocity();
-    inputs.algaeShooterCurrent = algaeShooterMotorFront.getOutputCurrent();
-    inputs.algaeShooterTemperature = algaeShooterMotorFront.getMotorTemperature();
+    inputs.algaeShooterFrontVoltage = algaeShooterMotorFront.getBusVoltage();
+    inputs.algaeShooterFrontPosition = algaeShooterMotorFront.getEncoder().getPosition();
+    inputs.algaeShooterFrontVelocity = algaeShooterMotorFront.getEncoder().getVelocity();
+    inputs.algaeShooterFromCurrent = algaeShooterMotorFront.getOutputCurrent();
+    inputs.algaeShooterFromTemperature = algaeShooterMotorFront.getMotorTemperature();
+
+    inputs.algaeShooterBackVoltage = algaeShooterMotorBack.getBusVoltage();
+    inputs.algaeShooterBackPosition = algaeShooterMotorBack.getEncoder().getPosition();
+    inputs.algaeShooterBackVelocity = algaeShooterMotorBack.getEncoder().getVelocity();
+    inputs.algaeShooterBackCurrent = algaeShooterMotorBack.getOutputCurrent();
+    inputs.algaeShooterBackTemperature = algaeShooterMotorBack.getMotorTemperature();
   }
 
   public void setDutyCycle(double dutyCycle) {

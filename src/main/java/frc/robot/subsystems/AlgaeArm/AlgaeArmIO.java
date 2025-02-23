@@ -7,7 +7,7 @@ package frc.robot.subsystems.AlgaeArm;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface AlgaeArmIO {
-  /** Creates a new AlgeaArmIO. */
+  /** Creates a new AlgaeArmIO. */
   @AutoLog
   public static class AlgaeArmIOInputs {
     public double algaeArmCurrent = 0.0;
@@ -24,4 +24,6 @@ public interface AlgaeArmIO {
   public void setPosition(double position);
 
   public void setEncoder(double value);
+
+  public void enableReverseSoftLimit(boolean enabled);
 } 

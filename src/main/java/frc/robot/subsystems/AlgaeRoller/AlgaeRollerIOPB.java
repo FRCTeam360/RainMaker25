@@ -21,7 +21,6 @@ public class AlgaeRollerIOPB implements AlgaeRollerIO {
 
   /** Creates a new AlgaeIntakeRollerIOPB. */
   public AlgaeRollerIOPB() {
-    motor.configure(new SparkMaxConfig(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     config.inverted(true);
     motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }

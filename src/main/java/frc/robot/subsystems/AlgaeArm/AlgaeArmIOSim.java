@@ -83,4 +83,5 @@ public class AlgaeArmIOSim implements AlgaeArmIO {
     armSim.setState(position, armSim.getVelocityRadPerSec());
   }
 
+  public void enableReverseSoftLimit(boolean enabled){}
 }

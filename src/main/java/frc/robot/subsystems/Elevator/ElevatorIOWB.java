@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.Constants.WoodbotConstants;
-import frc.robot.subsystems.CoralIntake.CoralIntakeIO.CoralIntakeIOInputs;
 
 /** Add your docs here. */
 public class ElevatorIOWB implements ElevatorIO {

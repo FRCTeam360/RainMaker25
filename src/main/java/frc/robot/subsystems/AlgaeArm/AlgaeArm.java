@@ -4,18 +4,19 @@
 
 package frc.robot.subsystems.AlgaeArm;
 
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.CoralIntake.CoralIntakeIOInputsAutoLogged;
 
 public class AlgaeArm extends SubsystemBase {
   private final AlgaeArmIO io;
   private final AlgaeArmIOInputsAutoLogged inputs = new AlgaeArmIOInputsAutoLogged();
 
-  /** Creates a new AlgeaArm. */
+  /** Creates a new AlgaeArm. */
   public AlgaeArm(AlgaeArmIO io) {
     this.io = io;
   }
@@ -40,10 +41,14 @@ public class AlgaeArm extends SubsystemBase {
     return inputs.algaeArmCurrent;
   }
 
-  public Command setDutyCycleCmd(double dutyCycle) {
+  public Command setDutyCycleCmd(DoubleSupplier dutyCycleSupplier) {
     return this.runEnd(
-        () -> this.setDutyCycle(dutyCycle),
+        () -> this.setDutyCycle(dutyCycleSupplier.getAsDouble()),
         () -> this.setDutyCycle(0.0));
+  }
+
+  public Command setDutyCycleCmd(double dutyCycle) {
+    return setDutyCycleCmd(() -> dutyCycle);
   }
 
   public Command setAlgaeArmAngleCmd(double angle) {
@@ -56,6 +61,6 @@ public class AlgaeArm extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     io.updateInputs(inputs);
-    Logger.processInputs("Algea Arm", inputs);
+    Logger.processInputs("Algae Arm", inputs);
   }
 }

@@ -445,7 +445,7 @@ public class RobotContainer {
         driverCont.rightStick().whileTrue(driveTrain.robotCentricDrive(driverCont));
 
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
-        operatorCont.pov(90).whileTrue(algaeTilt.setPositionCmd(0.0));
+        operatorCont.pov(90).whileTrue(algaeTilt.setPositionCmd(33.5));
 
         driverCont.leftTrigger(0.25).whileTrue(coralShooter.sensorIntakeCmd()); 
         driverCont.rightTrigger(0.25).whileTrue(coralShooter.basicShootCmd());

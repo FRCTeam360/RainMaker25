@@ -50,6 +50,6 @@ public class AlgaeTilt extends SubsystemBase {
   @Override
   public void periodic() {
     io.updateInputs(inputs);
-    Logger.processInputs("Algae Intake Arm", inputs);
+    Logger.processInputs("Algae Tilt", inputs);
   }
 }

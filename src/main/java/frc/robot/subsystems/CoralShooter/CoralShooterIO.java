@@ -33,6 +33,7 @@ public interface CoralShooterIO {
    */
   public void setDutyCycle(double dutyCycle);
 
+ 
   public void stop();
   // insert subsystem methods
 }

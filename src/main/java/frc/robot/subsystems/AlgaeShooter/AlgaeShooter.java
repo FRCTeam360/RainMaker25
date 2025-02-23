@@ -23,8 +23,12 @@ public class AlgaeShooter extends SubsystemBase {
         io.setDutyCycle(velocity);
     }
 
+    public void stop() {
+        io.stop();
+    }
+
     public Command setDutyCycleCmd(double dutyCycle) {
-        return this.runEnd(() -> this.setDutyCycle(dutyCycle), () -> this.setDutyCycle(0));
+        return this.runEnd(() -> this.setDutyCycle(dutyCycle), () -> this.stop());
     }
 
     public Command setVelocityCmd(double velocity) {

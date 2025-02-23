@@ -43,7 +43,11 @@ public class CoralShooter extends SubsystemBase {
         io.stop();
     }
 
-    public Command runCmd(double dutyCycle) {
+    public double getStatorCurrent() {
+        return inputs.outtakeStatorCurrent;
+    }
+
+    public Command setDutyCycleCmd(double dutyCycle) {
         return this.runEnd(() -> this.setDutyCycle(dutyCycle), () -> this.stop());
     }
 
@@ -61,12 +65,12 @@ public class CoralShooter extends SubsystemBase {
 
     public Command basicShootCmd() {
         String cmdName = "ShootCoral";
-        return CommandLogger.logCommand(waitUntilEmpty().raceWith(runCmd(-0.40)), cmdName);
+        return CommandLogger.logCommand(waitUntilEmpty().raceWith(setDutyCycleCmd(-0.40)), cmdName);
     }
 
     public Command basicIntakeCmd() {
         String cmdName = "IntakeCoral";
-        return CommandLogger.logCommand(waitUntilFull().raceWith(runCmd(-0.50)), cmdName);
+        return CommandLogger.logCommand(waitUntilFull().raceWith(setDutyCycleCmd(-0.50)), cmdName);
     }
 
     private boolean isStalling() {
@@ -98,7 +102,7 @@ public class CoralShooter extends SubsystemBase {
     }
 
     private Command repeatOnStall() {
-        return new ConditionalCommand(runCmd(1.0), runCmd(-0.3), () -> isUnjamming())
+        return new ConditionalCommand(setDutyCycleCmd(1.0), setDutyCycleCmd(-0.3), () -> isUnjamming())
             .repeatedly()
             .alongWith(
                 new InstantCommand(
@@ -114,7 +118,7 @@ public class CoralShooter extends SubsystemBase {
         return CommandLogger.logCommand(
             waitUntilIntakeSensor()
                 .deadlineFor(repeatOnStall())
-                .andThen(waitUntilFull().deadlineFor(runCmd(0))),
+                .andThen(waitUntilFull().deadlineFor(setDutyCycleCmd(0))),
             cmdName
         );
     }
@@ -123,8 +127,8 @@ public class CoralShooter extends SubsystemBase {
         String cmdName = "IntakeCoral2";
         return CommandLogger.logCommand(
             waitUntilIntakeSensor()
-                .deadlineFor(runCmd(-0.75))
-                .andThen(waitUntilFull().deadlineFor(runCmd(-0.20))),
+                .deadlineFor(setDutyCycleCmd(-0.75))
+                .andThen(waitUntilFull().deadlineFor(setDutyCycleCmd(-0.20))),
             cmdName
         );
     }

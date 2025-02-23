@@ -371,6 +371,7 @@ public class RobotContainer {
         Command scoreCoralL2Left = null;
         Command scoreCoralL2Right = null;
         Command scoreCoralL1 = null;
+        
         allignToReefWoodBot = commandFactory.alignToReefWoodbotLeft(0);       
 
         if (Objects.nonNull(coralShooter) && Objects.nonNull(elevator)) {

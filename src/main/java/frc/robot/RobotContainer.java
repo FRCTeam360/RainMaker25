@@ -66,6 +66,7 @@ import frc.robot.subsystems.AlgaeArm.AlgaeArm;
 import frc.robot.subsystems.AlgaeArm.AlgaeArmIOPB;
 import frc.robot.subsystems.AlgaeArm.AlgaeArmIOSim;
 import frc.robot.subsystems.AlgaeRoller.AlgaeRoller;
+import frc.robot.subsystems.AlgaeRoller.AlgaeRollerIO;
 import frc.robot.subsystems.AlgaeRoller.AlgaeRollerIOPB;
 
 import java.lang.ModuleLayer.Controller;
@@ -292,8 +293,8 @@ public class RobotContainer {
         diagnosticTab.addString("Serial Address", HALUtil::getSerialNumber);
         diagnosticTab.addBoolean("Sim", Constants::isSim);
 
-        // configureBindings();
-        configureTestController();
+        configureBindings();
+        // configureTestController();
     }
 
     public void initializeCommands() {
@@ -435,20 +436,22 @@ public class RobotContainer {
 
     private void configureBindings() {
         // elevator.setDefaultCommand(elevator.setDutyCycleCommand(() -> operatorCont.getLeftY() * 0.05));
+        driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
         algaeTilt.setDefaultCommand(algaeTilt.setDutyCycleCmd(() -> operatorCont.getLeftY() * 0.10));
         algaeArm.setDefaultCommand(algaeArm.setAlgaeArmAngleCmd(0.0));
 
-        operatorCont.pov(0).whileTrue(commandFactory.shootAlgae());
-        operatorCont.pov(180).whileTrue(commandFactory.outtakeAlgaeFromGround());
+        operatorCont.pov(0).whileTrue(new InstantCommand(() -> algaeTilt.setEncoder(-10.0), algaeTilt));
+        operatorCont.pov(90).whileTrue(commandFactory.outtakeAlgaeFromGround());
+        operatorCont.pov(180).whileTrue(commandFactory.shootAlgae());
         operatorCont.pov(270).whileTrue(commandFactory.intakeAlgaeFromGround());
-
-        operatorCont.b().whileTrue(algaeTilt.setPositionCmd(0.0));
+        
+        operatorCont.y().whileTrue(algaeTilt.setPositionCmd(0.0));
         operatorCont.x().whileTrue(algaeTilt.setPositionCmd(5.0));
-        operatorCont.y().whileTrue(algaeTilt.setPositionCmd(30.0));
+        operatorCont.b().whileTrue(algaeTilt.setPositionCmd(30.0));
         operatorCont.a().whileTrue(algaeTilt.setPositionCmd(35.0));
 
-
-        driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
+        operatorCont.leftBumper().whileTrue(algaeRoller.setDutyCycleCmd(-0.8));
+        operatorCont.rightBumper().whileTrue(algaeRoller.setDutyCycleCmd(0.8));
 
         driverCont.rightStick().whileTrue(driveTrain.robotCentricDrive(driverCont));
 
@@ -462,6 +465,10 @@ public class RobotContainer {
             driverCont.b().onTrue(levelTwo);
             driverCont.x().onTrue(levelThree);
             driverCont.y().whileTrue(levelFour);
+
+            driverCont.pov(270).onTrue(commandFactory.removeAlgaeL3());
+            driverCont.pov(90).onTrue(commandFactory.removeAlgaeL2());
+            driverCont.pov(180).onTrue(commandFactory.retractAlgaeArm());
         }
 
         if (Objects.nonNull(coralShooter)) {

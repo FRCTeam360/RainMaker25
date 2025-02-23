@@ -15,6 +15,7 @@ public interface AlgaeTiltIO {
     public double armPosition = 0.0;
     public double armDutyCycle = 0.0;
     public double armVelocity = 0.0;
+    public double armAmps = 0.0;
   }
 
   public void setDutyCycle(double dutyCycle);

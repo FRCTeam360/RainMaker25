@@ -64,7 +64,7 @@ public class CoralShooter extends SubsystemBase {
     }
 
     public Command pullAlgae() {
-        return setDutyCycleCmd(-1);
+        return setDutyCycleCmd(-1.0);
     }
 
     public Command basicShootCmd() {

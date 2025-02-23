@@ -22,11 +22,14 @@ import frc.robot.Constants;
 
 public class AlgaeTiltIOPB implements AlgaeTiltIO {
   private final SparkMax motor = new SparkMax(Constants.PracticeBotConstants.ALGAE_TILT, MotorType.kBrushless);
-  private final RelativeEncoder encoder =  motor.getEncoder(); //TODO: make absolute when we get one!!
+  private final RelativeEncoder encoder = motor.getEncoder(); // TODO: make absolute when we get one!!
 
   private final double kP = 0.035 * 4.0;
   private final double kI = 0.0;
   private final double kD = 0.0;
+
+  private final double forwardLimit = 38.0;
+  private final double reverseLimit = -10.0;
 
   private final double positionConversionFactor = 1.0;
   private final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
@@ -37,9 +40,9 @@ public class AlgaeTiltIOPB implements AlgaeTiltIO {
     sparkMaxConfig.inverted(false);
 
     SoftLimitConfig softLimitConfig = new SoftLimitConfig();
-    softLimitConfig.forwardSoftLimit(35.0);
+    softLimitConfig.forwardSoftLimit(forwardLimit);
     softLimitConfig.forwardSoftLimitEnabled(true);
-    softLimitConfig.reverseSoftLimit(-4.69);
+    softLimitConfig.reverseSoftLimit(reverseLimit);
     softLimitConfig.reverseSoftLimitEnabled(true);
     sparkMaxConfig.apply(softLimitConfig);
 
@@ -53,7 +56,7 @@ public class AlgaeTiltIOPB implements AlgaeTiltIO {
 
     sparkMaxConfig.apply(encoderConfig);
     motor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-}
+  }
 
   public void setDutyCycle(double dutyCycle) {
     motor.set(dutyCycle);
@@ -65,6 +68,7 @@ public class AlgaeTiltIOPB implements AlgaeTiltIO {
 
   /**
    * method for updating the encoder value
+   * 
    * @param value sets the new encoder value in rotations!!
    */
   public void setEncoder(double value) {
@@ -74,6 +78,7 @@ public class AlgaeTiltIOPB implements AlgaeTiltIO {
   public void updateInputs(AlgaeTiltIOInputs inputs) {
     inputs.armDutyCycle = motor.get();
     inputs.armPosition = encoder.getPosition();
-    inputs.armVelocity = encoder.getVelocity(); 
+    inputs.armVelocity = encoder.getVelocity();
+    inputs.armAmps = motor.getOutputCurrent();
   }
 }

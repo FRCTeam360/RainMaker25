@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.*;
 import frc.robot.commands.AlignWithLimelight;
 import frc.robot.commands.SetCoralIntake;
@@ -198,20 +199,19 @@ public class CommandFactory {
     }
 
     public Command intakeAlgaeFromGround() {
-        return algaeTilt.setPositionCmd(35.0).alongWith(algaeRoller.setDutyCycleCmd(-0.3),
-                algaeShooter.setDutyCycleCmd(-1.0));
+        return algaeRoller.setDutyCycleCmd(-0.5).alongWith(
+                algaeShooter.setDutyCycleCmd(-0.9));
     }
 
     public Command outtakeAlgaeFromGround() {
-        return algaeTilt.setPositionCmd(30.0).alongWith(algaeRoller.setDutyCycleCmd(0.3),
-                algaeShooter.setDutyCycleCmd(0.8));
+        return algaeShooter.setDutyCycleCmd(0.8);
     }
 
     public Command shootAlgae() {
         return Commands
-                .waitUntil(() -> algaeShooter.getVelocity() < -5500)
+                .waitUntil(() -> algaeShooter.getVelocity() > 5500)
                 .andThen(algaeRoller.setDutyCycleCmd(1.0).alongWith(climberWinch.setPositionCmd(5.0)))
-                .alongWith(algaeShooter.setDutyCycleCmd(1.0), algaeTilt.setPositionCmd(5.0));
+                .alongWith(algaeShooter.setDutyCycleCmd(1.0));
     }
 
     public Command intakeAlgaeFromReef() {
@@ -219,26 +219,32 @@ public class CommandFactory {
                 algaeShooter.setDutyCycleCmd(-1.0));
     }
 
-    public Command removeAlgaeL2(){
+    public Command removeAlgaeL2() {
         return removeAlgae(2);
     }
 
-    public Command removeAlgaeL3(){
+    public Command removeAlgaeL3() {
         return removeAlgae(3);
     }
 
-    public Command retractAlgaeArm(){
+    public Command retractAlgaeArm() {
         return algaeArm.setAlgaeArmAngleCmd(10.0);
     }
 
     private Command removeAlgae(int level) {
         double height;
-        if(level == 2){
+        if (level == 2) {
             height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_TWO + 3.0;
         } else {
             height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_THREE + 3.0;
         }
-        return coralShooter.pullAlgae().alongWith(algaeArm.setAlgaeArmAngleCmd(110.0),
-                elevator.setElevatorHeight(height));
+        // return
+        // coralShooter.pullAlgae().alongWith(algaeArm.setAlgaeArmAngleCmd(110.0),
+        // elevator.setElevatorHeight(height));
+
+        return Commands
+                .waitUntil(() -> Math.abs(elevator.getHeight() - height) <= 1.0)
+                .alongWith(elevator.setElevatorHeight(height))
+                .andThen(coralShooter.pullAlgae().alongWith(algaeArm.setAlgaeArmAngleCmd(110.0)));
     }
 }

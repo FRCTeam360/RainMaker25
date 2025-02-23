@@ -5,7 +5,10 @@
 package frc.robot.subsystems.AlgaeRoller;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,10 +16,15 @@ import frc.robot.Constants;
 
 public class AlgaeRollerIOPB implements AlgaeRollerIO {
   private final SparkMax motor = new SparkMax(Constants.PracticeBotConstants.ALGAE_ROLLER, MotorType.kBrushless);
+  private final SparkMaxConfig config = new SparkMaxConfig();
   private final RelativeEncoder encoder = motor.getEncoder();
-  
+
   /** Creates a new AlgaeIntakeRollerIOPB. */
-  public AlgaeRollerIOPB() {}
+  public AlgaeRollerIOPB() {
+    motor.configure(new SparkMaxConfig(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    config.inverted(true);
+    motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+  }
 
   public void setDutyCycle(double dutyCycle) {
     motor.set(dutyCycle);

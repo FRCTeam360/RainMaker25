@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.AlgaeTilt;
 
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -38,10 +40,16 @@ public class AlgaeTilt extends SubsystemBase {
       () -> io.setPosition(position)
       );
   }
+
+  public Command setDutyCycleCmd(DoubleSupplier duty) {
+    return this.runEnd(
+      () -> io.setDutyCycle(duty.getAsDouble()),
+      () -> io.setDutyCycle(0.0));
+  }
   
   @Override
   public void periodic() {
     io.updateInputs(inputs);
-    Logger.processInputs("Algae Intake Arm", inputs);
+    Logger.processInputs("Algae Tilt", inputs);
   }
 }

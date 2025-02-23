@@ -13,6 +13,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -23,7 +24,7 @@ public class AlgaeTiltIOPB implements AlgaeTiltIO {
   private final SparkMax motor = new SparkMax(Constants.PracticeBotConstants.ALGAE_TILT, MotorType.kBrushless);
   private final RelativeEncoder encoder =  motor.getEncoder(); //TODO: make absolute when we get one!!
 
-  private final double kP = 0.035;
+  private final double kP = 0.035 * 4.0;
   private final double kI = 0.0;
   private final double kD = 0.0;
 
@@ -34,6 +35,13 @@ public class AlgaeTiltIOPB implements AlgaeTiltIO {
   public AlgaeTiltIOPB() {
     sparkMaxConfig.idleMode(IdleMode.kBrake);
     sparkMaxConfig.inverted(false);
+
+    SoftLimitConfig softLimitConfig = new SoftLimitConfig();
+    softLimitConfig.forwardSoftLimit(35.0);
+    softLimitConfig.forwardSoftLimitEnabled(true);
+    softLimitConfig.reverseSoftLimit(-4.69);
+    softLimitConfig.reverseSoftLimitEnabled(true);
+    sparkMaxConfig.apply(softLimitConfig);
 
     ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
     closedLoopConfig.pid(kP, kI, kD);

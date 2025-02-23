@@ -49,9 +49,9 @@ public class AlgaeShooterIOPB implements AlgaeShooterIO {
     encoderConfig.positionConversionFactor(positionConversionFactor);
     frontConfig.apply(encoderConfig);
     backConfig.apply(encoderConfig);
-    backConfig.follow(Constants.PracticeBotConstants.ALGAE_SHOOTER_FRONT_ID);
-    backConfig.inverted(true);
-    frontConfig.inverted(false);
+    backConfig.follow(Constants.PracticeBotConstants.ALGAE_SHOOTER_FRONT_ID, true);
+    backConfig.inverted(false);
+    frontConfig.inverted(true);
     
     algaeShooterMotorFront.configure(frontConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     algaeShooterMotorBack.configure(backConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

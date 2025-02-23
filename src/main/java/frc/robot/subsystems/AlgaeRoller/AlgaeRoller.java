@@ -6,6 +6,7 @@ package frc.robot.subsystems.AlgaeRoller;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class AlgaeRoller extends SubsystemBase {
@@ -17,8 +18,15 @@ public class AlgaeRoller extends SubsystemBase {
     this.io = io;
   }
 
-  public void setDutyCycle(double dutyCycle) {
-    io.setDutyCycle(dutyCycle);
+  public void setDutyCycle(double duty) {
+    io.setDutyCycle(duty);
+  }
+
+  public Command setDutyCycleCmd(double duty) {
+    return this.runEnd(
+      () -> io.setDutyCycle(duty),
+      () -> io.setDutyCycle(0.0)
+    );
   }
 
   @Override

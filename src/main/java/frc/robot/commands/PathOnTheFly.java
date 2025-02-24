@@ -20,6 +20,8 @@ import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -135,8 +137,47 @@ public class PathOnTheFly {
                 .filter(tag -> REEF_TAG_IDS_BLUE.contains(tag.ID))
                 .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
 
+        private static final Map<Integer, Pose2d> LEFT_TAG_ID_TO_POSITION_DYNAMIC = REEF_TAGS.stream()
+                .map(tag -> createTagScoringPositionEntry(tag, false))
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue));
+
+        private static final Map<Integer, Pose2d> RIGHT_TAG_ID_TO_POSITION_DYNAMIC = REEF_TAGS.stream()
+                .map(tag -> createTagScoringPositionEntry(tag, true))
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue));
+
+        private static Entry<Integer, Pose2d> createTagScoringPositionEntry(AprilTag tag, boolean right) {
+            return Map.entry(tag.ID, transformTagPoseToScoringPose(tag, right));
+        }
+
+        private static Pose2d transformTagPoseToScoringPose(AprilTag tag, boolean right) {
+            Pose2d tagPose = tag.pose.toPose2d();
+            Rotation2d tagRotation = tagPose.getRotation();
+
+            if (right) {
+                // x is forwards-backwards, y is right-left relative to the tag position
+                Translation2d tagTranslation = new Translation2d(0.45, 0.14);
+                tagTranslation.rotateBy(tagRotation);
+                return tagPose.plus(new Transform2d(tagTranslation, Rotation2d.k180deg));
+            } else {
+                // x is forwards-backwards, y is right-left relative to the tag position
+                Translation2d tagTranslation = new Translation2d(0.45, -0.14);
+                tagTranslation.rotateBy(tagRotation);
+                return tagPose.plus(new Transform2d(tagTranslation, Rotation2d.k180deg));
+            }
+        }
     }
 
+    /**
+     * Follow the path given in the waypoints list, ending at the desired rotation
+     * 
+     * @param wayPoints
+     * @param endRotation2d
+     * @return
+     */
     public static Command pathOnTheFly(List<Waypoint> wayPoints, Rotation2d endRotation2d) {
         PathConstraints constraints = new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI); // test constraints(to be
                                                                                                // changed)
@@ -152,16 +193,38 @@ public class PathOnTheFly {
         return AutoBuilder.followPath(path);
     }
 
+    /**
+     * Move to the given position using Path Planner's pathfinding functionality
+     * 
+     * @param endPose
+     * @return
+     */
     public static Command pathFindToPose(Pose2d endPose) {
         PathConstraints constraints = new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI); // test constraints(to be
         return AutoBuilder.pathfindToPose(endPose, constraints);
     }
 
+    /**
+     * Moves to the closest reef scoring position on the robot's alliance side
+     * 
+     * @param currentBotPose supplier for the robot's current position
+     * @param right          if true, move to the right pole of the reef. If false,
+     *                       move to the left pole
+     * @return Command to path find to the reef
+     */
     public static Command pathfindToReef(Supplier<Pose2d> currentBotPose, boolean right) {
-        return Commands.either(pathfindToReefHelper(currentBotPose, ReefPositions.RIGHT_TAG_ID_TO_POSITION),
-                pathfindToReefHelper(currentBotPose, ReefPositions.LEFT_TAG_ID_TO_POSITION), () -> right);
+        return Commands.either(pathfindToReefHelper(currentBotPose, ReefPositions.RIGHT_TAG_ID_TO_POSITION_DYNAMIC),
+                pathfindToReefHelper(currentBotPose, ReefPositions.LEFT_TAG_ID_TO_POSITION_DYNAMIC), () -> right);
     }
 
+    /**
+     * Helper method to fill out the select commands for the left and right sides of
+     * the reef
+     * 
+     * @param currentBotPose
+     * @param tagIDPositionMap
+     * @return
+     */
     private static Command pathfindToReefHelper(Supplier<Pose2d> currentBotPose,
             Map<Integer, Pose2d> tagIDPositionMap) {
         return Commands.select(buildPathfindToReefCommandMap(tagIDPositionMap),
@@ -184,10 +247,11 @@ public class PathOnTheFly {
 
     private static int getNearestReefTagID(Pose2d currentBotPose) {
         List<AprilTag> tags = ReefPositions.REEF_TAGS;
-        if(DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red){
+        // If red alliance
+        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
             tags = ReefPositions.REEF_TAGS_RED;
-        // If blue
-        } else if(DriverStation.getAlliance().isPresent()) {
+            // If blue alliance
+        } else if (DriverStation.getAlliance().isPresent()) {
             tags = ReefPositions.REEF_TAGS_BLUE;
         }
         return getNearestTagID(currentBotPose, tags);

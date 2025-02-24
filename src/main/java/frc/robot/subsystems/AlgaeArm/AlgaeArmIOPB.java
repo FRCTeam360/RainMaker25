@@ -46,7 +46,7 @@ public class AlgaeArmIOPB implements AlgaeArmIO {
   private final double REVERSE_LIMIT = 10.0;
   private final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
 
-  private final double MAX_OUTPUT = 0.9;
+  private final double MAX_OUTPUT = 0.5;
 
   /** Creates a new AlgaeArmIOPB. */
   public AlgaeArmIOPB() {

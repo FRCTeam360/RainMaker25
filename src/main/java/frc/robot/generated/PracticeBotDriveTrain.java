@@ -46,14 +46,15 @@ public class PracticeBotDriveTrain {
     // the
     // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
     private static final Slot0Configs steerGains = new Slot0Configs()
-            .withKP(100).withKI(0).withKD(0.5)
-            .withKS(0.1).withKV(2.66).withKA(0)
-            .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
+            .withKP(28.7).withKI(0).withKD(0.62)
+            .withKS(0.2).withKV(1.56)
+            .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign); //.withKA(0.022)
     // When using closed-loop control, the drive motor uses the control
     // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
     private static final Slot0Configs driveGains = new Slot0Configs()
-            .withKP(0.1).withKI(0).withKD(0)
-            .withKS(0).withKV(0.124);
+            .withKP(0.11).withKI(0).withKD(0)
+            .withKS(0.19).withKV(0.12);
+            //.withKA(0.007); from 2/23 test
 
     // The closed-loop output type to use for the steer motors;
     // This affects the PID/FF gains for the steer motors

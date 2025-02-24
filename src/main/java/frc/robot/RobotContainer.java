@@ -273,7 +273,7 @@ public class RobotContainer {
         diagnosticTab.addString("Serial Address", HALUtil::getSerialNumber);
         diagnosticTab.addBoolean("Sim", Constants::isSim);
 
-        // configureBindings();
+        //configureBindings();
         configureTestController();
     }
 
@@ -439,23 +439,23 @@ public class RobotContainer {
         driverCont.rightTrigger(0.25).whileTrue(coralShooter.basicShootCmd());
 
         if (Objects.nonNull(elevator)) {
-            driverCont.a().onTrue(levelOneAndZero);
-            driverCont.b().onTrue(levelTwo);
-            driverCont.x().onTrue(levelThree);
-            driverCont.y().whileTrue(levelFour);
+            // driverCont.a().onTrue(levelOneAndZero);
+            // driverCont.b().onTrue(levelTwo);
+            // driverCont.x().onTrue(levelThree);
+            // driverCont.y().whileTrue(levelFour);
 
             driverCont.pov(270).onTrue(commandFactory.removeAlgaeL3());
             driverCont.pov(90).onTrue(commandFactory.removeAlgaeL2());
         }
 
         if (Objects.nonNull(coralShooter)) {
-            driverCont.leftBumper().whileTrue(leftAlign);
-            driverCont.rightBumper().whileTrue(rightAlign);
+            // driverCont.leftBumper().whileTrue(leftAlign);
+            // driverCont.rightBumper().whileTrue(rightAlign);
         }
 
         driverCont.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
         driverCont.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
-        
+
         /*
          * Joystick Y = quasistatic forward
          * Joystick A = quasistatic reverse
@@ -472,7 +472,7 @@ public class RobotContainer {
     private void configureTestController() {
         // climberWinch.setDefaultCommand(climberWinch.setDutyCycleCmd(() ->
         // testCont.getLeftY()));
-        algaeArm.setDefaultCommand(algaeArm.setDutyCycleCmd(() -> testCont.getLeftY()));
+        algaeArm.setDefaultCommand(algaeArm.setDutyCycleCmd(() -> testCont.getLeftY() * 0.1));
 
 
         // Algae commands`
@@ -481,7 +481,9 @@ public class RobotContainer {
         // testCont.y().whileTrue(commandFactory.shootAlgae());
         // testCont.x().whileTrue(commandFactory.intakeAlgaeFromReef());
         testCont.a().whileTrue(algaeArm.setAlgaeArmAngleCmd(110.0));
-        testCont.b().whileTrue(algaeArm.setAlgaeArmAngleCmd(0.0));
+        testCont.b().whileTrue(algaeArm.setAlgaeArmAngleCmd(20.0));
+        testCont.x().whileTrue(algaeArm.setAlgaeArmAngleCmd(50.0));
+        testCont.y().whileTrue(algaeArm.setAlgaeArmAngleCmd(80.0));
 
 
         // testCont.a().whileTrue(commandFactory.setElevatorHeightZeroAndZero());
@@ -489,8 +491,8 @@ public class RobotContainer {
         // testCont.x().whileTrue(commandFactory.setElevatorLevelThree());
         // testCont.y().whileTrue(commandFactory.setElevatorLevelFour());
 
-        // testCont.rightBumper().whileTrue(commandFactory.removeAlgaeL3());
-        // testCont.rightTrigger(0.5).whileTrue(commandFactory.removeAlgaeL2());
+        testCont.rightBumper().whileTrue(commandFactory.removeAlgaeL3());
+        testCont.rightTrigger(0.5).whileTrue(commandFactory.removeAlgaeL2());
         // testCont.start().whileTrue(commandFactory.retractAlgaeArm());
 
         // testCont.leftBumper().whileTrue(commandFactory.intakeAlgaeFromReef());

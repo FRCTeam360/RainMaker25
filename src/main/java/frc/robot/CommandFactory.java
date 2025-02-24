@@ -243,9 +243,7 @@ public class CommandFactory {
         // coralShooter.pullAlgae().alongWith(algaeArm.setAlgaeArmAngleCmd(110.0),
         // elevator.setElevatorHeight(height));
 
-        return Commands
-                .waitUntil(() -> Math.abs(elevator.getHeight() - height) <= 1.0)
-                .alongWith(elevator.setElevatorHeight(height))
+        return elevator.setElevatorHeight(height)
                 .andThen(coralShooter.pullAlgae().alongWith(algaeArm.setAlgaeArmAngleCmd(110.0)));
     }
 }

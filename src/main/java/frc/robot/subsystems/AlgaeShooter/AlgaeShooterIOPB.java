@@ -12,6 +12,14 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -19,65 +27,59 @@ import frc.robot.subsystems.Elevator.ElevatorIO.ElevatorIOInputs;
 
 public class AlgaeShooterIOPB implements AlgaeShooterIO {
 
-  private final TalonFX algaeShooterMotor = new TalonFX(Constants.PracticeBotConstants.ALGAE_SHOOTER_ID,
-      "Default Name"); // no ID
+  private final SparkFlex algaeShooterMotorFront = new SparkFlex(Constants.PracticeBotConstants.ALGAE_SHOOTER_FRONT_ID, MotorType.kBrushless); // no ID
+  private final SparkFlex algaeShooterMotorBack = new SparkFlex(Constants.PracticeBotConstants.ALGAE_SHOOTER_BACK_ID, MotorType.kBrushless); // no ID
 
-  private TalonFXConfiguration talonFXConfiguration = new TalonFXConfiguration();
-  private MotorOutputConfigs outputConfigs = new MotorOutputConfigs();
+  private SparkFlexConfig frontConfig = new SparkFlexConfig();
+  private SparkFlexConfig backConfig = new SparkFlexConfig();
+  private final double positionConversionFactor = 1.0;
 
   /** Creates a new AlgaeShooterIOWB. */
   public AlgaeShooterIOPB() {
-    algaeShooterMotor.getConfigurator().apply((talonFXConfiguration));
-    outputConfigs.withNeutralMode(NeutralModeValue.Brake);
-    outputConfigs.withInverted(InvertedValue.Clockwise_Positive);
-
     // TODO: add values
-    final double kA = 0.0;
-    final double kD = 0.0;
-    final double kG = 0.0;
-    final double kI = 0.0;
     final double kP = 0.0;
-    final double kS = 0.0;
-    final double kV = 0.0;
-
-    Slot0Configs slot0Configs = talonFXConfiguration.Slot0;
-    slot0Configs.kA = kA;
-    slot0Configs.kD = kD;
-    slot0Configs.kG = kG;
-    slot0Configs.kI = kI;
-    slot0Configs.kP = kP;
-    slot0Configs.kS = kS;
-    slot0Configs.kV = kV;
-
-    // TODO: values are for elevator, not sure if they apply the same to the shooter
-    final double motionMagicAcceleration = 400.0;
-    final double motionMagicCruiseVelocity = 85.0;
-    final double motionMagicCruiseJerk = 1750.0;
-
-    MotionMagicConfigs motionMagicConfigs = talonFXConfiguration.MotionMagic;
-    motionMagicConfigs.MotionMagicCruiseVelocity = motionMagicCruiseVelocity;
-    motionMagicConfigs.MotionMagicAcceleration = motionMagicAcceleration;
-    motionMagicConfigs.MotionMagicJerk = motionMagicCruiseJerk;
-
-    talonFXConfiguration.MotionMagic.withMotionMagicAcceleration(motionMagicAcceleration)
-        .withMotionMagicCruiseVelocity(motionMagicCruiseVelocity).withMotionMagicJerk(motionMagicCruiseJerk);
+    final double kI = 0.0;
+    final double kD = 0.0;
+    
+    ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
+    closedLoopConfig.pid(kP, kI, kD);
+    frontConfig.apply(closedLoopConfig);
+    backConfig.apply(closedLoopConfig);
+    EncoderConfig encoderConfig = new EncoderConfig();
+    encoderConfig.positionConversionFactor(positionConversionFactor);
+    frontConfig.apply(encoderConfig);
+    backConfig.apply(encoderConfig);
+    backConfig.follow(Constants.PracticeBotConstants.ALGAE_SHOOTER_FRONT_ID, true);
+    backConfig.inverted(true);
+    frontConfig.inverted(false);
+    
+    algaeShooterMotorFront.configure(frontConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    algaeShooterMotorBack.configure(backConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   public void updateInputs(AlgaeShooterIOInputs inputs) {
-    inputs.algaeShooterVoltage = algaeShooterMotor.getMotorVoltage().getValueAsDouble();
-    inputs.algaeShooterPosition = algaeShooterMotor.getPosition().getValueAsDouble();
-    inputs.algaeShooterVelocity = algaeShooterMotor.getVelocity().getValueAsDouble();
-    inputs.algaeShooterStatorCurrent = algaeShooterMotor.getStatorCurrent().getValueAsDouble();
-    inputs.algaeShooterSupplyCurrent = algaeShooterMotor.getSupplyCurrent().getValueAsDouble();
-    inputs.algaeShooterTemperature = algaeShooterMotor.getDeviceTemp().getValueAsDouble();
+    inputs.algaeShooterFrontVoltage = algaeShooterMotorFront.getBusVoltage();
+    inputs.algaeShooterFrontPosition = algaeShooterMotorFront.getEncoder().getPosition();
+    inputs.algaeShooterFrontVelocity = algaeShooterMotorFront.getEncoder().getVelocity();
+    inputs.algaeShooterFromCurrent = algaeShooterMotorFront.getOutputCurrent();
+    inputs.algaeShooterFromTemperature = algaeShooterMotorFront.getMotorTemperature();
+
+    inputs.algaeShooterBackVoltage = algaeShooterMotorBack.getBusVoltage();
+    inputs.algaeShooterBackPosition = algaeShooterMotorBack.getEncoder().getPosition();
+    inputs.algaeShooterBackVelocity = algaeShooterMotorBack.getEncoder().getVelocity();
+    inputs.algaeShooterBackCurrent = algaeShooterMotorBack.getOutputCurrent();
+    inputs.algaeShooterBackTemperature = algaeShooterMotorBack.getMotorTemperature();
   }
 
   public void setDutyCycle(double dutyCycle) {
-    algaeShooterMotor.set(dutyCycle);
+    algaeShooterMotorFront.set(dutyCycle);
   }
 
   public void setVelocity(double velocity) {
-    final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0).withEnableFOC(true);
-    algaeShooterMotor.setControl(velocityRequest.withVelocity(velocity));
+    algaeShooterMotorFront.getClosedLoopController().setReference(velocity, ControlType.kVelocity);
+  }
+
+  public void stop() {
+    algaeShooterMotorFront.stopMotor();
   }
 }

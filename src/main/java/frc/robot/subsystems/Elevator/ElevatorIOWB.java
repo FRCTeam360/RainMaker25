@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.Constants.WoodbotConstants;
-import frc.robot.subsystems.CoralIntake.CoralIntakeIO.CoralIntakeIOInputs;
 
 /** Add your docs here. */
 public class ElevatorIOWB implements ElevatorIO {
@@ -42,7 +41,7 @@ public class ElevatorIOWB implements ElevatorIO {
         final double kG = 0.65;
         final double kI = 0.0;
         final double kP = 5.0;
-        final double kS = 0.05;
+        final double kS = 0.01;
         final double kV = 0.0;
 
         Slot0Configs slot0Configs = talonFXConfiguration.Slot0;

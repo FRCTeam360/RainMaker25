@@ -4,18 +4,23 @@
 
 package frc.robot.subsystems.CoralShooter;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.CommandLogger;
-
 import org.littletonrobotics.junction.Logger;
 
 public class CoralShooter extends SubsystemBase {
-  private final CoralShooterIO io;
-  public final CoralShooterIOInputsAutoLogged inputs = new CoralShooterIOInputsAutoLogged();
+    private final CoralShooterIO io;
+    public final CoralShooterIOInputsAutoLogged inputs = new CoralShooterIOInputsAutoLogged();
+
+    private final Timer stallTimer = new Timer();
+    private final Timer unjamTimer = new Timer();
+    private boolean testStall = true;
 
     /** Creates a new CoralOutake. */
     public CoralShooter(CoralShooterIO io) {
@@ -30,30 +35,106 @@ public class CoralShooter extends SubsystemBase {
         return inputs.outtakeSensor;
     }
 
+    public boolean getIntakeSensor() {
+        return inputs.intakeSensor;
+    }
+
     public void stop() {
         io.stop();
     }
 
-    public Command runCmd(double dutyCycle) {
+    public double getStatorCurrent() {
+        return inputs.outtakeStatorCurrent;
+    }
+
+    public Command setDutyCycleCmd(double dutyCycle) {
         return this.runEnd(() -> this.setDutyCycle(dutyCycle), () -> this.stop());
     }
 
     public Command waitUntilEmpty() {
-        return Commands.waitUntil(() -> !this.getOuttakeSensor());
+        return Commands.waitUntil(() -> (!this.getOuttakeSensor() && !this.getIntakeSensor()));
     }
 
     public Command waitUntilFull() {
         return Commands.waitUntil(() -> this.getOuttakeSensor());
     }
 
-    public Command shootCmd() {
-        String cmdName = "ShootCoral";
-        return CommandLogger.logCommand(waitUntilEmpty().raceWith(runCmd(-0.8)), cmdName);
+    public Command waitUntilIntakeSensor() {
+        return Commands.waitUntil(() -> inputs.intakeSensor);
     }
 
-    public Command intakeCmd() {
+    public Command pullAlgae() {
+        return setDutyCycleCmd(-1.0);
+    }
+
+    public Command basicShootCmd() {
+        String cmdName = "ShootCoral";
+        return CommandLogger.logCommand(waitUntilEmpty().raceWith(setDutyCycleCmd(-0.40)), cmdName);
+    }
+
+    public Command basicIntakeCmd() {
         String cmdName = "IntakeCoral";
-        return CommandLogger.logCommand(waitUntilFull().raceWith(runCmd(-0.25)), cmdName);
+        return CommandLogger.logCommand(waitUntilFull().raceWith(setDutyCycleCmd(-0.50)), cmdName);
+    }
+
+    private boolean isStalling() {
+        boolean stalling = inputs.outtakeStatorCurrent > 15.0;
+        // stalling = testStall;
+        if (stalling && !stallTimer.isRunning()) {
+            stallTimer.restart();
+        } else if (stalling && stallTimer.hasElapsed(0.2)) {
+            stallTimer.stop();
+            return true;
+        } else if (!stalling) {
+            stallTimer.stop();
+        }
+        return false;
+    }
+
+    private boolean isUnjamming() {
+        boolean isStalled = isStalling();
+        if (isStalled) {
+            // testStall = false;
+            unjamTimer.restart();
+            return true;
+        } else if (unjamTimer.isRunning() && !unjamTimer.hasElapsed(0.2)) {
+            return true;
+        } else if (unjamTimer.hasElapsed(0.2)) {
+            unjamTimer.stop();
+        }
+        return false;
+    }
+
+    private Command repeatOnStall() {
+        return new ConditionalCommand(setDutyCycleCmd(1.0), setDutyCycleCmd(-0.3), () -> isUnjamming())
+            .repeatedly()
+            .alongWith(
+                new InstantCommand(
+                    () -> {
+                        // testStall = true;
+                    }
+                )
+            );
+    }
+
+    public Command antiStallIntakeCmd() {
+        String cmdName = "IntakeCoralEvenBetter";
+        return CommandLogger.logCommand(
+            waitUntilIntakeSensor()
+                .deadlineFor(repeatOnStall())
+                .andThen(waitUntilFull().deadlineFor(setDutyCycleCmd(0))),
+            cmdName
+        );
+    }
+
+    public Command sensorIntakeCmd() {
+        String cmdName = "IntakeCoral2";
+        return CommandLogger.logCommand(
+            waitUntilIntakeSensor()
+                .deadlineFor(setDutyCycleCmd(-0.75))
+                .andThen(waitUntilFull().deadlineFor(setDutyCycleCmd(-0.20))),
+            cmdName
+        );
     }
 
     @Override

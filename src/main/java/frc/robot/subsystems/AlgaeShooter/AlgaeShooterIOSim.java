@@ -48,9 +48,9 @@ public class AlgaeShooterIOSim implements AlgaeShooterIO {
   }
 
   public void updateInputs(AlgaeShooterIOInputs inputs) {
-    inputs.algaeShooterVoltage = algaeShooterSim.getInputVoltage();
-    inputs.algaeShooterPosition = simMotor.getPosition();
-    inputs.algaeShooterVelocity = algaeShooterSim.getAngularVelocityRPM();
+    inputs.algaeShooterFrontVoltage = algaeShooterSim.getInputVoltage();
+    inputs.algaeShooterFrontPosition = simMotor.getPosition();
+    inputs.algaeShooterFrontVelocity = algaeShooterSim.getAngularVelocityRPM();
   }
 
   public void setDutyCycle(double dutyCycle) {
@@ -60,5 +60,10 @@ public class AlgaeShooterIOSim implements AlgaeShooterIO {
   @Override
   public void setVelocity(double velocity) {
     algaeShooterSim.setAngularVelocity(velocity);
+  }
+
+
+  public void stop() {
+    simMotor.setSpeed(0.0);
   }
 }

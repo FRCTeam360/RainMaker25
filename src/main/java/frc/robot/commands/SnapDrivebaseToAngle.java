@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
@@ -30,6 +31,7 @@ public class SnapDrivebaseToAngle extends Command {
     private double angleToFace;
     private Rotation2d angleToFaceRotation2d;
     private Vision vision;
+    private String LIMELIGHT_NAME = Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME;
     private boolean endEarly = false;
     private int pipeline;
 
@@ -65,12 +67,12 @@ public class SnapDrivebaseToAngle extends Command {
 
         angleToFace = driveTrain.getAngle();
 
-        vision.setPipeline(pipeline);
+        vision.setPipeline(LIMELIGHT_NAME,pipeline);
 
-        int priorityID = vision.getAprilTagID();
+        int priorityID = vision.getAprilTagID(LIMELIGHT_NAME);
 
         endEarly = true;
-        if (vision.getTV() == 1 && tagIDToAngle.containsKey(priorityID)) {
+        if (vision.getTV(LIMELIGHT_NAME) == 1 && tagIDToAngle.containsKey(priorityID)) {
             endEarly = false;
             angleToFace = tagIDToAngle.get(priorityID);
         }

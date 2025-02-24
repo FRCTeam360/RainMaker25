@@ -36,11 +36,7 @@ public interface VisionIO {
 
     public double getTXRaw();
 
-    public double getTXAdjusted();
-
     public double getTYRaw();
-
-    public double getTYAdjusted();
 
     public double getTV();
 

@@ -10,6 +10,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+import frc.robot.Constants.PracticeBotConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.utils.LimelightHelpers;
@@ -32,6 +34,7 @@ public class AlignWithLimelight extends Command {
     private SlewRateLimiter leftAccelerationLimit = new SlewRateLimiter(0.75);
     private int pipeline;
 
+    private final String LIMELIGHT_NAME = Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME;
     private final String CMD_NAME = "AlignWithLimelight: ";
 
     private static final Map<Integer, Double> tagIDToAngle = Map.ofEntries(
@@ -73,13 +76,13 @@ public class AlignWithLimelight extends Command {
         leftAccelerationLimit.reset(0);
         forwardsAccelerationLimit.reset(0);
 
-        vision.setPipeline(pipeline);
+        vision.setPipeline(LIMELIGHT_NAME, pipeline);
 
         double angleToFace = driveTrain.getAngle();
-        int priorityID = vision.getAprilTagID();
+        int priorityID = vision.getAprilTagID(LIMELIGHT_NAME);
 
         endEarly = true;
-        if (vision.getTV() == 1 && tagIDToAngle.containsKey(priorityID)) {
+        if (vision.getTV(LIMELIGHT_NAME) == 1 && tagIDToAngle.containsKey(priorityID)) {
             endEarly = false;
             angleToFace = tagIDToAngle.get(priorityID);
         }
@@ -114,13 +117,13 @@ public class AlignWithLimelight extends Command {
         if (endEarly) return;
 
         double velX = -driveTrain.forwardController.calculate(
-            vision.getTYRaw(),
+            vision.getTYRaw(LIMELIGHT_NAME),
             goalTY,
             driveTrain.getState().Timestamp
         );
 
         double velY = driveTrain.strafeController.calculate(
-            vision.getTXRaw(),
+            vision.getTXRaw(LIMELIGHT_NAME),
             goalTX,
             driveTrain.getState().Timestamp
         );
@@ -141,7 +144,7 @@ public class AlignWithLimelight extends Command {
         Logger.recordOutput(CMD_NAME + "BaseOutput", PIDSpeed);
         Logger.recordOutput(CMD_NAME + "RotatedOutput", rotatedPIDSpeeds);
 
-        if (vision.getTV() == 1) {
+        if (vision.getTV(LIMELIGHT_NAME) == 1) {
             driveTrain.driveFieldCentricFacingAngle(
                 rotatedVelocityX, // forward & backward motion
                 rotatedVelocityY,
@@ -172,6 +175,6 @@ public class AlignWithLimelight extends Command {
         Logger.recordOutput(CMD_NAME + "setPointTX", goalTX);
         Logger.recordOutput(CMD_NAME + "setPointTY", goalTY);
         Logger.recordOutput(CMD_NAME + "onHeading", onHeading);
-        return endEarly || (onTX && onTY && onHeading && vision.isTargetInView());
+        return endEarly || (onTX && onTY && onHeading && vision.isTargetInView(LIMELIGHT_NAME));
     }
 }

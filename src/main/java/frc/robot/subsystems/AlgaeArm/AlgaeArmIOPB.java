@@ -35,7 +35,7 @@ public class AlgaeArmIOPB implements AlgaeArmIO {
   private final SparkMax armMotor = new SparkMax(Constants.PracticeBotConstants.ALGAE_ARM_ID, MotorType.kBrushless); // placeholder                                                                                                                    // ID
   private final RelativeEncoder encoder = armMotor.getEncoder();
   
-  private final double kP = 0.14;
+  private final double kP = 0.025;
   private final double kI = 0.0;
   private final double kD = 0.0;
 
@@ -46,6 +46,8 @@ public class AlgaeArmIOPB implements AlgaeArmIO {
   private final double REVERSE_LIMIT = 10.0;
   private final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
 
+  private final double MAX_OUTPUT = 0.9;
+
   /** Creates a new AlgaeArmIOPB. */
   public AlgaeArmIOPB() {
     sparkMaxConfig.idleMode(IdleMode.kBrake);
@@ -53,6 +55,8 @@ public class AlgaeArmIOPB implements AlgaeArmIO {
 
     ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
     closedLoopConfig.pid(kP, kI, kD);
+    closedLoopConfig.minOutput(-MAX_OUTPUT);
+    closedLoopConfig.maxOutput(MAX_OUTPUT);
     sparkMaxConfig.apply(closedLoopConfig);
 
     EncoderConfig encoderConfig = new EncoderConfig();

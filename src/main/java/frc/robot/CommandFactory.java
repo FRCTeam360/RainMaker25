@@ -200,7 +200,7 @@ public class CommandFactory {
 
     public Command intakeAlgaeFromGround() {
         return algaeRoller.setDutyCycleCmd(-0.5).alongWith(
-                algaeShooter.setDutyCycleCmd(-0.9));
+                algaeShooter.setDutyCycleCmd(-1.0));
     }
 
     public Command outtakeAlgaeFromGround() {
@@ -210,8 +210,8 @@ public class CommandFactory {
     public Command shootAlgae() {
         return Commands
                 .waitUntil(() -> algaeShooter.getVelocity() > 5500)
-                .andThen(algaeRoller.setDutyCycleCmd(1.0).alongWith(climberWinch.setPositionCmd(5.0)))
-                .alongWith(algaeShooter.setDutyCycleCmd(1.0));
+                .andThen(algaeRoller.setDutyCycleCmd(1.0))
+                .alongWith(algaeShooter.setDutyCycleCmd(0.8));
     }
 
     public Command intakeAlgaeFromReef() {
@@ -232,6 +232,7 @@ public class CommandFactory {
     }
 
     private Command removeAlgae(int level) {
+        
         double height;
         if (level == 2) {
             height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_TWO + 3.0;

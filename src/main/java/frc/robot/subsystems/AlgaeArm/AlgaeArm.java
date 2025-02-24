@@ -11,6 +11,7 @@ import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.CommandLogger;
 
 public class AlgaeArm extends SubsystemBase {
   private final AlgaeArmIO io;
@@ -52,9 +53,9 @@ public class AlgaeArm extends SubsystemBase {
   }
 
   public Command setAlgaeArmAngleCmd(double angle) {
-    return this.runEnd(
+    return CommandLogger.logCommand( this.runEnd(
         () -> this.setPosition(angle),
-        () -> this.setPosition(angle));
+        () -> this.setPosition(angle)), "set algae arm angle cmd");
   }
 
   @Override

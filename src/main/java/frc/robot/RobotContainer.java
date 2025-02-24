@@ -273,8 +273,8 @@ public class RobotContainer {
         diagnosticTab.addString("Serial Address", HALUtil::getSerialNumber);
         diagnosticTab.addBoolean("Sim", Constants::isSim);
 
-        //configureBindings();
-        configureTestController();
+        configureBindings();
+       // configureTestController();
     }
 
     public void initializeCommands() {

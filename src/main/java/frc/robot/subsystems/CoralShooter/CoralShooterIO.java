@@ -19,6 +19,9 @@ public interface CoralShooterIO {
     public double outtakeVelocity = 0.0;
     public double outtakePosition = 0.0;
     public boolean outtakeSensor = false;
+    public double outtakeSensorProximity = 0.0;
+    public boolean intakeSensor = false;
+    public double intakeSensorProximity = 0.0;
     // insert inputs
   }
 
@@ -30,6 +33,7 @@ public interface CoralShooterIO {
    */
   public void setDutyCycle(double dutyCycle);
 
+ 
   public void stop();
   // insert subsystem methods
 }

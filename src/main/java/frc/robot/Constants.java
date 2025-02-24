@@ -7,7 +7,6 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.signals.ConnectedMotorValue;
-
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.hal.HALUtil;
@@ -29,45 +28,47 @@ import frc.robot.generated.OldCompBot;
  */
 
 public final class Constants {
-    public static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+    public static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFieldLayout.loadField(
+        AprilTagFields.k2025ReefscapeWelded
+    );
 
-  public static class VisionConstants {
-    public static final String WOODBOT_LIMELIGHT_NAME = "limelight";
+   
+    public static class VisionConstants {
+        public static final String WOODBOT_LIMELIGHT_NAME = "limelight";
 
-    public static final String OCB_LIMELIGHT_NAME = "limelight";
-  
-  }
+        public static final String OCB_LIMELIGHT_NAME = "limelight";
+    }
 
-  // public static final Mode currentMode = Mode.SIM;
+    // public static final Mode currentMode = Mode.SIM;
 
-  public static enum RobotType {
-    // real robot
-    REAL,
-    // physics sim
-    SIM,
-    // log file
-    REPLAY,
-    // woodbot
-    WOODBOT,
-    // practice bot
-    PRACTICE,
-    // comp bot
-    COMPETITION,
-    // last year's comp bot; abbreviated to OCB
-    OLD_COMP_BOT
-  }
+    public static enum RobotType {
+        // real robot
+        REAL,
+        // physics sim
+        SIM,
+        // log file
+        REPLAY,
+        // woodbot
+        WOODBOT,
+        // practice bot
+        PRACTICE,
+        // comp bot
+        COMPETITION,
+        // last year's comp bot; abbreviated to OCB
+        OLD_COMP_BOT,
+    }
 
-  public static final class SerialAddressConstants {
-    public static String OCB_SERIAL_ADDRESS = "032BE44A";
-    public static String WOOD_SERIAL_ADDRESS = "031b5208";
-    public static String PRACTICE_SERIAL_ADDRESS = "c";
-    public static String COMP_SERIAL_ADDRESS = "d";
-  }
+    public static final class SerialAddressConstants {
+        public static String OCB_SERIAL_ADDRESS = "";
+        public static String WOOD_SERIAL_ADDRESS = "031b5208";
+        public static String PRACTICE_SERIAL_ADDRESS = "03260AD5";
+        public static String COMP_SERIAL_ADDRESS = "d";
+    }
 
-// placeholders for now until we got woodbot working
-  public static final int CORAL_INTAKE_ID = 0;
-  public static final int CORAL_OUTTAKE_ID = 1;
-  public static final int ELEVATOR_ID = 2;
+    // placeholders for now until we got woodbot working
+    public static final int CORAL_INTAKE_ID = 0;
+    public static final int CORAL_OUTTAKE_ID = 1;
+    public static final int ELEVATOR_ID = 2;
 
     public static class OperatorConstants {
         public static final int kDriverControllerPort = 0;
@@ -75,11 +76,8 @@ public final class Constants {
 
     public static class OldCompBotConstants {
         public static final String OCB_LIMELIGHT_NAME = "limelight";
-
-
-
     }
-    
+
     public static final class WoodbotConstants {
         public static final int CORAL_INTAKE_ID = 25;
         public static final int CORAL_SHOOTER_ID = 20;
@@ -91,18 +89,61 @@ public final class Constants {
         public static final double headingKIZone = 0.0;
 
         public static final double WBGOALSCORETX = 0.0;
-        public static final double WBGOALSCORETY = -10.0;
+        public static final double WBGOALSCORETY = -11.0;
 
         public static final int ELEVATOR_BOTTOM_SWITCH = 2;
         public static final int OUTTAKE_SENSOR = 0; //DIO port
+
+        public static final String CORAL_LIMELIGHT_NAME = "limelight-coral";
+        public static final String ALGAE_LIMELIGHT_NAME = "limelight-algae";
     }
 
     public static final class PracticeBotConstants {
-        public static final int ALGAE_SHOOTER_ID = 4;
-        public static final int ALGAE_ARM_ID = 5;
-        public static final int CLIMBER_WINCH_ID = 6;
-        public static final int CLIMBER_WHEEL_ID = 7;
-        
+        public static final String CANBUS_NAME = "Default Name";
+        public static final int BACK_ELEVATOR_ID = 14;
+        public static final int FRONT_ELEVATOR_ID = 15;
+
+        public static final int CLIMBER_ROLLER_ID = 28;
+        public static final int CLIMBER_WINCH_ID = 17;
+
+        public static final int ALGAE_ARM_ID = 18;
+        public static final int CORAL_SHOOTER_ID = 19;
+
+        public static final int ALGAE_SHOOTER_FRONT_ID = 25;
+        public static final int ALGAE_SHOOTER_BACK_ID = 26;
+        public static final int ALGAE_TILT = 27;
+        public static final int ALGAE_ROLLER = 16;
+
+        public static final int INTAKE_SENSOR_ID = 20;
+        public static final int OUTTAKE_SENSOR_ID = 21;
+
+        public static final double RIGHT_GOAL_TY = 6.8;
+        public static final double RIGHT_GOAL_TX = 0.0;
+
+        public static final double LEFT_GOAL_TY = 6.0;
+        public static final double LEFT_GOAL_TX = 0.0;
+
+        public static final String CORAL_LIMELIGHT_NAME = "limelight-coral";
+        public static final String ALGAE_LIMELIGHT_NAME = "limelight-algae";
+
+        public class ElevatorHeights {
+            public static final double TELE_LEVEL_FOUR = 29.5;
+            public static final double TELE_LEVEL_THREE = 16.0;
+            public static final double TELE_LEVEL_TWO = 7.0;
+            public static final double TELE_LEVEL_ONE = 0.0;
+
+            public static final double AUTO_LEVEL_FOUR = 0.0;
+            public static final double AUTO_LEVEL_THREE = 0.0;
+            public static final double AUTO_LEVEL_TWO = 0.0;
+            public static final double AUTO_LEVEL_ONE = 0.0;
+
+            public static final double ALIGN_LEVEL_FOUR = 0.0;
+            public static final double ALIGN_LEVEL_THREE = 0.0;
+            public static final double ALIGN_LEVEL_TWO = 0.0;
+            public static final double ALIGN_LEVEL_ONE = 0.0;
+
+        }
+
     }
 
     public static RobotType getRobotType() {
@@ -152,9 +193,9 @@ public final class Constants {
     }
 
     public static boolean isSim() {
-      if (getRobotType() == RobotType.SIM) {
-        return true;
-      }
-      return false;
+        if (getRobotType() == RobotType.SIM) {
+            return true;
+        }
+        return false;
     }
 }

@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.ClimberWheel;
 
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,6 +26,10 @@ public class ClimberWheel extends SubsystemBase {
 
   public Command setDutyCycleCmd(double dutyCycle) {
     return this.runEnd(() -> this.setDutyCycle(dutyCycle), () -> this.setDutyCycle(0));
+  }
+
+  public Command setDutyCycleCmd(DoubleSupplier dutyCycle) {
+    return this.runEnd(() -> this.setDutyCycle(dutyCycle.getAsDouble()), () -> this.setDutyCycle(0));
   }
 
   @Override

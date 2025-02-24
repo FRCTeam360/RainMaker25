@@ -7,7 +7,9 @@ package frc.robot.subsystems.Vision;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.function.Consumer;
@@ -38,8 +40,10 @@ import frc.robot.Constants;
 public class Vision extends SubsystemBase {
   private NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
   private VisionIOInputsAutoLogged inputs = new VisionIOInputsAutoLogged();
-  private final VisionIO[] ios;
-  private final VisionIOInputsAutoLogged[] visionInputs;
+  //private final VisionIO[] ios;
+  private final Map<String, VisionIO> ios;
+
+  private final Map<String, VisionIOInputsAutoLogged> visionInputs;
   private Timer snapshotTimer = new Timer();
   List<VisionMeasurement> acceptedMeasurements = Collections.emptyList();
 
@@ -49,115 +53,106 @@ public class Vision extends SubsystemBase {
   private static final InterpolatingMatrixTreeMap<Double, N3, N1> MEASUREMENT_STD_DEV_DISTANCE_MAP = new InterpolatingMatrixTreeMap<>();
 
   static {
-    MEASUREMENT_STD_DEV_DISTANCE_MAP.put(1.0, VecBuilder.fill(1.0, 1.0, 1.0));
-    MEASUREMENT_STD_DEV_DISTANCE_MAP.put(8.0, VecBuilder.fill(10.0, 10.0, 10.0));
+    MEASUREMENT_STD_DEV_DISTANCE_MAP.put(1.0, VecBuilder.fill(1.5, 1.5,999999999.0));
+    MEASUREMENT_STD_DEV_DISTANCE_MAP.put(8.0, VecBuilder.fill(10.0, 10.0, 999999999.0));
   }
 
-  private static final Matrix<N3, N1> stdDevMatrix = VecBuilder.fill(.7, .7, 999999);
+  private static final Matrix<N3, N1> stdDevMatrix = VecBuilder.fill(3.0, 3.0, 999999.0);
 
   /** Creates a new Vision. */
-  public Vision(VisionIO[] visionIos) {
+  public Vision( Map<String, VisionIO> visionIos) {
     this.ios = visionIos;
     // Creates the same number of inputs as vision IO layers
-    visionInputs = new VisionIOInputsAutoLogged[visionIos.length];
-    Arrays.fill(visionInputs, new VisionIOInputsAutoLogged());
-  }
-
-  public int getAprilTagID() {
-    return ios[0].getAprilTagID();
-  }
-
-  public double getTXRaw() {
-    // TODO: replace with more robust code
-    return ios[0].getTXRaw();
-  }
-
-  public double getTXAdjusted() {
-    // TODO: replace with more robust code
-    return ios[0].getTXAdjusted();
-  }
-
-  public double getTYRaw() {
-    // TODO: replace with more robust code
-    return ios[0].getTYRaw();
-  }
-
-  public double getTYAdjusted() {
-    // TODO: replace with more robust code
-    return ios[0].getTYAdjusted();
-  }
-
-  public double getTV() {
-    // TODO: replace with more robust code
-    return ios[0].getTV();
-  }
-
-  public double getPipeline() {
-    // TODO: replace with more robust code
-    return ios[0].getPipeline();
-  }
-
-  public void setPipeline(int pipeline) {
-    // TODO: replace with more robust code
-    if (ios[0].getPipeline() != pipeline) {
-      ios[0].setPipeline(pipeline);
+    visionInputs = new HashMap<>();
+    for(String key: visionIos.keySet()){
+      visionInputs.put(key, new VisionIOInputsAutoLogged());
     }
   }
 
-  public Command waitUntilTargetTxTy(double goalTX, double goalTY) {
-    return Commands.waitUntil(() -> isTargetInView() && isOnTargetTX(goalTX) && isOnTargetTY(goalTY));
+  public int getAprilTagID(String name) {
+    return ios.get(name).getAprilTagID();
   }
 
-  public void takeSnapshot() {
+  public double getTXRaw(String name) {
     // TODO: replace with more robust code
-    ios[0].takeSnapshot();
+    return ios.get(name).getTXRaw();
+  }
+
+
+  public double getTYRaw(String name) {
+    // TODO: replace with more robust code
+    return ios.get(name).getTYRaw();
+  }
+
+  public double getTV(String name) {
+    // TODO: replace with more robust code
+    return ios.get(name).getTV();
+  }
+
+  public double getPipeline(String name) {
+    // TODO: replace with more robust code
+    return ios.get(name).getPipeline();
+  }
+
+  public void setPipeline(String name, int pipeline) {
+    // TODO: replace with more robust code
+    if (ios.get(name).getPipeline() != pipeline) {
+      ios.get(name).setPipeline(pipeline);
+    }
+  }
+  
+  public void takeSnapshot(String name) {
+    // TODO: replace with more robust code
+    ios.get(name).takeSnapshot();
     Logger.recordOutput(VISION_LOGGING_PREFIX + "snapshot", true);
     snapshotTimer.stop();
     snapshotTimer.reset();
     snapshotTimer.start();
   }
 
-  public void resetSnapshot() {
+  public void resetSnapshot(String name) {
     // TODO: replace with more robust code
-    ios[0].resetSnapshot();
+    ios.get(name).resetSnapshot();
     Logger.recordOutput(VISION_LOGGING_PREFIX + "snapshot", false);
     snapshotTimer.stop();
   }
 
-  public boolean isOnTargetTX(double goal) {
-    if (Math.abs(getTXRaw() - goal) < 1.0) {
+  public boolean isOnTargetTX(String name, double goal) {
+    if (Math.abs(getTXRaw(name) - goal) < 1.0) {
       return true;
     }
     return false;
   }
 
-  public boolean isOnTargetTY(double goal) {
-    if (Math.abs(getTYRaw() - goal) < 1.0) {
+  public boolean isOnTargetTY(String name, double goal) {
+    if (Math.abs(getTYRaw(name) - goal) < 1.0) {
       return true;
     }
-
     return false;
   }
-
-  // Returns true if the target is in view
-  public boolean isTargetInView() {
+  
+  public boolean isTargetInView(String name) {
     // TODO: replace with more robust code
-    return getTV() == 1;
+    return getTV(name) == 1;
   }
-
+  
+  public Command waitUntilTargetTxTy(String name, double goalTX, double goalTY) {
+    return Commands.waitUntil(() -> isTargetInView(name) && isOnTargetTX(name, goalTX) && isOnTargetTY(name, goalTY));
+  }
   @Override
   public void periodic() {
-    for (int i = 0; i < ios.length; i++) {
-      VisionIO io = ios[i];
-      VisionIOInputsAutoLogged input = visionInputs[i];
+    for (String key : ios.keySet()) {
+      VisionIO io = ios.get(key);
+      VisionIOInputsAutoLogged input = visionInputs.get(key);
 
       io.updateInputs(input);
-      Logger.processInputs("Limelight", input);
+      Logger.processInputs("Limelight: " + key, input);
     }
 
     List<VisionMeasurement> acceptedMeasurements = new ArrayList<>();
 
-    for (VisionIOInputsAutoLogged input : visionInputs) {
+    for (String key: visionInputs.keySet()) {
+      VisionIOInputsAutoLogged input = visionInputs.get(key);
       // skip input if not updated
       if (!input.poseUpdated)
         continue;
@@ -173,9 +168,9 @@ public class Vision extends SubsystemBase {
       // get standard deviation based on distance to nearest tag
       OptionalDouble closestTagDistance = Arrays.stream(input.distancesToTargets).min();
 
-      Matrix<N3, N1> stdDevs = MEASUREMENT_STD_DEV_DISTANCE_MAP.get(closestTagDistance.orElse(Double.MAX_VALUE));
+      Matrix<N3, N1> cprStdDevs = MEASUREMENT_STD_DEV_DISTANCE_MAP.get(closestTagDistance.orElse(Double.MAX_VALUE));
 
-      acceptedMeasurements.add(new VisionMeasurement(timestamp, pose, stdDevMatrix));
+      acceptedMeasurements.add(new VisionMeasurement(timestamp, pose, cprStdDevs));
     }
     this.acceptedMeasurements = acceptedMeasurements;
   }

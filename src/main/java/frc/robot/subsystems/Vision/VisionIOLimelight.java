@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants;
 import frc.robot.utils.LimelightHelpers;
 import frc.robot.utils.LimelightHelpers.PoseEstimate;
@@ -41,22 +42,26 @@ public class VisionIOLimelight implements VisionIO {
 
   public void updateInputs(VisionIOInputs inputs) {
     // Get the pose estimate from limelight helpers
-    Optional<PoseEstimate> newPoseEstimate = getMegatagPoseEst();
+    Optional<PoseEstimate> newPoseEstimate = getMegatag1PoseEst();
+    // If enabled, get megatag 2 pose
+    if(DriverStation.isEnabled()){
+      newPoseEstimate = getMegatag2PoseEst();
+    }
 
     // Assume that the pose hasn't been updated
     inputs.poseUpdated = false;
 
     inputs.tv = getTV();
     inputs.tx = getTXRaw();
-    inputs.txAdjusted = getTXAdjusted();
     inputs.ty = getTYRaw();
-    inputs.tyAdjusted = getTYAdjusted();
     inputs.pipeline = getPipeline();
     inputs.tagID = getAprilTagID();
     // if the new pose estimate is null, then don't update further
     if(newPoseEstimate.isEmpty()) return;
     // if the new pose estimate is null or angle rate is greater than 720 degrees per, then don't update further
     if(inputs.tv == 0.0 || newPoseEstimate.isEmpty() || gryoAngleRateSupplier.getAsDouble() > 720.0) return;
+    // if the megatag1 pose estimate has less than 2 tags in it, don't update further
+    if(!newPoseEstimate.get().isMegaTag2 && newPoseEstimate.get().tagCount < 2) return;
 
     PoseEstimate poseEstimate = newPoseEstimate.get();
 
@@ -81,9 +86,14 @@ public class VisionIOLimelight implements VisionIO {
     inputs.poseUpdated = true;
   }
 
-  private Optional<PoseEstimate> getMegatagPoseEst(){
+  private Optional<PoseEstimate> getMegatag2PoseEst(){
     LimelightHelpers.SetRobotOrientation(name, gyroAngleSupplier.getAsDouble(), gryoAngleRateSupplier.getAsDouble(), 0, 0, 0, 0);
     PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(name);
+    return Optional.ofNullable(mt2);
+  }
+
+  private Optional<PoseEstimate> getMegatag1PoseEst(){
+    PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue(name);
     return Optional.ofNullable(mt2);
   }
 
@@ -95,24 +105,12 @@ public class VisionIOLimelight implements VisionIO {
     return table.getEntry("tx").getDouble(0.0);
   }
 
-  public double getTXAdjusted() {
-    return getTXRaw();
-  }
-
   public double getTYRaw() {
     return table.getEntry("ty").getDouble(0);
   }
-
-  public double getTYAdjusted() {
-    return getTYRaw();
-  }
-
+ 
   public double getTV() {
     return table.getEntry("tv").getDouble(0);
-  }
-
-  private boolean targetInView() {
-    return getTV() == 1.0;
   }
 
   public double getPipeline() {

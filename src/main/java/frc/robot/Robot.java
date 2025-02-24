@@ -8,8 +8,12 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorIOSim;
+import frc.robot.utils.RobotUtils;
+
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -26,6 +30,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  */
 public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
+    private CommandSwerveDrivetrain drivetrain;
 
     private final RobotContainer m_robotContainer;
 
@@ -39,6 +44,13 @@ public class Robot extends LoggedRobot {
     public Robot() {
         Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
 
+        if (isReal()) {
+            if (RobotUtils.isUsbWriteable()) {
+                Logger.addDataReceiver(new WPILOGWriter("/U"));
+            }
+            Logger.addDataReceiver(new NT4Publisher());
+            new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
+        }
         switch (Constants.getRobotType()) {
             case REAL:
             case WOODBOT:
@@ -46,9 +58,6 @@ public class Robot extends LoggedRobot {
             case COMPETITION:
             case PRACTICE:
                 // Running on a real robot, log to a USB stick ("/U/logs")
-                Logger.addDataReceiver(new WPILOGWriter());
-                Logger.addDataReceiver(new NT4Publisher());
-                new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
                 break;
             case SIM:
                 // Running a physics simulator, log to NT
@@ -116,6 +125,7 @@ public class Robot extends LoggedRobot {
         if (m_autonomousCommand != null) {
             m_autonomousCommand.schedule();
         }
+      //  drivetrain.setSteerCoast(false);
     }
 
     /** This function is called periodically during autonomous. */

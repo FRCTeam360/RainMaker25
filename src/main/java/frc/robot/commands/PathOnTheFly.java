@@ -20,6 +20,8 @@ import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
@@ -27,7 +29,7 @@ import frc.robot.subsystems.Vision.Vision;
 
 public class PathOnTheFly {
     public static class ReefPositions {
-        public static final Map<Integer, Pose2d> LeftTagIDToPosition = Map.ofEntries(
+        public static final Map<Integer, Pose2d> LEFT_TAG_ID_TO_POSITION = Map.ofEntries(
 
                 // ADD SELECT COMMAND AND COLLISION AVOIDENCE STUFFFF
                 Map.entry(
@@ -67,7 +69,7 @@ public class PathOnTheFly {
                         22,
                         new Pose2d(5.529, 2.778, Rotation2d.fromDegrees(120.0))));
         // RIGHT STARTS HERE
-        public static final Map<Integer, Pose2d> RightTagIDToPosition = Map.ofEntries(
+        public static final Map<Integer, Pose2d> RIGHT_TAG_ID_TO_POSITION = Map.ofEntries(
                 Map.entry(
                         6,
                         new Pose2d(14.219, 2.828, Rotation2d.fromDegrees(120.0))),
@@ -105,7 +107,7 @@ public class PathOnTheFly {
                         22,
                         new Pose2d(5.529, 2.778, Rotation2d.fromDegrees(120.0))));
         // LEFT STARTS HERE
-        public static final Map<Integer, List<Waypoint>> LeftTagIDToWaypoints = Map.ofEntries(
+        public static final Map<Integer, List<Waypoint>> LEFT_TAG_ID_TO_WAYPOINTS = Map.ofEntries(
 
                 // ADD SELECT COMMAND AND COLLISION AVOIDENCE STUFFFF
                 Map.entry(
@@ -175,7 +177,7 @@ public class PathOnTheFly {
                                 new Pose2d(7.100, 8.800, Rotation2d.fromDegrees(-33.917)), // make better
                                 new Pose2d(5.529, 2.778, Rotation2d.fromDegrees(-33.917)))));// change this pose
         // RIGHT STARTS HERE
-        public static final Map<Integer, List<Waypoint>> RightTagIDToWaypoints = Map.ofEntries(
+        public static final Map<Integer, List<Waypoint>> RIGHT_TAG_ID_TO_WAYPOINTS = Map.ofEntries(
                 Map.entry(
                         21,
                         PathPlannerPath.waypointsFromPoses(
@@ -243,7 +245,7 @@ public class PathOnTheFly {
                                 new Pose2d(7.100, 8.800, Rotation2d.fromDegrees(-33.917)), // make better
                                 new Pose2d(5.529, 2.778, Rotation2d.fromDegrees(-33.917)))));
 
-        public static final Map<Integer, Double> tagIDToRotation = Map.ofEntries(
+        public static final Map<Integer, Double> REEF_TAG_ID_TO_ROTATION = Map.ofEntries(
                 Map.entry(6, 120.0),
                 Map.entry(7, 180.0),
                 Map.entry(8, -120.0),
@@ -256,6 +258,21 @@ public class PathOnTheFly {
                 Map.entry(20, -120.0),
                 Map.entry(21, 180.0),
                 Map.entry(22, 120.0));
+
+        private static final Set<Integer> REEF_TAG_IDS_RED = Set.of(6, 7, 8, 9, 10, 11);
+        private static final Set<Integer> REEF_TAG_IDS_BLUE = Set.of(17, 18, 19, 20, 21, 22);
+        private static final Set<Integer> REEF_TAG_IDS = Set.of(6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22);
+
+        private static final List<AprilTag> REEF_TAGS = Constants.FIELD_LAYOUT.getTags().stream()
+                .filter(tag -> REEF_TAG_IDS.contains(tag.ID))
+                .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+        private static final List<AprilTag> REEF_TAGS_RED = Constants.FIELD_LAYOUT.getTags().stream()
+                .filter(tag -> REEF_TAG_IDS_RED.contains(tag.ID))
+                .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+        private static final List<AprilTag> REEF_TAGS_BLUE = Constants.FIELD_LAYOUT.getTags().stream()
+                .filter(tag -> REEF_TAG_IDS_BLUE.contains(tag.ID))
+                .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+
     }
 
     public static Command pathOnTheFly(List<Waypoint> wayPoints, Rotation2d endRotation2d) {
@@ -278,19 +295,19 @@ public class PathOnTheFly {
         return AutoBuilder.pathfindToPose(endPose, constraints);
     }
 
-    public static Command pathToReef2(Supplier<Pose2d> currentBotPose, boolean right) {
-        return Commands.either(pathToReef2Helper(currentBotPose, ReefPositions.RightTagIDToPosition),
-                pathToReef2Helper(currentBotPose, ReefPositions.LeftTagIDToPosition), () -> right);
+    public static Command pathfindToReef(Supplier<Pose2d> currentBotPose, boolean right) {
+        return Commands.either(pathfindToReefHelper(currentBotPose, ReefPositions.RIGHT_TAG_ID_TO_POSITION),
+                pathfindToReefHelper(currentBotPose, ReefPositions.LEFT_TAG_ID_TO_POSITION), () -> right);
     }
 
-    private static Command pathToReef2Helper(Supplier<Pose2d> currentBotPose,
+    private static Command pathfindToReefHelper(Supplier<Pose2d> currentBotPose,
             Map<Integer, Pose2d> tagIDPositionMap) {
         return Commands.select(buildPathfindToReefCommandMap(tagIDPositionMap),
                 () -> getNearestReefTagID(currentBotPose.get()));
     }
 
     private static Map<Integer, Command> buildPathfindToReefCommandMap(Map<Integer, Pose2d> tagIDPositionMap) {
-        return REEF_TAG_IDS.stream()
+        return ReefPositions.REEF_TAG_IDS.stream()
                 .map(tagId -> buildPathfindToReefCommandEntry(tagId, tagIDPositionMap))
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
@@ -304,8 +321,8 @@ public class PathOnTheFly {
     }
 
     public static Command pathToReef(Supplier<Pose2d> currentBotPose, boolean right) {
-        return Commands.either(pathToReefHelper(currentBotPose, ReefPositions.RightTagIDToWaypoints),
-                pathToReefHelper(currentBotPose, ReefPositions.LeftTagIDToWaypoints), () -> right);
+        return Commands.either(pathToReefHelper(currentBotPose, ReefPositions.RIGHT_TAG_ID_TO_WAYPOINTS),
+                pathToReefHelper(currentBotPose, ReefPositions.LEFT_TAG_ID_TO_WAYPOINTS), () -> right);
     }
 
     private static Command pathToReefHelper(Supplier<Pose2d> currentBotPose,
@@ -315,7 +332,7 @@ public class PathOnTheFly {
     }
 
     private static Map<Integer, Command> buildPathToReefCommandMap(Map<Integer, List<Waypoint>> tagIDPositionMap) {
-        return REEF_TAG_IDS.stream()
+        return ReefPositions.REEF_TAG_IDS.stream()
                 .map(tagId -> buildPathToReefCommandEntry(tagId, tagIDPositionMap))
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
@@ -325,17 +342,18 @@ public class PathOnTheFly {
     private static Entry<Integer, Command> buildPathToReefCommandEntry(int tagID,
             Map<Integer, List<Waypoint>> tagIDPositionMap) {
         return Map.entry(tagID, pathOnTheFly(tagIDPositionMap.get(tagID),
-                Rotation2d.fromDegrees(ReefPositions.tagIDToRotation.get(tagID))));
+                Rotation2d.fromDegrees(ReefPositions.REEF_TAG_ID_TO_ROTATION.get(tagID))));
     }
 
-    private static final Set<Integer> REEF_TAG_IDS = Set.of(6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22);
-
-    private static final List<AprilTag> REEF_TAGS = Constants.FIELD_LAYOUT.getTags().stream()
-            .filter(tag -> REEF_TAG_IDS.contains(tag.ID))
-            .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
-
     private static int getNearestReefTagID(Pose2d currentBotPose) {
-        return getNearestTagID(currentBotPose, REEF_TAGS);
+        List<AprilTag> tags = ReefPositions.REEF_TAGS;
+        if(DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red){
+            tags = ReefPositions.REEF_TAGS_RED;
+        // If blue
+        } else if(DriverStation.getAlliance().isPresent()) {
+            tags = ReefPositions.REEF_TAGS_BLUE;
+        }
+        return getNearestTagID(currentBotPose, tags);
     }
 
     private static int getNearestTagID(Pose2d currentBotPose, List<AprilTag> tags) {

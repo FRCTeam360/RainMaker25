@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OldCompBotConstants;
 import frc.robot.commands.AlignWithLimelight;
+import frc.robot.commands.PathOnTheFly;
 import frc.robot.commands.SetCoralIntake;
 import frc.robot.commands.SnapDrivebaseToAngle;
 import frc.robot.generated.OldCompBot;
@@ -293,8 +294,8 @@ public class RobotContainer {
         diagnosticTab.addString("Serial Address", HALUtil::getSerialNumber);
         diagnosticTab.addBoolean("Sim", Constants::isSim);
 
-        configureBindings();
-        // configureTestController();
+        // configureBindings();
+        configureTestController();
     }
 
     public void initializeCommands() {
@@ -497,8 +498,11 @@ public class RobotContainer {
     }
 
     private void configureTestController() {
+        driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(testCont));
+        testCont.rightBumper().whileTrue(PathOnTheFly.pathToReef(() -> driveTrain.getPose(), true));
+        testCont.rightBumper().whileTrue(PathOnTheFly.pathToReef(() -> driveTrain.getPose(), false));
         // climberWinch.setDefaultCommand(climberWinch.setDutyCycleCmd(() -> testCont.getLeftY()));
-        algaeArm.setDefaultCommand(algaeArm.setDutyCycleCmd(() -> testCont.getLeftY()));
+        // algaeArm.setDefaultCommand(algaeArm.setDutyCycleCmd(() -> testCont.getLeftY()));
 
         // Algae commands`
         // testCont.a().whileTrue(commandFactory.intakeAlgaeFromGround());
@@ -506,17 +510,17 @@ public class RobotContainer {
         // testCont.y().whileTrue(commandFactory.shootAlgae());
         // testCont.x().whileTrue(commandFactory.intakeAlgaeFromReef());
         // testCont.a().whileTrue(algaeArm.setAlgaeArmAngleCmd(110.0));
-        testCont.a().whileTrue(commandFactory.setElevatorHeightZeroAndZero());
-        testCont.b().whileTrue(commandFactory.setElevatorLevelTwo());
-        testCont.x().whileTrue(commandFactory.setElevatorLevelThree());
-        testCont.y().whileTrue(commandFactory.setElevatorLevelFour());
+        // testCont.a().whileTrue(commandFactory.setElevatorHeightZeroAndZero());
+        // testCont.b().whileTrue(commandFactory.setElevatorLevelTwo());
+        // testCont.x().whileTrue(commandFactory.setElevatorLevelThree());
+        // testCont.y().whileTrue(commandFactory.setElevatorLevelFour());
 
-        testCont.rightBumper().whileTrue(commandFactory.removeAlgaeL3());
-        testCont.rightTrigger(0.5).whileTrue(commandFactory.removeAlgaeL2());
-        testCont.start().whileTrue(commandFactory.retractAlgaeArm());
+        // testCont.rightBumper().whileTrue(commandFactory.removeAlgaeL3());
+        // testCont.rightTrigger(0.5).whileTrue(commandFactory.removeAlgaeL2());
+        // testCont.start().whileTrue(commandFactory.retractAlgaeArm());
 
-        testCont.leftBumper().whileTrue(commandFactory.intakeAlgaeFromReef());
-        testCont.pov(0).whileTrue(algaeTilt.setPositionCmd(0));
+        // testCont.leftBumper().whileTrue(commandFactory.intakeAlgaeFromReef());
+        // testCont.pov(0).whileTrue(algaeTilt.setPositionCmd(0));
 
         // testCont.b().whileTrue(algaeArm.setAlgaeArmAngleCmd(0));
 

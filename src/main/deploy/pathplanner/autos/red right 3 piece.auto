@@ -23,12 +23,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Elevator L1"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "red right 2"
@@ -44,6 +38,30 @@
           "type": "path",
           "data": {
             "pathName": "red right 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "red right 4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "red right 5"
           }
         },
         {

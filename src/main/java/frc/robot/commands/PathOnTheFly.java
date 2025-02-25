@@ -209,8 +209,8 @@ public class PathOnTheFly {
         Logger.recordOutput(LOGGING_PREFIX + "Processor: Red", processorPoseRed);
 
         return Commands.either(
-                pathFindToPose(drivetrain, processorPoseRed),
-                pathFindToPose(drivetrain, processorPoseBlue),
+                pathfindToPose(drivetrain, processorPoseRed),
+                pathfindToPose(drivetrain, processorPoseBlue),
                 () -> DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red
         );
     }
@@ -222,7 +222,7 @@ public class PathOnTheFly {
      * @param endPose
      * @return
      */
-    public static Command pathFindToPose(CommandSwerveDrivetrain drivetrain, Pose2d endPose) {
+    public static Command pathfindToPose(CommandSwerveDrivetrain drivetrain, Pose2d endPose) {
         // test constraint
         PathConstraints constraints = new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI);
         return CommandLogger.logCommand(AutoBuilder.pathfindToPose(endPose, constraints), "PathFind")
@@ -288,7 +288,7 @@ public class PathOnTheFly {
     private static Entry<Integer, Command> buildPathfindToReefCommandEntry(CommandSwerveDrivetrain drivetrain, int tagID,
             Map<Integer, Pose2d> tagIDPositionMap) {
         Pose2d endPose = tagIDPositionMap.get(tagID);
-        return Map.entry(tagID, pathFindToPose(drivetrain, endPose));
+        return Map.entry(tagID, pathfindToPose(drivetrain, endPose));
     }
 
     private static int getNearestReefTagID(Pose2d currentBotPose, boolean isRed) {

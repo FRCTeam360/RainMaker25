@@ -46,15 +46,16 @@ public class PracticeBotDriveTrain {
     // the
     // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
     private static final Slot0Configs steerGains = new Slot0Configs()
-            .withKP(28.7).withKI(0).withKD(0.62)
-            .withKS(0.2).withKV(1.56)
-            .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign); //.withKA(0.022)
+            .withKP(132.0).withKI(0).withKD(1.0)
+            .withKS(0.2).withKV(2.6).withKA(0.048)
+            .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign); 
     // When using closed-loop control, the drive motor uses the control
     // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
     private static final Slot0Configs driveGains = new Slot0Configs()
-            .withKP(0.11).withKI(0).withKD(0)
-            .withKS(0.19).withKV(0.12);
-            //.withKA(0.007); from 2/23 test
+            .withKP(0.13).withKI(0).withKD(0)
+            .withKS(0.16).withKV(0.12).withKA(0.007);
+             
+            //from 2/23 test
 
     // The closed-loop output type to use for the steer motors;
     // This affects the PID/FF gains for the steer motors
@@ -100,7 +101,7 @@ public class PracticeBotDriveTrain {
   
     // Theoretical free speed (m/s) at 12 V applied output;
     // This needs to be tuned to your individual robot
-    public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(4.47);
+    public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(4.118);
 
     // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
     // This may need to be tuned to your individual robot

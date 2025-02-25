@@ -4,18 +4,20 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.utils.CommandLogger;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class FaceAngle extends Command {
   private final CommandSwerveDrivetrain drivetrain;
-  private final double desiredAngle;
+  private double desiredAngle;
   /** Creates a new FaceAngle. */
   private FaceAngle(CommandSwerveDrivetrain drivetrain, double desiredAngle) {
     this.drivetrain = drivetrain;
-    this.desiredAngle = desiredAngle;
     addRequirements(drivetrain);
   }
 
@@ -40,6 +42,12 @@ public class FaceAngle extends Command {
   }
 
   public static Command getCommand(CommandSwerveDrivetrain drivetrain, double desiredAngle) {
-    return CommandLogger.logCommand(new FaceAngle(drivetrain, desiredAngle), "Face Angle");
+    return CommandLogger.logCommand(Commands.either(
+      // Blue side, no inverting
+      new FaceAngle(drivetrain, desiredAngle),
+      // Red side, inverted
+      new FaceAngle(drivetrain, desiredAngle + 180.0),
+      () -> DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue
+      ), "Face Angle");
   }
 }

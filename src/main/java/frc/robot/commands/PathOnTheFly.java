@@ -10,6 +10,8 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
@@ -33,83 +35,84 @@ import frc.robot.utils.CommandLogger;
 
 public class PathOnTheFly {
     public static class ReefPositions {
-        public static final Map<Integer, Pose2d> LEFT_TAG_ID_TO_POSITION = Map.ofEntries(
+        public static final Map<Integer, Translation2d> LEFT_TAG_ID_TO_POSITION_OFFSET = Map.ofEntries(
+                // ADD SELECT COMMAND AND COLLISION AVOIDENCE STUFFFF
+                Map.entry(
+                        6,
+                        new Translation2d(0, 0)),
+                Map.entry(
+                        7,
+                        new Translation2d(0, 0)),
+                Map.entry(
+                        8,
+                        new Translation2d(0, 0)),
+                Map.entry(
+                        9,
+                        new Translation2d(0, 0)),
+                Map.entry(
+                        10,
+                        new Translation2d(0, 0)),
+                Map.entry(
+                        11,
+                        new Translation2d(0, 0)),
+                Map.entry(
+                        17,
+                        new Translation2d(0, 0)),
+                Map.entry(
+                        18,
+                        new Translation2d(0, 0)),
+                Map.entry(
+                        19,
+                        new Translation2d(0, 0)),
+                Map.entry(
+                        20,
+                        new Translation2d(0, 0)),
+                Map.entry(
+                        21,
+                        new Translation2d(0, 0)),
+                Map.entry(
+                        22,
+                        new Translation2d(0, 0)));
+        // RIGHT STARTS HERE
+        public static final Map<Integer, Translation2d> RIGHT_TAG_ID_TO_POSITION = Map.ofEntries(
 
                 // ADD SELECT COMMAND AND COLLISION AVOIDENCE STUFFFF
                 Map.entry(
                         6,
-                        new Pose2d(13.628, 2.612, Rotation2d.fromDegrees(120.0))),
+                        new Translation2d(0, 0)),
                 Map.entry(
                         7,
-                        new Pose2d(14.623, 3.809, Rotation2d.fromDegrees(180.0))),
+                        new Translation2d(0, 0)),
                 Map.entry(
                         8,
-                        new Pose2d(14.176, 5.236, Rotation2d.fromDegrees(-120.0))),
+                        new Translation2d(0, 0)),
                 Map.entry(
                         9,
-                        new Pose2d(12.503, 5.453, Rotation2d.fromDegrees(-60.0))),
+                        new Translation2d(0, 0)),
                 Map.entry(
                         10,
-                        new Pose2d(11.522, 4.371, Rotation2d.fromDegrees(0.0))),
+                        new Translation2d(0, 0)),
                 Map.entry(
                         11,
-                        new Pose2d(11.955, 2.871, Rotation2d.fromDegrees(60.0))),
+                        new Translation2d(0, 0)),
                 Map.entry(
                         17,
-                        new Pose2d(3.725, 3.011, Rotation2d.fromDegrees(60.0))),
+                        new Translation2d(0, 0)),
                 Map.entry(
                         18,
-                        new Pose2d(3.247, 4.181, Rotation2d.fromDegrees(0.0))),
+                        new Translation2d(0, 0)),
                 Map.entry(
                         19,
-                        new Pose2d(3.832, 5.482, Rotation2d.fromDegrees(-60.0))),
+                        new Translation2d(0, 0)),
                 Map.entry(
                         20,
-                        new Pose2d(5.529, 5.167, Rotation2d.fromDegrees(-120.0))),
+                        new Translation2d(0, 0)),
                 Map.entry(
                         21,
-                        new Pose2d(5.743, 3.840, Rotation2d.fromDegrees(180.0))),
+                        new Translation2d(0, 0)),
                 Map.entry(
                         22,
-                        new Pose2d(5.529, 2.778, Rotation2d.fromDegrees(120.0))));
-        // RIGHT STARTS HERE
-        public static final Map<Integer, Pose2d> RIGHT_TAG_ID_TO_POSITION = Map.ofEntries(
-                Map.entry(
-                        6,
-                        new Pose2d(14.219, 2.828, Rotation2d.fromDegrees(120.0))),
-                Map.entry(
-                        7,
-                        new Pose2d(14.536, 4.386, Rotation2d.fromDegrees(180.0))),
-                Map.entry(
-                        8,
-                        new Pose2d(13.642, 5.481, Rotation2d.fromDegrees(-120.0))),
-                Map.entry(
-                        9,
-                        new Pose2d(12.027, 5.207, Rotation2d.fromDegrees(-60.0))),
-                Map.entry(
-                        10,
-                        new Pose2d(11.565, 3.679, Rotation2d.fromDegrees(0.0))),
-                Map.entry(
-                        11,
-                        new Pose2d(12.474, 2.597, Rotation2d.fromDegrees(60.0))),
-                Map.entry(
-                        17,
-                        new Pose2d(4.046, 2.865, Rotation2d.fromDegrees(60.0))),
-                Map.entry(
-                        18,
-                        new Pose2d(3.276, 3.859, Rotation2d.fromDegrees(0.0))),
-                Map.entry(
-                        19,
-                        new Pose2d(3.381, 5.212, Rotation2d.fromDegrees(-60.0))),
-                Map.entry(
-                        20,
-                        new Pose2d(5.109, 5.467, Rotation2d.fromDegrees(-120.0))),
-                Map.entry(
-                        21,
-                        new Pose2d(5.743, 4.132, Rotation2d.fromDegrees(180.0))),
-                Map.entry(
-                        22,
-                        new Pose2d(5.529, 2.778, Rotation2d.fromDegrees(120.0))));
+                        new Translation2d(0, 0)));
 
         public static final Map<Integer, Double> REEF_TAG_ID_TO_ROTATION = Map.ofEntries(
                 Map.entry(6, 120.0),
@@ -160,18 +163,22 @@ public class PathOnTheFly {
             Rotation2d tagRotation = tagPose.getRotation();
 
             if (right) {
+                Translation2d offset = RIGHT_TAG_ID_TO_POSITION.get(tag.ID);
                 // x is forwards-backwards, y is right-left relative to the tag position
-                Translation2d tagTranslation = new Translation2d(0.45, 0.14);
+                Translation2d tagTranslation = new Translation2d(0.45, 0.14).plus(offset);
                 tagTranslation.rotateBy(tagRotation);
                 return tagPose.plus(new Transform2d(tagTranslation, Rotation2d.k180deg));
             } else {
+                Translation2d offset = LEFT_TAG_ID_TO_POSITION_OFFSET.get(tag.ID);
                 // x is forwards-backwards, y is right-left relative to the tag position
-                Translation2d tagTranslation = new Translation2d(0.45, -0.14);
+                Translation2d tagTranslation = new Translation2d(0.45, -0.14).plus(offset);
                 tagTranslation.rotateBy(tagRotation);
                 return tagPose.plus(new Transform2d(tagTranslation, Rotation2d.k180deg));
             }
         }
     }
+
+    private static final String LOGGING_PREFIX = "Path On The Fly Poses: ";
 
     /**
      * Follow the path given in the waypoints list, ending at the desired rotation
@@ -195,6 +202,23 @@ public class PathOnTheFly {
         return AutoBuilder.followPath(path);
     }
 
+    public static Command pathFindToProcessor(CommandSwerveDrivetrain drivetrain){
+        final int processorTagIDBlue = 16;
+        final int processorTagIDRed = 3;
+
+        final Pose2d processorPoseBlue = Constants.FIELD_LAYOUT.getTagPose(processorTagIDBlue).get().toPose2d().plus(new Transform2d(0.5, 0.0,Rotation2d.kCCW_90deg));
+        final Pose2d processorPoseRed = Constants.FIELD_LAYOUT.getTagPose(processorTagIDRed).get().toPose2d().plus(new Transform2d(0.5, 0.0,Rotation2d.kCCW_90deg));
+
+        Logger.recordOutput(LOGGING_PREFIX + "Processor: Blue", processorPoseBlue);
+        Logger.recordOutput(LOGGING_PREFIX + "Processor: Red", processorPoseRed);
+
+        return Commands.either(
+                pathFindToPose(processorPoseRed, drivetrain),
+                pathFindToPose(processorPoseBlue, drivetrain),
+                () -> DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red
+        );
+    }
+
     /**
      * Move to the given position using Path Planner's pathfinding functionality
      * 
@@ -204,8 +228,7 @@ public class PathOnTheFly {
     public static Command pathFindToPose(Pose2d endPose, CommandSwerveDrivetrain drivetrain) {
         // test constraint
         PathConstraints constraints = new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI);
-        return CommandLogger.logCommand(AutoBuilder.pathfindToPose(endPose, constraints), "PathFind")
-                        .andThen(FaceAngle.getCommand(drivetrain, endPose.getRotation().getDegrees()));
+        return CommandLogger.logCommand(AutoBuilder.pathfindToPose(endPose, constraints), "PathFind");
     }
 
     /**
@@ -217,12 +240,29 @@ public class PathOnTheFly {
      * @return Command to path find to the reef
      */
     public static Command pathfindToReef(Supplier<Pose2d> currentBotPose, boolean right, CommandSwerveDrivetrain drivetrain) {
+        // Create commands
         return Commands.either(
-                pathfindToReefHelper(currentBotPose, ReefPositions.RIGHT_TAG_ID_TO_POSITION_DYNAMIC, drivetrain),
-                pathfindToReefHelper(currentBotPose, ReefPositions.LEFT_TAG_ID_TO_POSITION_DYNAMIC, drivetrain),
+                pathfindToReefAllianceSpecific(currentBotPose, right, true, drivetrain),
+                pathfindToReefAllianceSpecific(currentBotPose, right, false, drivetrain),
+                () -> DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red
+        );
+    }
+
+    private static Command pathfindToReefAllianceSpecific(Supplier<Pose2d> currentBotPose, boolean right, boolean isRed, CommandSwerveDrivetrain drivetrain) {
+        Map<Integer, Pose2d> tagIDPositionMapRight = logPositions(ReefPositions.RIGHT_TAG_ID_TO_POSITION_DYNAMIC, "RIGHT_TAG_ID_TO_POSITION_DYNAMIC");
+        Map<Integer, Pose2d> tagIDPositionMapLeft = logPositions(ReefPositions.LEFT_TAG_ID_TO_POSITION_DYNAMIC, "LEFT_TAG_ID_TO_POSITION_DYNAMIC");
+        return Commands.either(
+                pathfindToReefHelper(currentBotPose, tagIDPositionMapRight, isRed, drivetrain),
+                pathfindToReefHelper(currentBotPose, tagIDPositionMapLeft, isRed, drivetrain),
                 () -> right);
     }
 
+    private static Map<Integer, Pose2d> logPositions(Map<Integer, Pose2d> tagIDPositionMap, String name) {
+        for (int key : tagIDPositionMap.keySet()) {
+            Logger.recordOutput(LOGGING_PREFIX + "Reef " + name + ": " + key, tagIDPositionMap.get(key));
+        }
+        return tagIDPositionMap;
+    }
     /**
      * Helper method to fill out the select commands for the left and right sides of
      * the reef
@@ -232,9 +272,9 @@ public class PathOnTheFly {
      * @return
      */
     private static Command pathfindToReefHelper(Supplier<Pose2d> currentBotPose,
-            Map<Integer, Pose2d> tagIDPositionMap, CommandSwerveDrivetrain drivetrain) {
+            Map<Integer, Pose2d> tagIDPositionMap, boolean isRed, CommandSwerveDrivetrain drivetrain) {
         return Commands.select(buildPathfindToReefCommandMap(tagIDPositionMap, drivetrain),
-                () -> getNearestReefTagID(currentBotPose.get()));
+                () -> getNearestReefTagID(currentBotPose.get(), isRed));
     }
 
     private static Map<Integer, Command> buildPathfindToReefCommandMap(Map<Integer, Pose2d> tagIDPositionMap, CommandSwerveDrivetrain drivetrain) {
@@ -251,13 +291,13 @@ public class PathOnTheFly {
         return Map.entry(tagID, pathFindToPose(endPose, drivetrain));
     }
 
-    private static int getNearestReefTagID(Pose2d currentBotPose) {
+    private static int getNearestReefTagID(Pose2d currentBotPose, boolean isRed) {
         List<AprilTag> tags = ReefPositions.REEF_TAGS;
         // If red alliance
-        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+        if (isRed) {
             tags = ReefPositions.REEF_TAGS_RED;
             // If blue alliance
-        } else if (DriverStation.getAlliance().isPresent()) {
+        } else {
             tags = ReefPositions.REEF_TAGS_BLUE;
         }
         return getNearestTagID(currentBotPose, tags);

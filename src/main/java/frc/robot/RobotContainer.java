@@ -221,8 +221,8 @@ public class RobotContainer {
                 // practice bot stuff
                 break;
             case SIM:
-                driveTrain = WoodBotDriveTrain.createDrivetrain();
-                logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
+                driveTrain = PracticeBotDriveTrain.createDrivetrain();
+                logger = new Telemetry(PracticeBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
                 vision =
                     new Vision(
                         Map.ofEntries(
@@ -503,6 +503,8 @@ public class RobotContainer {
         // testCont.leftBumper().whileTrue(PathOnTheFly.pathToReef(() -> driveTrain.getPose(), false));
         testCont.rightBumper().whileTrue(PathOnTheFly.pathfindToReef(() -> driveTrain.getPose(), true, driveTrain));
         testCont.leftBumper().whileTrue(PathOnTheFly.pathfindToReef(() -> driveTrain.getPose(), false, driveTrain));
+        testCont.a().whileTrue(PathOnTheFly.pathFindToProcessor(driveTrain));
+        testCont.start().whileTrue(new InstantCommand(() -> driveTrain.zero()));
         // climberWinch.setDefaultCommand(climberWinch.setDutyCycleCmd(() -> testCont.getLeftY()));
         // algaeArm.setDefaultCommand(algaeArm.setDutyCycleCmd(() -> testCont.getLeftY()));
 

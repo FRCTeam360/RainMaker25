@@ -501,9 +501,9 @@ public class RobotContainer {
         driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(testCont));
         // testCont.rightBumper().whileTrue(PathOnTheFly.pathToReef(() -> driveTrain.getPose(), true));
         // testCont.leftBumper().whileTrue(PathOnTheFly.pathToReef(() -> driveTrain.getPose(), false));
-        testCont.rightBumper().whileTrue(PathOnTheFly.pathfindToReef(() -> driveTrain.getPose(), true, driveTrain));
-        testCont.leftBumper().whileTrue(PathOnTheFly.pathfindToReef(() -> driveTrain.getPose(), false, driveTrain));
-        testCont.a().whileTrue(PathOnTheFly.pathFindToProcessor(driveTrain));
+        testCont.rightBumper().whileTrue(commandFactory.pathFindToReefRight());
+        testCont.leftBumper().whileTrue(commandFactory.pathFindToReefLeft());
+        testCont.a().whileTrue(commandFactory.pathFindToProcessor());
         testCont.start().whileTrue(new InstantCommand(() -> driveTrain.zero()));
         // climberWinch.setDefaultCommand(climberWinch.setDutyCycleCmd(() -> testCont.getLeftY()));
         // algaeArm.setDefaultCommand(algaeArm.setDutyCycleCmd(() -> testCont.getLeftY()));

@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.*;
 import frc.robot.commands.AlignWithLimelight;
+import frc.robot.commands.PathOnTheFly;
 import frc.robot.commands.SetCoralIntake;
 import frc.robot.commands.SnapDrivebaseToAngle;
 import frc.robot.generated.WoodBotDriveTrain;
@@ -246,5 +247,17 @@ public class CommandFactory {
                 .waitUntil(() -> Math.abs(elevator.getHeight() - height) <= 1.0)
                 .alongWith(elevator.setElevatorHeight(height))
                 .andThen(coralShooter.pullAlgae().alongWith(algaeArm.setAlgaeArmAngleCmd(110.0)));
+    }
+
+    public Command pathFindToReefLeft() {
+        return PathOnTheFly.pathfindToReef(drivetrain, () -> this.drivetrain.getPose(), false);
+    }
+
+    public Command pathFindToReefRight() {
+        return PathOnTheFly.pathfindToReef(drivetrain, () -> this.drivetrain.getPose(), true);
+    }
+
+    public Command pathFindToProcessor() {
+        return PathOnTheFly.pathFindToProcessor(drivetrain);
     }
 }

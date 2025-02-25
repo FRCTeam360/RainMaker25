@@ -1,8 +1,6 @@
 package frc.robot.commands;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -20,7 +18,6 @@ import com.pathplanner.lib.path.Waypoint;
 
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -30,7 +27,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.Vision.Vision;
 import frc.robot.utils.CommandLogger;
 
 public class PathOnTheFly {
@@ -213,8 +209,8 @@ public class PathOnTheFly {
         Logger.recordOutput(LOGGING_PREFIX + "Processor: Red", processorPoseRed);
 
         return Commands.either(
-                pathFindToPose(processorPoseRed, drivetrain),
-                pathFindToPose(processorPoseBlue, drivetrain),
+                pathFindToPose(drivetrain, processorPoseRed),
+                pathFindToPose(drivetrain, processorPoseBlue),
                 () -> DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red
         );
     }
@@ -222,10 +218,11 @@ public class PathOnTheFly {
     /**
      * Move to the given position using Path Planner's pathfinding functionality
      * 
+     * @param drivetrain
      * @param endPose
      * @return
      */
-    public static Command pathFindToPose(Pose2d endPose, CommandSwerveDrivetrain drivetrain) {
+    public static Command pathFindToPose(CommandSwerveDrivetrain drivetrain, Pose2d endPose) {
         // test constraint
         PathConstraints constraints = new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI);
         return CommandLogger.logCommand(AutoBuilder.pathfindToPose(endPose, constraints), "PathFind")
@@ -235,26 +232,27 @@ public class PathOnTheFly {
     /**
      * Moves to the closest reef scoring position on the robot's alliance side
      * 
+     * @param drivetrain
      * @param currentBotPose supplier for the robot's current position
      * @param right          if true, move to the right pole of the reef. If false,
      *                       move to the left pole
      * @return Command to path find to the reef
      */
-    public static Command pathfindToReef(Supplier<Pose2d> currentBotPose, boolean right, CommandSwerveDrivetrain drivetrain) {
+    public static Command pathfindToReef(CommandSwerveDrivetrain drivetrain, Supplier<Pose2d> currentBotPose, boolean right) {
         // Create commands
         return Commands.either(
-                pathfindToReefAllianceSpecific(currentBotPose, right, true, drivetrain),
-                pathfindToReefAllianceSpecific(currentBotPose, right, false, drivetrain),
+                pathfindToReefAllianceSpecific(drivetrain, currentBotPose, right, true),
+                pathfindToReefAllianceSpecific(drivetrain, currentBotPose, right, false),
                 () -> DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red
         );
     }
 
-    private static Command pathfindToReefAllianceSpecific(Supplier<Pose2d> currentBotPose, boolean right, boolean isRed, CommandSwerveDrivetrain drivetrain) {
+    private static Command pathfindToReefAllianceSpecific(CommandSwerveDrivetrain drivetrain, Supplier<Pose2d> currentBotPose, boolean right, boolean isRed) {
         Map<Integer, Pose2d> tagIDPositionMapRight = logPositions(ReefPositions.RIGHT_TAG_ID_TO_POSITION_DYNAMIC, "RIGHT_TAG_ID_TO_POSITION_DYNAMIC");
         Map<Integer, Pose2d> tagIDPositionMapLeft = logPositions(ReefPositions.LEFT_TAG_ID_TO_POSITION_DYNAMIC, "LEFT_TAG_ID_TO_POSITION_DYNAMIC");
         return Commands.either(
-                pathfindToReefHelper(currentBotPose, tagIDPositionMapRight, isRed, drivetrain),
-                pathfindToReefHelper(currentBotPose, tagIDPositionMapLeft, isRed, drivetrain),
+                pathfindToReefHelper(drivetrain, currentBotPose, tagIDPositionMapRight, isRed),
+                pathfindToReefHelper(drivetrain, currentBotPose, tagIDPositionMapLeft, isRed),
                 () -> right);
     }
 
@@ -268,28 +266,29 @@ public class PathOnTheFly {
      * Helper method to fill out the select commands for the left and right sides of
      * the reef
      * 
+     * @param drivetrain
      * @param currentBotPose
      * @param tagIDPositionMap
      * @return
      */
-    private static Command pathfindToReefHelper(Supplier<Pose2d> currentBotPose,
-            Map<Integer, Pose2d> tagIDPositionMap, boolean isRed, CommandSwerveDrivetrain drivetrain) {
-        return Commands.select(buildPathfindToReefCommandMap(tagIDPositionMap, drivetrain),
+    private static Command pathfindToReefHelper(CommandSwerveDrivetrain drivetrain, Supplier<Pose2d> currentBotPose,
+            Map<Integer, Pose2d> tagIDPositionMap, boolean isRed) {
+        return Commands.select(buildPathfindToReefCommandMap(drivetrain, tagIDPositionMap),
                 () -> getNearestReefTagID(currentBotPose.get(), isRed));
     }
 
-    private static Map<Integer, Command> buildPathfindToReefCommandMap(Map<Integer, Pose2d> tagIDPositionMap, CommandSwerveDrivetrain drivetrain) {
+    private static Map<Integer, Command> buildPathfindToReefCommandMap(CommandSwerveDrivetrain drivetrain, Map<Integer, Pose2d> tagIDPositionMap) {
         return ReefPositions.REEF_TAG_IDS.stream()
-                .map(tagId -> buildPathfindToReefCommandEntry(tagId, tagIDPositionMap, drivetrain))
+                .map(tagId -> buildPathfindToReefCommandEntry(drivetrain, tagId, tagIDPositionMap))
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         Map.Entry::getValue));
     }
 
-    private static Entry<Integer, Command> buildPathfindToReefCommandEntry(int tagID,
-            Map<Integer, Pose2d> tagIDPositionMap, CommandSwerveDrivetrain drivetrain) {
+    private static Entry<Integer, Command> buildPathfindToReefCommandEntry(CommandSwerveDrivetrain drivetrain, int tagID,
+            Map<Integer, Pose2d> tagIDPositionMap) {
         Pose2d endPose = tagIDPositionMap.get(tagID);
-        return Map.entry(tagID, pathFindToPose(endPose, drivetrain));
+        return Map.entry(tagID, pathFindToPose(drivetrain, endPose));
     }
 
     private static int getNearestReefTagID(Pose2d currentBotPose, boolean isRed) {

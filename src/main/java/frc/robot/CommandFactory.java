@@ -258,6 +258,6 @@ public class CommandFactory {
     }
 
     public Command pathFindToProcessor() {
-        return PathOnTheFly.pathFindToProcessor(drivetrain);
+        return PathOnTheFly.pathfindToProcessor(drivetrain);
     }
 }

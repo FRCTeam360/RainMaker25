@@ -198,7 +198,7 @@ public class PathOnTheFly {
         return AutoBuilder.followPath(path);
     }
 
-    public static Command pathFindToProcessor(CommandSwerveDrivetrain drivetrain){
+    public static Command pathfindToProcessor(CommandSwerveDrivetrain drivetrain){
         final int processorTagIDBlue = 16;
         final int processorTagIDRed = 3;
 

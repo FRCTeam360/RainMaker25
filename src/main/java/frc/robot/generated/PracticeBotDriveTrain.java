@@ -52,8 +52,8 @@ public class PracticeBotDriveTrain {
     // When using closed-loop control, the drive motor uses the control
     // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
     private static final Slot0Configs driveGains = new Slot0Configs()
-            .withKP(0.14).withKI(0).withKD(0)
-            .withKS(0.16).withKV(0.12).withKA(0.007);
+            .withKP(0.135).withKI(0).withKD(0)
+            .withKS(0.8).withKV(0.12).withKA(0.007);
              
             //from 2/23 test
 

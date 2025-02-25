@@ -409,7 +409,7 @@ public class RobotContainer {
             NamedCommands.registerCommand("intake", coralShooter.basicIntakeCmd());
         }
 
-        registerPathplannerCommand("Intake Coral", intake);
+        // registerPathplannerCommand("Intake Coral", intake);
     }
 
     /**
@@ -454,19 +454,19 @@ public class RobotContainer {
         driverCont.rightTrigger(0.25).whileTrue(coralShooter.basicShootCmd());
 
         if (Objects.nonNull(elevator)) {
-            // driverCont.a().onTrue(levelOneAndZero);
-            // driverCont.b().onTrue(levelTwo);
-            // driverCont.x().onTrue(levelThree);
-            // driverCont.y().whileTrue(levelFour);
+            driverCont.a().onTrue(levelOneAndZero);
+            driverCont.b().onTrue(levelTwo);
+            driverCont.x().onTrue(levelThree);
+            driverCont.y().whileTrue(levelFour);
         }
 
         if (Objects.nonNull(coralShooter)) {
-            // driverCont.leftBumper().whileTrue(leftAlign);
-            // driverCont.rightBumper().whileTrue(rightAlign);
+            driverCont.leftBumper().whileTrue(leftAlign);
+            driverCont.rightBumper().whileTrue(rightAlign);
         }
 
-        driverCont.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
-        driverCont.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
+        // driverCont.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
+        // driverCont.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
         /*
 
          * Joystick Y = quasistatic forward
@@ -475,10 +475,10 @@ public class RobotContainer {
          * Joystick B = dynamic forward
          */
 
-        driverCont.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-        driverCont.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-        driverCont.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
-        driverCont.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        // driverCont.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        // driverCont.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        // driverCont.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        // driverCont.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
 
     public void onDisable() {
@@ -488,6 +488,6 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return autoChooser.getSelected().beforeStarting(() -> elevator.zeroEncoder());
+        return autoChooser.getSelected();
     }
 }

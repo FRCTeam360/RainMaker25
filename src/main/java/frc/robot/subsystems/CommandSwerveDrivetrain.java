@@ -81,8 +81,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public final Command fieldOrientedDrive(
             CommandXboxController driveCont) { // field oriented drive command!
         SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric() // creates a fieldcentric drive
-                .withDeadband(maxSpeed * 0.025)
-                .withRotationalDeadband(maxAngularRate * 0.025); // Add a 10% deadband
+                .withDeadband(maxSpeed * 0.01)
+                .withRotationalDeadband(maxAngularRate * 0.01
+                ); // Add a 10% deadband
             //    .withDriveRequestType(DriveRequestType.Velocity); // Use closed-loop control for drive motors
 
         return CommandLogger.logCommand(this.applyRequest(

@@ -228,7 +228,8 @@ public class PathOnTheFly {
     public static Command pathFindToPose(Pose2d endPose, CommandSwerveDrivetrain drivetrain) {
         // test constraint
         PathConstraints constraints = new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI);
-        return CommandLogger.logCommand(AutoBuilder.pathfindToPose(endPose, constraints), "PathFind");
+        return CommandLogger.logCommand(AutoBuilder.pathfindToPose(endPose, constraints), "PathFind")
+            .andThen(FaceAngle.getCommand(drivetrain, endPose.getRotation()));
     }
 
     /**

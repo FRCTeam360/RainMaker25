@@ -4,19 +4,22 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.utils.CommandLogger;
+import frc.robot.utils.RobotUtils;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class FaceAngle extends Command {
   private final CommandSwerveDrivetrain drivetrain;
   private double desiredAngle;
   /** Creates a new FaceAngle. */
-  private FaceAngle(CommandSwerveDrivetrain drivetrain, double desiredAngle) {
+  private FaceAngle(CommandSwerveDrivetrain drivetrain, Rotation2d desiredRotation) {
+    this.desiredAngle = desiredRotation.getDegrees();
     this.drivetrain = drivetrain;
     addRequirements(drivetrain);
   }
@@ -41,13 +44,13 @@ public class FaceAngle extends Command {
     return drivetrain.isAtRotationSetpoint();
   }
 
-  public static Command getCommand(CommandSwerveDrivetrain drivetrain, double desiredAngle) {
+  public static Command getCommand(CommandSwerveDrivetrain drivetrain, Rotation2d desiredRotation) {
     return CommandLogger.logCommand(Commands.either(
-      // Blue side, no inverting
-      new FaceAngle(drivetrain, desiredAngle),
-      // Red side, inverted
-      new FaceAngle(drivetrain, desiredAngle + 180.0),
-      () -> DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue
+      // Red side, flipped
+      new FaceAngle(drivetrain, RobotUtils.flipForRedAlliancePerspective(desiredRotation)),
+      // Blue side, no flipping
+      new FaceAngle(drivetrain, desiredRotation),
+      () -> DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red
       ), "Face Angle");
   }
 }

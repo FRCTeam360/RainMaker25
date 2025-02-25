@@ -8,6 +8,7 @@ import com.ctre.phoenix6.hardware.*;
 import com.ctre.phoenix6.signals.*;
 import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
+import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.numbers.N1;
@@ -216,13 +217,29 @@ public class PracticeBotDriveTrain {
             kBackRightXPos, kBackRightYPos, kInvertRightSide, kBackRightSteerMotorInverted, kBackRightEncoderInverted
         );
 
+    private static final double POSE_CONTROLLER_KP = 1;
+    private static final double POSE_CONTROLLER_KI = 0.0006;
+    private static final double POSE_CONTROLLER_KD = 0.0;
+    private static final double POSE_CONTROLLER_IZONE = 0.08;
+
+    private static final double POSE_CONTROLLER_POSITION_TOLERANCE = 0.03;
+    private static final double POSE_CONTROLLER_VELOCITY_TOLERANCE = 0.02;
+
+    private static final PhoenixPIDController POSE_X_CONTROLLER = new PhoenixPIDController(POSE_CONTROLLER_KP, POSE_CONTROLLER_KI, POSE_CONTROLLER_KD);
+    private static final PhoenixPIDController POSE_Y_CONTROLLER = new PhoenixPIDController(POSE_CONTROLLER_KP, POSE_CONTROLLER_KI, POSE_CONTROLLER_KD);
+
     /**
      * Creates a CommandSwerveDrivetrain instance.
      * This should only be called once in your robot program,.
      */
     public static CommandSwerveDrivetrain createDrivetrain() {
+        POSE_X_CONTROLLER.setTolerance(POSE_CONTROLLER_POSITION_TOLERANCE, POSE_CONTROLLER_VELOCITY_TOLERANCE);
+        POSE_X_CONTROLLER.setIZone(POSE_CONTROLLER_IZONE);
+        POSE_Y_CONTROLLER.setTolerance(POSE_CONTROLLER_POSITION_TOLERANCE, POSE_CONTROLLER_VELOCITY_TOLERANCE);
+        POSE_Y_CONTROLLER.setIZone(POSE_CONTROLLER_IZONE);
         return new CommandSwerveDrivetrain(
                 headingKP, headingKI, headingKD, headingKIZone, stafeKP, stafeKI, stafeKD, strafeIRMax, strafeIRMin, forwardKP, forwardKI, forwardKD, forwardIRMax, forwardIRMin,
+                POSE_X_CONTROLLER, POSE_Y_CONTROLLER,
                 kSpeedAt12Volts.in(MetersPerSecond),
                 maxAngularRate, DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight);
     }

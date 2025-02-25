@@ -178,7 +178,7 @@ public class PathOnTheFly {
 
     /**
      * Follow the path given in the waypoints list, ending at the desired rotation
-     * 
+     *
      * @param wayPoints
      * @param endRotation2d
      * @return
@@ -217,7 +217,7 @@ public class PathOnTheFly {
 
     /**
      * Move to the given position using Path Planner's pathfinding functionality
-     * 
+     *
      * @param drivetrain
      * @param endPose
      * @return
@@ -226,12 +226,12 @@ public class PathOnTheFly {
         // test constraint
         PathConstraints constraints = new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI);
         return CommandLogger.logCommand(AutoBuilder.pathfindToPose(endPose, constraints), "PathFind")
-            .andThen(FaceAngle.getCommand(drivetrain, endPose.getRotation()));
+            .andThen(DriveToPose.getCommand(drivetrain, endPose));
     }
 
     /**
      * Moves to the closest reef scoring position on the robot's alliance side
-     * 
+     *
      * @param drivetrain
      * @param currentBotPose supplier for the robot's current position
      * @param right          if true, move to the right pole of the reef. If false,
@@ -265,7 +265,7 @@ public class PathOnTheFly {
     /**
      * Helper method to fill out the select commands for the left and right sides of
      * the reef
-     * 
+     *
      * @param drivetrain
      * @param currentBotPose
      * @param tagIDPositionMap

@@ -106,7 +106,7 @@ public class CoralShooter extends SubsystemBase {
     }
 
     private Command repeatOnStall() {
-        return new ConditionalCommand(setDutyCycleCmd(1.0), setDutyCycleCmd(-0.3), () -> isUnjamming())
+        return new ConditionalCommand(setDutyCycleCmd(1.0), setDutyCycleCmd(-0.4), () -> isUnjamming())
             .repeatedly()
             .alongWith(
                 new InstantCommand(
@@ -120,9 +120,8 @@ public class CoralShooter extends SubsystemBase {
     public Command antiStallIntakeCmd() {
         String cmdName = "IntakeCoralEvenBetter";
         return CommandLogger.logCommand(
-            waitUntilIntakeSensor()
-                .deadlineFor(repeatOnStall())
-                .andThen(waitUntilFull().deadlineFor(setDutyCycleCmd(0))),
+            waitUntilFull()
+                .deadlineFor(repeatOnStall()),
             cmdName
         );
     }

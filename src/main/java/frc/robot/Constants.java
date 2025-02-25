@@ -132,7 +132,7 @@ public final class Constants {
             public static final double TELE_LEVEL_TWO = 7.0;
             public static final double TELE_LEVEL_ONE = 0.0;
 
-            public static final double AUTO_LEVEL_FOUR = 0.0;
+            public static final double AUTO_LEVEL_FOUR = 29.5;
             public static final double AUTO_LEVEL_THREE = 0.0;
             public static final double AUTO_LEVEL_TWO = 0.0;
             public static final double AUTO_LEVEL_ONE = 0.0;

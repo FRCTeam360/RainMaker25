@@ -30,6 +30,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OldCompBotConstants;
+import frc.robot.Constants.PracticeBotConstants.ElevatorHeights;
+import frc.robot.Constants.*;
 import frc.robot.commands.AlignWithLimelight;
 import frc.robot.commands.SetCoralIntake;
 import frc.robot.commands.SnapDrivebaseToAngle;
@@ -324,7 +326,7 @@ public class RobotContainer {
             levelOne = commandFactory.setElevatorToZero();
 
             autoLevelThree = commandFactory.setElevatorHeight(20.5);
-            autoLevelFour = commandFactory.setElevatorHeight(33.0);
+            autoLevelFour = commandFactory.setElevatorHeight(ElevatorHeights.AUTO_LEVEL_FOUR);
 
             zeroElevatorEncoder = elevator.zeroElevatorCmd();
 
@@ -452,30 +454,31 @@ public class RobotContainer {
         driverCont.rightTrigger(0.25).whileTrue(coralShooter.basicShootCmd());
 
         if (Objects.nonNull(elevator)) {
-            driverCont.a().onTrue(levelOneAndZero);
-            driverCont.b().onTrue(levelTwo);
-            driverCont.x().onTrue(levelThree);
-            driverCont.y().whileTrue(levelFour);
+            // driverCont.a().onTrue(levelOneAndZero);
+            // driverCont.b().onTrue(levelTwo);
+            // driverCont.x().onTrue(levelThree);
+            // driverCont.y().whileTrue(levelFour);
         }
 
         if (Objects.nonNull(coralShooter)) {
-            driverCont.leftBumper().whileTrue(leftAlign);
-            driverCont.rightBumper().whileTrue(rightAlign);
+            // driverCont.leftBumper().whileTrue(leftAlign);
+            // driverCont.rightBumper().whileTrue(rightAlign);
         }
 
-        // driverCont.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
-        // driverCont.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
+        driverCont.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
+        driverCont.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
         /*
+
          * Joystick Y = quasistatic forward
          * Joystick A = quasistatic reverse
          * Joystick X = dyanmic reverse
          * Joystick B = dynamic forward
          */
 
-        // driverCont.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-        // driverCont.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-        // driverCont.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
-        // driverCont.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        driverCont.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        driverCont.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        driverCont.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        driverCont.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
 
     public void onDisable() {

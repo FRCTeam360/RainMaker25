@@ -48,17 +48,21 @@ public class DriveToPose extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+       // System.out.println("Running initialize");
+        drivetrain.driveToPose(setpointPose);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
         drivetrain.driveToPose(setpointPose);
+        //System.out.println("Running execute");
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        //System.out.println("Running end");
     }
 
     private final String LOGGING_PREFIX = "DriveToPose: ";
@@ -66,6 +70,7 @@ public class DriveToPose extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
+        //System.out.println("Running isFinished");
         final boolean isAtHeadingSetpoint = drivetrain.isAtRotationSetpoint();
         final boolean isAtPoseXSetPoint = drivetrain.isAtPoseXSetpoint();
         final boolean isAtPoseYSetPoint = drivetrain.isAtPoseYSetpoint();

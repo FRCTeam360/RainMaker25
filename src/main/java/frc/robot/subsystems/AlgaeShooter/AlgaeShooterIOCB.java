@@ -27,8 +27,8 @@ import frc.robot.subsystems.Elevator.ElevatorIO.ElevatorIOInputs;
 
 public class AlgaeShooterIOCB implements AlgaeShooterIO {
 
-  private final SparkFlex algaeShooterMotorFront = new SparkFlex(Constants.PracticeBotConstants.ALGAE_SHOOTER_FRONT_ID, MotorType.kBrushless); // no ID
-  private final SparkFlex algaeShooterMotorBack = new SparkFlex(Constants.PracticeBotConstants.ALGAE_SHOOTER_BACK_ID, MotorType.kBrushless); // no ID
+  private final SparkFlex algaeShooterMotorFront = new SparkFlex(Constants.CompBotConstants.ALGAE_SHOOTER_FRONT_ID, MotorType.kBrushless); // no ID
+  private final SparkFlex algaeShooterMotorBack = new SparkFlex(Constants.CompBotConstants.ALGAE_SHOOTER_BACK_ID, MotorType.kBrushless); // no ID
 
   private SparkFlexConfig frontConfig = new SparkFlexConfig();
   private SparkFlexConfig backConfig = new SparkFlexConfig();
@@ -49,7 +49,7 @@ public class AlgaeShooterIOCB implements AlgaeShooterIO {
     encoderConfig.positionConversionFactor(positionConversionFactor);
     frontConfig.apply(encoderConfig);
     backConfig.apply(encoderConfig);
-    backConfig.follow(Constants.PracticeBotConstants.ALGAE_SHOOTER_FRONT_ID, true);
+    backConfig.follow(Constants.CompBotConstants.ALGAE_SHOOTER_FRONT_ID, true);
     backConfig.inverted(true);
     frontConfig.inverted(false);
     

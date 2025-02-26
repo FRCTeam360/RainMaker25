@@ -32,7 +32,7 @@ import frc.robot.Constants;
 
 public class AlgaeArmIOCB implements AlgaeArmIO {
 
-  private final SparkMax armMotor = new SparkMax(Constants.PracticeBotConstants.ALGAE_ARM_ID, MotorType.kBrushless); // placeholder                                                                                                                    // ID
+  private final SparkMax armMotor = new SparkMax(Constants.CompBotConstants.ALGAE_ARM_ID, MotorType.kBrushless); // placeholder                                                                                                                    // ID
   private final RelativeEncoder encoder = armMotor.getEncoder();
   
   private final double kP = 0.025;

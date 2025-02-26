@@ -146,6 +146,54 @@ public final class Constants {
 
     }
 
+    public static final class CompBotConstants {
+        public static final String CANBUS_NAME = "Default Name";
+        public static final int BACK_ELEVATOR_ID = 14;
+        public static final int FRONT_ELEVATOR_ID = 15;
+
+        public static final int CLIMBER_ROLLER_ID = 28;
+        public static final int CLIMBER_WINCH_ID = 17;
+
+        public static final int ALGAE_ARM_ID = 18;
+        public static final int CORAL_SHOOTER_ID = 19;
+
+        public static final int ALGAE_SHOOTER_FRONT_ID = 25;
+        public static final int ALGAE_SHOOTER_BACK_ID = 26;
+        public static final int ALGAE_TILT = 27;
+        public static final int ALGAE_ROLLER = 16;
+
+        public static final int INTAKE_SENSOR_ID = 20;
+        public static final int OUTTAKE_SENSOR_ID = 21;
+
+        public static final double RIGHT_GOAL_TY = 6.8;
+        public static final double RIGHT_GOAL_TX = 0.0;
+
+        public static final double LEFT_GOAL_TY = 6.0;
+        public static final double LEFT_GOAL_TX = 0.0;
+
+        public static final String CORAL_LIMELIGHT_NAME = "limelight-coral";
+        public static final String ALGAE_LIMELIGHT_NAME = "limelight-algae";
+
+        public class ElevatorHeights {
+            public static final double TELE_LEVEL_FOUR = 29.5;
+            public static final double TELE_LEVEL_THREE = 16.0;
+            public static final double TELE_LEVEL_TWO = 7.0;
+            public static final double TELE_LEVEL_ONE = 0.0;
+
+            public static final double AUTO_LEVEL_FOUR = 29.5;
+            public static final double AUTO_LEVEL_THREE = 0.0;
+            public static final double AUTO_LEVEL_TWO = 0.0;
+            public static final double AUTO_LEVEL_ONE = 0.0;
+
+            public static final double ALIGN_LEVEL_FOUR = 0.0;
+            public static final double ALIGN_LEVEL_THREE = 0.0;
+            public static final double ALIGN_LEVEL_TWO = 0.0;
+            public static final double ALIGN_LEVEL_ONE = 0.0;
+
+        }
+
+    }
+
     public static RobotType getRobotType() {
         String serialAddress = HALUtil.getSerialNumber();
 

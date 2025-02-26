@@ -146,7 +146,7 @@ public final class Constants {
 
     }
 
-    public static final class CompBotConstants {
+    public static final class CompBotConstants { // Currently just a copy of practice bot, values should be adjusted to comp if needed
         public static final String CANBUS_NAME = "Default Name";
         public static final int BACK_ELEVATOR_ID = 14;
         public static final int FRONT_ELEVATOR_ID = 15;

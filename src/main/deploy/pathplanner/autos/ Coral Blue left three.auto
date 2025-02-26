@@ -23,12 +23,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Elevator L1"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": " coral 3pPath 2"
@@ -49,19 +43,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Elevator L4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Elevator L1"
           }
         },
         {
@@ -85,12 +67,6 @@
         {
           "type": "named",
           "data": {
-            "name": "Elevator L4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "shoot"
           }
         },
@@ -98,6 +74,18 @@
           "type": "named",
           "data": {
             "name": "Elevator L1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "coral 3p Path 6"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intake"
           }
         }
       ]

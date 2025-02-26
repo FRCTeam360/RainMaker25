@@ -25,4 +25,8 @@ public interface ClimberWinchIO {
   public void setDutyCycle(double dutyCycle);
 
   public void setPosition(double position);
+
+public void setServoPosition(double position);
+
+public void setServoSpeed(double speed);
 }

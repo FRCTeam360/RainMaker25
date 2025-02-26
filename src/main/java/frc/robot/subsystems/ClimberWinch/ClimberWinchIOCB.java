@@ -16,13 +16,16 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.CompBotConstants;
 import frc.robot.Constants.PracticeBotConstants;
 
-public class ClimberWinchIOPB implements ClimberWinchIO {
+public class ClimberWinchIOCB implements ClimberWinchIO {
 
-  private final SparkMax winchMotor = new SparkMax(PracticeBotConstants.CLIMBER_WINCH_ID, MotorType.kBrushless);
+  private final SparkMax winchMotor = new SparkMax(CompBotConstants.CLIMBER_WINCH_ID, MotorType.kBrushless);
   private final RelativeEncoder winchEncoder = winchMotor.getEncoder();
+  private final Servo servo = new Servo(CompBotConstants.SERVO_PORT);
 
   private final double kP = 0.2;
   private final double kI = 0.0;
@@ -32,7 +35,7 @@ public class ClimberWinchIOPB implements ClimberWinchIO {
   private final SparkMaxConfig config = new SparkMaxConfig();
 
   /** Creates a new ClimberIOPB. */
-  public ClimberWinchIOPB() {
+  public ClimberWinchIOCB() {
     config.idleMode(IdleMode.kBrake);
     config.inverted(true);
     ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
@@ -52,6 +55,14 @@ public class ClimberWinchIOPB implements ClimberWinchIO {
     winchMotor.getClosedLoopController().setReference(position, ControlType.kPosition);
   }
 
+  public void setServoPosition(double position) {
+    servo.setPosition(position);
+  }
+
+  public void setServoSpeed(double speed) {
+    servo.setSpeed(speed);
+  }
+
   public void updateInputs(ClimberWinchIOInputs inputs) {
     inputs.winchDutyCycle = winchMotor.getAppliedOutput();
     inputs.winchPosition = winchEncoder.getPosition();
@@ -59,17 +70,5 @@ public class ClimberWinchIOPB implements ClimberWinchIO {
     inputs.winchCurrent = winchMotor.getOutputCurrent();
     inputs.winchTemp = winchMotor.getMotorTemperature();
   }
-
-@Override
-public void setServoPosition(double position) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setServoPosition'");
-}
-
-@Override
-public void setServoSpeed(double speed) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setServoSpeed'");
-}
 
 }

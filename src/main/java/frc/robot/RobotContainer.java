@@ -145,45 +145,36 @@ public class RobotContainer {
             case WOODBOT:
                 driveTrain = WoodBotDriveTrain.createDrivetrain();
                 logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
-                vision =
-                    new Vision(
+                vision = new Vision(
                         Map.ofEntries(
-                            Map.entry(
-                                Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
-                                new VisionIOLimelight(
-                                    Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
-                                    () -> driveTrain.getAngle(),
-                                    () -> driveTrain.getAngularRate()
-                                )
-                            )
-                        )
-                    );
+                                Map.entry(
+                                        Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
+                                        new VisionIOLimelight(
+                                                Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
+                                                () -> driveTrain.getAngle(),
+                                                () -> driveTrain.getAngularRate()))));
                 elevator = new Elevator(new ElevatorIOPB());
                 coralShooter = new CoralShooter(new CoralShooterIOWB());
                 break;
             case OLD_COMP_BOT:
                 driveTrain = OldCompBot.createDrivetrain();
-                vision =
-                    new Vision(
+                vision = new Vision(
                         Map.ofEntries(
-                            Map.entry(
-                                Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
-                                new VisionIOLimelight(
-                                    Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
-                                    () -> driveTrain.getAngle(),
-                                    () -> driveTrain.getAngularRate()
-                                )
-                            )
-                            // Map.entry(
-                            //     Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                            //     new VisionIOLimelight(
-                            //         Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                            //         () -> driveTrain.getAngle(),
-                            //         () -> driveTrain.getAngularRate()
-                            //     )
-                            // )
-                        )
-                    );
+                                Map.entry(
+                                        Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
+                                        new VisionIOLimelight(
+                                                Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
+                                                () -> driveTrain.getAngle(),
+                                                () -> driveTrain.getAngularRate()))
+                        // Map.entry(
+                        // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                        // new VisionIOLimelight(
+                        // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                        // () -> driveTrain.getAngle(),
+                        // () -> driveTrain.getAngularRate()
+                        // )
+                        // )
+                        ));
                 break;
             case PRACTICE:
                 driveTrain = PracticeBotDriveTrain.createDrivetrain();
@@ -197,53 +188,45 @@ public class RobotContainer {
                 climberWheel = new ClimberWheel(new ClimberWheelIOPB());
                 climberWinch = new ClimberWinch(new ClimberWinchIOPB());
 
-                vision =
-                    new Vision(
+                vision = new Vision(
                         Map.ofEntries(
-                            Map.entry(
-                                Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
-                                new VisionIOLimelight(
-                                    Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
-                                    () -> driveTrain.getAngle(),
-                                    () -> driveTrain.getAngularRate()
-                                )
-                            )
-                            // Map.entry(
-                            //     Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                            //     new VisionIOLimelight(
-                            //         Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                            //         () -> driveTrain.getAngle(),
-                            //         () -> driveTrain.getAngularRate()
-                            //     )
-                            // )
-                        )
-                    );
+                                Map.entry(
+                                        Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
+                                        new VisionIOLimelight(
+                                                Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
+                                                () -> driveTrain.getAngle(),
+                                                () -> driveTrain.getAngularRate()))
+                        // Map.entry(
+                        // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                        // new VisionIOLimelight(
+                        // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                        // () -> driveTrain.getAngle(),
+                        // () -> driveTrain.getAngularRate()
+                        // )
+                        // )
+                        ));
                 // practice bot stuff
                 break;
             case SIM:
                 driveTrain = WoodBotDriveTrain.createDrivetrain();
                 logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
-                vision =
-                    new Vision(
+                vision = new Vision(
                         Map.ofEntries(
-                            Map.entry(
-                                Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
-                                new VisionIOLimelight(
-                                    Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
-                                    () -> driveTrain.getAngle(),
-                                    () -> driveTrain.getAngularRate()
-                                )
-                            )
-                            // Map.entry(
-                            //     Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                            //     new VisionIOLimelight(
-                            //         Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                            //         () -> driveTrain.getAngle(),
-                            //         () -> driveTrain.getAngularRate()
-                            //     )
-                            // )
-                        )
-                    );
+                                Map.entry(
+                                        Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
+                                        new VisionIOLimelight(
+                                                Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
+                                                () -> driveTrain.getAngle(),
+                                                () -> driveTrain.getAngularRate()))
+                        // Map.entry(
+                        // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                        // new VisionIOLimelight(
+                        // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                        // () -> driveTrain.getAngle(),
+                        // () -> driveTrain.getAngularRate()
+                        // )
+                        // )
+                        ));
                 elevator = new Elevator(new ElevatorIOSim());
                 algaeArm = new AlgaeArm(new AlgaeArmIOSim(() -> elevator.getHeight()));
                 coralShooter = new CoralShooter(new CoralShooterIOSim(() -> elevator.getHeight()));
@@ -257,8 +240,7 @@ public class RobotContainer {
                 break;
         }
 
-        commandFactory =
-            new CommandFactory(
+        commandFactory = new CommandFactory(
                 coralShooter,
                 elevator,
                 vision,
@@ -269,8 +251,7 @@ public class RobotContainer {
                 driveTrain,
                 driverCont.getHID(),
                 algaeTilt,
-                algaeRoller
-            );
+                algaeRoller);
 
         initializeCommands();
 
@@ -278,11 +259,10 @@ public class RobotContainer {
         SmartDashboard.putData("Field", field);
 
         PathPlannerLogging.setLogActivePathCallback(
-            (poses -> Logger.recordOutput("Swerve/ActivePath", poses.toArray(new Pose2d[0])))
-        );
+                (poses -> Logger.recordOutput("Swerve/ActivePath", poses.toArray(new Pose2d[0]))));
         PathPlannerLogging.setLogTargetPoseCallback(
-        pose -> Logger.recordOutput("Swerve/TargetPathPose", pose));
-        
+                pose -> Logger.recordOutput("Swerve/TargetPathPose", pose));
+
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -299,23 +279,8 @@ public class RobotContainer {
 
     public void initializeCommands() {
         consumeVisionMeasurements = vision.consumeVisionMeasurements(driveTrain::addVisionMeasurements);
-        //elevatorHeight = new DoubleSupplier() 
+        // elevatorHeight = new DoubleSupplier()
         xOut = driveTrain.xOutCmd();
-
-        rightAlign =
-            commandFactory.alignWithLimelight(
-                Constants.WoodbotConstants.WBGOALSCORETY,
-                Constants.WoodbotConstants.WBGOALSCORETX,
-                0
-            );
-        // Periodically adds the vision measurement to drivetrain for pose estimation
-
-        leftAlign =
-            commandFactory.alignWithLimelight(
-                Constants.WoodbotConstants.WBGOALSCORETY,
-                Constants.WoodbotConstants.WBGOALSCORETX,
-                1
-            );
 
         snapDrivebaseToAngle = new SnapDrivebaseToAngle(vision, driveTrain, 0);
 
@@ -333,36 +298,30 @@ public class RobotContainer {
             levelOneAndZero = new SequentialCommandGroup(levelOne, zeroElevatorEncoder);
 
             NamedCommands.registerCommand(
-                "raise to l4",
-                commandFactory.setElevatorHeight(33.0).raceWith(elevator.isAtHeight(33.0))
-            );
+                    "raise to l4",
+                    commandFactory.setElevatorHeight(33.0).raceWith(elevator.isAtHeight(33.0)));
             NamedCommands.registerCommand(
-                "zero",
-                commandFactory.setElevatorHeight(0.0).raceWith(elevator.isAtHeight(0.0))
-            );
+                    "zero",
+                    commandFactory.setElevatorHeight(0.0).raceWith(elevator.isAtHeight(0.0)));
         }
 
         if (Objects.nonNull(driveTrain)) {
-            rightAlign =
-                commandFactory.alignWithLimelight(
-                    Constants.WoodbotConstants.WBGOALSCORETY,
-                    Constants.WoodbotConstants.WBGOALSCORETX,
-                    0
-                );
+            rightAlign = commandFactory.alignWithLimelight(
+                    Constants.PracticeBotConstants.RIGHT_GOAL_TY,
+                    Constants.PracticeBotConstants.RIGHT_GOAL_TX,
+                    0);
+            // Periodically adds the vision measurement to drivetrain for pose estimation
 
-            leftAlign =
-                commandFactory.alignWithLimelight(
-                    Constants.WoodbotConstants.WBGOALSCORETY,
-                    Constants.WoodbotConstants.WBGOALSCORETX,
-                    1
-                );
+            leftAlign = commandFactory.alignWithLimelight(
+                    Constants.PracticeBotConstants.LEFT_GOAL_TY,
+                    Constants.PracticeBotConstants.LEFT_GOAL_TX,
+                    1);
         }
 
         registerPathplannerCommand("Elevator L4", autoLevelFour);
         registerPathplannerCommand("Elevator L3", autoLevelThree);
         registerPathplannerCommand("Elevator L2", levelTwo);
         registerPathplannerCommand("Elevator L1", levelOne);
-
 
         Command scoreCoralL4Left = null;
         Command scoreCoralL4Right = null;
@@ -371,7 +330,7 @@ public class RobotContainer {
         Command scoreCoralL2Left = null;
         Command scoreCoralL2Right = null;
         Command scoreCoralL1 = null;
-        allignToReefWoodBot = commandFactory.alignToReefWoodbotLeft(0);       
+        allignToReefWoodBot = commandFactory.alignToReefWoodbotLeft(0);
 
         if (Objects.nonNull(coralShooter) && Objects.nonNull(elevator)) {
             scoreCoralL4Left = commandFactory.scoringRoutine(4, true);
@@ -427,17 +386,16 @@ public class RobotContainer {
         } else {
             System.err.println(commandName + " is null");
             NamedCommands.registerCommand(
-                commandName,
-                new InstantCommand(() -> System.err.println(commandName + " is null"))
-            );
+                    commandName,
+                    new InstantCommand(() -> System.err.println(commandName + " is null")));
         }
     }
-
 
     private void configureBindings() {
 
         vision.setDefaultCommand(consumeVisionMeasurements.ignoringDisable(true));
-        // elevator.setDefaultCommand(elevator.setDutyCycleCommand(() -> operatorCont.getLeftY() * 0.05));
+        // elevator.setDefaultCommand(elevator.setDutyCycleCommand(() ->
+        // operatorCont.getLeftY() * 0.05));
         algaeTilt.setDefaultCommand(algaeTilt.setDutyCycleCmd(() -> operatorCont.getLeftY() * 0.10));
         algaeArm.setDefaultCommand(algaeArm.setAlgaeArmAngleCmd(0.0));
 
@@ -452,7 +410,7 @@ public class RobotContainer {
 
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
 
-        driverCont.leftTrigger(0.25).whileTrue(coralShooter.sensorIntakeCmd()); 
+        driverCont.leftTrigger(0.25).whileTrue(coralShooter.sensorIntakeCmd());
         driverCont.rightTrigger(0.25).whileTrue(coralShooter.basicShootCmd());
 
         if (Objects.nonNull(elevator)) {
@@ -470,7 +428,7 @@ public class RobotContainer {
         // driverCont.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
         // driverCont.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
         /*
-
+         * 
          * Joystick Y = quasistatic forward
          * Joystick A = quasistatic reverse
          * Joystick X = dyanmic reverse

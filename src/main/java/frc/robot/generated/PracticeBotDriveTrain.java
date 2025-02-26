@@ -30,12 +30,12 @@ public class PracticeBotDriveTrain {
     public static final double headingKIZone = 0.0;
 
     public static final double stafeKP = 0.01;
-    public static final double stafeKI = 0.0003;
+    public static final double stafeKI = 0.0002;
     public static final double stafeKD = 0.003;
-    public static final double strafeIRMax = 0.05;
+    public static final double strafeIRMax = 0.05; //DOES NOTHING WE ARENT DOING INTEGRATOR RANGE :((()))
     public static final double strafeIRMin = -0.05;
 
-    public static final double forwardKP = 0.045;
+    public static final double forwardKP = 0.04;
     public static final double forwardKI = 0.0;
     public static final double forwardKD = 0.0;
     public static final double forwardIRMax = 0.05;

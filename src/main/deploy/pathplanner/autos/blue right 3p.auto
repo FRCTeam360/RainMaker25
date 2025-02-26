@@ -47,6 +47,30 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "blue right 4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "blue right 5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Elevator L1"

@@ -7,13 +7,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue Left RP"
+            "pathName": "blue right 1"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Elevator L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "blue right 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "blue right 3"
           }
         },
         {

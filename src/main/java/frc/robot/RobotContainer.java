@@ -236,6 +236,7 @@ public class RobotContainer {
                 break;
             case COMPETITION:
             default:
+                driveTrain = PracticeBotDriveTrain.createDrivetrain();
                 // competition bot stuff
                 break;
         }

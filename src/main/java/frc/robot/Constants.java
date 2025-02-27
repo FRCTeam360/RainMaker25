@@ -59,10 +59,10 @@ public final class Constants {
     }
 
     public static final class SerialAddressConstants {
-        public static String OCB_SERIAL_ADDRESS = "";
-        public static String WOOD_SERIAL_ADDRESS = "031b5208";
+        public static String OCB_SERIAL_ADDRESS = "DO_NOT_USE";
+        public static String WOOD_SERIAL_ADDRESS = "DO_NOT_USE";
         public static String PRACTICE_SERIAL_ADDRESS = "03260AD5";
-        public static String COMP_SERIAL_ADDRESS = "d";
+        public static String COMP_SERIAL_ADDRESS = "03415A99";
     }
 
     // placeholders for now until we got woodbot working
@@ -149,7 +149,7 @@ public final class Constants {
     public static final class CompBotConstants { // Currently just a copy of practice bot, values should be adjusted to comp if needed
         public static final String CANBUS_NAME = "Default Name";
 
-        public static final int SERVO_PORT = 0; // TODO: insert actual port
+        public static final int SERVO_PORT = 0; // is the actual port :)
         public static final int BACK_ELEVATOR_ID = 14;
         public static final int FRONT_ELEVATOR_ID = 15;
 

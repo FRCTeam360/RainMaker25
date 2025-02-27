@@ -77,8 +77,8 @@ public class AlgaeTiltIOPB implements AlgaeTiltIO {
 
   public void updateInputs(AlgaeTiltIOInputs inputs) {
     inputs.armDutyCycle = motor.get();
-    inputs.armPosition = encoder.getPosition();
-    inputs.armVelocity = encoder.getVelocity();
+    inputs.armPositionRelative = encoder.getPosition();
+    inputs.armVelocityRelative = encoder.getVelocity();
     inputs.armAmps = motor.getOutputCurrent();
   }
 }

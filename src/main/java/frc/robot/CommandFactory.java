@@ -215,7 +215,7 @@ public class CommandFactory {
     }
 
     public Command intakeAlgaeFromReef() {
-        return algaeTilt.setPositionCmd(-3.0).alongWith(algaeRoller.setDutyCycleCmd(-0.3),
+        return algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.0 : -3.0).alongWith(algaeRoller.setDutyCycleCmd(-0.3),
                 algaeShooter.setDutyCycleCmd(-1.0));
     }
 

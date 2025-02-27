@@ -294,7 +294,7 @@ public class RobotContainer {
                 algaeTilt,
                 algaeRoller);
 
-        initializeCommands();
+        // initializeCommands();
 
         field = new Field2d();
         SmartDashboard.putData("Field", field);
@@ -315,9 +315,9 @@ public class RobotContainer {
         diagnosticTab.addString("Serial Address", HALUtil::getSerialNumber);
         diagnosticTab.addBoolean("Sim", Constants::isSim);
 
-        configureBindings();
+        // configureBindings();
 
-        // configureTestController();
+        configureTestController();
     }
 
     public void initializeCommands() {
@@ -485,10 +485,13 @@ public class RobotContainer {
     }
 
     private void configureTestController() {
+        algaeTilt.setDefaultCommand(algaeTilt.setDutyCycleCmd(() -> testCont.getLeftY() * .1));
         // servo.setDefaultCommand(servo.setServoSpeedCmd(() -> testCont.getLeftY()));
-        testCont.a().whileTrue(servo.setPositionCmd(0));
-        testCont.b().whileTrue(servo.setPositionCmd(1.0));
-        testCont.x().whileTrue(servo.setPositionCmd(-1.0));
+        // testCont.a().whileTrue(servo.setPositionCmd(0));
+        // testCont.b().whileTrue(servo.setPositionCmd(1.0));
+        // testCont.x().whileTrue(servo.setPositionCmd(-1.0));
+        testCont.a().whileTrue(algaeTilt.setPositionCmd(0.0));
+        testCont.b().whileTrue(algaeTilt.setPositionCmd(0.25));
 
     }
 

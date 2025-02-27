@@ -198,6 +198,10 @@ public class CommandFactory {
                 new AlignWithLimelight(vision, drivetrain, -12.64, -11.16, 0));
     }
 
+    public Command homeAlgaeTilt() {
+        return algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.055 : 10.0);
+    }
+
     public Command intakeAlgaeFromGround() {
         return algaeRoller.setDutyCycleCmd(-0.5).alongWith(
                 algaeShooter.setDutyCycleCmd(-1.0));

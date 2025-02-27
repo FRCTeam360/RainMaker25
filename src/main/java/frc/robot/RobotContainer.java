@@ -485,7 +485,7 @@ public class RobotContainer {
     }
 
     private void configureTestController() {
-        algaeTilt.setDefaultCommand(algaeTilt.setDutyCycleCmd(() -> testCont.getLeftY() * .1));
+        algaeTilt.setDefaultCommand(commandFactory.homeAlgaeTilt());
         // servo.setDefaultCommand(servo.setServoSpeedCmd(() -> testCont.getLeftY()));
         // testCont.a().whileTrue(servo.setPositionCmd(0));
         // testCont.b().whileTrue(servo.setPositionCmd(1.0));

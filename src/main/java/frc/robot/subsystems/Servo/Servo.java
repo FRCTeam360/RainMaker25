@@ -35,6 +35,10 @@ public class Servo extends SubsystemBase {
         return setServoSpeedCmd(() -> speed);
     }
 
+    public void stop() {
+        io.setServoPosition(0.0);
+    }
+
     public Command setServoSpeedCmd(DoubleSupplier speed) {
         System.out.println("speed");
         System.out.println(speed.getAsDouble());

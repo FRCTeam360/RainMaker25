@@ -444,7 +444,7 @@ public class RobotContainer {
         algaeArm.setDefaultCommand(algaeArm.setAlgaeArmAngleCmd(0.0));
 
         operatorCont.pov(0).whileTrue(algaeTilt.setPositionCmd(0.0));
-        operatorCont.pov(90).whileTrue(algaeTilt.setPositionCmd(35.0));
+        operatorCont.pov(90).whileTrue(commandFactory.groundPickupAlgaeTilt());
         operatorCont.pov(180).whileTrue(commandFactory.outtakeAlgaeFromGround());
         operatorCont.pov(270).whileTrue(commandFactory.intakeAlgaeFromGround());
 
@@ -488,16 +488,21 @@ public class RobotContainer {
     private void configureTestController() {
         // elevator.setDefaultCommand(
         //         elevator.setDutyCycleCommand(() -> MathUtil.applyDeadband(testCont.getLeftY(), 0.1)));
-        // algaeTilt.setDefaultCommand(commandFactory.homeAlgaeTilt());
+        algaeTilt.setDefaultCommand(commandFactory.homeAlgaeTilt());
         // servo.setDefaultCommand(servo.setServoSpeedCmd(() -> testCont.getLeftY()));
         // testCont.a().whileTrue(servo.setPositionCmd(0));
         // testCont.b().whileTrue(servo.setPositionCmd(1.0));
         // testCont.x().whileTrue(servo.setPositionCmd(-1.0));
         testCont.a().whileTrue(coralShooter.sensorIntakeCmd());
         testCont.b().whileTrue(coralShooter.basicShootCmd());
-        // testCont.x().whileTrue(commandFactory.extendAlgaeArm());
-        // testCont.y().whileTrue(commandFactory.retractAlgaeArm());
+        testCont.x().whileTrue(commandFactory.extendAlgaeArm());
+        testCont.y().whileTrue(commandFactory.retractAlgaeArm());
 
+
+        testCont.pov(0).onTrue(commandFactory.climberSetupAlgaeTilt());
+        testCont.pov(90).whileTrue(commandFactory.groundPickupAlgaeTilt());
+        testCont.pov(180).whileTrue(commandFactory.outtakeAlgaeFromGround());
+        testCont.pov(270).whileTrue(commandFactory.intakeAlgaeFromGround());
     }
 
 

@@ -202,6 +202,14 @@ public class CommandFactory {
         return algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.055 : 10.0);
     }
 
+    public Command groundPickupAlgaeTilt() {
+        return algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.3 : 35.0);
+    }
+
+    public Command climberSetupAlgaeTilt() {
+        return algaeTilt.setPositionCmd(0.25);
+    }
+
     public Command intakeAlgaeFromGround() {
         return algaeRoller.setDutyCycleCmd(-0.5).alongWith(
                 algaeShooter.setDutyCycleCmd(-1.0));

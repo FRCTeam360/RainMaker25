@@ -30,6 +30,10 @@ public class AlgaeArm extends SubsystemBase {
     io.setDutyCycle(dutyCycle);
   }
 
+  public void stop(){
+    io.setDutyCycle(0.0);
+  }
+
   /**
    * method for setting encoder to a new value (i.e. for zeroing)
    * @param value new value in motor rotations

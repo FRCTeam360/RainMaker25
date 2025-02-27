@@ -156,8 +156,8 @@ public final class Constants {
         public static final int CLIMBER_ROLLER_ID = 28;
         public static final int CLIMBER_WINCH_ID = 16;
 
-        public static final int ALGAE_ARM_ID = 17;
-        public static final int CORAL_SHOOTER_ID = 18;
+        public static final int CORAL_SHOOTER_ID = 17;
+        public static final int ALGAE_ARM_ID = 18;
         
         public static final int INTAKE_SENSOR_ID = 19;
         public static final int OUTTAKE_SENSOR_ID = 20;

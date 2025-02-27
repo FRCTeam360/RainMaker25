@@ -25,6 +25,10 @@ public class ClimberWinch extends SubsystemBase {
     io.setDutyCycle(dutyCycle);
   }
 
+  public void stop() {
+    io.setDutyCycle(0.0);
+  }
+
   public Command setDutyCycleCmd(double dutyCycle) {
       return this.runEnd(() -> this.setDutyCycle(dutyCycle), () -> this.setDutyCycle(0));
   }

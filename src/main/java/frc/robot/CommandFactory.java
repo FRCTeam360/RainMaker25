@@ -232,7 +232,11 @@ public class CommandFactory {
     }
 
     public Command retractAlgaeArm() {
-        return algaeArm.setAlgaeArmAngleCmd(10.0);
+        return this.setAlgaeArmAngle(10.0);
+    }
+
+    public Command extendAlgaeArm() {
+        return this.setAlgaeArmAngle(110.0);
     }
 
     private Command removeAlgae(int level) {
@@ -248,6 +252,6 @@ public class CommandFactory {
         // elevator.setElevatorHeight(height));
 
         return elevator.setElevatorHeight(height)
-                .andThen(coralShooter.pullAlgae().alongWith(algaeArm.setAlgaeArmAngleCmd(110.0)));
+                .andThen(coralShooter.pullAlgae().alongWith(extendAlgaeArm()));
     }
 }

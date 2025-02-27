@@ -13,6 +13,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.hal.HALUtil;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -485,21 +486,31 @@ public class RobotContainer {
     }
 
     private void configureTestController() {
-        algaeTilt.setDefaultCommand(commandFactory.homeAlgaeTilt());
+        // elevator.setDefaultCommand(
+        //         elevator.setDutyCycleCommand(() -> MathUtil.applyDeadband(testCont.getLeftY(), 0.1)));
+        // algaeTilt.setDefaultCommand(commandFactory.homeAlgaeTilt());
         // servo.setDefaultCommand(servo.setServoSpeedCmd(() -> testCont.getLeftY()));
         // testCont.a().whileTrue(servo.setPositionCmd(0));
         // testCont.b().whileTrue(servo.setPositionCmd(1.0));
         // testCont.x().whileTrue(servo.setPositionCmd(-1.0));
-        testCont.a().whileTrue(algaeTilt.setPositionCmd(0.0));
-        testCont.b().whileTrue(algaeTilt.setPositionCmd(0.25));
+        testCont.a().whileTrue(coralShooter.sensorIntakeCmd());
+        testCont.b().whileTrue(coralShooter.basicShootCmd());
+        // testCont.x().whileTrue(commandFactory.extendAlgaeArm());
+        // testCont.y().whileTrue(commandFactory.retractAlgaeArm());
 
     }
 
 
     public void onDisable() {
-        if (Objects.nonNull(elevator)) {
-            elevator.stop();
-        }
+        if(Objects.nonNull(elevator)) elevator.stop(); 
+        if(Objects.nonNull(coralShooter)) coralShooter.stop();
+        if(Objects.nonNull(algaeArm)) algaeArm.stop();
+        if(Objects.nonNull(algaeArm)) algaeRoller.stop();
+        if(Objects.nonNull(algaeShooter)) algaeShooter.stop();
+        if(Objects.nonNull(algaeTilt)) algaeTilt.stop();
+        if(Objects.nonNull(climberWinch)) climberWinch.stop();
+        if(Objects.nonNull(climberWheel)) climberWheel.stop();
+        if(Objects.nonNull(servo)) servo.stop();
     }
 
     public Command getAutonomousCommand() {

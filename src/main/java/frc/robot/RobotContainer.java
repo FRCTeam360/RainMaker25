@@ -53,6 +53,7 @@ import frc.robot.subsystems.ClimberWheel.ClimberWheelIOSim;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorIOSim;
 import frc.robot.subsystems.CoralShooter.CoralShooter;
+import frc.robot.subsystems.CoralShooter.CoralShooterIOCB;
 import frc.robot.subsystems.CoralShooter.CoralShooterIOPB;
 import frc.robot.subsystems.CoralShooter.CoralShooterIOSim;
 import frc.robot.subsystems.CoralShooter.CoralShooterIOWB;
@@ -237,6 +238,7 @@ public class RobotContainer {
             case COMPETITION:
             default:
                 driveTrain = PracticeBotDriveTrain.createDrivetrain();
+                coralShooter = new CoralShooter(new CoralShooterIOCB());
                 // competition bot stuff
                 break;
         }

@@ -81,9 +81,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public final Command fieldOrientedDrive(
             CommandXboxController driveCont) { // field oriented drive command!
         SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric() // creates a fieldcentric drive
-                .withDeadband(maxSpeed * 0.05)
-                .withRotationalDeadband(maxAngularRate * 0.05) // Add a 10% deadband
-                .withDriveRequestType(DriveRequestType.Velocity); // Use open-loop control for drive motors
+                .withDeadband(maxSpeed * 0.01)
+                .withRotationalDeadband(maxAngularRate * 0.01
+                ); // Add a 10% deadband
+            //    .withDriveRequestType(DriveRequestType.Velocity); // Use closed-loop control for drive motors
 
         return CommandLogger.logCommand(this.applyRequest(
                 () -> drive
@@ -127,15 +128,15 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public void addStrafeController(double kP, double kI, double kD, double irMax, double irMin) {
         strafeController = new PhoenixPIDController(kP, kI, kD);
         // strafeController.setIntegratorRange(-irMin, irMax);
-        strafeController.setIZone(3.0);
-        strafeController.setTolerance(0.25, 0.01);
+        strafeController.setIZone(2.5);
+        strafeController.setTolerance(0.5, 0.1);
     }
 
     public void addForwardContrller(double kP, double kI, double kD, double irMax, double irMin) {
         forwardController = new PhoenixPIDController(kP, kI, kD);
         //forwardController.setIntegratorRange(-irMin, irMax);
-        forwardController.setIZone(2.0);
-        forwardController.setTolerance(0.1, 0.05);
+        forwardController.setIZone(3.0);
+        forwardController.setTolerance(0.5, 0.5);
     }
 
     public void driveFieldCentricFacingAngle(double x, double y, double desiredAngle) {
@@ -147,7 +148,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         request.withDeadband(0.1);
         request.withRotationalDeadband(0.04);
         this.setControl(request);
-        // request.withDriveRequestType(DriveRequestType.Velocity);
+        request.withDriveRequestType(DriveRequestType.Velocity);
     }
 
     public void robotCentricDrive(double x, double y, double rotation) {
@@ -242,7 +243,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                     this));
 
     /* The SysId routine to test */
-    private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
+    private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineRotation;
 
     private double maxSpeed;
     private double maxAngularRate;

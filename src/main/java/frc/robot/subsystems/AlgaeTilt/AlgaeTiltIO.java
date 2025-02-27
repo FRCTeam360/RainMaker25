@@ -12,9 +12,11 @@ public interface AlgaeTiltIO {
   /** Creates a new AlgaeIntakeIO. */
   @AutoLog
   public static class AlgaeTiltIOInputs {
-    public double armPosition = 0.0;
+    public double armPositionRelative = 0.0;
+    public double armPositionAbsolute = 0.0;
     public double armDutyCycle = 0.0;
-    public double armVelocity = 0.0;
+    public double armVelocityRelative = 0.0;
+    public double armVelocityAbsolute = 0.0;
     public double armAmps = 0.0;
   }
 

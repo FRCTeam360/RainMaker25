@@ -57,13 +57,10 @@ public class ClimberWinchIOSim implements ClimberWinchIO {
     inputs.winchDutyCycle = climberSim.getInputVoltage();
   }
 
-
-  @Override
   public void setDutyCycle(double dutyCycle) {
     simWinchMotor.setSpeed(dutyCycle);
   }
 
-  @Override
   public void setPosition(double position) {
     simWinchMotor.setPosition(position);
   }

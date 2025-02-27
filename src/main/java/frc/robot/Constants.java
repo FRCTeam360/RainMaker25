@@ -59,10 +59,10 @@ public final class Constants {
     }
 
     public static final class SerialAddressConstants {
-        public static String OCB_SERIAL_ADDRESS = "";
-        public static String WOOD_SERIAL_ADDRESS = "031b5208";
+        public static String OCB_SERIAL_ADDRESS = "DO_NOT_USE";
+        public static String WOOD_SERIAL_ADDRESS = "DO_NOT_USE";
         public static String PRACTICE_SERIAL_ADDRESS = "03260AD5";
-        public static String COMP_SERIAL_ADDRESS = "d";
+        public static String COMP_SERIAL_ADDRESS = "03415A99";
     }
 
     // placeholders for now until we got woodbot working
@@ -117,6 +117,57 @@ public final class Constants {
         public static final int INTAKE_SENSOR_ID = 20;
         public static final int OUTTAKE_SENSOR_ID = 21;
 
+        public static final double RIGHT_GOAL_TY = 9.0;
+        public static final double RIGHT_GOAL_TX = 0.0;
+
+        public static final double LEFT_GOAL_TY = RIGHT_GOAL_TY;
+        public static final double LEFT_GOAL_TX = RIGHT_GOAL_TX;
+
+        public static final String CORAL_LIMELIGHT_NAME = "limelight-coral";
+        public static final String ALGAE_LIMELIGHT_NAME = "limelight-algae";
+
+        public class ElevatorHeights {
+            public static final double TELE_LEVEL_FOUR = 29.5;
+            public static final double TELE_LEVEL_THREE = 16.0;
+            public static final double TELE_LEVEL_TWO = 7.0;
+            public static final double TELE_LEVEL_ONE = 0.0;
+
+            public static final double AUTO_LEVEL_FOUR = 29.5;
+            public static final double AUTO_LEVEL_THREE = 0.0;
+            public static final double AUTO_LEVEL_TWO = 0.0;
+            public static final double AUTO_LEVEL_ONE = 0.0;
+
+            public static final double ALIGN_LEVEL_FOUR = 0.0;
+            public static final double ALIGN_LEVEL_THREE = 0.0;
+            public static final double ALIGN_LEVEL_TWO = 0.0;
+            public static final double ALIGN_LEVEL_ONE = 0.0;
+
+        }
+
+    }
+
+    public static final class CompBotConstants { // Currently just a copy of practice bot, values should be adjusted to comp if needed
+        public static final String CANBUS_NAME = "Default Name";
+
+        public static final int SERVO_PORT = 0; // is the actual port :)
+        public static final int BACK_ELEVATOR_ID = 14;
+        public static final int FRONT_ELEVATOR_ID = 15;
+
+        public static final int CLIMBER_ROLLER_ID = 28;
+        public static final int CLIMBER_WINCH_ID = 16;
+
+        public static final int CORAL_SHOOTER_ID = 17;
+        public static final int ALGAE_ARM_ID = 18;
+        
+        public static final int INTAKE_SENSOR_ID = 19;
+        public static final int OUTTAKE_SENSOR_ID = 20;
+
+        public static final int ALGAE_SHOOTER_FRONT_ID = 21;
+        public static final int ALGAE_SHOOTER_BACK_ID = 22;
+        public static final int ALGAE_ROLLER = 23;
+        public static final int ALGAE_TILT = 24;
+
+
         public static final double RIGHT_GOAL_TY = 6.8;
         public static final double RIGHT_GOAL_TX = 0.0;
 
@@ -132,7 +183,7 @@ public final class Constants {
             public static final double TELE_LEVEL_TWO = 7.0;
             public static final double TELE_LEVEL_ONE = 0.0;
 
-            public static final double AUTO_LEVEL_FOUR = 0.0;
+            public static final double AUTO_LEVEL_FOUR = 29.5;
             public static final double AUTO_LEVEL_THREE = 0.0;
             public static final double AUTO_LEVEL_TWO = 0.0;
             public static final double AUTO_LEVEL_ONE = 0.0;

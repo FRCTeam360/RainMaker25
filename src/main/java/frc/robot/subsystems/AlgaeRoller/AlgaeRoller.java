@@ -22,6 +22,10 @@ public class AlgaeRoller extends SubsystemBase {
     io.setDutyCycle(duty);
   }
 
+  public void stop(){
+    io.setDutyCycle(0.0);
+  }
+
   public Command setDutyCycleCmd(double duty) {
     return this.runEnd(
       () -> io.setDutyCycle(duty),

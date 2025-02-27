@@ -30,6 +30,9 @@ public class CoralShooter extends SubsystemBase {
     public void setDutyCycle(double speed) {
         io.setDutyCycle(speed);
     }
+    public double getVelocity() {
+        return inputs.outtakeVelocity;
+    }
 
     public boolean getOuttakeSensor() {
         return inputs.outtakeSensor;
@@ -74,7 +77,7 @@ public class CoralShooter extends SubsystemBase {
 
     public Command basicIntakeCmd() {
         String cmdName = "IntakeCoral";
-        return CommandLogger.logCommand(waitUntilFull().raceWith(setDutyCycleCmd(-0.50)), cmdName);
+        return CommandLogger.logCommand(waitUntilFull().raceWith(setDutyCycleCmd(-0.35)), cmdName);
     }
 
     private boolean isStalling() {
@@ -106,7 +109,7 @@ public class CoralShooter extends SubsystemBase {
     }
 
     private Command repeatOnStall() {
-        return new ConditionalCommand(setDutyCycleCmd(1.0), setDutyCycleCmd(-0.3), () -> isUnjamming())
+        return new ConditionalCommand(setDutyCycleCmd(1.0), setDutyCycleCmd(-0.4), () -> isUnjamming())
             .repeatedly()
             .alongWith(
                 new InstantCommand(
@@ -120,9 +123,8 @@ public class CoralShooter extends SubsystemBase {
     public Command antiStallIntakeCmd() {
         String cmdName = "IntakeCoralEvenBetter";
         return CommandLogger.logCommand(
-            waitUntilIntakeSensor()
-                .deadlineFor(repeatOnStall())
-                .andThen(waitUntilFull().deadlineFor(setDutyCycleCmd(0))),
+            waitUntilFull()
+                .deadlineFor(repeatOnStall()),
             cmdName
         );
     }

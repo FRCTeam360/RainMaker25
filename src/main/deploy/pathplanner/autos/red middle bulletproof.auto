@@ -7,43 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "red middle"
+            "pathName": "right middle"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Elevator L3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "zero"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "red middle 2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "red middle 3"
+            "name": "Elevator L4"
           }
         },
         {
@@ -55,7 +25,7 @@
         {
           "type": "named",
           "data": {
-            "name": "zero"
+            "name": "Elevator L1"
           }
         }
       ]

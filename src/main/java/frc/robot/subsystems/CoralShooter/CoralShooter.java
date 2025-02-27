@@ -30,6 +30,9 @@ public class CoralShooter extends SubsystemBase {
     public void setDutyCycle(double speed) {
         io.setDutyCycle(speed);
     }
+    public double getVelocity() {
+        return inputs.outtakeVelocity;
+    }
 
     public boolean getOuttakeSensor() {
         return inputs.outtakeSensor;

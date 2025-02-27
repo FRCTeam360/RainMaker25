@@ -439,20 +439,36 @@ public class RobotContainer {
         vision.setDefaultCommand(consumeVisionMeasurements.ignoringDisable(true));
         // elevator.setDefaultCommand(elevator.setDutyCycleCommand(() ->
         // operatorCont.getLeftY() * 0.05));
-        // algaeTilt.setDefaultCommand(algaeTilt.setDutyCycleCmd(() -> operatorCont.getLeftY() * 0.10)); //TODO: MAKE BIND
         algaeTilt.setDefaultCommand(algaeTilt.setPositionCmd(10.0));
         algaeArm.setDefaultCommand(algaeArm.setAlgaeArmAngleCmd(0.0));
 
-        operatorCont.pov(0).whileTrue(algaeTilt.setPositionCmd(0.0));
-        operatorCont.pov(90).whileTrue(commandFactory.groundPickupAlgaeTilt());
-        operatorCont.pov(180).whileTrue(commandFactory.outtakeAlgaeFromGround());
+        operatorCont.leftBumper().whileTrue(algaeRoller.setDutyCycleCmd(-0.5));
+        operatorCont.rightBumper().whileTrue(algaeRoller.setDutyCycleCmd(1.0));
+
+        operatorCont.y().whileTrue(algaeTilt.setPositionCmd(0.0));
+        operatorCont.x().whileTrue(algaeTilt.setPositionCmd(3.0));
+        operatorCont.b().whileTrue(algaeTilt.setPositionCmd(30.0));
+        operatorCont.a().whileTrue(algaeTilt.setPositionCmd(35.0));
+
+        operatorCont.pov(90).whileTrue(commandFactory.outtakeAlgaeFromGround());
         operatorCont.pov(270).whileTrue(commandFactory.intakeAlgaeFromGround());
+
+        operatorCont.leftTrigger(0.25).whileTrue(coralShooter.setDutyCycleCmd(0.3));
+        // operatorCont.rightTrigger(0.25).whileTrue(coralShooter.setDutyCycleCmd(-0.4));
+
+        if(Math.abs(operatorCont.getLeftY()) > 0.05) {
+            algaeArm.setDutyCycleCmd(operatorCont.getLeftY());
+        }
 
         driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
 
         driverCont.rightStick().whileTrue(driveTrain.robotCentricDrive(driverCont));
 
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
+        driverCont.pov(90).whileTrue(commandFactory.removeAlgaeL2());
+
+        // driverCont.pov(270).onTrue(commandFactory.removeAlgaeL3());
+        driverCont.pov(180).onTrue(commandFactory.setAlgaeArmAngle(0.0));
 
         driverCont.leftTrigger(0.25).whileTrue(coralShooter.sensorIntakeCmd());
         driverCont.rightTrigger(0.25).whileTrue(coralShooter.basicShootCmd());

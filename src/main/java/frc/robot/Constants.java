@@ -117,7 +117,7 @@ public final class Constants {
         public static final int INTAKE_SENSOR_ID = 20;
         public static final int OUTTAKE_SENSOR_ID = 21;
 
-        public static final double RIGHT_GOAL_TY = 11.0;
+        public static final double RIGHT_GOAL_TY = 9.0;
         public static final double RIGHT_GOAL_TX = 0.0;
 
         public static final double LEFT_GOAL_TY = RIGHT_GOAL_TY;

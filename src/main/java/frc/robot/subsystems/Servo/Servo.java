@@ -4,8 +4,11 @@
 
 package frc.robot.subsystems.Servo;
 
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Servo extends SubsystemBase {
@@ -15,6 +18,28 @@ public class Servo extends SubsystemBase {
   public Servo(ServoIO io) {
     this.io = io;
   }
+
+  public void setServoPosition(double position) {
+    io.setServoPosition(position);
+  }
+
+  public Command setPositionCmd(double position) {
+    return runEnd(() -> io.setServoPosition(position), () -> io.setServoPosition(position));
+  }
+
+  public void setSpeed(double speed) {
+    io.setServoSpeed(speed);
+}
+
+    public Command setSpeedCmd(double speed) {
+        return setServoSpeedCmd(() -> speed);
+    }
+
+    public Command setServoSpeedCmd(DoubleSupplier speed) {
+        System.out.println("speed");
+        System.out.println(speed.getAsDouble());
+        return this.runEnd(() -> io.setServoSpeed(speed.getAsDouble()), () -> io.setServoSpeed(0));
+    }
 
   @Override
   public void periodic() {

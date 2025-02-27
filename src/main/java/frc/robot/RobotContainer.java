@@ -62,6 +62,8 @@ import frc.robot.subsystems.Elevator.ElevatorIOPB;
 import frc.robot.subsystems.Elevator.ElevatorIOSim;
 import frc.robot.subsystems.Elevator.ElevatorIOSim;
 import frc.robot.subsystems.Elevator.ElevatorIOWB;
+import frc.robot.subsystems.Servo.Servo;
+import frc.robot.subsystems.Servo.ServoIOCB;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIO;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
@@ -88,6 +90,7 @@ public class RobotContainer {
 
     private final CommandXboxController driverCont = new CommandXboxController(0);
     private final CommandXboxController operatorCont = new CommandXboxController(1);
+    private final CommandXboxController testCont = new CommandXboxController(5);
 
     private CommandFactory commandFactory;
     private Command setAngle;
@@ -101,6 +104,7 @@ public class RobotContainer {
     private AlgaeShooter algaeShooter;
     private AlgaeRoller algaeRoller;
     private AlgaeTilt algaeTilt;
+    private Servo servo;
 
     private ShuffleboardTab diagnosticTab;
 
@@ -239,6 +243,7 @@ public class RobotContainer {
             default:
                 driveTrain = PracticeBotDriveTrain.createDrivetrain();
                 coralShooter = new CoralShooter(new CoralShooterIOCB());
+                servo = new Servo(new ServoIOCB());
                 // competition bot stuff
                 break;
         }
@@ -256,7 +261,7 @@ public class RobotContainer {
                 algaeTilt,
                 algaeRoller);
 
-        initializeCommands();
+        // initializeCommands();
 
         field = new Field2d();
         SmartDashboard.putData("Field", field);
@@ -277,7 +282,9 @@ public class RobotContainer {
         diagnosticTab.addString("Serial Address", HALUtil::getSerialNumber);
         diagnosticTab.addBoolean("Sim", Constants::isSim);
 
-        configureBindings();
+        // configureBindings();
+
+        configureTestController();
     }
 
     public void initializeCommands() {
@@ -299,7 +306,6 @@ public class RobotContainer {
             zeroElevatorEncoder = elevator.zeroElevatorCmd();
 
             levelOneAndZero = new SequentialCommandGroup(levelOne, zeroElevatorEncoder);
-
             NamedCommands.registerCommand(
                     "raise to l4",
                     commandFactory.setElevatorHeight(33.0).raceWith(elevator.isAtHeight(33.0)));
@@ -444,6 +450,15 @@ public class RobotContainer {
         // driverCont.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
         // driverCont.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
+
+    private void configureTestController() {
+        // servo.setDefaultCommand(servo.setServoSpeedCmd(() -> testCont.getLeftY()));
+        testCont.a().whileTrue(servo.setPositionCmd(0));
+        testCont.b().whileTrue(servo.setPositionCmd(1.0));
+        testCont.x().whileTrue(servo.setPositionCmd(-1.0));
+
+    }
+
 
     public void onDisable() {
         if (Objects.nonNull(elevator)) {

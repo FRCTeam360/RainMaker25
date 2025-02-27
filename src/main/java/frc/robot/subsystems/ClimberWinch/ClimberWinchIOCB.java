@@ -25,7 +25,6 @@ public class ClimberWinchIOCB implements ClimberWinchIO {
 
   private final SparkMax winchMotor = new SparkMax(CompBotConstants.CLIMBER_WINCH_ID, MotorType.kBrushless);
   private final RelativeEncoder winchEncoder = winchMotor.getEncoder();
-  private final Servo servo = new Servo(CompBotConstants.SERVO_PORT);
 
   private final double kP = 0.2;
   private final double kI = 0.0;
@@ -53,14 +52,6 @@ public class ClimberWinchIOCB implements ClimberWinchIO {
 
   public void setPosition(double position) {
     winchMotor.getClosedLoopController().setReference(position, ControlType.kPosition);
-  }
-
-  public void setServoPosition(double position) {
-    servo.setPosition(position);
-  }
-
-  public void setServoSpeed(double speed) {
-    servo.setSpeed(speed);
   }
 
   public void updateInputs(ClimberWinchIOInputs inputs) {

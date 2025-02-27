@@ -59,17 +59,4 @@ public class ClimberWinchIOPB implements ClimberWinchIO {
     inputs.winchCurrent = winchMotor.getOutputCurrent();
     inputs.winchTemp = winchMotor.getMotorTemperature();
   }
-
-@Override
-public void setServoPosition(double position) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setServoPosition'");
-}
-
-@Override
-public void setServoSpeed(double speed) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setServoSpeed'");
-}
-
 }

@@ -24,14 +24,6 @@ public class ClimberWinch extends SubsystemBase {
     io.setDutyCycle(dutyCycle);
   }
 
-  public void setServoPosition(double position) {
-    io.setServoPosition(position);
-  }
-
-  public void setServoSpeed(double speed) {
-    io.setServoSpeed(speed);
-  }
-
   public Command setDutyCycleCmd(double dutyCycle) {
       return this.runEnd(() -> this.setDutyCycle(dutyCycle), () -> this.setDutyCycle(0));
   }

@@ -26,7 +26,4 @@ public interface ClimberWinchIO {
 
   public void setPosition(double position);
 
-public void setServoPosition(double position);
-
-public void setServoSpeed(double speed);
 }

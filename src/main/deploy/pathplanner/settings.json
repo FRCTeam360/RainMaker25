@@ -28,5 +28,7 @@
   "brModuleY": -0.289,
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
-  "robotFeatures": []
+  "robotFeatures": [
+    "{\"name\":\"shooter\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":0.3,\"y\":-0.09},\"size\":{\"width\":0.1,\"length\":1.0},\"borderRadius\":0.05,\"strokeWidth\":0.04,\"filled\":false}}"
+  ]
 }

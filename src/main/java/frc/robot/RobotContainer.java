@@ -399,7 +399,8 @@ public class RobotContainer {
         vision.setDefaultCommand(consumeVisionMeasurements.ignoringDisable(true));
         // elevator.setDefaultCommand(elevator.setDutyCycleCommand(() ->
         // operatorCont.getLeftY() * 0.05));
-        algaeTilt.setDefaultCommand(algaeTilt.setDutyCycleCmd(() -> operatorCont.getLeftY() * 0.10));
+        // algaeTilt.setDefaultCommand(algaeTilt.setDutyCycleCmd(() -> operatorCont.getLeftY() * 0.10)); //TODO: MAKE BIND
+        algaeTilt.setDefaultCommand(algaeTilt.setPositionCmd(10.0));
         algaeArm.setDefaultCommand(algaeArm.setAlgaeArmAngleCmd(0.0));
 
         operatorCont.pov(0).whileTrue(algaeTilt.setPositionCmd(0.0));

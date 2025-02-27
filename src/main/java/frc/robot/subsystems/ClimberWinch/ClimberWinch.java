@@ -10,6 +10,7 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.ClimberWheel.ClimberWheelIOCB;
 
 public class ClimberWinch extends SubsystemBase {
   private final ClimberWinchIO io;

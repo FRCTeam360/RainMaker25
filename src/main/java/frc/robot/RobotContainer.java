@@ -35,19 +35,24 @@ import frc.robot.Constants.*;
 import frc.robot.commands.AlignWithLimelight;
 import frc.robot.commands.SetCoralIntake;
 import frc.robot.commands.SnapDrivebaseToAngle;
+import frc.robot.generated.CompBotDriveTrain;
 import frc.robot.generated.OldCompBot;
 import frc.robot.generated.PracticeBotDriveTrain;
 import frc.robot.generated.WoodBotDriveTrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ClimberWinch.ClimberWinch;
+import frc.robot.subsystems.ClimberWinch.ClimberWinchIOCB;
 import frc.robot.subsystems.ClimberWinch.ClimberWinchIOPB;
 import frc.robot.subsystems.ClimberWinch.ClimberWinchIOSim;
 import frc.robot.subsystems.AlgaeShooter.AlgaeShooter;
+import frc.robot.subsystems.AlgaeShooter.AlgaeShooterIOCB;
 import frc.robot.subsystems.AlgaeShooter.AlgaeShooterIOPB;
 import frc.robot.subsystems.AlgaeShooter.AlgaeShooterIOSim;
 import frc.robot.subsystems.AlgaeTilt.AlgaeTilt;
+import frc.robot.subsystems.AlgaeTilt.AlgaeTiltIOCB;
 import frc.robot.subsystems.AlgaeTilt.AlgaeTiltIOPB;
 import frc.robot.subsystems.ClimberWheel.ClimberWheel;
+import frc.robot.subsystems.ClimberWheel.ClimberWheelIOCB;
 import frc.robot.subsystems.ClimberWheel.ClimberWheelIOPB;
 import frc.robot.subsystems.ClimberWheel.ClimberWheelIOSim;
 import frc.robot.subsystems.Elevator.Elevator;
@@ -58,6 +63,7 @@ import frc.robot.subsystems.CoralShooter.CoralShooterIOPB;
 import frc.robot.subsystems.CoralShooter.CoralShooterIOSim;
 import frc.robot.subsystems.CoralShooter.CoralShooterIOWB;
 import frc.robot.subsystems.Elevator.ElevatorIO;
+import frc.robot.subsystems.Elevator.ElevatorIOCB;
 import frc.robot.subsystems.Elevator.ElevatorIOPB;
 import frc.robot.subsystems.Elevator.ElevatorIOSim;
 import frc.robot.subsystems.Elevator.ElevatorIOSim;
@@ -68,9 +74,11 @@ import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIO;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
 import frc.robot.subsystems.AlgaeArm.AlgaeArm;
+import frc.robot.subsystems.AlgaeArm.AlgaeArmIOCB;
 import frc.robot.subsystems.AlgaeArm.AlgaeArmIOPB;
 import frc.robot.subsystems.AlgaeArm.AlgaeArmIOSim;
 import frc.robot.subsystems.AlgaeRoller.AlgaeRoller;
+import frc.robot.subsystems.AlgaeRoller.AlgaeRollerIOCB;
 import frc.robot.subsystems.AlgaeRoller.AlgaeRollerIOPB;
 
 import java.lang.ModuleLayer.Controller;
@@ -241,8 +249,33 @@ public class RobotContainer {
                 break;
             case COMPETITION:
             default:
-                driveTrain = PracticeBotDriveTrain.createDrivetrain();
+                driveTrain = CompBotDriveTrain.createDrivetrain();
+                logger = new Telemetry(CompBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
                 coralShooter = new CoralShooter(new CoralShooterIOCB());
+                elevator = new Elevator(new ElevatorIOCB());
+                algaeArm = new AlgaeArm(new AlgaeArmIOCB());
+                algaeRoller = new AlgaeRoller(new AlgaeRollerIOCB());
+                algaeShooter = new AlgaeShooter(new AlgaeShooterIOCB());
+                algaeTilt = new AlgaeTilt(new AlgaeTiltIOCB());
+                climberWinch = new ClimberWinch(new ClimberWinchIOCB());
+
+                vision = new Vision(
+                        Map.ofEntries(
+                                Map.entry(
+                                        Constants.CompBotConstants.CORAL_LIMELIGHT_NAME,
+                                        new VisionIOLimelight(
+                                                Constants.CompBotConstants.CORAL_LIMELIGHT_NAME,
+                                                () -> driveTrain.getAngle(),
+                                                () -> driveTrain.getAngularRate()))
+                        // Map.entry(
+                        // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                        // new VisionIOLimelight(
+                        // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                        // () -> driveTrain.getAngle(),
+                        // () -> driveTrain.getAngularRate()
+                        // )
+                        // )
+                        ));
                 servo = new Servo(new ServoIOCB());
                 // competition bot stuff
                 break;
@@ -261,7 +294,7 @@ public class RobotContainer {
                 algaeTilt,
                 algaeRoller);
 
-        // initializeCommands();
+        initializeCommands();
 
         field = new Field2d();
         SmartDashboard.putData("Field", field);
@@ -282,9 +315,9 @@ public class RobotContainer {
         diagnosticTab.addString("Serial Address", HALUtil::getSerialNumber);
         diagnosticTab.addBoolean("Sim", Constants::isSim);
 
-        // configureBindings();
+        configureBindings();
 
-        configureTestController();
+        // configureTestController();
     }
 
     public void initializeCommands() {

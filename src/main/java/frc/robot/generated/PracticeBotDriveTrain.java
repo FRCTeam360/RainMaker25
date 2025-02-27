@@ -24,13 +24,13 @@ public class PracticeBotDriveTrain {
                                                                                                   // per
                                                                                                   // second max angular
                                                                                                   // velocity
-    public static final double headingKP = 2.019; // sysid number
+    public static final double headingKP = 1.75; 
     public static final double headingKI = 0.0;
     public static final double headingKD = 0.0;
     public static final double headingKIZone = 0.0;
 
     public static final double stafeKP = 0.01;
-    public static final double stafeKI = 0.0002;
+    public static final double stafeKI = 0.00015;
     public static final double stafeKD = 0.003;
     public static final double strafeIRMax = 0.05; //DOES NOTHING WE ARENT DOING INTEGRATOR RANGE :((()))
     public static final double strafeIRMin = -0.05;

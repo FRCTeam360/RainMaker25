@@ -6,11 +6,13 @@ package frc.robot.subsystems.AlgaeTilt;
 
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.EncoderConfig;
 import com.revrobotics.spark.config.SoftLimitConfig;
@@ -22,7 +24,7 @@ import frc.robot.Constants;
 
 public class AlgaeTiltIOCB implements AlgaeTiltIO {
   private final SparkMax motor = new SparkMax(Constants.CompBotConstants.ALGAE_TILT, MotorType.kBrushless);
-  private final RelativeEncoder encoder = motor.getEncoder(); // TODO: make absolute when we get one!!
+  private final AbsoluteEncoder encoder = motor.getAbsoluteEncoder(); // TODO: make absolute when we get one!!
 
   private final double kP = 0.035 * 4.0;
   private final double kI = 0.0;
@@ -30,6 +32,8 @@ public class AlgaeTiltIOCB implements AlgaeTiltIO {
 
   private final double forwardLimit = 38.0;
   private final double reverseLimit = -10.0;
+
+  private final double ZERO_OFFSET = 0.0; // TODO: find the zero offset
 
   private final double positionConversionFactor = 1.0;
   private final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
@@ -53,8 +57,11 @@ public class AlgaeTiltIOCB implements AlgaeTiltIO {
 
     EncoderConfig encoderConfig = new EncoderConfig();
     encoderConfig.positionConversionFactor(positionConversionFactor);
+    
+    AbsoluteEncoderConfig absoluteEncoderConfig = new AbsoluteEncoderConfig();
+    absoluteEncoderConfig.zeroOffset(ZERO_OFFSET);
 
-    sparkMaxConfig.apply(encoderConfig);
+    sparkMaxConfig.apply(absoluteEncoderConfig);
     motor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
@@ -71,9 +78,6 @@ public class AlgaeTiltIOCB implements AlgaeTiltIO {
    * 
    * @param value sets the new encoder value in rotations!!
    */
-  public void setEncoder(double value) {
-    encoder.setPosition(value);
-  }
 
   public void updateInputs(AlgaeTiltIOInputs inputs) {
     inputs.armDutyCycle = motor.get();
@@ -81,4 +85,10 @@ public class AlgaeTiltIOCB implements AlgaeTiltIO {
     inputs.armVelocity = encoder.getVelocity();
     inputs.armAmps = motor.getOutputCurrent();
   }
+
+@Override
+public void setEncoder(double value) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'setEncoder'");
+}
 }

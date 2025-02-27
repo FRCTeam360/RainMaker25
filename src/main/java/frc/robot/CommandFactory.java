@@ -215,16 +215,20 @@ public class CommandFactory {
                 .alongWith(algaeShooter.setDutyCycleCmd(0.8));
     }
 
-    // public Command intakeAlgaeFromReef() {
+    /**
+     * This command assumes the elevator is already above the algae
+     * @return
+     */
+    public Command intakeAlgaeFromReef() {
 
-    //     return algaeArm.setAlgaeArmAngleCmd(110.0).alongWith(coralShooter.pullAlgae())
-    //             .alongWith(algaeShooter.setDutyCycleCmd(-0.8))
-    //             .alongWith(algaeTilt.setPositionCmd(0.0))
-    //             .waitUntil(coralShooter.getVelocity() < -6000.0)
-    //             .alongWith(elevator.setElevatorHeight(ElevatorHeights.TELE_LEVEL_THREE - 3.0));
+        return algaeArm.setAlgaeArmAngleCmd(110.0).alongWith(coralShooter.pullAlgae())
+                .alongWith(algaeShooter.setDutyCycleCmd(-0.8))
+                .alongWith(algaeTilt.setPositionCmd(0.0)).alongWith(
+                Commands.waitUntil(() -> coralShooter.getVelocity() < -6000.0)
+                .andThen(elevator.setElevatorHeight(ElevatorHeights.TELE_LEVEL_THREE - 3.0)));
 
                 
-    // }
+    }
 
     public Command removeAlgaeL2() {
         return removeAlgae(2);
@@ -246,7 +250,6 @@ public class CommandFactory {
         } else {
         height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_FOUR - 3.0;
         }
-        
         
         if(coralShooter.getVelocity() < -6000.0) {
             return elevator.setElevatorHeight(height)

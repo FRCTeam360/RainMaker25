@@ -16,6 +16,7 @@ import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -263,7 +264,7 @@ public class RobotContainer {
                 algaeRoller = new AlgaeRoller(new AlgaeRollerIOCB());
                 algaeShooter = new AlgaeShooter(new AlgaeShooterIOCB());
                 algaeTilt = new AlgaeTilt(new AlgaeTiltIOCB());
-                // climberWinch = new ClimberWinch(new ClimberWinchIOCB());
+                climberWinch = new ClimberWinch(new ClimberWinchIOCB());
 
                 vision = new Vision(
                         Map.ofEntries(
@@ -298,7 +299,8 @@ public class RobotContainer {
                 driveTrain,
                 driverCont,
                 algaeTilt,
-                algaeRoller);
+                algaeRoller,
+                servo );
 
         initializeCommands();
 
@@ -449,7 +451,7 @@ public class RobotContainer {
 
         // elevator.setDefaultCommand(elevator.setDutyCycleCommand(() ->
         // operatorCont.getLeftY() * 0.05));
-        algaeTilt.setDefaultCommand(algaeTilt.setPositionCmd(0.07));
+        algaeTilt.setDefaultCommand(commandFactory.homeAlgaeTilt());
         algaeArm.setDefaultCommand(algaeArm.setAlgaeArmAngleCmd(0.0));
 
         // algaeArm.setDefaultCommand(algaeArm.setDutyCycleCmd(() -> operatorCont.getLeftY() * 0.05));
@@ -483,6 +485,8 @@ public class RobotContainer {
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
         driverCont.pov(90).whileTrue(removeAlgaeL2);
         driverCont.pov(270).whileTrue(removeAlgaeL3);
+        driverCont.start().onTrue(commandFactory.depolyAndInitiateClimb());
+        driverCont.back().whileTrue(commandFactory.climb());
         
         driverCont.pov(180).onTrue(commandFactory.setAlgaeArmAngle(0.0));
 
@@ -490,6 +494,7 @@ public class RobotContainer {
         driverCont.rightTrigger(0.25).whileTrue(coralShooter.basicShootCmd());
 
         if (Objects.nonNull(elevator)) {
+            
             driverCont.a().onTrue(levelOneAndZero);
             driverCont.b().onTrue(levelTwo);
             driverCont.x().onTrue(levelThree);
@@ -520,21 +525,32 @@ public class RobotContainer {
     private void configureTestController() {
         // elevator.setDefaultCommand(
         //         elevator.setDutyCycleCommand(() -> MathUtil.applyDeadband(testCont.getLeftY(), 0.1)));
+        // algaeTilt.setDefaultCommand(commandFactory.homeAlgaeTilt());
         algaeTilt.setDefaultCommand(commandFactory.homeAlgaeTilt());
+
         // servo.setDefaultCommand(servo.setServoSpeedCmd(() -> testCont.getLeftY()));
         // testCont.a().whileTrue(servo.setPositionCmd(0));
         // testCont.b().whileTrue(servo.setPositionCmd(1.0));
         // testCont.x().whileTrue(servo.setPositionCmd(-1.0));
-        testCont.a().whileTrue(coralShooter.sensorIntakeCmd());
-        testCont.b().whileTrue(coralShooter.basicShootCmd());
-        testCont.x().whileTrue(commandFactory.extendAlgaeArm());
-        testCont.y().whileTrue(commandFactory.retractAlgaeArm());
+        // testCont.a().whileTrue(coralShooter.sensorIntakeCmd());
+        // testCont.b().whileTrue(coralShooter.basicShootCmd());
+        // testCont.x().whileTrue(commandFactory.extendAlgaeArm());
+        // testCont.y().whileTrue(commandFactory.retractAlgaeArm());
 
 
-        testCont.pov(0).onTrue(commandFactory.climberSetupAlgaeTilt());
-        testCont.pov(90).whileTrue(commandFactory.groundPickupAlgaeTilt());
-        testCont.pov(180).whileTrue(commandFactory.outtakeAlgaeFromGround());
-        testCont.pov(270).whileTrue(commandFactory.intakeAlgaeFromGround());
+        // testCont.pov(0).onTrue(commandFactory.climberSetupAlgaeTilt());
+        // testCont.pov(90).whileTrue(commandFactory.groundPickupAlgaeTilt());
+        // testCont.pov(180).whileTrue(commandFactory.outtakeAlgaeFromGround());
+        // testCont.pov(270).whileTrue(commandFactory.intakeAlgaeFromGround());
+
+        // servo.setDefaultCommand(servo.setSpeedCmd(() -> testCont.getLeftY() / 2.0 + 0.5));
+        // testCont.a().whileTrue(servo.setSpeedCmd(0.0).beforeStarting(() -> timer.restart()).finallyDo(() -> {
+        //     timer.stop();
+        //     Logger.recordOutput("Time to run servo", timer.get());
+        // }));
+   
+        testCont.b().onTrue(commandFactory.climb());
+        testCont.a().onTrue(commandFactory.deployClimb());
     }
 
 

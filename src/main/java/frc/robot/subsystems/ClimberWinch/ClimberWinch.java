@@ -40,6 +40,9 @@ public class ClimberWinch extends SubsystemBase {
   public void setPosition(double position) {
     io.setPosition(position);
   }
+  public double getPosition() {
+    return inputs.winchPosition;
+  }
 
   public Command setPositionCmd(double position) {
     return this.runEnd(() -> this.setPosition(position), () -> this.setPosition(position));

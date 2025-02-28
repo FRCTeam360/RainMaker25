@@ -4,9 +4,12 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -28,6 +31,7 @@ import frc.robot.subsystems.ClimberWinch.ClimberWinch;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CoralShooter.CoralShooter;
 import frc.robot.subsystems.Elevator.Elevator;
+import frc.robot.subsystems.Servo.Servo;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.utils.CommandLogger;
 import java.util.Map;
@@ -49,6 +53,7 @@ public class CommandFactory {
     private final CommandSwerveDrivetrain drivetrain;
     private final CommandXboxController driverCont;
     private final AlgaeTilt algaeTilt;
+    private final Servo servo;
 
     // ↓ constructor ↓ //
     public CommandFactory(
@@ -62,7 +67,8 @@ public class CommandFactory {
             CommandSwerveDrivetrain driveTrain,
             CommandXboxController driverCont,
             AlgaeTilt algaeTilt,
-            AlgaeRoller algaeRoller) {
+            AlgaeRoller algaeRoller,
+            Servo servo) {
         this.coralShooter = coralShooter;
         this.elevator = elevator;
         this.vision = vision;
@@ -74,6 +80,7 @@ public class CommandFactory {
         this.driverCont = driverCont;
         this.algaeTilt = algaeTilt;
         this.algaeRoller = algaeRoller;
+        this.servo = servo;;
     }
 
     public Command rumbleDriverController(CommandXboxController controller) {
@@ -206,8 +213,11 @@ public class CommandFactory {
                 new AlignWithLimelight(vision, drivetrain, -12.64, -11.16, 0, new CommandXboxController(0)));
     }
 
+    private boolean climberDeployed = false;
+
     public Command homeAlgaeTilt() {
-        return algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.055 : 10.0);
+        return 
+        Commands.either(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.07 : 10.0), algaeTilt.setPositionCmd(0.907), () -> !climberDeployed);
     }
 
     public Command groundPickupAlgaeTilt() {
@@ -285,5 +295,29 @@ public class CommandFactory {
         // .until(() -> Math.abs(elevator.getHeight() - height) < 0.5)
         // .andThen(coralShooter.pullAlgae().alongWith(algaeArm.setAlgaeArmAngleCmd(110.0)));
 
+    }
+
+    public Command deployClimb() {
+       return servo.runWithTimeout(3.0, 0).deadlineFor(algaeTilt.setPositionCmd(0.256))
+       .andThen(new InstantCommand(() -> this.climberDeployed = true));
+    }
+
+    double climberWinchSetPoint = -44.33;
+    public Command initiateClimb() {
+        return Commands.waitUntil(() -> climberWinch.getPosition() < climberWinchSetPoint)
+        .deadlineFor(climberWinch.setDutyCycleCmd(-0.3)).alongWith(algaeTilt.setPositionCmd(0.907));
+    }
+
+    public Command depolyAndInitiateClimb() {
+        return deployClimb().andThen(initiateClimb());
+    }
+
+    public Command climb() {
+        return climberWinch.setDutyCycleCmd(-0.5)
+        .alongWith(algaeTilt.setPositionCmd(0.907));
+    }
+
+    public void resetClimberDeployed() {
+        climberDeployed = false;
     }
 }

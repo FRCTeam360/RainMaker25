@@ -18,13 +18,14 @@ import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.simulation.PWMSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.ClimberWheel.ClimberWheelIO.ClimberWheelIOInputs;
 
 public class ClimberWheelIOSim implements ClimberWheelIO {
   private final DCMotor gearbox = DCMotor.getNEO(1);
-  private final Encoder encoder = new Encoder(10, 11);
+  private final Encoder encoder = new Encoder(Constants.SimulationConstants.ROLLER_ENCODER_A, Constants.SimulationConstants.ROLLER_ENCODER_B);
 
-  private final PWMSparkMax wheelMotor = new PWMSparkMax(5);
+  private final PWMSparkMax wheelMotor = new PWMSparkMax(Constants.SimulationConstants.CLIMBER_ROLLER_ID);
 
   private final LinearSystem<N1, N1, N1> plant = LinearSystemId.createFlywheelSystem(
       gearbox, 0.00113951385, 1.0); // TODO: find actual MOI

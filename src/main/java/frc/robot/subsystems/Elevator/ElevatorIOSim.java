@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.PWMSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.WoodbotConstants;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -42,7 +43,7 @@ public class ElevatorIOSim implements ElevatorIO {
   /** Creates a new ElevatorIOSim. */
 
   private DCMotor gearbox = DCMotor.getFalcon500(1);
-  public static Encoder encoder = new Encoder(0, 1);
+  public static Encoder encoder = new Encoder(Constants.SimulationConstants.ELEVATOR_ENCODER_A, Constants.SimulationConstants.ELEVATOR_ENCODER_B);
 
   final double UPPER_LIMIT = 20;
   final double LOWER_LIMIT = 2;
@@ -59,7 +60,7 @@ public class ElevatorIOSim implements ElevatorIO {
       new TrapezoidProfile.Constraints(600, 300));
   private ElevatorFeedforward feedforward = new ElevatorFeedforward(kS, kG, kV, kA);
 
-  private final PWMTalonFX motor = new PWMTalonFX(1);
+  private final PWMTalonFX motor = new PWMTalonFX(Constants.SimulationConstants.ELEVATOR_ID);
 
   public final ElevatorSim elevatorSim = new ElevatorSim(
       gearbox,

@@ -318,7 +318,7 @@ public class RobotContainer {
 
         // configureBindings();
 
-        configureTestController();
+        // configureTestController();
     }
 
     public void initializeCommands() {
@@ -526,7 +526,7 @@ public class RobotContainer {
         if(Objects.nonNull(elevator)) elevator.stop(); 
         if(Objects.nonNull(coralShooter)) coralShooter.stop();
         if(Objects.nonNull(algaeArm)) algaeArm.stop();
-        if(Objects.nonNull(algaeArm)) algaeRoller.stop();
+        if(Objects.nonNull(algaeRoller)) algaeRoller.stop();
         if(Objects.nonNull(algaeShooter)) algaeShooter.stop();
         if(Objects.nonNull(algaeTilt)) algaeTilt.stop();
         if(Objects.nonNull(climberWinch)) climberWinch.stop();

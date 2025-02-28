@@ -111,9 +111,9 @@ public class CommandFactory {
         return algaeArm.setAlgaeArmAngleCmd(angle);
     }
 
-    public Command setAlgaeTiltPosition(double position) {
-        return algaeTilt.setPositionCmd(position);
-    }
+    // public Command setAlgaeTiltPosition(double position) {
+    //     return algaeTilt.setPositionCmd(position);
+    // }
 
     /**
      *
@@ -199,7 +199,7 @@ public class CommandFactory {
                 new AlignWithLimelight(vision, drivetrain, -12.64, -11.16, 0));
     }
 
-    public Command homeAlgaeTilt() {
+    /* public Command homeAlgaeTilt() {
         return algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.055 : 10.0);
     }
 
@@ -209,29 +209,30 @@ public class CommandFactory {
 
     public Command climberSetupAlgaeTilt() {
         return algaeTilt.setPositionCmd(0.25);
-    }
+    } */
 
-    public Command intakeAlgaeFromGround() {
+    /* public Command intakeAlgaeFromGround() {
         return algaeRoller.setDutyCycleCmd(-0.5).alongWith(
                 algaeShooter.setDutyCycleCmd(-1.0));
-    }
+    } */
 
     public Command outtakeAlgaeFromGround() {
         return algaeShooter.setDutyCycleCmd(1.0);
     }
 
-    public Command shootAlgae() {
+    /* public Command shootAlgae() {
         return Commands
                 .waitUntil(() -> algaeShooter.getVelocity() > 5500)
                 .andThen(algaeRoller.setDutyCycleCmd(1.0))
                 .alongWith(algaeShooter.setDutyCycleCmd(0.8));
-    }
+    } */
 
     /**
      * This command assumes the elevator is already above the algae
      * @return
      */
-    public Command intakeAlgaeFromReef() {
+
+    /* public Command intakeAlgaeFromReef() {
 
         return algaeArm.setAlgaeArmAngleCmd(110.0).alongWith(coralShooter.pullAlgae())
                 .alongWith(algaeShooter.setDutyCycleCmd(-0.8))
@@ -240,7 +241,7 @@ public class CommandFactory {
                 .andThen(elevator.setElevatorHeight(ElevatorHeights.TELE_LEVEL_THREE - 3.0)));
 
                 
-    }
+    } */
 
     public Command removeAlgaeL2() {
         return removeAlgae(2);

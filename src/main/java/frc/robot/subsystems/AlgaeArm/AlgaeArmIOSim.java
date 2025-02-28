@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.CoralShooter.CoralShooterIO.CoralShooterIOInputs;
 import frc.robot.subsystems.CoralShooter.CoralShooterIOSim;
 
@@ -37,9 +38,9 @@ public class AlgaeArmIOSim implements AlgaeArmIO {
   
   private DoubleSupplier heightSupplier;
   private DCMotor gearbox = DCMotor.getNeo550(1);
-  private Encoder encoder = new Encoder(5, 6);
+  private Encoder encoder = new Encoder(Constants.SimulationConstants.ARM_ENCODER_A, Constants.SimulationConstants.ARM_ENCODER_B);
 
-  private final PWMSparkMax motor = new PWMSparkMax(3);
+  private final PWMSparkMax motor = new PWMSparkMax(Constants.SimulationConstants.ALGAE_ARM_ID);
   private final PWMSim simMotor = new PWMSim(motor);
 
   private final SingleJointedArmSim armSim = new SingleJointedArmSim(gearbox, 1.0, SingleJointedArmSim.estimateMOI(Units.inchesToMeters(30) /*placeholder*/ , 2.0/*placeist*/),Units.inchesToMeters(30)/*placeholder*/ , Units.degreesToRadians(-75)/*placehold */, Units.degreesToRadians(255)/*place */, true, 0);

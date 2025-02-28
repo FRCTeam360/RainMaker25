@@ -78,6 +78,41 @@ public final class Constants {
         public static final String OCB_LIMELIGHT_NAME = "limelight";
     }
 
+    public static class SimulationConstants {
+        
+        public static final int ELEVATOR_ID = 1;
+        public static final int ELEVATOR_ENCODER_A = 1;
+        public static final int ELEVATOR_ENCODER_B = 2;
+
+        public static final int CLIMBER_ROLLER_ID = 2;
+        public static final int ROLLER_ENCODER_A = 3;
+        public static final int ROLLER_ENCODER_B = 4;
+
+        public static final int CLIMBER_WINCH_ID = 3;
+        public static final int WINCH_ENCODER_A = 5;
+        public static final int WINCH_ENCODER_B = 6;
+
+        public static final int CORAL_SHOOTER_ID = 4;
+        public static final int SHOOTER_ENCODER_A = 7;
+        public static final int SHOOTER_ENCODER_B = 8;
+
+        public static final int ALGAE_ARM_ID = 5;
+        public static final int ARM_ENCODER_A = 9;
+        public static final int ARM_ENCODER_B = 10;
+        
+        public static final int INTAKE_SENSOR_ID = 6;
+        public static final int INTAKE_ENCODER_A = 11;
+        public static final int INTAKE_ENCODER_B = 12;
+
+        public static final int OUTTAKE_SENSOR_ID = 7;
+        public static final int OUTTAKE_ENCODER_A = 13;
+        public static final int OUTTAKE_ENCODER_B = 14;
+
+        public static final int ALGAE_SHOOTER_ID = 8;
+        public static final int ASHOOTER_ENCODER_A = 15;
+        public static final int ASHOOTER_ENCODER_B = 16;
+    }
+
     public static final class WoodbotConstants {
         public static final int CORAL_INTAKE_ID = 25;
         public static final int CORAL_SHOOTER_ID = 20;

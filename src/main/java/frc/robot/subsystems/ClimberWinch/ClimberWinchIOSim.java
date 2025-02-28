@@ -21,14 +21,15 @@ import edu.wpi.first.wpilibj.simulation.PWMSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.CoralShooter.CoralShooterIO.CoralShooterIOInputs;
 
 public class ClimberWinchIOSim implements ClimberWinchIO {
 
   private DCMotor gearbox = DCMotor.getNEO(1);
-  private Encoder winchEncoder = new Encoder(8, 9);
+  private Encoder winchEncoder = new Encoder(Constants.SimulationConstants.WINCH_ENCODER_A, Constants.SimulationConstants.WINCH_ENCODER_B);
 
-  private final PWMSparkMax winchMotor = new PWMSparkMax(5);
+  private final PWMSparkMax winchMotor = new PWMSparkMax(Constants.SimulationConstants.CLIMBER_WINCH_ID);
 
   private final LinearSystem<N1, N1, N1> plant = LinearSystemId.createFlywheelSystem(
       gearbox, 0.00113951385, 1.0); // TODO: find actual MOI

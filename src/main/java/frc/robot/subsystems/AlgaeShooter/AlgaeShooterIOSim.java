@@ -19,13 +19,14 @@ import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.simulation.PWMSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.CoralShooter.CoralShooterIO.CoralShooterIOInputs;
 
 public class AlgaeShooterIOSim implements AlgaeShooterIO {
   private DCMotor gearbox = DCMotor.getKrakenX60Foc(1);
-  private Encoder encoder = new Encoder(7, 8);
+  private Encoder encoder = new Encoder(Constants.SimulationConstants.ASHOOTER_ENCODER_A, Constants.SimulationConstants.ASHOOTER_ENCODER_B);
 
-  private final PWMTalonFX motor = new PWMTalonFX(4);
+  private final PWMTalonFX motor = new PWMTalonFX(Constants.SimulationConstants.ALGAE_SHOOTER_ID);
 
   private final LinearSystem<N1, N1, N1> plant = LinearSystemId.createFlywheelSystem(
       gearbox, 0.00113951385, 1.0); // TODO: find actual MOI

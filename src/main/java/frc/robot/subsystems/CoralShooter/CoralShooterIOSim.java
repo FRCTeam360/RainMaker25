@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkFlex;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.WoodbotConstants;
 import frc.robot.subsystems.Elevator.ElevatorIOSim;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
@@ -38,9 +39,9 @@ public class CoralShooterIOSim implements CoralShooterIO {
   private DoubleSupplier heightSupplier;
 
   private DCMotor gearbox = DCMotor.getNEO(1);
-  private Encoder encoder = new Encoder(2, 3);
+  private Encoder encoder = new Encoder(Constants.SimulationConstants.SHOOTER_ENCODER_A, Constants.SimulationConstants.SHOOTER_ENCODER_B);
 
-  private final PWMSparkMax motor = new PWMSparkMax(2);
+  private final PWMSparkMax motor = new PWMSparkMax(Constants.SimulationConstants.CORAL_SHOOTER_ID);
 
   private final LinearSystem<N1, N1, N1> plant =
     LinearSystemId.createFlywheelSystem(

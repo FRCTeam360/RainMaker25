@@ -258,7 +258,7 @@ public class RobotContainer {
                 algaeRoller = new AlgaeRoller(new AlgaeRollerIOCB());
                 algaeShooter = new AlgaeShooter(new AlgaeShooterIOCB());
                 algaeTilt = new AlgaeTilt(new AlgaeTiltIOCB());
-                climberWinch = new ClimberWinch(new ClimberWinchIOCB());
+                // climberWinch = new ClimberWinch(new ClimberWinchIOCB());
 
                 vision = new Vision(
                         Map.ofEntries(
@@ -295,7 +295,7 @@ public class RobotContainer {
                 algaeTilt,
                 algaeRoller);
 
-        // initializeCommands();
+        initializeCommands();
 
         field = new Field2d();
         SmartDashboard.putData("Field", field);
@@ -316,9 +316,10 @@ public class RobotContainer {
         diagnosticTab.addString("Serial Address", HALUtil::getSerialNumber);
         diagnosticTab.addBoolean("Sim", Constants::isSim);
 
-        // configureBindings();
+        configureBindings();
 
-        configureTestController();
+
+        // configureTestController();
     }
 
     public void initializeCommands() {
@@ -439,18 +440,19 @@ public class RobotContainer {
         vision.setDefaultCommand(consumeVisionMeasurements.ignoringDisable(true));
         // elevator.setDefaultCommand(elevator.setDutyCycleCommand(() ->
         // operatorCont.getLeftY() * 0.05));
-        algaeTilt.setDefaultCommand(algaeTilt.setPositionCmd(10.0));
+        algaeTilt.setDefaultCommand(algaeTilt.setPositionCmd(0.07));
         algaeArm.setDefaultCommand(algaeArm.setAlgaeArmAngleCmd(0.0));
 
         operatorCont.leftBumper().whileTrue(algaeRoller.setDutyCycleCmd(-0.5));
         operatorCont.rightBumper().whileTrue(algaeRoller.setDutyCycleCmd(1.0));
 
-        operatorCont.y().whileTrue(algaeTilt.setPositionCmd(0.0));
-        operatorCont.x().whileTrue(algaeTilt.setPositionCmd(3.0));
-        operatorCont.b().whileTrue(algaeTilt.setPositionCmd(30.0));
-        operatorCont.a().whileTrue(algaeTilt.setPositionCmd(35.0));
+        operatorCont.y().whileTrue(algaeTilt.setPositionCmd(0.001)); //0.001 used to be 0
+        operatorCont.x().whileTrue(algaeTilt.setPositionCmd(0.065)); // .065 used to be 3
+        operatorCont.b().whileTrue(algaeTilt.setPositionCmd(0.253)); // 0.244 used to be 30
+        operatorCont.a().whileTrue(algaeTilt.setPositionCmd(0.361)); // 0.361 used to be 35
 
         operatorCont.pov(90).whileTrue(commandFactory.outtakeAlgaeFromGround());
+        
         operatorCont.pov(270).whileTrue(commandFactory.intakeAlgaeFromGround());
 
         operatorCont.leftTrigger(0.25).whileTrue(coralShooter.setDutyCycleCmd(0.3));

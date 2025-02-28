@@ -2,6 +2,7 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -10,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.*;
 import frc.robot.Constants.PracticeBotConstants.ElevatorHeights;
 import frc.robot.commands.AlignWithLimelight;
@@ -45,7 +47,7 @@ public class CommandFactory {
     private final AlgaeArm algaeArm;
     private final AlgaeRoller algaeRoller;
     private final CommandSwerveDrivetrain drivetrain;
-    private final XboxController driverCont;
+    private final CommandXboxController driverCont;
     private final AlgaeTilt algaeTilt;
 
     // ↓ constructor ↓ //
@@ -58,7 +60,7 @@ public class CommandFactory {
             AlgaeShooter algaeShooter,
             AlgaeArm algaeArm,
             CommandSwerveDrivetrain driveTrain,
-            XboxController driverCont,
+            CommandXboxController driverCont,
             AlgaeTilt algaeTilt,
             AlgaeRoller algaeRoller) {
         this.coralShooter = coralShooter;
@@ -72,6 +74,11 @@ public class CommandFactory {
         this.driverCont = driverCont;
         this.algaeTilt = algaeTilt;
         this.algaeRoller = algaeRoller;
+    }
+
+    public Command rumbleDriverController(CommandXboxController controller) {
+        return Commands.runEnd(() -> controller.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0.15),
+                () -> controller.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0.0));
     }
 
     /*
@@ -122,11 +129,11 @@ public class CommandFactory {
      * @param pipeline 0 is right, 1 is left
      * @return
      */
-    public Command alignWithLimelight(double goalTY, double goalTX, int pipeline) {
+    public Command alignWithLimelight(double goalTY, double goalTX, int pipeline, CommandXboxController driverCont) {
         return CommandLogger.logCommand( // vision.waitUntilTargetTxTy(goalTX,
                                          // goalTY).alongWith(drivetrain.waitUntilDrivetrainAtHeadingSetpoint())
-                new AlignWithLimelight(vision, drivetrain, goalTY, goalTX, pipeline),
-                "AlignWithLimelightBase"); // no more timeout
+                new AlignWithLimelight(vision, drivetrain, goalTY, goalTX, pipeline, driverCont),
+                "AlignWithLimelightBase").andThen(this.rumbleDriverController(driverCont).withTimeout(0.1)); // no more timeout
     }
 
     /**
@@ -160,7 +167,7 @@ public class CommandFactory {
                                     onHeading &&
                                     vision.isTargetInView(Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME));
                         })
-                .deadlineFor(alignWithLimelight(goalTY, goalTX, pipeline).repeatedly());
+                .deadlineFor(alignWithLimelight(goalTY, goalTX, pipeline, driverCont).repeatedly());
     }
 
     /**
@@ -196,7 +203,7 @@ public class CommandFactory {
     public Command alignToReefWoodbotLeft(int pipeline) {
         return new SequentialCommandGroup(
                 new SnapDrivebaseToAngle(vision, drivetrain, pipeline),
-                new AlignWithLimelight(vision, drivetrain, -12.64, -11.16, 0));
+                new AlignWithLimelight(vision, drivetrain, -12.64, -11.16, 0, new CommandXboxController(0)));
     }
 
     public Command homeAlgaeTilt() {
@@ -229,6 +236,7 @@ public class CommandFactory {
 
     /**
      * This command assumes the elevator is already above the algae
+     * 
      * @return
      */
     public Command intakeAlgaeFromReef() {
@@ -236,10 +244,9 @@ public class CommandFactory {
         return algaeArm.setAlgaeArmAngleCmd(110.0).alongWith(coralShooter.pullAlgae())
                 .alongWith(algaeShooter.setDutyCycleCmd(-0.8))
                 .alongWith(algaeTilt.setPositionCmd(0.0)).alongWith(
-                Commands.waitUntil(() -> coralShooter.getVelocity() < -6000.0)
-                .andThen(elevator.setElevatorHeight(ElevatorHeights.TELE_LEVEL_THREE - 3.0)));
+                        Commands.waitUntil(() -> coralShooter.getVelocity() < -6000.0)
+                                .andThen(elevator.setElevatorHeight(ElevatorHeights.TELE_LEVEL_THREE - 3.0)));
 
-                
     }
 
     public Command removeAlgaeL2() {
@@ -262,18 +269,17 @@ public class CommandFactory {
 
         double height;
         if (level == 2) {
-        height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_THREE - 3.0;
+            height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_THREE - 3.0;
         } else {
-        height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_FOUR - 3.0;
+            height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_FOUR - 3.0;
         }
-        
-        if(coralShooter.getVelocity() < -6000.0) {
+
+        if (coralShooter.getVelocity() < -6000.0) {
             return elevator.setElevatorHeight(height)
-            .alongWith(algaeArm.setAlgaeArmAngleCmd(110.0));
+                    .alongWith(algaeArm.setAlgaeArmAngleCmd(110.0));
         } else {
             return coralShooter.pullAlgae();
         }
- 
 
         // return Commands.run(() -> elevator.setElevatorHeight(height), elevator)
         // .until(() -> Math.abs(elevator.getHeight() - height) < 0.5)

@@ -16,6 +16,7 @@ import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
@@ -35,6 +36,7 @@ import frc.robot.Constants.PracticeBotConstants.ElevatorHeights;
 import frc.robot.Constants.*;
 import frc.robot.commands.AlignWithLimelight;
 import frc.robot.commands.SetCoralIntake;
+import frc.robot.commands.RemoveAlgae;
 import frc.robot.commands.SnapDrivebaseToAngle;
 import frc.robot.generated.CompBotDriveTrain;
 import frc.robot.generated.OldCompBot;
@@ -151,6 +153,9 @@ public class RobotContainer {
     private Command scoreCoralL2Right = null;
     private Command scoreCoralL1 = null;
     private DoubleSupplier elevatorHeight;
+    
+    private RemoveAlgae removeAlgaeL3;
+    private RemoveAlgae removeAlgaeL2;
 
     private Command consumeVisionMeasurements;
 
@@ -291,11 +296,11 @@ public class RobotContainer {
                 algaeShooter,
                 algaeArm,
                 driveTrain,
-                driverCont.getHID(),
+                driverCont,
                 algaeTilt,
                 algaeRoller);
 
-        // initializeCommands();
+        initializeCommands();
 
         field = new Field2d();
         SmartDashboard.putData("Field", field);
@@ -316,9 +321,9 @@ public class RobotContainer {
         diagnosticTab.addString("Serial Address", HALUtil::getSerialNumber);
         diagnosticTab.addBoolean("Sim", Constants::isSim);
 
-        // configureBindings();
+        configureBindings();
 
-        configureTestController();
+        //configureTestController();
     }
 
     public void initializeCommands() {
@@ -352,13 +357,13 @@ public class RobotContainer {
             rightAlign = commandFactory.alignWithLimelight(
                     Constants.PracticeBotConstants.RIGHT_GOAL_TY,
                     Constants.PracticeBotConstants.RIGHT_GOAL_TX,
-                    0);
+                    0, driverCont);
             // Periodically adds the vision measurement to drivetrain for pose estimation
 
             leftAlign = commandFactory.alignWithLimelight(
                     Constants.PracticeBotConstants.LEFT_GOAL_TY,
                     Constants.PracticeBotConstants.LEFT_GOAL_TX,
-                    1);
+                    1, driverCont);
         }
 
         registerPathplannerCommand("Elevator L4", autoLevelFour);
@@ -385,6 +390,10 @@ public class RobotContainer {
             scoreCoralL1 = commandFactory.scoreLevelOne();
 
             scoreLevel3RightTeleop = commandFactory.scoringRoutineTeleop(3, false);
+
+            removeAlgaeL3 = new RemoveAlgae(3, algaeArm, algaeShooter, algaeTilt, coralShooter, elevator);
+            removeAlgaeL2 = new RemoveAlgae(2, algaeArm, algaeShooter, algaeTilt, coralShooter, elevator);
+
         }
 
         registerPathplannerCommand("Score Coral L4 Left", scoreCoralL4Left);
@@ -437,10 +446,13 @@ public class RobotContainer {
     private void configureBindings() {
 
         vision.setDefaultCommand(consumeVisionMeasurements.ignoringDisable(true));
+
         // elevator.setDefaultCommand(elevator.setDutyCycleCommand(() ->
         // operatorCont.getLeftY() * 0.05));
         algaeTilt.setDefaultCommand(algaeTilt.setPositionCmd(10.0));
         algaeArm.setDefaultCommand(algaeArm.setAlgaeArmAngleCmd(0.0));
+
+        // algaeArm.setDefaultCommand(algaeArm.setDutyCycleCmd(() -> operatorCont.getLeftY() * 0.05));
 
         operatorCont.leftBumper().whileTrue(algaeRoller.setDutyCycleCmd(-0.5));
         operatorCont.rightBumper().whileTrue(algaeRoller.setDutyCycleCmd(1.0));
@@ -452,6 +464,9 @@ public class RobotContainer {
 
         operatorCont.pov(90).whileTrue(commandFactory.outtakeAlgaeFromGround());
         operatorCont.pov(270).whileTrue(commandFactory.intakeAlgaeFromGround());
+
+
+        operatorCont.pov(0).whileTrue(algaeArm.setAlgaeArmAngleCmd(45.0));
 
         operatorCont.leftTrigger(0.25).whileTrue(coralShooter.setDutyCycleCmd(0.3));
         // operatorCont.rightTrigger(0.25).whileTrue(coralShooter.setDutyCycleCmd(-0.4));
@@ -465,9 +480,9 @@ public class RobotContainer {
         driverCont.rightStick().whileTrue(driveTrain.robotCentricDrive(driverCont));
 
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
-        driverCont.pov(90).whileTrue(commandFactory.removeAlgaeL2());
-
-        // driverCont.pov(270).onTrue(commandFactory.removeAlgaeL3());
+        driverCont.pov(90).whileTrue(removeAlgaeL2);
+        driverCont.pov(270).whileTrue(removeAlgaeL3);
+        
         driverCont.pov(180).onTrue(commandFactory.setAlgaeArmAngle(0.0));
 
         driverCont.leftTrigger(0.25).whileTrue(coralShooter.sensorIntakeCmd());

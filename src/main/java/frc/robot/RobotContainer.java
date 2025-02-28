@@ -273,16 +273,15 @@ public class RobotContainer {
                                         new VisionIOLimelight(
                                                 Constants.CompBotConstants.CORAL_LIMELIGHT_NAME,
                                                 () -> driveTrain.getAngle(),
-                                                () -> driveTrain.getAngularRate()))
-                        // Map.entry(
-                        // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                        // new VisionIOLimelight(
-                        // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                        // () -> driveTrain.getAngle(),
-                        // () -> driveTrain.getAngularRate()
-                        // )
-                        // )
-                        ));
+                                                () -> driveTrain.getAngularRate(), true)),
+                                Map.entry(
+                                        Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                                        new VisionIOLimelight(
+                                                Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                                                () -> driveTrain.getAngle(),
+                                                () -> driveTrain.getAngularRate(), false)
+
+                                )));
                 servo = new Servo(new ServoIOCB());
                 // competition bot stuff
                 break;
@@ -527,7 +526,7 @@ public class RobotContainer {
         // elevator.setDutyCycleCommand(() ->
         // MathUtil.applyDeadband(testCont.getLeftY(), 0.1)));
         // algaeTilt.setDefaultCommand(commandFactory.homeAlgaeTilt());
-        algaeTilt.setDefaultCommand(commandFactory.homeAlgaeTilt());
+        // algaeTilt.setDefaultCommand(commandFactory.homeAlgaeTilt());
 
         // servo.setDefaultCommand(servo.setServoSpeedCmd(() -> testCont.getLeftY()));
         // testCont.a().whileTrue(servo.setPositionCmd(0));

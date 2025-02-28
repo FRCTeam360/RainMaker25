@@ -153,7 +153,7 @@ public class RobotContainer {
     private Command scoreCoralL2Right = null;
     private Command scoreCoralL1 = null;
     private DoubleSupplier elevatorHeight;
-    
+
     private RemoveAlgae removeAlgaeL3;
     private RemoveAlgae removeAlgaeL2;
 
@@ -272,16 +272,15 @@ public class RobotContainer {
                                         new VisionIOLimelight(
                                                 Constants.CompBotConstants.CORAL_LIMELIGHT_NAME,
                                                 () -> driveTrain.getAngle(),
-                                                () -> driveTrain.getAngularRate()))
-                        // Map.entry(
-                        // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                        // new VisionIOLimelight(
-                        // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                        // () -> driveTrain.getAngle(),
-                        // () -> driveTrain.getAngularRate()
-                        // )
-                        // )
-                        ));
+                                                () -> driveTrain.getAngularRate(), true)),
+                                Map.entry(
+                                        Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                                        new VisionIOLimelight(
+                                                Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                                                () -> driveTrain.getAngle(),
+                                                () -> driveTrain.getAngularRate(), false)
+
+                                )));
                 servo = new Servo(new ServoIOCB());
                 // competition bot stuff
                 break;
@@ -323,7 +322,7 @@ public class RobotContainer {
 
         configureBindings();
 
-        //configureTestController();
+        // configureTestController();
     }
 
     public void initializeCommands() {
@@ -452,27 +451,27 @@ public class RobotContainer {
         algaeTilt.setDefaultCommand(algaeTilt.setPositionCmd(0.07));
         algaeArm.setDefaultCommand(algaeArm.setAlgaeArmAngleCmd(0.0));
 
-        // algaeArm.setDefaultCommand(algaeArm.setDutyCycleCmd(() -> operatorCont.getLeftY() * 0.05));
+        // algaeArm.setDefaultCommand(algaeArm.setDutyCycleCmd(() ->
+        // operatorCont.getLeftY() * 0.05));
 
         operatorCont.leftBumper().whileTrue(algaeRoller.setDutyCycleCmd(-0.5));
         operatorCont.rightBumper().whileTrue(algaeRoller.setDutyCycleCmd(1.0));
 
-        operatorCont.y().whileTrue(algaeTilt.setPositionCmd(0.001)); //0.001 used to be 0
+        operatorCont.y().whileTrue(algaeTilt.setPositionCmd(0.001)); // 0.001 used to be 0
         operatorCont.x().whileTrue(algaeTilt.setPositionCmd(0.065)); // .065 used to be 3
         operatorCont.b().whileTrue(algaeTilt.setPositionCmd(0.253)); // 0.244 used to be 30
         operatorCont.a().whileTrue(algaeTilt.setPositionCmd(0.361)); // 0.361 used to be 35
 
         operatorCont.pov(90).whileTrue(commandFactory.outtakeAlgaeFromGround());
-        
-        operatorCont.pov(270).whileTrue(commandFactory.intakeAlgaeFromGround());
 
+        operatorCont.pov(270).whileTrue(commandFactory.intakeAlgaeFromGround());
 
         operatorCont.pov(0).whileTrue(algaeArm.setAlgaeArmAngleCmd(45.0));
 
         operatorCont.leftTrigger(0.25).whileTrue(coralShooter.setDutyCycleCmd(0.3));
         // operatorCont.rightTrigger(0.25).whileTrue(coralShooter.setDutyCycleCmd(-0.4));
 
-        if(Math.abs(operatorCont.getLeftY()) > 0.05) {
+        if (Math.abs(operatorCont.getLeftY()) > 0.05) {
             algaeArm.setDutyCycleCmd(operatorCont.getLeftY());
         }
 
@@ -483,7 +482,7 @@ public class RobotContainer {
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
         driverCont.pov(90).whileTrue(removeAlgaeL2);
         driverCont.pov(270).whileTrue(removeAlgaeL3);
-        
+
         driverCont.pov(180).onTrue(commandFactory.setAlgaeArmAngle(0.0));
 
         driverCont.leftTrigger(0.25).whileTrue(coralShooter.sensorIntakeCmd());
@@ -519,7 +518,8 @@ public class RobotContainer {
 
     private void configureTestController() {
         // elevator.setDefaultCommand(
-        //         elevator.setDutyCycleCommand(() -> MathUtil.applyDeadband(testCont.getLeftY(), 0.1)));
+        // elevator.setDutyCycleCommand(() ->
+        // MathUtil.applyDeadband(testCont.getLeftY(), 0.1)));
         algaeTilt.setDefaultCommand(commandFactory.homeAlgaeTilt());
         // servo.setDefaultCommand(servo.setServoSpeedCmd(() -> testCont.getLeftY()));
         // testCont.a().whileTrue(servo.setPositionCmd(0));
@@ -530,24 +530,31 @@ public class RobotContainer {
         testCont.x().whileTrue(commandFactory.extendAlgaeArm());
         testCont.y().whileTrue(commandFactory.retractAlgaeArm());
 
-
         testCont.pov(0).onTrue(commandFactory.climberSetupAlgaeTilt());
         testCont.pov(90).whileTrue(commandFactory.groundPickupAlgaeTilt());
         testCont.pov(180).whileTrue(commandFactory.outtakeAlgaeFromGround());
         testCont.pov(270).whileTrue(commandFactory.intakeAlgaeFromGround());
     }
 
-
     public void onDisable() {
-        if(Objects.nonNull(elevator)) elevator.stop(); 
-        if(Objects.nonNull(coralShooter)) coralShooter.stop();
-        if(Objects.nonNull(algaeArm)) algaeArm.stop();
-        if(Objects.nonNull(algaeArm)) algaeRoller.stop();
-        if(Objects.nonNull(algaeShooter)) algaeShooter.stop();
-        if(Objects.nonNull(algaeTilt)) algaeTilt.stop();
-        if(Objects.nonNull(climberWinch)) climberWinch.stop();
-        if(Objects.nonNull(climberWheel)) climberWheel.stop();
-        if(Objects.nonNull(servo)) servo.stop();
+        if (Objects.nonNull(elevator))
+            elevator.stop();
+        if (Objects.nonNull(coralShooter))
+            coralShooter.stop();
+        if (Objects.nonNull(algaeArm))
+            algaeArm.stop();
+        if (Objects.nonNull(algaeArm))
+            algaeRoller.stop();
+        if (Objects.nonNull(algaeShooter))
+            algaeShooter.stop();
+        if (Objects.nonNull(algaeTilt))
+            algaeTilt.stop();
+        if (Objects.nonNull(climberWinch))
+            climberWinch.stop();
+        if (Objects.nonNull(climberWheel))
+            climberWheel.stop();
+        if (Objects.nonNull(servo))
+            servo.stop();
     }
 
     public Command getAutonomousCommand() {

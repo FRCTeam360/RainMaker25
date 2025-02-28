@@ -10,8 +10,6 @@ import frc.robot.Constants;
 public class ServoIOCB implements ServoIO {
     private final Servo servo = new Servo(Constants.CompBotConstants.SERVO_PORT);
 
-    double num = 0;
-
     /** Creates a new ServoIOCB. */
     public ServoIOCB() {}
 
@@ -20,8 +18,6 @@ public class ServoIOCB implements ServoIO {
     }
 
     public void updateInputs(ServoIOInputs inputs) {
-        inputs.servoDutyCycle = servo.getSpeed();
-        inputs.servoPosition = servo.getPosition();
-        inputs.servoAngle = servo.getAngle();
+        inputs.setOutput = servo.getPosition();
     }
 }

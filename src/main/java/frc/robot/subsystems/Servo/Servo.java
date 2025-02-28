@@ -19,14 +19,6 @@ public class Servo extends SubsystemBase {
     this.io = io;
   }
 
-  public void setServoPosition(double position) {
-    io.setServoPosition(position);
-  }
-
-  public Command setPositionCmd(double position) {
-    return runEnd(() -> io.setServoPosition(position), () -> io.setServoPosition(position));
-  }
-
   public void setSpeed(double speed) {
     io.setServoSpeed(speed);
 }
@@ -36,7 +28,7 @@ public class Servo extends SubsystemBase {
     }
 
     public void stop() {
-        io.setServoPosition(0.0);
+        io.setServoSpeed(0.0);
     }
 
     public Command setServoSpeedCmd(DoubleSupplier speed) {

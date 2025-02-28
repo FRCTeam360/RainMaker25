@@ -17,8 +17,6 @@ public interface ServoIO {
     public double servoDutyCycle = 0.0;
 }
 
-  public void setServoPosition(double position);
-
   public default void updateInputs(ServoIOInputs inputs){}
 
   public void setServoSpeed(double speed);

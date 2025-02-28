@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 13.64,
-        "y": 5.166
+        "x": 13.66,
+        "y": 5.205
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.228555236728763,
-        "y": 5.58542699965005
+        "x": 14.248555236728762,
+        "y": 5.6244269996500496
       },
       "isLocked": false,
       "linkedName": null
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "lower elevator",
+      "name": "elevator",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {

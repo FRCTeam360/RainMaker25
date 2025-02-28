@@ -132,7 +132,7 @@ public final class Constants {
             public static final double TELE_LEVEL_TWO = 7.0;
             public static final double TELE_LEVEL_ONE = 0.0;
 
-            public static final double AUTO_LEVEL_FOUR = 29.0;
+            public static final double AUTO_LEVEL_FOUR = 29.5;
             public static final double AUTO_LEVEL_THREE = 0.0;
             public static final double AUTO_LEVEL_TWO = 0.0;
             public static final double AUTO_LEVEL_ONE = 0.0;
@@ -159,8 +159,8 @@ public final class Constants {
         public static final int CORAL_SHOOTER_ID = 17;
         public static final int ALGAE_ARM_ID = 18;
         
-        public static final int INTAKE_SENSOR_ID = 19;
-        public static final int OUTTAKE_SENSOR_ID = 20;
+        public static final int INTAKE_SENSOR_ID = 20;
+        public static final int OUTTAKE_SENSOR_ID = 19;
 
         public static final int ALGAE_SHOOTER_FRONT_ID = 21;
         public static final int ALGAE_SHOOTER_BACK_ID = 22;
@@ -183,7 +183,7 @@ public final class Constants {
             public static final double TELE_LEVEL_TWO = 7.0;
             public static final double TELE_LEVEL_ONE = 0.0;
 
-            public static final double AUTO_LEVEL_FOUR = 29.5;
+            public static final double AUTO_LEVEL_FOUR = 29.0;
             public static final double AUTO_LEVEL_THREE = 0.0;
             public static final double AUTO_LEVEL_TWO = 0.0;
             public static final double AUTO_LEVEL_ONE = 0.0;

@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "lower elevator",
+      "name": "elevator",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {

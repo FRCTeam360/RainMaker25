@@ -15,12 +15,8 @@ public class ServoIOCB implements ServoIO {
     /** Creates a new ServoIOCB. */
     public ServoIOCB() {}
 
-    public void setServoPosition(double position) {
-        servo.setPosition(position);
-    }
-
     public void setServoSpeed(double speed) {
-        servo.setSpeed(speed);
+        servo.setPosition(speed);
     }
 
     public void updateInputs(ServoIOInputs inputs) {

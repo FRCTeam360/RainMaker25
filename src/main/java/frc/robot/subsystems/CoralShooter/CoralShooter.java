@@ -30,6 +30,7 @@ public class CoralShooter extends SubsystemBase {
     public void setDutyCycle(double speed) {
         io.setDutyCycle(speed);
     }
+
     public double getVelocity() {
         return inputs.outtakeVelocity;
     }
@@ -58,8 +59,13 @@ public class CoralShooter extends SubsystemBase {
         return Commands.waitUntil(() -> (!this.getOuttakeSensor() && !this.getIntakeSensor()));
     }
 
-    public Command waitUntilFull() {
+    public Command waitUntilOuttakeSensor() {
         return Commands.waitUntil(() -> this.getOuttakeSensor());
+    }
+
+    public Command waitUntilFull() {
+        return Commands.waitUntil(() -> (this.getOuttakeSensor() || this.getIntakeSensor()));
+
     }
 
     public Command waitUntilIntakeSensor() {
@@ -110,33 +116,29 @@ public class CoralShooter extends SubsystemBase {
 
     private Command repeatOnStall() {
         return new ConditionalCommand(setDutyCycleCmd(1.0), setDutyCycleCmd(-0.4), () -> isUnjamming())
-            .repeatedly()
-            .alongWith(
-                new InstantCommand(
-                    () -> {
-                        // testStall = true;
-                    }
-                )
-            );
+                .repeatedly()
+                .alongWith(
+                        new InstantCommand(
+                                () -> {
+                                    // testStall = true;
+                                }));
     }
 
     public Command antiStallIntakeCmd() {
         String cmdName = "IntakeCoralEvenBetter";
         return CommandLogger.logCommand(
-            waitUntilFull()
-                .deadlineFor(repeatOnStall()),
-            cmdName
-        );
+                waitUntilOuttakeSensor()
+                        .deadlineFor(repeatOnStall()),
+                cmdName);
     }
 
     public Command sensorIntakeCmd() {
         String cmdName = "IntakeCoral2";
         return CommandLogger.logCommand(
-            waitUntilIntakeSensor()
-                .deadlineFor(setDutyCycleCmd(-0.75))
-                .andThen(waitUntilFull().deadlineFor(setDutyCycleCmd(-0.20))),
-            cmdName
-        );
+                waitUntilOuttakeSensor().deadlineFor(waitUntilIntakeSensor()
+                        .deadlineFor(setDutyCycleCmd(-0.75))
+                        .andThen(setDutyCycleCmd(-0.20))),
+                cmdName);
     }
 
     @Override

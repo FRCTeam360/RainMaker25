@@ -462,10 +462,9 @@ public class RobotContainer {
         operatorCont.y().whileTrue(algaeTilt.setPositionCmd(0.001)); // 0.001 used to be 0
         operatorCont.x().whileTrue(algaeTilt.setPositionCmd(0.065)); // .065 used to be 3
         operatorCont.b().whileTrue(algaeTilt.setPositionCmd(0.253)); // 0.244 used to be 30
-        operatorCont.a().whileTrue(algaeTilt.setPositionCmd(0.361)); // 0.361 used to be 35
+        operatorCont.a().whileTrue(algaeTilt.setPositionCmd(0.32)); // 0.361 used to be 35
 
         operatorCont.pov(90).whileTrue(commandFactory.outtakeAlgaeFromGround());
-
         operatorCont.pov(270).whileTrue(commandFactory.intakeAlgaeFromGround());
 
         operatorCont.pov(0).whileTrue(commandFactory.climb());

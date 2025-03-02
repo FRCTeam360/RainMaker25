@@ -236,7 +236,7 @@ public class CommandFactory {
     }
 
     public Command outtakeAlgaeFromGround() {
-        return algaeShooter.setDutyCycleCmd(1.0);
+        return algaeShooter.setDutyCycleCmd(0.8);
     }
 
     public Command shootAlgae() {
@@ -312,7 +312,7 @@ public class CommandFactory {
     }
 
     public Command depolyAndInitiateClimb() {
-        return deployClimb().andThen(Commands.waitSeconds(0.5).andThen(initiateClimb()));
+        return deployClimb().andThen(Commands.waitSeconds(1.0).andThen(initiateClimb()));
     }
 
     public Command climb() {

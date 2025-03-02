@@ -49,9 +49,9 @@ public class RemoveAlgae extends Command {
     @Override
     public void execute() {
         if (level == 3) {
-            height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_FOUR - 7.5;
+            height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_FOUR - 10.0;
         } else if (level == 2) {
-            height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_THREE - 3.0;
+            height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_THREE - 5.5;
         }
 
         coralShooter.setDutyCycle(-1.0);

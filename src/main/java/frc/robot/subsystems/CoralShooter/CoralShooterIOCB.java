@@ -41,7 +41,7 @@ public class CoralShooterIOCB implements CoralShooterIO {
     }
 
     private boolean isInOuttakeSensor() {
-        return outtakeSensor.getProximity() < 0.0575;
+        return outtakeSensor.getProximity() < 0.1;
     }
 
     private boolean isInIntakeSensor() {

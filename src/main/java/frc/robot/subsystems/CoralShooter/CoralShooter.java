@@ -5,6 +5,8 @@
 package frc.robot.subsystems.CoralShooter;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -12,19 +14,36 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.CommandLogger;
+
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
+import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
+import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 
 public class CoralShooter extends SubsystemBase {
     private final CoralShooterIO io;
     public final CoralShooterIOInputsAutoLogged inputs = new CoralShooterIOInputsAutoLogged();
 
+    private DoubleSupplier elevatorHeight;
+
     private final Timer stallTimer = new Timer();
     private final Timer unjamTimer = new Timer();
     private boolean testStall = true;
 
+    private final Color8Bit color = new Color8Bit(Color.kCoral);
+    private final LoggedMechanism2d mech2d = new LoggedMechanism2d(30, 50, new Color8Bit(Color.kBlue));
+    private final LoggedMechanismRoot2d mech2dRoot = mech2d.getRoot("shooter root", 10, 0);
+    private final LoggedMechanismLigament2d mech2dSide1 = mech2dRoot.append(new LoggedMechanismLigament2d("side1", 10, 340, 5, color));
+    private final LoggedMechanismLigament2d mech2dSide2 = mech2dRoot.append(new LoggedMechanismLigament2d("side2", 5, 270, 5, color));
+    private final LoggedMechanismLigament2d mech2dSide3 = mech2dSide1.append(new LoggedMechanismLigament2d("side3", 5, 290, 5, color));
+    private final LoggedMechanismLigament2d mech2dSide4 = mech2dSide2.append(new LoggedMechanismLigament2d("side4", 10, 70, 5, color));
+
     /** Creates a new CoralOutake. */
-    public CoralShooter(CoralShooterIO io) {
+    public CoralShooter(CoralShooterIO io, DoubleSupplier elevatorHeight) {
         this.io = io;
+        this.elevatorHeight = elevatorHeight;
     }
 
     public void setDutyCycle(double speed) {
@@ -142,7 +161,9 @@ public class CoralShooter extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+        mech2dRoot.setPosition(10, elevatorHeight.getAsDouble());
         io.updateInputs(inputs);
+        Logger.recordOutput("Coral Mech", mech2d);
         Logger.processInputs("Coral Outtake", inputs);
     }
 }

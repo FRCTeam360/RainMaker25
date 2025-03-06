@@ -168,7 +168,7 @@ public class RobotContainer {
                                                 () -> driveTrain.getAngle(),
                                                 () -> driveTrain.getAngularRate()))));
                 elevator = new Elevator(new ElevatorIOPB());
-                coralShooter = new CoralShooter(new CoralShooterIOWB());
+                coralShooter = new CoralShooter(new CoralShooterIOWB(), () -> elevator.getHeight());
                 break;
             case OLD_COMP_BOT:
                 driveTrain = OldCompBot.createDrivetrain();
@@ -193,9 +193,9 @@ public class RobotContainer {
             case PRACTICE:
                 driveTrain = PracticeBotDriveTrain.createDrivetrain();
                 logger = new Telemetry(PracticeBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
-                coralShooter = new CoralShooter(new CoralShooterIOPB());
                 elevator = new Elevator(new ElevatorIOPB());
-                algaeArm = new AlgaeArm(new AlgaeArmIOPB());
+                coralShooter = new CoralShooter(new CoralShooterIOPB(), () -> elevator.getHeight());
+                algaeArm = new AlgaeArm(new AlgaeArmIOPB(), () -> elevator.getHeight());
                 algaeRoller = new AlgaeRoller(new AlgaeRollerIOPB());
                 algaeShooter = new AlgaeShooter(new AlgaeShooterIOPB());
                 algaeTilt = new AlgaeTilt(new AlgaeTiltIOPB());
@@ -242,8 +242,8 @@ public class RobotContainer {
                         // )
                         ));
                 elevator = new Elevator(new ElevatorIOSim());
-                algaeArm = new AlgaeArm(new AlgaeArmIOSim(() -> elevator.getHeight()));
-                coralShooter = new CoralShooter(new CoralShooterIOSim(() -> elevator.getHeight()));
+                algaeArm = new AlgaeArm(new AlgaeArmIOSim(() -> elevator.getHeight()), () -> elevator.getHeight());
+                coralShooter = new CoralShooter(new CoralShooterIOSim(() -> elevator.getHeight()), () -> elevator.getHeight());
                 climberWinch = new ClimberWinch(new ClimberWinchIOSim());
                 climberWheel = new ClimberWheel(new ClimberWheelIOSim());
                 algaeShooter = new AlgaeShooter(new AlgaeShooterIOSim());
@@ -252,9 +252,9 @@ public class RobotContainer {
             default:
                 driveTrain = CompBotDriveTrain.createDrivetrain();
                 logger = new Telemetry(CompBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
-                coralShooter = new CoralShooter(new CoralShooterIOCB());
                 elevator = new Elevator(new ElevatorIOCB());
-                algaeArm = new AlgaeArm(new AlgaeArmIOCB());
+                coralShooter = new CoralShooter(new CoralShooterIOCB(), () -> elevator.getHeight());
+                algaeArm = new AlgaeArm(new AlgaeArmIOCB(), () -> elevator.getHeight());
                 algaeRoller = new AlgaeRoller(new AlgaeRollerIOCB());
                 algaeShooter = new AlgaeShooter(new AlgaeShooterIOCB());
                 algaeTilt = new AlgaeTilt(new AlgaeTiltIOCB());

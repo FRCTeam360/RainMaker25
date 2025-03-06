@@ -5,6 +5,8 @@
 package frc.robot.subsystems.Elevator;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -14,12 +16,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
+import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
+import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 
 public class Elevator extends SubsystemBase {
     private final ElevatorIO io;
     private final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
 
     private static final InterpolatingDoubleTreeMap offsetMap = new InterpolatingDoubleTreeMap();
+
+    private final LoggedMechanism2d mech2d = new LoggedMechanism2d(20, 50, new Color8Bit(Color.kBlue));
+    private final LoggedMechanismRoot2d mech2dRoot = mech2d.getRoot("elevator root", 10, 0);
+    private final LoggedMechanismLigament2d elevatorMech2d = mech2dRoot.append(new LoggedMechanismLigament2d("elevator", inputs.elevatorPosition, 90, 5, new Color8Bit(Color.kCoral)));
 
     /** Creates a new Elevator. */
     public Elevator(ElevatorIO io) {
@@ -109,7 +118,9 @@ public class Elevator extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+        elevatorMech2d.setLength(inputs.elevatorPosition);
         io.updateInputs(inputs);
+        Logger.recordOutput("Elevator Mech", mech2d);
         Logger.processInputs("Elevator", inputs);
     }
 }

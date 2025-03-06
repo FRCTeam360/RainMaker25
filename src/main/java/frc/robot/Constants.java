@@ -171,7 +171,7 @@ public final class Constants {
         public static final double RIGHT_GOAL_TY = 14.0; //TUNED FOR GPEAK
         public static final double RIGHT_GOAL_TX = 0.0;
 
-        public static final double LEFT_GOAL_TY = 14.0;
+        public static final double LEFT_GOAL_TY = RIGHT_GOAL_TY;
         public static final double LEFT_GOAL_TX = 0.0;
 
         public static final String CORAL_LIMELIGHT_NAME = "limelight-coral";

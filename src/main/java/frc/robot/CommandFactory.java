@@ -243,7 +243,7 @@ public class CommandFactory {
         return Commands
                 .waitUntil(() -> algaeShooter.getVelocity() > 5500)
                 .andThen(algaeRoller.setDutyCycleCmd(1.0))
-                .alongWith(algaeShooter.setDutyCycleCmd(0.8));
+                .alongWith(algaeShooter.setDutyCycleCmd(1.0));
     }
 
     /**
@@ -300,7 +300,7 @@ public class CommandFactory {
     }
 
     public Command deployClimb() {
-        return servo.runWithTimeout(3.0, 0).deadlineFor(algaeTilt.setPositionCmd(0.256))
+        return servo.runWithTimeout(3.5, 0).deadlineFor(algaeTilt.setPositionCmd(0.256))
                 .andThen(new InstantCommand(() -> this.climberDeployed = true));
     }
 
@@ -316,7 +316,7 @@ public class CommandFactory {
     }
 
     public Command climb() {
-        return climberWinch.setDutyCycleCmd(-0.37)
+        return climberWinch.setDutyCycleCmd(-0.60)
                 .alongWith(algaeTilt.setPositionCmd(0.907));
     }
 

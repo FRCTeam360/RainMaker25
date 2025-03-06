@@ -356,14 +356,14 @@ public class RobotContainer {
 
         if (Objects.nonNull(driveTrain)) {
             rightAlign = commandFactory.alignWithLimelight(
-                    Constants.PracticeBotConstants.RIGHT_GOAL_TY,
-                    Constants.PracticeBotConstants.RIGHT_GOAL_TX,
+                    Constants.CompBotConstants.RIGHT_GOAL_TY,
+                    Constants.CompBotConstants.RIGHT_GOAL_TX,
                     0, driverCont);
             // Periodically adds the vision measurement to drivetrain for pose estimation
 
             leftAlign = commandFactory.alignWithLimelight(
-                    Constants.PracticeBotConstants.LEFT_GOAL_TY,
-                    Constants.PracticeBotConstants.LEFT_GOAL_TX,
+                    Constants.CompBotConstants.LEFT_GOAL_TY,
+                    Constants.CompBotConstants.LEFT_GOAL_TX,
                     1, driverCont);
         }
 
@@ -460,21 +460,22 @@ public class RobotContainer {
         operatorCont.rightBumper().whileTrue(algaeRoller.setDutyCycleCmd(1.0));
 
         operatorCont.y().whileTrue(algaeTilt.setPositionCmd(0.001)); // 0.001 used to be 0
-        operatorCont.x().whileTrue(algaeTilt.setPositionCmd(0.065)); // .065 used to be 3
+        operatorCont.x().whileTrue(algaeTilt.setPositionCmd(0.03)); // .065 used to be 3
         operatorCont.b().whileTrue(algaeTilt.setPositionCmd(0.253)); // 0.244 used to be 30
         operatorCont.a().whileTrue(algaeTilt.setPositionCmd(0.32)); // 0.361 used to be 35
 
         operatorCont.pov(90).whileTrue(commandFactory.outtakeAlgaeFromGround());
         operatorCont.pov(270).whileTrue(commandFactory.intakeAlgaeFromGround());
+        operatorCont.pov(180).whileTrue(commandFactory.shootAlgae());
 
         operatorCont.pov(0).whileTrue(commandFactory.climb());
 
         operatorCont.leftTrigger(0.25).whileTrue(coralShooter.setDutyCycleCmd(0.3));
         // operatorCont.rightTrigger(0.25).whileTrue(coralShooter.setDutyCycleCmd(-0.4));
 
-        if (Math.abs(operatorCont.getLeftY()) > 0.05) {
-            algaeArm.setDutyCycleCmd(operatorCont.getLeftY());
-        }
+        // if (Math.abs(operatorCont.getLeftY()) > 0.05) {
+        //     algaeArm.setDutyCycleCmd(operatorCont.getLeftY());
+        // }
 
         driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
 

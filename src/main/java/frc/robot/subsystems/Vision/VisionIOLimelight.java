@@ -21,111 +21,140 @@ import frc.robot.utils.LimelightHelpers.PoseEstimate;
 import frc.robot.utils.LimelightHelpers.RawFiducial;
 
 public class VisionIOLimelight implements VisionIO {
-  private final NetworkTable table;
-  private final String name;
-  private final DoubleSupplier gyroAngleSupplier;
-  private final DoubleSupplier gryoAngleRateSupplier;
+    private final NetworkTable table;
+    private final String name;
+    private final DoubleSupplier gyroAngleSupplier;
+    private final DoubleSupplier gryoAngleRateSupplier;
 
-  private RawFiducial[] fiducials = LimelightHelpers.getRawFiducials("");
+    private boolean acceptMeasurements = false;
 
-  /**
-   * Creates a new Limelight hardware layer.
-   * 
-   * @param name              the name of the limelight
-   */
-  public VisionIOLimelight(String name, DoubleSupplier gyroAngleSupplier, DoubleSupplier gryoAngleRateSupplier) {
-    table = NetworkTableInstance.getDefault().getTable(name);
-    this.name = name;
-    this.gyroAngleSupplier = gyroAngleSupplier;
-    this.gryoAngleRateSupplier = gryoAngleRateSupplier;
-  }
+    private RawFiducial[] fiducials = LimelightHelpers.getRawFiducials("");
 
-  public void updateInputs(VisionIOInputs inputs) {
-    // Get the pose estimate from limelight helpers
-    Optional<PoseEstimate> newPoseEstimate = getMegatag1PoseEst();
-    // If enabled, get megatag 2 pose
-    if(DriverStation.isEnabled()){
-      newPoseEstimate = getMegatag2PoseEst();
+    /**
+     * Creates a new Limelight hardware layer.
+     * 
+     * @param name the name of the limelight
+     */
+    public VisionIOLimelight(String name, DoubleSupplier gyroAngleSupplier, DoubleSupplier gryoAngleRateSupplier,
+            boolean acceptMeasurements) {
+        table = NetworkTableInstance.getDefault().getTable(name);
+        this.name = name;
+        this.gyroAngleSupplier = gyroAngleSupplier;
+        this.gryoAngleRateSupplier = gryoAngleRateSupplier;
+        this.acceptMeasurements = acceptMeasurements;
     }
 
-    // Assume that the pose hasn't been updated
-    inputs.poseUpdated = false;
-
-    inputs.tv = getTV();
-    inputs.tx = getTXRaw();
-    inputs.ty = getTYRaw();
-    inputs.pipeline = getPipeline();
-    inputs.tagID = getAprilTagID();
-    // if the new pose estimate is null, then don't update further
-    if(newPoseEstimate.isEmpty()) return;
-    // if the new pose estimate is null or angle rate is greater than 720 degrees per, then don't update further
-    if(inputs.tv == 0.0 || newPoseEstimate.isEmpty() || gryoAngleRateSupplier.getAsDouble() > 720.0) return;
-    // if the megatag1 pose estimate has less than 2 tags in it, don't update further
-    if(!newPoseEstimate.get().isMegaTag2 && newPoseEstimate.get().tagCount < 2) return;
-
-    PoseEstimate poseEstimate = newPoseEstimate.get();
-
-    inputs.estimatedPose = poseEstimate.pose;
-    inputs.timestampSeconds = poseEstimate.timestampSeconds;
-    int[] targetIds = new int[poseEstimate.rawFiducials.length];
-    double[] distancesToTargets = new double[poseEstimate.rawFiducials.length];
-    Pose3d[] tagPoses = new Pose3d[poseEstimate.rawFiducials.length];
-    for (int i = 0; i < poseEstimate.rawFiducials.length; i++){
-      RawFiducial rawFiducial = poseEstimate.rawFiducials[i];
-      // if the pose is outside of the field, then skip to the next point
-      Optional<Pose3d> tagPose = Constants.FIELD_LAYOUT.getTagPose(rawFiducial.id);
-      if(tagPose.isEmpty()) continue;
-
-      targetIds[i] = rawFiducial.id;
-      distancesToTargets[i] = rawFiducial.distToRobot;
-      tagPoses[i] = tagPose.get();
+    /**
+     * Creates a new Limelight hardware layer.
+     * 
+     * @param name the name of the limelight
+     */
+    public VisionIOLimelight(String name, DoubleSupplier gyroAngleSupplier, DoubleSupplier gryoAngleRateSupplier) {
+        table = NetworkTableInstance.getDefault().getTable(name);
+        this.name = name;
+        this.gyroAngleSupplier = gyroAngleSupplier;
+        this.gryoAngleRateSupplier = gryoAngleRateSupplier;
     }
-    inputs.targetIds = targetIds;
-    inputs.distancesToTargets = distancesToTargets;
-    inputs.tagPoses = tagPoses;
-    inputs.poseUpdated = true;
-  }
 
-  private Optional<PoseEstimate> getMegatag2PoseEst(){
-    LimelightHelpers.SetRobotOrientation(name, gyroAngleSupplier.getAsDouble(), gryoAngleRateSupplier.getAsDouble(), 0, 0, 0, 0);
-    PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(name);
-    return Optional.ofNullable(mt2);
-  }
+    public void updateInputs(VisionIOInputs inputs) {
+        // Get the pose estimate from limelight helpers
+        Optional<PoseEstimate> newPoseEstimate = getMegatag1PoseEst();
+        // If enabled, get megatag 2 pose
+        if (DriverStation.isEnabled()) {
+            newPoseEstimate = getMegatag2PoseEst();
+        }
 
-  private Optional<PoseEstimate> getMegatag1PoseEst(){
-    PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue(name);
-    return Optional.ofNullable(mt2);
-  }
+        // Assume that the pose hasn't been updated
+        inputs.poseUpdated = false;
 
-  public int getAprilTagID() {
-    return (int)table.getEntry("tid").getInteger(0);
-  }
-  
-  public double getTXRaw() {
-    return table.getEntry("tx").getDouble(0.0);
-  }
+        inputs.tv = getTV();
+        inputs.tx = getTXRaw();
+        inputs.ty = getTYRaw();
+        inputs.pipeline = getPipeline();
+        inputs.tagID = getAprilTagID();
 
-  public double getTYRaw() {
-    return table.getEntry("ty").getDouble(0);
-  }
- 
-  public double getTV() {
-    return table.getEntry("tv").getDouble(0);
-  }
+        if (acceptMeasurements == false) {
+            return;
+        }
 
-  public double getPipeline() {
-    return table.getEntry("getpipe").getDouble(0);
-  }
+        // if the new pose estimate is null, then don't update further
+        if (newPoseEstimate.isEmpty())
+            return;
+        // if the new pose estimate is null or angle rate is greater than 720 degrees
+        // per, then don't update further
+        if (inputs.tv == 0.0 || newPoseEstimate.isEmpty() || gryoAngleRateSupplier.getAsDouble() > 720.0)
+            return;
+        // if the megatag1 pose estimate has less than 2 tags in it, don't update
+        // further
+        if (!newPoseEstimate.get().isMegaTag2 && newPoseEstimate.get().tagCount < 2)
+            return;
 
-  public void setPipeline(int pipeline) {
-    table.getEntry("pipeline").setNumber(pipeline);
-  }
+        PoseEstimate poseEstimate = newPoseEstimate.get();
 
-  public void takeSnapshot() {
-    table.getEntry("snapshot").setNumber(1);
-  }
+        inputs.estimatedPose = poseEstimate.pose;
+        inputs.timestampSeconds = poseEstimate.timestampSeconds;
+        int[] targetIds = new int[poseEstimate.rawFiducials.length];
+        double[] distancesToTargets = new double[poseEstimate.rawFiducials.length];
+        Pose3d[] tagPoses = new Pose3d[poseEstimate.rawFiducials.length];
+        for (int i = 0; i < poseEstimate.rawFiducials.length; i++) {
+            RawFiducial rawFiducial = poseEstimate.rawFiducials[i];
+            // if the pose is outside of the field, then skip to the next point
+            Optional<Pose3d> tagPose = Constants.FIELD_LAYOUT.getTagPose(rawFiducial.id);
+            if (tagPose.isEmpty())
+                continue;
 
-  public void resetSnapshot() {
-    table.getEntry("snapshot").setNumber(0);
-  }
+            targetIds[i] = rawFiducial.id;
+            distancesToTargets[i] = rawFiducial.distToRobot;
+            tagPoses[i] = tagPose.get();
+        }
+
+        inputs.targetIds = targetIds;
+        inputs.distancesToTargets = distancesToTargets;
+        inputs.tagPoses = tagPoses;
+        inputs.poseUpdated = true;
+    }
+
+    private Optional<PoseEstimate> getMegatag2PoseEst() {
+        LimelightHelpers.SetRobotOrientation(name, gyroAngleSupplier.getAsDouble(), gryoAngleRateSupplier.getAsDouble(),
+                0, 0, 0, 0);
+        PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(name);
+        return Optional.ofNullable(mt2);
+    }
+
+    private Optional<PoseEstimate> getMegatag1PoseEst() {
+        PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue(name);
+        return Optional.ofNullable(mt2);
+    }
+
+    public int getAprilTagID() {
+        return (int) table.getEntry("tid").getInteger(0);
+    }
+
+    public double getTXRaw() {
+        return table.getEntry("tx").getDouble(0.0);
+    }
+
+    public double getTYRaw() {
+        return table.getEntry("ty").getDouble(0);
+    }
+
+    public double getTV() {
+        return table.getEntry("tv").getDouble(0);
+    }
+
+    public double getPipeline() {
+        return table.getEntry("getpipe").getDouble(0);
+    }
+
+    public void setPipeline(int pipeline) {
+        table.getEntry("pipeline").setNumber(pipeline);
+    }
+
+    public void takeSnapshot() {
+        table.getEntry("snapshot").setNumber(1);
+    }
+
+    public void resetSnapshot() {
+        table.getEntry("snapshot").setNumber(0);
+    }
 }

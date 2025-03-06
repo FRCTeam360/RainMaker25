@@ -9,7 +9,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.PracticeBotConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -33,6 +35,8 @@ public class AlignWithLimelight extends Command {
     private SlewRateLimiter forwardsAccelerationLimit = new SlewRateLimiter(0.75);
     private SlewRateLimiter leftAccelerationLimit = new SlewRateLimiter(0.75);
     private int pipeline;
+    
+    private CommandXboxController driverCont;
 
     private final String LIMELIGHT_NAME = Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME;
     private final String CMD_NAME = "AlignWithLimelight: ";
@@ -60,13 +64,15 @@ public class AlignWithLimelight extends Command {
         CommandSwerveDrivetrain driveTrain,
         double goalTY,
         double goalTX,
-        int pipeline
+        int pipeline,
+        CommandXboxController driverCont
     ) {
         this.vision = vision;
         this.driveTrain = driveTrain;
         this.goalTY = goalTY;
         this.goalTX = goalTX;
         this.pipeline = pipeline;
+        this.driverCont = driverCont;
         addRequirements(driveTrain);
     }
 
@@ -158,6 +164,7 @@ public class AlignWithLimelight extends Command {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        
     //   LimelightHelpers.SetFiducialIDFiltersOverride("limelight", new int[] { 6, 7, 8 });
         LimelightHelpers.setPriorityTagID("limelight", -1);
         driveTrain.xOut();

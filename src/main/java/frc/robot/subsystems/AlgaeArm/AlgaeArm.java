@@ -34,6 +34,10 @@ public class AlgaeArm extends SubsystemBase {
     io.setDutyCycle(0.0);
   }
 
+  public double getAngle() {
+    return inputs.algaeArmAngle;
+  }
+
   /**
    * method for setting encoder to a new value (i.e. for zeroing)
    * @param value new value in motor rotations

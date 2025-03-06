@@ -117,7 +117,7 @@ public final class Constants {
         public static final int INTAKE_SENSOR_ID = 20;
         public static final int OUTTAKE_SENSOR_ID = 21;
 
-        public static final double RIGHT_GOAL_TY = 9.0;
+        public static final double RIGHT_GOAL_TY = 11.75;
         public static final double RIGHT_GOAL_TX = 0.0;
 
         public static final double LEFT_GOAL_TY = RIGHT_GOAL_TY;
@@ -168,22 +168,22 @@ public final class Constants {
         public static final int ALGAE_TILT = 24;
 
 
-        public static final double RIGHT_GOAL_TY = 6.8;
+        public static final double RIGHT_GOAL_TY = 14.0; //TUNED FOR GPEAK
         public static final double RIGHT_GOAL_TX = 0.0;
 
-        public static final double LEFT_GOAL_TY = 6.0;
+        public static final double LEFT_GOAL_TY = RIGHT_GOAL_TY;
         public static final double LEFT_GOAL_TX = 0.0;
 
         public static final String CORAL_LIMELIGHT_NAME = "limelight-coral";
         public static final String ALGAE_LIMELIGHT_NAME = "limelight-algae";
 
         public class ElevatorHeights {
-            public static final double TELE_LEVEL_FOUR = 29.5;
-            public static final double TELE_LEVEL_THREE = 16.0;
-            public static final double TELE_LEVEL_TWO = 7.0;
+            public static final double TELE_LEVEL_FOUR = 29.3;
+            public static final double TELE_LEVEL_THREE = 15.9;
+            public static final double TELE_LEVEL_TWO = 7.2;
             public static final double TELE_LEVEL_ONE = 0.0;
 
-            public static final double AUTO_LEVEL_FOUR = 29.5;
+            public static final double AUTO_LEVEL_FOUR = 29.0;
             public static final double AUTO_LEVEL_THREE = 0.0;
             public static final double AUTO_LEVEL_TWO = 0.0;
             public static final double AUTO_LEVEL_ONE = 0.0;
@@ -193,7 +193,7 @@ public final class Constants {
             public static final double ALIGN_LEVEL_TWO = 0.0;
             public static final double ALIGN_LEVEL_ONE = 0.0;
 
-        }
+        } 
 
     }
 

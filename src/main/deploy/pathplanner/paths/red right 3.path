@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 13.64,
-        "y": 5.16575
+        "x": 13.7,
+        "y": 5.185
       },
       "prevControl": {
-        "x": 13.424342275196981,
-        "y": 5.03929152565848
+        "x": 13.48434227519698,
+        "y": 5.058541525658479
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "raise elevator",
-      "waypointRelativePos": 0.6,
+      "name": "elevator",
+      "waypointRelativePos": 0.4978417266187054,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

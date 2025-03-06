@@ -246,6 +246,7 @@ public class CommandFactory {
                 .alongWith(algaeShooter.setDutyCycleCmd(1.0));
     }
 
+
     /**
      * This command assumes the elevator is already above the algae
      * 

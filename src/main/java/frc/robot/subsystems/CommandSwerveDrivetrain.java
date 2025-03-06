@@ -83,8 +83,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric() // creates a fieldcentric drive
                 .withDeadband(maxSpeed * 0.01)
                 .withRotationalDeadband(maxAngularRate * 0.01
-                ); // Add a 10% deadband
-            //    .withDriveRequestType(DriveRequestType.Velocity); // Use closed-loop control for drive motors
+                );
+             //  .withDriveRequestType(DriveRequestType.Velocity); // Use closed-loop control for drive motors
 
         return CommandLogger.logCommand(this.applyRequest(
                 () -> drive
@@ -98,8 +98,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                                         -1.0) // Drive left with negative X (left)
                         .withRotationalRate(
                             Math.pow(driveCont.getRightX(), 2) *
-                            maxAngularRate *
-                            -Math.signum(driveCont.getRightX()) 
+                            (maxAngularRate / 2.0) * -Math.signum(driveCont.getRightX())
                         ) // Drive counterclockwise with negative X (left)
         ), "DrivetrainFieldOriented");
     }

@@ -20,7 +20,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 // https://v6.docs.ctr-electronics.com/en/stable/docs/tuner/tuner-swerve/index.html
 public class CompBotDriveTrain {
 
-    public static final double maxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation
+    public static final double maxAngularRate = RotationsPerSecond.of(2.0).in(RadiansPerSecond); // 3/4 of a rotation
                                                                                                   // per
                                                                                                   // second max angular
                                                                                                   // velocity

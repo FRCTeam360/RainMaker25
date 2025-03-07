@@ -282,9 +282,9 @@ public class CommandFactory {
 
         double height;
         if (level == 2) {
-            height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_THREE - 3.0;
+            height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_THREE - 6.0; // - 3.0 rotations from L4
         } else {
-            height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_FOUR - 3.0;
+            height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_FOUR - 6.5; // - 3.0 rotations from L3
         }
 
         if (coralShooter.getVelocity() < -6000.0) {

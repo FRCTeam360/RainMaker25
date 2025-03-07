@@ -159,6 +159,7 @@ public class RobotContainer {
     private RemoveAlgae removeAlgaeL2;
 
     private Command consumeVisionMeasurements;
+    private boolean isAlgaeMode;
 
     public RobotContainer() {
         switch (Constants.getRobotType()) {
@@ -448,77 +449,101 @@ public class RobotContainer {
 
         vision.setDefaultCommand(consumeVisionMeasurements.ignoringDisable(true));
 
-      //  elevator.setDefaultCommand(elevator.setDutyCycleCommand(() -> testCont.getLeftY() * 0.05));
+        // elevator.setDefaultCommand(elevator.setDutyCycleCommand(() ->
+        // testCont.getLeftY() * 0.05));
 
         algaeTilt.setDefaultCommand(commandFactory.homeAlgaeTilt());
         algaeArm.setDefaultCommand(algaeArm.setAlgaeArmAngleCmd(0.0));
 
+        // driverCont.rightStick().toggleOnTrue(isAlgaeMode);
+
         // algaeArm.setDefaultCommand(algaeArm.setDutyCycleCmd(() ->
         // operatorCont.getLeftY() * 0.05));
+        if (isAlgaeMode) {
+            operatorCont.leftBumper().whileTrue(algaeRoller.setDutyCycleCmd(-0.5));
+            operatorCont.rightBumper().whileTrue(algaeRoller.setDutyCycleCmd(1.0));
 
-        operatorCont.leftBumper().whileTrue(algaeRoller.setDutyCycleCmd(-0.5));
-        operatorCont.rightBumper().whileTrue(algaeRoller.setDutyCycleCmd(1.0));
+            operatorCont.y().whileTrue(algaeTilt.setPositionCmd(0.001)); // 0.001 used to be 0
+            operatorCont.x().whileTrue(algaeTilt.setPositionCmd(0.03)); // .065 used to be 3
+            operatorCont.b().whileTrue(algaeTilt.setPositionCmd(0.253)); // 0.244 used to be 30
+            operatorCont.a().whileTrue(algaeTilt.setPositionCmd(0.32)); // 0.361 used to be 35
 
-        operatorCont.y().whileTrue(algaeTilt.setPositionCmd(0.001)); // 0.001 used to be 0
-        operatorCont.x().whileTrue(algaeTilt.setPositionCmd(0.03)); // .065 used to be 3
-        operatorCont.b().whileTrue(algaeTilt.setPositionCmd(0.253)); // 0.244 used to be 30
-        operatorCont.a().whileTrue(algaeTilt.setPositionCmd(0.32)); // 0.361 used to be 35
+            operatorCont.pov(90).whileTrue(commandFactory.outtakeAlgaeFromGround());
+            operatorCont.pov(270).whileTrue(commandFactory.intakeAlgaeFromGround());
+            operatorCont.pov(180).whileTrue(commandFactory.shootAlgae());
 
-        operatorCont.pov(90).whileTrue(commandFactory.outtakeAlgaeFromGround());
-        operatorCont.pov(270).whileTrue(commandFactory.intakeAlgaeFromGround());
-        operatorCont.pov(180).whileTrue(commandFactory.shootAlgae());
+            operatorCont.pov(0).whileTrue(commandFactory.climb());
 
-        operatorCont.pov(0).whileTrue(commandFactory.climb());
+            operatorCont.leftTrigger(0.25).whileTrue(coralShooter.setDutyCycleCmd(0.3));
+            // operatorCont.rightTrigger(0.25).whileTrue(coralShooter.setDutyCycleCmd(-0.4));
 
-        operatorCont.leftTrigger(0.25).whileTrue(coralShooter.setDutyCycleCmd(0.3));
-        // operatorCont.rightTrigger(0.25).whileTrue(coralShooter.setDutyCycleCmd(-0.4));
-
-        // if (Math.abs(operatorCont.getLeftY()) > 0.05) {
-        //     algaeArm.setDutyCycleCmd(operatorCont.getLeftY());
-        // }
+            // if (Math.abs(operatorCont.getLeftY()) > 0.05) {
+            // algaeArm.setDutyCycleCmd(operatorCont.getLeftY());
+            // }
+        }
 
         driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
 
         driverCont.rightStick().whileTrue(driveTrain.robotCentricDrive(driverCont));
 
-        driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
-        driverCont.pov(90).whileTrue(removeAlgaeL2);
-        driverCont.pov(270).whileTrue(removeAlgaeL3);
-        driverCont.start().onTrue(commandFactory.depolyAndInitiateClimb());
-        driverCont.back().whileTrue(commandFactory.climbAutomated());
+      
+            driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
+            driverCont.pov(90).whileTrue(removeAlgaeL2);
+            driverCont.pov(270).whileTrue(removeAlgaeL3);
+            driverCont.start().onTrue(commandFactory.depolyAndInitiateClimb());
+            driverCont.back().whileTrue(commandFactory.climbAutomated());
 
-        driverCont.pov(180).onTrue(commandFactory.setAlgaeArmAngle(0.0));
+            driverCont.pov(180).onTrue(commandFactory.setAlgaeArmAngle(0.0));
 
-        driverCont.leftTrigger(0.25).whileTrue(coralShooter.sensorIntakeCmd());
-        driverCont.rightTrigger(0.25).whileTrue(coralShooter.basicShootCmd());
+            driverCont.leftTrigger(0.25).whileTrue(coralShooter.sensorIntakeCmd());
+            driverCont.rightTrigger(0.25).whileTrue(coralShooter.basicShootCmd());
 
-        if (Objects.nonNull(elevator)) {
+            driverCont.rightStick().onTrue(new InstantCommand(() -> toggleIsAlgaeMode()));
+            if (Objects.nonNull(elevator)) {
 
-            driverCont.a().onTrue(levelOneAndZero);
-            driverCont.b().onTrue(levelTwo);
-            driverCont.x().onTrue(levelThree);
-            driverCont.y().whileTrue(levelFour);
-        }
+                driverCont.a()
+                        .onTrue(Commands.either(
+                                algaeTilt.setPositionCmd(0.07),
+                                levelOneAndZero,
+                                () -> isAlgaeMode));
+                driverCont.b()
+                        .onTrue(Commands.either(
+                            algaeTilt.setPositionCmd(0.253),
+                            levelTwo,
+                            () -> isAlgaeMode));
+                driverCont.x().onTrue(Commands.either(
+                            algaeTilt.setPositionCmd(0.03),
+                            levelThree,
+                            () -> isAlgaeMode));
+                driverCont.y().onTrue(Commands.either(
+                            algaeTilt.setPositionCmd(0.001),
+                            levelThree,
+                            () -> isAlgaeMode));
+            }
 
-        if (Objects.nonNull(coralShooter)) {
-            driverCont.leftBumper().whileTrue(leftAlign);
-            driverCont.rightBumper().whileTrue(rightAlign);
-        }
+            if (Objects.nonNull(coralShooter)) {
+                driverCont.leftBumper().whileTrue(leftAlign);
+                driverCont.rightBumper().whileTrue(rightAlign);
+            }
 
-        // driverCont.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
-        // driverCont.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
-        /*
-         * 
-         * Joystick Y = quasistatic forward
-         * Joystick A = quasistatic reverse
-         * Joystick X = dyanmic reverse
-         * Joystick B = dynamic forward
-         */
+            // driverCont.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
+            // driverCont.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
+            /*
+             * 
+             * Joystick Y = quasistatic forward
+             * Joystick A = quasistatic reverse
+             * Joystick X = dyanmic reverse
+             * Joystick B = dynamic forward
+             */
 
-        // driverCont.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-        // driverCont.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-        // driverCont.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
-        // driverCont.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+            // driverCont.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+            // driverCont.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+            // driverCont.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+            // driverCont.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    }
+
+    private void toggleIsAlgaeMode() {
+        this.isAlgaeMode = !this.isAlgaeMode;
     }
 
     private void configureTestController() {

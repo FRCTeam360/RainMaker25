@@ -36,6 +36,7 @@ import frc.robot.Constants.PracticeBotConstants.ElevatorHeights;
 import frc.robot.Constants.*;
 import frc.robot.commands.AlignWithLimelight;
 import frc.robot.commands.SetCoralIntake;
+import frc.robot.commands.SmartIntake;
 import frc.robot.commands.RemoveAlgae;
 import frc.robot.commands.SnapDrivebaseToAngle;
 import frc.robot.generated.CompBotDriveTrain;
@@ -155,6 +156,8 @@ public class RobotContainer {
     private DoubleSupplier elevatorHeight;
 
     private RemoveAlgae removeAlgae;
+
+    private SmartIntake smartIntake;
 
     private Command consumeVisionMeasurements;
     private boolean isAlgaeMode;
@@ -416,6 +419,8 @@ public class RobotContainer {
             setCoralIntake = new SetCoralIntake(coralShooter);
             intake = coralShooter.basicIntakeCmd();
 
+            smartIntake = new SmartIntake(coralShooter);
+
             NamedCommands.registerCommand("shoot", coralShooter.basicShootCmd());
             NamedCommands.registerCommand("intake", coralShooter.basicIntakeCmd());
         }
@@ -457,6 +462,9 @@ public class RobotContainer {
 
         // algaeArm.setDefaultCommand(algaeArm.setDutyCycleCmd(() ->
         // testCont.getLeftY() * 0.05));
+
+        testCont.leftTrigger(0.25).whileTrue(smartIntake);
+
 
             operatorCont.leftBumper().whileTrue(algaeRoller.setDutyCycleCmd(-0.5));
             operatorCont.rightBumper().whileTrue(algaeRoller.setDutyCycleCmd(1.0));

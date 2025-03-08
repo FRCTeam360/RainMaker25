@@ -66,8 +66,6 @@ public class RemoveAlgae extends Command {
         
         // if (coralShooter.getVelocity() < -6000.0) {
         // }
-        drivetrain.robotCentricDrive(-0.1, 0.0, 0.0);
-
     }
 
 

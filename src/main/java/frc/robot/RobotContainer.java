@@ -44,6 +44,7 @@ import frc.robot.generated.OldCompBot;
 import frc.robot.generated.PracticeBotDriveTrain;
 import frc.robot.generated.WoodBotDriveTrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.ClimberWinch.ClimberWinch;
 import frc.robot.subsystems.ClimberWinch.ClimberWinchIOCB;
 import frc.robot.subsystems.ClimberWinch.ClimberWinchIOPB;
@@ -117,6 +118,8 @@ public class RobotContainer {
     private AlgaeRoller algaeRoller;
     private AlgaeTilt algaeTilt;
     private Servo servo;
+
+    private Lights lights;
 
     private ShuffleboardTab diagnosticTab;
 
@@ -268,7 +271,7 @@ public class RobotContainer {
                 algaeShooter = new AlgaeShooter(new AlgaeShooterIOCB());
                 algaeTilt = new AlgaeTilt(new AlgaeTiltIOCB());
                 climberWinch = new ClimberWinch(new ClimberWinchIOCB());
-
+                lights = new Lights();
                 vision = new Vision(
                         Map.ofEntries(
                                 Map.entry(

@@ -154,8 +154,7 @@ public class RobotContainer {
     private Command scoreCoralL1 = null;
     private DoubleSupplier elevatorHeight;
 
-    private RemoveAlgae removeAlgaeL3;
-    private RemoveAlgae removeAlgaeL2;
+    private RemoveAlgae removeAlgae;
 
     private Command consumeVisionMeasurements;
     private boolean isAlgaeMode;
@@ -163,7 +162,8 @@ public class RobotContainer {
     public RobotContainer() {
         switch (Constants.getRobotType()) {
             case WOODBOT:
-                driveTrain = WoodBotDriveTrain.createDrivetrain();
+                
+             driveTrain = WoodBotDriveTrain.createDrivetrain();
                 logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
                 vision = new Vision(
                         Map.ofEntries(
@@ -392,8 +392,7 @@ public class RobotContainer {
 
             scoreLevel3RightTeleop = commandFactory.scoringRoutineTeleop(3, false);
 
-            removeAlgaeL3 = new RemoveAlgae(3, algaeArm, algaeShooter, algaeTilt, coralShooter, elevator);
-            removeAlgaeL2 = new RemoveAlgae(2, algaeArm, algaeShooter, algaeTilt, coralShooter, elevator);
+            removeAlgae = new RemoveAlgae(3, algaeArm, algaeShooter, algaeTilt, coralShooter, elevator, driveTrain);
 
         }
 
@@ -457,7 +456,7 @@ public class RobotContainer {
         // driverCont.rightStick().toggleOnTrue(isAlgaeMode);
 
         // algaeArm.setDefaultCommand(algaeArm.setDutyCycleCmd(() ->
-        // operatorCont.getLeftY() * 0.05));
+        // testCont.getLeftY() * 0.05));
 
             operatorCont.leftBumper().whileTrue(algaeRoller.setDutyCycleCmd(-0.5));
             operatorCont.rightBumper().whileTrue(algaeRoller.setDutyCycleCmd(1.0));
@@ -486,9 +485,8 @@ public class RobotContainer {
         // driverCont.rightStick().whileTrue(driveTrain.robotCentricDrive(driverCont));
 
       
-            driverCont.pov(90).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
-            driverCont.pov(180).whileTrue(removeAlgaeL2);
-            driverCont.pov(0).whileTrue(removeAlgaeL3);
+            driverCont.pov(180).whileTrue(removeAlgae);
+            driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
             driverCont.start().onTrue(commandFactory.depolyAndInitiateClimb());
             driverCont.back().whileTrue(commandFactory.climbAutomated());
 

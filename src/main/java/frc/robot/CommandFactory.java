@@ -278,18 +278,19 @@ public class CommandFactory {
         return this.setAlgaeArmAngle(110.0);
     }
 
-    private Command removeAlgae(int level) {
+    private Command removeAlgae(int level) { //NOT BEING USED
 
         double height;
         if (level == 2) {
-            height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_THREE - 6.0; // - 3.0 rotations from L4
+            height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_THREE - 6.0; // - 3.0 rotations from L4 GPEAK
         } else {
-            height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_FOUR - 6.5; // - 3.0 rotations from L3
+            height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_FOUR - 6.5; // - 3.0 rotations from L3 GPEAK
         }
 
+        algaeArm.setAlgaeArmAngleCmd(60.0);
+
         if (coralShooter.getVelocity() < -6000.0) {
-            return elevator.setElevatorHeight(height)
-                    .alongWith(algaeArm.setAlgaeArmAngleCmd(110.0));
+            return elevator.setElevatorHeight(height);
         } else {
             return coralShooter.pullAlgae();
         }

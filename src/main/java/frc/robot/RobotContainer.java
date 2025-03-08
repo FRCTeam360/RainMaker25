@@ -157,7 +157,7 @@ public class RobotContainer {
 
     private RemoveAlgae removeAlgae;
 
-    private SmartIntake smartIntake;
+    private Command smartIntake;
 
     private Command consumeVisionMeasurements;
     private boolean isAlgaeMode;
@@ -419,10 +419,10 @@ public class RobotContainer {
             setCoralIntake = new SetCoralIntake(coralShooter);
             intake = coralShooter.basicIntakeCmd();
 
-            smartIntake = new SmartIntake(coralShooter);
+            smartIntake = SmartIntake.newCommand(coralShooter);
 
             NamedCommands.registerCommand("shoot", coralShooter.basicShootCmd());
-            NamedCommands.registerCommand("intake", coralShooter.basicIntakeCmd());
+            NamedCommands.registerCommand("intake", smartIntake);
         }
 
         // registerPathplannerCommand("Intake Coral", intake);

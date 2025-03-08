@@ -25,4 +25,5 @@ public interface ClimberWinchIO {
   public void setDutyCycle(double dutyCycle);
 
   public void setPosition(double position);
+
 }

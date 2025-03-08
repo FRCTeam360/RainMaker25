@@ -34,12 +34,17 @@ public class AlgaeTilt extends SubsystemBase {
     io.setPosition(position);
   }
 
+  public void stop() {
+    io.setDutyCycle(0.0);
+  }
+
   public Command setPositionCmd(double position) {
     return this.runEnd(
       () -> io.setPosition(position),
       () -> io.setPosition(position)
       );
   }
+
 
   public Command setDutyCycleCmd(DoubleSupplier duty) {
     return this.runEnd(

@@ -24,7 +24,7 @@ public class AlgaeTiltIOPB implements AlgaeTiltIO {
   private final SparkMax motor = new SparkMax(Constants.PracticeBotConstants.ALGAE_TILT, MotorType.kBrushless);
   private final RelativeEncoder encoder = motor.getEncoder(); // TODO: make absolute when we get one!!
 
-  private final double kP = 0.035 * 4.0;
+  private final double kP = 0.035 * 2.0;
   private final double kI = 0.0;
   private final double kD = 0.0;
 
@@ -77,8 +77,8 @@ public class AlgaeTiltIOPB implements AlgaeTiltIO {
 
   public void updateInputs(AlgaeTiltIOInputs inputs) {
     inputs.armDutyCycle = motor.get();
-    inputs.armPosition = encoder.getPosition();
-    inputs.armVelocity = encoder.getVelocity();
+    inputs.armPositionRelative = encoder.getPosition();
+    inputs.armVelocityRelative = encoder.getVelocity();
     inputs.armAmps = motor.getOutputCurrent();
   }
 }

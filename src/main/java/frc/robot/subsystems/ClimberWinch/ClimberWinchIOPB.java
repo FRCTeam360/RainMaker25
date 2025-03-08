@@ -59,5 +59,4 @@ public class ClimberWinchIOPB implements ClimberWinchIO {
     inputs.winchCurrent = winchMotor.getOutputCurrent();
     inputs.winchTemp = winchMotor.getMotorTemperature();
   }
-
 }

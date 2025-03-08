@@ -25,15 +25,15 @@ public class PracticeBotDriveTrain {
                                                                                                   // per
                                                                                                   // second max angular
                                                                                                   // velocity
-    public static final double headingKP = 2.019; // sysid number
+    public static final double headingKP = 1.75; 
     public static final double headingKI = 0.0;
     public static final double headingKD = 0.0;
     public static final double headingKIZone = 0.0;
 
-    public static final double stafeKP = 0.01;
-    public static final double stafeKI = 0.0003;
-    public static final double stafeKD = 0.003;
-    public static final double strafeIRMax = 0.05;
+    public static final double stafeKP = 0.008;
+    public static final double stafeKI = 0.0;//0.00015;
+    public static final double stafeKD = 0.0;//0.003;
+    public static final double strafeIRMax = 0.05; //DOES NOTHING WE ARENT DOING INTEGRATOR RANGE :((()))
     public static final double strafeIRMin = -0.05;
 
     public static final double forwardKP = 0.045;
@@ -47,14 +47,16 @@ public class PracticeBotDriveTrain {
     // the
     // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
     private static final Slot0Configs steerGains = new Slot0Configs()
-            .withKP(100).withKI(0).withKD(0.5)
-            .withKS(0.1).withKV(2.66).withKA(0)
-            .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
+            .withKP(132.0).withKI(0).withKD(1.0)
+            .withKS(0.2).withKV(2.6).withKA(0.048)
+            .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign); 
     // When using closed-loop control, the drive motor uses the control
     // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
     private static final Slot0Configs driveGains = new Slot0Configs()
-            .withKP(0.1).withKI(0).withKD(0)
-            .withKS(0).withKV(0.124);
+            .withKP(0.135).withKI(0).withKD(0)
+            .withKS(0.8).withKV(0.12).withKA(0.007);
+             
+            //from 2/23 test
 
     // The closed-loop output type to use for the steer motors;
     // This affects the PID/FF gains for the steer motors
@@ -100,7 +102,7 @@ public class PracticeBotDriveTrain {
   
     // Theoretical free speed (m/s) at 12 V applied output;
     // This needs to be tuned to your individual robot
-    public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(4.47);
+    public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(4.118);
 
     // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
     // This may need to be tuned to your individual robot

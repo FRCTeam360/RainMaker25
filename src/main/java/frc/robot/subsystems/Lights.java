@@ -17,6 +17,10 @@ public class Lights extends SubsystemBase {
         candle.configLEDType(LEDStripType.GRB);
     }
 
+    public void setLEDs(int r, int g, int b) {
+        candle.setLEDs(r, g, b);
+    }
+
     @Override
     public void periodic() {
         // This method will be called once per scheduler run

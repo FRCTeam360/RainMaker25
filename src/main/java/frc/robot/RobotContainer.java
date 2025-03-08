@@ -454,6 +454,7 @@ public class RobotContainer {
     private void configureBindings() {
 
         vision.setDefaultCommand(consumeVisionMeasurements.ignoringDisable(true));
+        lights.setDefaultCommand(new InstantCommand(() -> lights.setLEDs(200, 0, 0), lights));
 
         // elevator.setDefaultCommand(elevator.setDutyCycleCommand(() ->
         // testCont.getLeftY() * 0.05));

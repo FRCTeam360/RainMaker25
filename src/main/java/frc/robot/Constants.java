@@ -167,6 +167,7 @@ public final class Constants {
         public static final int ALGAE_ROLLER = 23;
         public static final int ALGAE_TILT = 24;
 
+        public static final int CANDLE_ID = 25;
 
         public static final double RIGHT_GOAL_TY = 14.0; //TUNED FOR GPEAK
         public static final double RIGHT_GOAL_TX = 0.0;

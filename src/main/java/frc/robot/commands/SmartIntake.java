@@ -14,6 +14,8 @@ import frc.robot.subsystems.CoralShooter.CoralShooter;
 public class SmartIntake extends Command {
     private CoralShooter coralShooter;
     private Timer timer = new Timer();
+    private Timer stallTimer = new Timer();
+    private Timer unJammedTimer = new Timer();
 
     private boolean isFinised;
 
@@ -45,19 +47,33 @@ public class SmartIntake extends Command {
         Logger.recordOutput("intake state", intakeStates);
 
         switch (intakeStates) {
+            case JAMMED:
+                stallTimer.reset();
+                stallTimer.stop();
+                coralShooter.setDutyCycle(0.25);
+                unJammedTimer.start();
+                if(unJammedTimer.hasElapsed(0.05)){
+                    updateStates();
+                    unJammedTimer.reset();
+                    unJammedTimer.stop();
+                }
+                break;
             case EMPTY:
+                stallTimer.start();
                 coralShooter.setDutyCycle(-0.75);
                 timer.reset();
                 timer.stop();
                 updateStates();
                 break;
             case JUST_INTAKE:
+                stallTimer.start();
                 coralShooter.setDutyCycle(-0.2);
                 timer.reset();
                 timer.stop();
                 updateStates();
                 break;
             case JUST_OUTTAKE:
+                stallTimer.start();
                 coralShooter.setDutyCycle(0.1);
                 timer.reset();
                 timer.stop();
@@ -65,6 +81,7 @@ public class SmartIntake extends Command {
                 break;
             case FULL:
             default:
+                stallTimer.start();
                 coralShooter.stop();
                 timer.start();
                 if (timer.get() > 0.1) {
@@ -82,7 +99,9 @@ public class SmartIntake extends Command {
     }
 
     public void updateStates() {
-        if (coralShooter.getIntakeSensor() && coralShooter.getOuttakeSensor()) {
+        if(stallTimer.hasElapsed(.2) && coralShooter.getStatorCurrent() > 15.0 && Math.abs(coralShooter.getVelocity()) < .1){
+            intakeStates = intakeStates.JAMMED;
+        }else if(coralShooter.getIntakeSensor() && coralShooter.getOuttakeSensor()) {
             intakeStates = intakeStates.FULL;
         } else if (coralShooter.getIntakeSensor() && !coralShooter.getOuttakeSensor()) {
             intakeStates = intakeStates.JUST_INTAKE;

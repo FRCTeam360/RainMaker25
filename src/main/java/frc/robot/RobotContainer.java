@@ -464,6 +464,7 @@ public class RobotContainer {
         // testCont.getLeftY() * 0.05));
 
         testCont.leftTrigger(0.25).whileTrue(smartIntake);
+        testCont.rightTrigger(.25).whileTrue(coralShooter.basicShootCmd());
 
 
             operatorCont.leftBumper().whileTrue(algaeRoller.setDutyCycleCmd(-0.5));

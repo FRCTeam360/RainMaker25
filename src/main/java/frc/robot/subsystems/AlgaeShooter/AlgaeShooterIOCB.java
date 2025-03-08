@@ -36,13 +36,13 @@ public class AlgaeShooterIOCB implements AlgaeShooterIO {
 
   /** Creates a new AlgaeShooterIOWB. */
   public AlgaeShooterIOCB() {
-    // TODO: add values
-    final double kP = 0.0;
+    final double kP = 0.00035;
     final double kI = 0.0;
     final double kD = 0.0;
+    final double kFF = 0.00015;
     
     ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
-    closedLoopConfig.pid(kP, kI, kD);
+    closedLoopConfig.pidf(kP, kI, kD, kFF);
     frontConfig.apply(closedLoopConfig);
     backConfig.apply(closedLoopConfig);
     EncoderConfig encoderConfig = new EncoderConfig();

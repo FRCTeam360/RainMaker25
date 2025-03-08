@@ -243,7 +243,7 @@ public class CommandFactory {
         return Commands
                 .waitUntil(() -> algaeShooter.getVelocity() > 5500)
                 .andThen(algaeRoller.setDutyCycleCmd(1.0))
-                .alongWith(algaeShooter.setDutyCycleCmd(1.0));
+                .alongWith(algaeShooter.setVelocityCmd(6000));
     }
 
 

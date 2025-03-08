@@ -83,8 +83,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric() // creates a fieldcentric drive
                 .withDeadband(maxSpeed * 0.01)
                 .withRotationalDeadband(maxAngularRate * 0.01);
-            
-            //.withDriveRequestType(DriveRequestType.Velocity); // Use closed-loop control for drive motors
+                // .withDriveRequestType(DriveRequestType.Velocity); // Use closed-loop control for drive motors
 
         return CommandLogger.logCommand(this.applyRequest(
                 () -> drive
@@ -97,9 +96,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                                         maxSpeed *
                                         -1.0) // Drive left with negative X (left)
                         .withRotationalRate(
-                            Math.pow(driveCont.getRightX(), 2) *
-                            (maxAngularRate / 2.0) * -Math.signum(driveCont.getRightX())
-                        ) // Drive counterclockwise with negative X (left)
+                                Math.pow(driveCont.getRightX(), 2) *
+                                        (maxAngularRate / 2.0) * -Math.signum(driveCont.getRightX())) // Drive
+                                                                                                      // counterclockwise
+                                                                                                      // with negative X
+                                                                                                      // (left)
         ), "DrivetrainFieldOriented");
     }
 
@@ -134,7 +135,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public void addForwardContrller(double kP, double kI, double kD, double irMax, double irMin) {
         forwardController = new PhoenixPIDController(kP, kI, kD);
 
-        //forwardController.setIntegratorRange(-irMin, irMax);
+        // forwardController.setIntegratorRange(-irMin, irMax);
         forwardController.setIZone(3.0);
         forwardController.setTolerance(0.75, 0.5);
     }
@@ -149,12 +150,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         request.withRotationalDeadband(0.04);
         this.setControl(request);
         request.withDriveRequestType(DriveRequestType.Velocity);
-    }  
-
-
+    }
 
     // public Command backUpBot(double meters) {
-    //     return Commands.runOnce(() -> this.start)
+    // return Commands.runOnce(() -> this.start)
     // }
 
     public void robotCentricDrive(double x, double y, double rotation) {
@@ -249,7 +248,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                     this));
 
     /* The SysId routine to test */
-    private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineRotation;
+    private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineSteer;
 
     private double maxSpeed;
     private double maxAngularRate;

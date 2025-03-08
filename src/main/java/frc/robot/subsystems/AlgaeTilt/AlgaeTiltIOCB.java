@@ -44,6 +44,8 @@ public class AlgaeTiltIOCB implements AlgaeTiltIO {
   public AlgaeTiltIOCB() {
     sparkMaxConfig.idleMode(IdleMode.kBrake);
     sparkMaxConfig.inverted(true);
+    sparkMaxConfig.smartCurrentLimit(20, 5);
+
 
     // SoftLimitConfig softLimitConfig = new SoftLimitConfig();
     // softLimitConfig.forwardSoftLimit(forwardLimit);

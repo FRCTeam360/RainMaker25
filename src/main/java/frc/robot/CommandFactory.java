@@ -231,7 +231,7 @@ public class CommandFactory {
     }
 
     public Command intakeAlgaeFromGround() {
-        return algaeRoller.setDutyCycleCmd(-0.5).alongWith(
+        return algaeRoller.setDutyCycleCmd(-0.1).alongWith(
                 algaeShooter.setDutyCycleCmd(-1.0));
     }
 

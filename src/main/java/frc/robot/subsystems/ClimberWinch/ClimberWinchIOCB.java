@@ -37,6 +37,7 @@ public class ClimberWinchIOCB implements ClimberWinchIO {
   public ClimberWinchIOCB() {
     config.idleMode(IdleMode.kBrake);
     config.inverted(true);
+    config.smartCurrentLimit(50);
     ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
     closedLoopConfig.pid(kP, kI, kD);
     config.apply(closedLoopConfig);

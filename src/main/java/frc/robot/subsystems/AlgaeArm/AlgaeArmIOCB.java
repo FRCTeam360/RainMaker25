@@ -52,6 +52,8 @@ public class AlgaeArmIOCB implements AlgaeArmIO {
   public AlgaeArmIOCB() {
     sparkMaxConfig.idleMode(IdleMode.kBrake);
     sparkMaxConfig.inverted(false);
+    sparkMaxConfig.smartCurrentLimit(20, 5);
+
 
     ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
     closedLoopConfig.pid(kP, kI, kD);

@@ -463,11 +463,11 @@ public class RobotContainer {
         // algaeArm.setDefaultCommand(algaeArm.setDutyCycleCmd(() ->
         // testCont.getLeftY() * 0.05));
 
-        testCont.leftTrigger(0.25).whileTrue(smartIntake);
-        testCont.rightTrigger(.25).whileTrue(coralShooter.basicShootCmd());
+        // testCont.leftTrigger(0.25).whileTrue(smartIntake);
+        // testCont.rightTrigger(.25).whileTrue(coralShooter.basicShootCmd());
 
 
-            operatorCont.leftBumper().whileTrue(algaeRoller.setDutyCycleCmd(-0.5));
+            operatorCont.leftBumper().whileTrue(algaeRoller.setDutyCycleCmd(-0.1));
             operatorCont.rightBumper().whileTrue(algaeRoller.setDutyCycleCmd(1.0));
 
             operatorCont.y().whileTrue(algaeTilt.setPositionCmd(0.001)); // 0.001 used to be 0
@@ -539,20 +539,24 @@ public class RobotContainer {
                 driverCont.rightBumper().whileTrue(rightAlign);
             }
 
-            // driverCont.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
-            // driverCont.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
+            testCont.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
+            testCont.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
             /*
              * 
              * Joystick Y = quasistatic forward
-             * Joystick A = quasistatic reverse
+             * Joystick A = qu
+             * asistatic reverse
              * Joystick X = dyanmic reverse
              * Joystick B = dynamic forward
              */
 
-            // driverCont.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-            // driverCont.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-            // driverCont.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
-            // driverCont.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+            // driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(testCont));
+            testCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
+
+            testCont.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+            testCont.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+            testCont.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+            testCont.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
 
     private void toggleIsAlgaeMode() {
@@ -588,8 +592,8 @@ public class RobotContainer {
         // Logger.recordOutput("Time to run servo", timer.get());
         // }));
 
-        testCont.b().onTrue(commandFactory.climb());
-        testCont.a().onTrue(commandFactory.deployClimb());
+        // testCont.b().onTrue(commandFactory.climb());
+        // testCont.a().onTrue(commandFactory.deployClimb());
     }
 
     public void onDisable() {

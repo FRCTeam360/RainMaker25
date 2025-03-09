@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.*;
 import frc.robot.Constants.SetPointConstants.ElevatorHeights;
 import frc.robot.commands.AlignWithLimelight;
+import frc.robot.commands.*;
 import frc.robot.commands.SetCoralIntake;
 import frc.robot.commands.SnapDrivebaseToAngle;
 import frc.robot.generated.WoodBotDriveTrain;
@@ -151,7 +152,7 @@ public class CommandFactory {
      * then ends finally when the robot is at the appropriate heading and tx/ty
      * positions
      * uses the coral limelight
-     * 
+     *
      * @param isLeft is it on the left reef (true) or right reef (false)
      * @return
      */
@@ -328,5 +329,17 @@ public class CommandFactory {
 
     public void resetClimberDeployed() {
         climberDeployed = false;
+    }
+
+    public Command pathFindToReefLeft() {
+        return PathOnTheFly.pathfindToReef(drivetrain, () -> this.drivetrain.getPose(), false);
+    }
+
+    public Command pathFindToReefRight() {
+        return PathOnTheFly.pathfindToReef(drivetrain, () -> this.drivetrain.getPose(), true);
+    }
+
+    public Command pathFindToProcessor() {
+        return PathOnTheFly.pathfindToProcessor(drivetrain);
     }
 }

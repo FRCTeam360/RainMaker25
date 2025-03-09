@@ -452,16 +452,14 @@ public class RobotContainer {
 
         vision.setDefaultCommand(consumeVisionMeasurements.ignoringDisable(true));
 
-        // elevator.setDefaultCommand(elevator.setDutyCycleCommand(() ->
-        // testCont.getLeftY() * 0.05));
-
         algaeTilt.setDefaultCommand(commandFactory.homeAlgaeTilt());
         algaeArm.setDefaultCommand(algaeArm.setAlgaeArmAngleCmd(0.0));
 
-        // driverCont.rightStick().toggleOnTrue(isAlgaeMode);
+        // elevator.setDefaultCommand(elevator.setDutyCycleCommand(() ->
+        // testCont.getLeftY() * 0.1));
 
-        // algaeArm.setDefaultCommand(algaeArm.setDutyCycleCmd(() ->
-        // testCont.getLeftY() * 0.05));
+        // testCont.a().whileTrue(algaeArm.zeroPositionAndZeroArm());
+        // driverCont.rightStick().toggleOnTrue(isAlgaeMode);
 
         // testCont.leftTrigger(0.25).whileTrue(smartIntake);
         // testCont.rightTrigger(.25).whileTrue(coralShooter.basicShootCmd());
@@ -481,6 +479,7 @@ public class RobotContainer {
         operatorCont.pov(0).whileTrue(commandFactory.climb());
 
         operatorCont.leftTrigger(0.25).whileTrue(coralShooter.setDutyCycleCmd(0.3));
+        
         // operatorCont.rightTrigger(0.25).whileTrue(coralShooter.setDutyCycleCmd(-0.4));
 
         // if (Math.abs(operatorCont.getLeftY()) > 0.05) {
@@ -500,7 +499,7 @@ public class RobotContainer {
 
         driverCont.leftTrigger(0.25).whileTrue(Commands.either(
                 commandFactory.intakeAlgaeFromGround(),
-                coralShooter.sensorIntakeCmd(),
+                smartIntake,
                 () -> isAlgaeMode));
 
         driverCont.rightTrigger(0.25).whileTrue(Commands.either(
@@ -508,7 +507,8 @@ public class RobotContainer {
                 coralShooter.basicShootCmd(),
                 () -> isAlgaeMode));
 
-        driverCont.rightStick().onTrue(new InstantCommand(() -> toggleIsAlgaeMode()).andThen(Commands.either(Commands.none(), commandFactory.homeAlgaeTilt(), () -> isAlgaeMode)));
+        driverCont.rightStick().onTrue(new InstantCommand(() -> toggleIsAlgaeMode())
+                .andThen(Commands.either(Commands.none(), commandFactory.homeAlgaeTilt(), () -> isAlgaeMode)));
 
         driverCont.a()
                 .onTrue(Commands.either(
@@ -520,19 +520,30 @@ public class RobotContainer {
                         algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.03 : 3.0),
                         levelTwo,
                         () -> isAlgaeMode));
+
         driverCont.b().onTrue(Commands.either(
                 algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.253 : 30),
                 levelThree,
                 () -> isAlgaeMode));
+
         driverCont.y().onTrue(Commands.either(
                 algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.001 : 0.0),
                 levelFour,
                 () -> isAlgaeMode));
 
-        if (Objects.nonNull(coralShooter)) {
-            driverCont.leftBumper().whileTrue(leftAlign);
-            driverCont.rightBumper().whileTrue(rightAlign);
-        }
+        driverCont.leftBumper().whileTrue(Commands.either(
+                algaeRoller.setDutyCycleCmd(-0.1),
+                leftAlign,
+                () -> isAlgaeMode));
+        driverCont.rightBumper().whileTrue(Commands.either(
+                algaeRoller.setDutyCycleCmd(1.0),
+                rightAlign,
+                () -> isAlgaeMode));
+
+        // if (Objects.nonNull(coralShooter)) {
+        // driverCont.leftBumper().whileTrue(leftAlign);
+        // driverCont.rightBumper().whileTrue(rightAlign);
+        // }
 
         // testCont.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
         // testCont.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));

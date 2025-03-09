@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.AlgaeRoller.AlgaeRoller;
 import frc.robot.subsystems.AlgaeShooter.AlgaeShooter;
 import frc.robot.subsystems.AlgaeTilt.AlgaeTilt;
@@ -15,6 +16,7 @@ public class ShuffleboardTuner extends Command {
     private AlgaeTilt algaeTilt;
     private AlgaeShooter algaeShooter;
     private AlgaeRoller algaeRoller;
+    private CommandSwerveDrivetrain drivetrain;
 
     private double tiltAngle = 0.0;
     private double shooterVelocity = 0.0;
@@ -23,19 +25,23 @@ public class ShuffleboardTuner extends Command {
     private double newTiltAngle = tiltAngle;
     private double newShooterVelocity = shooterVelocity;
     private double newRollerDutyCycle = rollerDutyCycle;
+
+    private double xDistance;
     
   /** Creates a new ShuffleboardTuner. */
-  public ShuffleboardTuner(AlgaeTilt algaeTilt, AlgaeShooter algaeShooter, AlgaeRoller algaeRoller) {
+  public ShuffleboardTuner(AlgaeTilt algaeTilt, AlgaeShooter algaeShooter, AlgaeRoller algaeRoller, CommandSwerveDrivetrain drivetrain) {
     this.algaeTilt = algaeTilt;
     this.algaeShooter = algaeShooter;
     this.algaeRoller = algaeRoller;
-    
+    this.drivetrain = drivetrain;
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(algaeTilt, algaeShooter, algaeRoller);
 
     SmartDashboard.putNumber("tilt angle", tiltAngle);
     SmartDashboard.putNumber("shooter velocity", shooterVelocity);
     SmartDashboard.putNumber("roller velocity", rollerDutyCycle);
+    // SmartDashboard.putNumber("field x value", )
   }
 
   // Called when the command is initially scheduled.

@@ -61,8 +61,8 @@ public class AlgaeShooterIOCB implements AlgaeShooterIO {
     inputs.algaeShooterFrontVoltage = algaeShooterMotorFront.getBusVoltage();
     inputs.algaeShooterFrontPosition = algaeShooterMotorFront.getEncoder().getPosition();
     inputs.algaeShooterFrontVelocity = algaeShooterMotorFront.getEncoder().getVelocity();
-    inputs.algaeShooterFromCurrent = algaeShooterMotorFront.getOutputCurrent();
-    inputs.algaeShooterFromTemperature = algaeShooterMotorFront.getMotorTemperature();
+    inputs.algaeShooterFrontCurrent = algaeShooterMotorFront.getOutputCurrent();
+    inputs.algaeShooterFrontTemperature = algaeShooterMotorFront.getMotorTemperature();
 
     inputs.algaeShooterBackVoltage = algaeShooterMotorBack.getBusVoltage();
     inputs.algaeShooterBackPosition = algaeShooterMotorBack.getEncoder().getPosition();

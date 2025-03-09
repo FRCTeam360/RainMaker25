@@ -236,7 +236,7 @@ public class CommandFactory {
     }
 
     public Command outtakeAlgaeFromGround() {
-        return algaeShooter.setDutyCycleCmd(0.8);
+        return algaeShooter.setDutyCycleCmd(0.9);
     }
 
     public Command shootAlgae() {

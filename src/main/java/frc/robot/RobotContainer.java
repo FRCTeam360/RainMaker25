@@ -32,7 +32,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.Constants.OldCompBotConstants;
+import frc.robot.Constants.PracticeBotConstants.ElevatorHeights;
 import frc.robot.Constants.*;
 import frc.robot.commands.AlignWithLimelight;
 import frc.robot.commands.SetCoralIntake;
@@ -458,7 +458,7 @@ public class RobotContainer {
 
         // algaeArm.setDefaultCommand(algaeArm.setDutyCycleCmd(() ->
         // operatorCont.getLeftY() * 0.05));
-        if (isAlgaeMode) {
+
             operatorCont.leftBumper().whileTrue(algaeRoller.setDutyCycleCmd(-0.5));
             operatorCont.rightBumper().whileTrue(algaeRoller.setDutyCycleCmd(1.0));
 
@@ -479,46 +479,53 @@ public class RobotContainer {
             // if (Math.abs(operatorCont.getLeftY()) > 0.05) {
             // algaeArm.setDutyCycleCmd(operatorCont.getLeftY());
             // }
-        }
+        
 
         driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
 
-        driverCont.rightStick().whileTrue(driveTrain.robotCentricDrive(driverCont));
+        // driverCont.rightStick().whileTrue(driveTrain.robotCentricDrive(driverCont));
 
       
-            driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
-            driverCont.pov(90).whileTrue(removeAlgaeL2);
-            driverCont.pov(270).whileTrue(removeAlgaeL3);
+            driverCont.pov(90).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
+            driverCont.pov(180).whileTrue(removeAlgaeL2);
+            driverCont.pov(0).whileTrue(removeAlgaeL3);
             driverCont.start().onTrue(commandFactory.depolyAndInitiateClimb());
             driverCont.back().whileTrue(commandFactory.climbAutomated());
 
-            driverCont.pov(180).onTrue(commandFactory.setAlgaeArmAngle(0.0));
+            // driverCont.pov(180).onTrue(commandFactory.setAlgaeArmAngle(0.0));
 
-            driverCont.leftTrigger(0.25).whileTrue(coralShooter.sensorIntakeCmd());
-            driverCont.rightTrigger(0.25).whileTrue(coralShooter.basicShootCmd());
-
+            driverCont.leftTrigger(0.25).whileTrue(Commands.either(
+                commandFactory.intakeAlgaeFromGround(),
+                coralShooter.sensorIntakeCmd(),
+                () -> isAlgaeMode));
+                
+            driverCont.rightTrigger(0.25).whileTrue(Commands.either(
+                commandFactory.shootAlgae(),
+                coralShooter.basicShootCmd(),
+                () -> isAlgaeMode));
+                
             driverCont.rightStick().onTrue(new InstantCommand(() -> toggleIsAlgaeMode()));
-            if (Objects.nonNull(elevator)) {
+
 
                 driverCont.a()
                         .onTrue(Commands.either(
-                                algaeTilt.setPositionCmd(0.07),
+                                algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.32 : 35.0),
                                 levelOneAndZero,
                                 () -> isAlgaeMode));
-                driverCont.b()
+                driverCont.x()
                         .onTrue(Commands.either(
-                            algaeTilt.setPositionCmd(0.253),
+                            algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.03 : 3.0),
                             levelTwo,
                             () -> isAlgaeMode));
-                driverCont.x().onTrue(Commands.either(
-                            algaeTilt.setPositionCmd(0.03),
+                driverCont.b().onTrue(Commands.either(
+                            algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.253 : 30),
                             levelThree,
                             () -> isAlgaeMode));
                 driverCont.y().onTrue(Commands.either(
-                            algaeTilt.setPositionCmd(0.001),
-                            levelThree,
+                            algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.001 : 0.0),
+                            levelFour,
                             () -> isAlgaeMode));
-            }
+            
 
             if (Objects.nonNull(coralShooter)) {
                 driverCont.leftBumper().whileTrue(leftAlign);

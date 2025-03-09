@@ -25,7 +25,7 @@ public class RemoveAlgae extends Command {
     private Elevator elevator;
 
     private int level;
-    private double height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_FOUR;
+    private double height = SetPointConstants.ElevatorHeights.TELE_LEVEL_FOUR;
 
     /** Creates a new RemoveAlgae. */
     public RemoveAlgae(int level, AlgaeArm algaeArm, AlgaeShooter algaeShooter, AlgaeTilt algaeTilt,
@@ -49,9 +49,9 @@ public class RemoveAlgae extends Command {
     @Override
     public void execute() {
         if (level == 3) {
-            height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_FOUR - 10.0;
+            height = SetPointConstants.ElevatorHeights.TELE_LEVEL_FOUR - 10.0;
         } else if (level == 2) {
-            height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_THREE - 5.5;
+            height = SetPointConstants.ElevatorHeights.TELE_LEVEL_THREE - 5.5;
         }
 
         coralShooter.setDutyCycle(-1.0);

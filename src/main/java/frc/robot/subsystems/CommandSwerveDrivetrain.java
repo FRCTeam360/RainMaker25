@@ -82,9 +82,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             CommandXboxController driveCont) { // field oriented drive command!
         SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric() // creates a fieldcentric drive
                 .withDeadband(maxSpeed * 0.01)
-                .withRotationalDeadband(maxAngularRate * 0.01
-                ); // Add a 10% deadband
-            //    .withDriveRequestType(DriveRequestType.Velocity); // Use closed-loop control for drive motors
+                .withRotationalDeadband(maxAngularRate * 0.01);
+            
+            //.withDriveRequestType(DriveRequestType.Velocity); // Use closed-loop control for drive motors
 
         return CommandLogger.logCommand(this.applyRequest(
                 () -> drive
@@ -98,8 +98,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                                         -1.0) // Drive left with negative X (left)
                         .withRotationalRate(
                             Math.pow(driveCont.getRightX(), 2) *
-                            maxAngularRate *
-                            -Math.signum(driveCont.getRightX()) 
+                            (maxAngularRate / 2.0) * -Math.signum(driveCont.getRightX())
                         ) // Drive counterclockwise with negative X (left)
         ), "DrivetrainFieldOriented");
     }
@@ -122,21 +121,22 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         headingController = new PhoenixPIDController(kP, kI, kD);
 
         headingController.enableContinuousInput(-Math.PI, Math.PI);
-        headingController.setTolerance(Math.toRadians(1));
+        headingController.setTolerance(Math.toRadians(2));
     }
 
     public void addStrafeController(double kP, double kI, double kD, double irMax, double irMin) {
         strafeController = new PhoenixPIDController(kP, kI, kD);
         // strafeController.setIntegratorRange(-irMin, irMax);
         strafeController.setIZone(2.5);
-        strafeController.setTolerance(0.5, 0.1);
+        strafeController.setTolerance(1.0, 0.1);
     }
 
     public void addForwardContrller(double kP, double kI, double kD, double irMax, double irMin) {
         forwardController = new PhoenixPIDController(kP, kI, kD);
+
         //forwardController.setIntegratorRange(-irMin, irMax);
         forwardController.setIZone(3.0);
-        forwardController.setTolerance(0.5, 0.5);
+        forwardController.setTolerance(0.75, 0.5);
     }
 
     public void driveFieldCentricFacingAngle(double x, double y, double desiredAngle) {

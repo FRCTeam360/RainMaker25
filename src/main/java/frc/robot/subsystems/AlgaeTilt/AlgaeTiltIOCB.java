@@ -26,7 +26,7 @@ import frc.robot.Constants;
 public class AlgaeTiltIOCB implements AlgaeTiltIO {
   private final SparkMax motor = new SparkMax(Constants.CompBotConstants.ALGAE_TILT, MotorType.kBrushless);
   private final AbsoluteEncoder absEncoder = motor.getAbsoluteEncoder(); // TODO: make absolute when we get one!!
-  private final RelativeEncoder encoder = motor.getEncoder(); // TODO: make absolute when we get one!!
+  // private final RelativeEncoder encoder = motor.getEncoder(); // TODO: make absolute when we get one!!
 
   private final double kP = 4;
   private final double kI = 0.0;
@@ -89,9 +89,9 @@ public class AlgaeTiltIOCB implements AlgaeTiltIO {
 
   public void updateInputs(AlgaeTiltIOInputs inputs) {
     inputs.armDutyCycle = motor.get();
-    inputs.armPositionRelative = encoder.getPosition();
+    inputs.armPositionRelative = absEncoder.getPosition();
     inputs.armPositionAbsolute = absEncoder.getPosition();
-    inputs.armVelocityRelative = encoder.getVelocity();
+    inputs.armVelocityRelative = absEncoder.getVelocity();
     inputs.armVelocityAbsolute = absEncoder.getVelocity();
     inputs.armAmps = motor.getOutputCurrent();
   }

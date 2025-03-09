@@ -12,12 +12,8 @@ public interface ServoIO {
   /** Creates a new ServoIO. */
   @AutoLog
   public static class ServoIOInputs {
-    public double servoAngle = 0.0;
-    public double servoPosition = 0.0;
-    public double servoDutyCycle = 0.0;
+    public double setOutput = 0.0;
 }
-
-  public void setServoPosition(double position);
 
   public default void updateInputs(ServoIOInputs inputs){}
 

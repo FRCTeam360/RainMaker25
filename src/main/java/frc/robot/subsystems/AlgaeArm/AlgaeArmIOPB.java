@@ -43,7 +43,7 @@ public class AlgaeArmIOPB implements AlgaeArmIO {
   private final double VELOCITY_CONVERSION_FACTOR = POSITION_CONVERSION_FACTOR / 60.0;
 
   private final double FORWARD_LIMIT = 150.0;
-  private final double REVERSE_LIMIT = 10.0;
+  private final double REVERSE_LIMIT = 1.0;
   private final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
 
   private final double MAX_OUTPUT = 0.5;

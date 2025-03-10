@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 12.54,
-        "y": 2.819425675675675
+        "x": 12.51,
+        "y": 2.76
       },
       "prevControl": null,
       "nextControl": {
-        "x": 13.092972972967909,
-        "y": 2.1667736486495492
+        "x": 13.06297297296791,
+        "y": 2.107347972973874
       },
       "isLocked": false,
       "linkedName": null
@@ -45,7 +45,19 @@
     }
   ],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "lower elevator",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Elevator L1"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,

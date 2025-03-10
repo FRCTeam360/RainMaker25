@@ -51,7 +51,7 @@ public class SmartIntake extends Command {
             case JAMMED:
                 stallTimer.reset();
                 stallTimer.stop();
-                coralShooter.setDutyCycle(0.1);
+                coralShooter.setDutyCycle(0.15);
                 unJammedTimer.start();
                 if(unJammedTimer.hasElapsed(0.05)){
                     updateStates();

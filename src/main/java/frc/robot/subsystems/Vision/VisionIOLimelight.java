@@ -86,7 +86,7 @@ public class VisionIOLimelight implements VisionIO {
             return;
         // if the megatag1 pose estimate has less than 2 tags in it, don't update
         // further
-        if (!newPoseEstimate.get().isMegaTag2 && newPoseEstimate.get().tagCount < 2)
+        if (!newPoseEstimate.get().isMegaTag2)
             return;
 
         PoseEstimate poseEstimate = newPoseEstimate.get();

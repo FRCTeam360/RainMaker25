@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.*;
-import frc.robot.Constants.PracticeBotConstants.ElevatorHeights;
+import frc.robot.Constants.SetPointConstants.ElevatorHeights;
 import frc.robot.commands.AlignWithLimelight;
 import frc.robot.commands.*;
 import frc.robot.commands.SetCoralIntake;
@@ -100,19 +100,19 @@ public class CommandFactory {
     }
 
     public Command setElevatorLevelFour() {
-        return setElevatorHeight(CompBotConstants.ElevatorHeights.TELE_LEVEL_FOUR);
+        return setElevatorHeight(SetPointConstants.ElevatorHeights.TELE_LEVEL_FOUR);
     }
 
     public Command setElevatorLevelThree() {
-        return setElevatorHeight(CompBotConstants.ElevatorHeights.TELE_LEVEL_THREE);
+        return setElevatorHeight(SetPointConstants.ElevatorHeights.TELE_LEVEL_THREE);
     }
 
     public Command setElevatorLevelTwo() {
-        return setElevatorHeight(CompBotConstants.ElevatorHeights.TELE_LEVEL_TWO);
+        return setElevatorHeight(SetPointConstants.ElevatorHeights.TELE_LEVEL_TWO);
     }
 
     public Command setElevatorLevelOne() {
-        return setElevatorHeight(CompBotConstants.ElevatorHeights.TELE_LEVEL_ONE);
+        return setElevatorHeight(SetPointConstants.ElevatorHeights.TELE_LEVEL_ONE);
     }
 
     public Command setElevatorToZero() {
@@ -259,7 +259,7 @@ public class CommandFactory {
                 .alongWith(algaeShooter.setDutyCycleCmd(-0.8))
                 .alongWith(algaeTilt.setPositionCmd(0.0)).alongWith(
                         Commands.waitUntil(() -> coralShooter.getVelocity() < -6000.0)
-                                .andThen(elevator.setElevatorHeight(ElevatorHeights.TELE_LEVEL_THREE - 3.0)));
+                                .andThen(elevator.setElevatorHeight(SetPointConstants.ElevatorHeights.TELE_LEVEL_THREE - 3.0)));
 
     }
 
@@ -283,9 +283,9 @@ public class CommandFactory {
 
         double height;
         if (level == 2) {
-            height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_THREE - 6.0; // - 3.0 rotations from L4
+            height = ElevatorHeights.TELE_LEVEL_THREE - 6.0; // - 3.0 rotations from L4
         } else {
-            height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_FOUR - 6.5; // - 3.0 rotations from L3
+            height = ElevatorHeights.TELE_LEVEL_FOUR - 6.5; // - 3.0 rotations from L3
         }
 
         if (coralShooter.getVelocity() < -6000.0) {

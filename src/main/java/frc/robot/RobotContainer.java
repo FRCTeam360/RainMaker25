@@ -117,6 +117,7 @@ public class RobotContainer {
     private AlgaeRoller algaeRoller;
     private AlgaeTilt algaeTilt;
     private Servo servo;
+    private PathOnTheFly pathOnTheFly;
 
     private ShuffleboardTab diagnosticTab;
 
@@ -300,7 +301,8 @@ public class RobotContainer {
                 driverCont,
                 algaeTilt,
                 algaeRoller,
-                servo);
+                servo,
+                pathOnTheFly);
 
         initializeCommands();
 

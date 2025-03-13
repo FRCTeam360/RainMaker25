@@ -23,7 +23,9 @@ public class AlgaeRollerIOCB implements AlgaeRollerIO {
   /** Creates a new AlgaeIntakeRollerIOPB. */
   public AlgaeRollerIOCB() {
     config.inverted(true);
-    config.idleMode(IdleMode.kBrake);
+    config.idleMode(IdleMode.kCoast);
+    config.smartCurrentLimit(20, 5);
+
     motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 

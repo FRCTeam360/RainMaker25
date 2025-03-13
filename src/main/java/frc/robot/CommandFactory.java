@@ -234,19 +234,19 @@ public class CommandFactory {
     }
 
     public Command intakeAlgaeFromGround() {
-        return algaeRoller.setDutyCycleCmd(-0.5).alongWith(
+        return algaeRoller.setDutyCycleCmd(-0.1).alongWith(
                 algaeShooter.setDutyCycleCmd(-1.0));
     }
 
     public Command outtakeAlgaeFromGround() {
-        return algaeShooter.setDutyCycleCmd(0.8);
+        return algaeShooter.setDutyCycleCmd(0.9);
     }
 
     public Command shootAlgae() {
         return Commands
                 .waitUntil(() -> algaeShooter.getVelocity() > 5500)
                 .andThen(algaeRoller.setDutyCycleCmd(1.0))
-                .alongWith(algaeShooter.setDutyCycleCmd(1.0));
+                .alongWith(algaeShooter.setVelocityCmd(6000));
     }
 
     /**
@@ -281,18 +281,19 @@ public class CommandFactory {
         return this.setAlgaeArmAngle(110.0);
     }
 
-    private Command removeAlgae(int level) {
+    private Command removeAlgae(int level) { //NOT BEING USED
 
         double height;
         if (level == 2) {
-            height = ElevatorHeights.TELE_LEVEL_THREE - 6.0; // - 3.0 rotations from L4
+            height = SetPointConstants.ElevatorHeights.TELE_LEVEL_THREE - 6.0; // - 3.0 rotations from L4 GPEAK
         } else {
-            height = ElevatorHeights.TELE_LEVEL_FOUR - 6.5; // - 3.0 rotations from L3
+            height = SetPointConstants.ElevatorHeights.TELE_LEVEL_FOUR - 6.5; // - 3.0 rotations from L3 GPEAK
         }
 
+        algaeArm.setAlgaeArmAngleCmd(60.0);
+
         if (coralShooter.getVelocity() < -6000.0) {
-            return elevator.setElevatorHeight(height)
-                    .alongWith(algaeArm.setAlgaeArmAngleCmd(110.0));
+            return elevator.setElevatorHeight(height);
         } else {
             return coralShooter.pullAlgae();
         }

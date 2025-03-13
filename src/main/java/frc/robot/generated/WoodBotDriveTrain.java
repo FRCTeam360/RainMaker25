@@ -233,7 +233,7 @@ public class WoodBotDriveTrain {
         poseYController.setTolerance(0.02, 0.02);
         return new CommandSwerveDrivetrain(
                 headingKP, headingKI, headingKD, headingKIZone, stafeKP, stafeKI, stafeKD, strafeIRMax, strafeIRMin, forwardKP, forwardKI, forwardKD, forwardIRMax, forwardIRMin,
-                // poseXController, poseYController,
+                poseXController, poseYController,
                 kSpeedAt12Volts.in(MetersPerSecond),
                 maxAngularRate, DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight);
     }

@@ -22,6 +22,8 @@ public class CoralShooter extends SubsystemBase {
     private final Timer unjamTimer = new Timer();
     private boolean testStall = true;
 
+    private final Timer goodTimer = new Timer();
+
     /** Creates a new CoralOutake. */
     public CoralShooter(CoralShooterIO io) {
         this.io = io;
@@ -55,21 +57,24 @@ public class CoralShooter extends SubsystemBase {
         return this.runEnd(() -> this.setDutyCycle(dutyCycle), () -> this.stop());
     }
 
+    public Command waitUntilIntakeSensor() {
+        return Commands.waitUntil(() -> inputs.intakeSensor);
+    }
+
+    public Command waitUntilOuttakeSensor() {
+        return Commands.waitUntil(() -> inputs.outtakeSensor);
+    }
+
     public Command waitUntilEmpty() {
         return Commands.waitUntil(() -> (!this.getOuttakeSensor() && !this.getIntakeSensor()));
     }
 
-    public Command waitUntilOuttakeSensor() {
-        return Commands.waitUntil(() -> this.getOuttakeSensor());
-    }
-
     public Command waitUntilFull() {
-        return Commands.waitUntil(() -> (this.getOuttakeSensor() || this.getIntakeSensor()));
-
+        return Commands.waitUntil(() -> (this.getOuttakeSensor() && this.getIntakeSensor()));
     }
 
-    public Command waitUntilIntakeSensor() {
-        return Commands.waitUntil(() -> inputs.intakeSensor);
+    public Command waitUntilEither() {
+        return Commands.waitUntil(() -> (this.getOuttakeSensor() || this.getIntakeSensor()));
     }
 
     public Command pullAlgae() {
@@ -83,7 +88,7 @@ public class CoralShooter extends SubsystemBase {
 
     public Command basicIntakeCmd() {
         String cmdName = "IntakeCoral";
-        return CommandLogger.logCommand(waitUntilFull().raceWith(setDutyCycleCmd(-0.35)), cmdName);
+        return CommandLogger.logCommand(waitUntilEither().raceWith(setDutyCycleCmd(-0.35)), cmdName);
     }
 
     private boolean isStalling() {
@@ -139,6 +144,21 @@ public class CoralShooter extends SubsystemBase {
                         .deadlineFor(setDutyCycleCmd(-0.75))
                         .andThen(setDutyCycleCmd(-0.20))),
                 cmdName);
+
+        // return this.runEnd(() -> {
+        //     if (!getIntakeSensor() && !getOuttakeSensor()) {
+        //         setDutyCycle(-0.75);
+        //     } else if (!getIntakeSensor()) {
+        //         setDutyCycle(-0.2);
+        //     } else if (getIntakeSensor() && getOuttakeSensor()) {
+        //         goodTimer.start();
+
+        //         if (goodTimer.get() == 0.1) {
+        //             if (getIntakeSensor() )
+        //         }
+        //     }
+        // });
+
     }
 
     @Override

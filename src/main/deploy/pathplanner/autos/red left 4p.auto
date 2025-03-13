@@ -5,28 +5,28 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "blue right 1"
-          }
-        },
-        {
-          "type": "race",
+          "type": "deadline",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "shoot"
+                  "pathName": "red left 1"
                 }
               },
               {
-                "type": "wait",
+                "type": "named",
                 "data": {
-                  "waitTime": 0.75
+                  "name": "intake"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         },
         {
@@ -40,19 +40,19 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "blue right 2"
+                        "pathName": "red left 2"
                       }
                     },
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.75
+                        "waitTime": 0.5
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "blue right 3"
+                        "pathName": "red left 3"
                       }
                     }
                   ]
@@ -80,7 +80,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.75
+                  "waitTime": 0.25
                 }
               }
             ]
@@ -97,19 +97,19 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "blue right 4"
+                        "pathName": "red left 4"
                       }
                     },
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.75
+                        "waitTime": 0.5
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "blue right 5"
+                        "pathName": "red left 5"
                       }
                     }
                   ]
@@ -137,7 +137,64 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.75
+                  "waitTime": 0.25
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "red left 6"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "red left 7"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.25
                 }
               }
             ]

@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.*;
 import frc.robot.Constants.SetPointConstants.ElevatorHeights;
 import frc.robot.commands.AlignWithLimelight;
+import frc.robot.commands.*;
 import frc.robot.commands.SetCoralIntake;
 import frc.robot.commands.SnapDrivebaseToAngle;
 import frc.robot.generated.WoodBotDriveTrain;
@@ -54,6 +55,7 @@ public class CommandFactory {
     private final CommandXboxController driverCont;
     private final AlgaeTilt algaeTilt;
     private final Servo servo;
+    private final PathOnTheFly pathOnTheFly;
 
     // ↓ constructor ↓ //
     public CommandFactory(
@@ -68,7 +70,8 @@ public class CommandFactory {
             CommandXboxController driverCont,
             AlgaeTilt algaeTilt,
             AlgaeRoller algaeRoller,
-            Servo servo) {
+            Servo servo,
+            PathOnTheFly pathOnTheFly) {
         this.coralShooter = coralShooter;
         this.elevator = elevator;
         this.vision = vision;
@@ -81,7 +84,7 @@ public class CommandFactory {
         this.algaeTilt = algaeTilt;
         this.algaeRoller = algaeRoller;
         this.servo = servo;
-        ;
+        this.pathOnTheFly = pathOnTheFly;
     }
 
     public Command rumbleDriverController(CommandXboxController controller) {
@@ -151,7 +154,7 @@ public class CommandFactory {
      * then ends finally when the robot is at the appropriate heading and tx/ty
      * positions
      * uses the coral limelight
-     * 
+     *
      * @param isLeft is it on the left reef (true) or right reef (false)
      * @return
      */
@@ -231,21 +234,20 @@ public class CommandFactory {
     }
 
     public Command intakeAlgaeFromGround() {
-        return algaeRoller.setDutyCycleCmd(-0.5).alongWith(
+        return algaeRoller.setDutyCycleCmd(-0.1).alongWith(
                 algaeShooter.setDutyCycleCmd(-1.0));
     }
 
     public Command outtakeAlgaeFromGround() {
-        return algaeShooter.setDutyCycleCmd(0.8);
+        return algaeShooter.setDutyCycleCmd(0.9);
     }
 
     public Command shootAlgae() {
         return Commands
                 .waitUntil(() -> algaeShooter.getVelocity() > 5500)
                 .andThen(algaeRoller.setDutyCycleCmd(1.0))
-                .alongWith(algaeShooter.setDutyCycleCmd(1.0));
+                .alongWith(algaeShooter.setVelocityCmd(6000));
     }
-
 
     /**
      * This command assumes the elevator is already above the algae
@@ -258,7 +260,8 @@ public class CommandFactory {
                 .alongWith(algaeShooter.setDutyCycleCmd(-0.8))
                 .alongWith(algaeTilt.setPositionCmd(0.0)).alongWith(
                         Commands.waitUntil(() -> coralShooter.getVelocity() < -6000.0)
-                                .andThen(elevator.setElevatorHeight(SetPointConstants.ElevatorHeights.TELE_LEVEL_THREE - 3.0)));
+                                .andThen(elevator
+                                        .setElevatorHeight(SetPointConstants.ElevatorHeights.TELE_LEVEL_THREE - 3.0)));
 
     }
 
@@ -278,18 +281,19 @@ public class CommandFactory {
         return this.setAlgaeArmAngle(110.0);
     }
 
-    private Command removeAlgae(int level) {
+    private Command removeAlgae(int level) { //NOT BEING USED
 
         double height;
         if (level == 2) {
-            height = ElevatorHeights.TELE_LEVEL_THREE - 6.0; // - 3.0 rotations from L4
+            height = SetPointConstants.ElevatorHeights.TELE_LEVEL_THREE - 6.0; // - 3.0 rotations from L4 GPEAK
         } else {
-            height = ElevatorHeights.TELE_LEVEL_FOUR - 6.5; // - 3.0 rotations from L3
+            height = SetPointConstants.ElevatorHeights.TELE_LEVEL_FOUR - 6.5; // - 3.0 rotations from L3 GPEAK
         }
 
+        algaeArm.setAlgaeArmAngleCmd(60.0);
+
         if (coralShooter.getVelocity() < -6000.0) {
-            return elevator.setElevatorHeight(height)
-                    .alongWith(algaeArm.setAlgaeArmAngleCmd(110.0));
+            return elevator.setElevatorHeight(height);
         } else {
             return coralShooter.pullAlgae();
         }
@@ -323,10 +327,22 @@ public class CommandFactory {
 
     public Command climbAutomated() {
         return Commands.waitUntil(() -> climberWinch.getPosition() < -145.5)
-        .deadlineFor(climb());
+                .deadlineFor(climb());
     }
 
     public void resetClimberDeployed() {
         climberDeployed = false;
+    }
+
+    public Command pathFindToReefLeft() {
+        return PathOnTheFly.pathfindToReef(drivetrain, () -> this.drivetrain.getPose(), false);
+    }
+
+    public Command pathFindToReefRight() {
+        return PathOnTheFly.pathfindToReef(drivetrain, () -> this.drivetrain.getPose(), true);
+    }
+
+    public Command pathFindToProcessor() {
+        return PathOnTheFly.pathfindToProcessor(drivetrain);
     }
 }

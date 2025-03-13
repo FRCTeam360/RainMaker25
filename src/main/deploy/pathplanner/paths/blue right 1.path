@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 5.071,
-        "y": 2.7722848360655736
+        "x": 4.946,
+        "y": 2.7436505681818177
       },
       "prevControl": {
-        "x": 5.299692033673075,
-        "y": 2.6712900157307033
+        "x": 5.174692033673075,
+        "y": 2.6426557478469475
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.07527559055118103,
+      "waypointRelativePos": 0.11423550087873358,
       "rotationDegrees": 119.99999999999999
     }
   ],
@@ -39,7 +39,7 @@
   "eventMarkers": [
     {
       "name": "raise elevator",
-      "waypointRelativePos": 0.15791366906474033,
+      "waypointRelativePos": 0.15982241953385337,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

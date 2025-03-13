@@ -18,6 +18,10 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.Waypoint;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.PIDController;
@@ -40,13 +44,18 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.PracticeBotConstants;
 import frc.robot.generated.OldCompBot;
 import frc.robot.generated.OldCompBot.TunerSwerveDrivetrain;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionMeasurement;
+import frc.robot.utils.LimelightHelpers;
+
+import java.util.ArrayList;
 import frc.robot.utils.CommandLogger;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -63,6 +72,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public PhoenixPIDController headingController;
     public PhoenixPIDController strafeController;
     public PhoenixPIDController forwardController;
+    public PhoenixPIDController poseXController;
+    public PhoenixPIDController poseYController;
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -83,8 +94,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric() // creates a fieldcentric drive
                 .withDeadband(maxSpeed * 0.01)
                 .withRotationalDeadband(maxAngularRate * 0.01);
-            
-            //.withDriveRequestType(DriveRequestType.Velocity); // Use closed-loop control for drive motors
+        // .withDriveRequestType(DriveRequestType.Velocity); // Use closed-loop control
+        // for drive motors
 
         return CommandLogger.logCommand(this.applyRequest(
                 () -> drive
@@ -97,9 +108,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                                         maxSpeed *
                                         -1.0) // Drive left with negative X (left)
                         .withRotationalRate(
-                            Math.pow(driveCont.getRightX(), 2) *
-                            (maxAngularRate / 2.0) * -Math.signum(driveCont.getRightX())
-                        ) // Drive counterclockwise with negative X (left)
+                                Math.pow(driveCont.getRightX(), 2) *
+                                        (maxAngularRate / 2.0) * -Math.signum(driveCont.getRightX())) // Drive
+                                                                                                      // counterclockwise
+                                                                                                      // with negative X
+                                                                                                      // (left)
         ), "DrivetrainFieldOriented");
     }
 
@@ -134,7 +147,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public void addForwardContrller(double kP, double kI, double kD, double irMax, double irMin) {
         forwardController = new PhoenixPIDController(kP, kI, kD);
 
-        //forwardController.setIntegratorRange(-irMin, irMax);
+        // forwardController.setIntegratorRange(-irMin, irMax);
         forwardController.setIZone(3.0);
         forwardController.setTolerance(0.75, 0.5);
     }
@@ -150,6 +163,77 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         this.setControl(request);
         request.withDriveRequestType(DriveRequestType.Velocity);
     }
+
+    public double getHeadingControllerSetpoint(){
+        return headingController.getSetpoint();
+    }
+
+    public double getHeadingControllerPositionError(){
+        return headingController.getPositionError();
+    }
+
+    public double getHeadingControllerVelocityError(){
+        return headingController.getVelocityError();
+    }
+
+    public double getPoseXSetpoint(){
+        return poseXController.getSetpoint();
+    }
+
+    public boolean isAtPoseXSetpoint(){
+        return poseXController.atSetpoint();
+    }
+
+    public double getPoseXControllerPositionError(){
+        return poseXController.getPositionError();
+    }
+
+    public double getPoseXControllerVelocityError(){
+        return poseXController.getVelocityError();
+    }
+
+    public double getPoseYSetpoint(){
+        return poseYController.getSetpoint();
+    }
+
+    public boolean isAtPoseYSetpoint(){
+        return poseYController.atSetpoint();
+    }
+
+    public double getPoseYControllerPositionError(){
+        return poseYController.getPositionError();
+    }
+
+    public double getPoseYControllerVelocityError(){
+        return poseYController.getVelocityError();
+    }
+
+    /**
+     * Field centric facing angle command without flipping based on operator perspective
+     *
+     * @param setpointPose the position on the field to move to
+     */
+    public void driveToPose(Pose2d setpointPose) {
+        Pose2d currentPose = getPose();
+        double timestamp = getStateCopy().Timestamp;
+        double x = poseXController.calculate(currentPose.getX(), setpointPose.getX(), timestamp);
+        double y = poseYController.calculate(currentPose.getY(), setpointPose.getY(), timestamp);
+
+        FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle()
+                .withVelocityX(x * maxSpeed)
+                .withVelocityY(y * maxSpeed)
+                .withTargetDirection(setpointPose.getRotation());
+        request.HeadingController = headingController;
+        request.withDeadband(0.1);
+        request.withRotationalDeadband(0.04);
+        request.ForwardPerspective = ForwardPerspectiveValue.BlueAlliance;
+        request.withDriveRequestType(DriveRequestType.Velocity);
+        this.setControl(request);
+    }
+
+    // public Command backUpBot(double meters) {
+    // return Commands.runOnce(() -> this.start)
+    // }
 
     public void robotCentricDrive(double x, double y, double rotation) {
         this.setControl(
@@ -243,7 +327,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                     this));
 
     /* The SysId routine to test */
-    private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineRotation;
+    private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineSteer;
 
     private double maxSpeed;
     private double maxAngularRate;
@@ -275,6 +359,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             double forwardKD,
             double forwardIRMax,
             double forwardIRMin,
+            PhoenixPIDController poseXController,
+            PhoenixPIDController poseYController,
             double maxSpeed,
             double maxAngularRate,
             SwerveDrivetrainConstants drivetrainConstants,
@@ -286,6 +372,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         addHeadingController(headingKP, headingKI, headingKD, headingKIZone);
         addStrafeController(stafeKP, stafeKI, stafeKD, strafeIRMax, strafeIRMin);
         addForwardContrller(forwardKP, forwardKI, forwardKD, forwardIRMax, forwardIRMin);
+        this.poseXController = poseXController;
+        this.poseYController = poseYController;
 
         this.maxSpeed = maxSpeed;
         this.maxAngularRate = maxAngularRate;

@@ -33,6 +33,8 @@ public class CoralShooterIOCB implements CoralShooterIO {
     public CoralShooterIOCB() {
         sparkMaxConfig.idleMode(IdleMode.kBrake);
         sparkMaxConfig.inverted(false);
+        sparkMaxConfig.smartCurrentLimit(20, 5);
+
         outtakeMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
@@ -41,11 +43,11 @@ public class CoralShooterIOCB implements CoralShooterIO {
     }
 
     private boolean isInOuttakeSensor() {
-        return outtakeSensor.getProximity() < 0.1;
+        return outtakeSensor.getProximity() < 0.2;
     }
 
     private boolean isInIntakeSensor() {
-        return intakeSensor.getProximity() < 0.0575;
+        return intakeSensor.getProximity() < 0.2;
     }
 
     public void stop() {

@@ -100,6 +100,9 @@ public final class Constants {
 
     public static final class PracticeBotConstants {
         public static final String CANBUS_NAME = "Default Name";
+
+        public static final int SERVO_PORT = 0; // is the actual port :)
+        
         public static final int BACK_ELEVATOR_ID = 14;
         public static final int FRONT_ELEVATOR_ID = 15;
 

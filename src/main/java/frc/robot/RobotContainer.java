@@ -81,6 +81,7 @@ import frc.robot.subsystems.Elevator.ElevatorIOSim;
 import frc.robot.subsystems.Elevator.ElevatorIOWB;
 import frc.robot.subsystems.Servo.Servo;
 import frc.robot.subsystems.Servo.ServoIOCB;
+import frc.robot.subsystems.Servo.ServoIOPB;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIO;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
@@ -215,7 +216,6 @@ public class RobotContainer {
                 algaeRoller = new AlgaeRoller(new AlgaeRollerIOPB());
                 algaeShooter = new AlgaeShooter(new AlgaeShooterIOPB());
                 algaeTilt = new AlgaeTilt(new AlgaeTiltIOPB());
-                climberWheel = new ClimberWheel(new ClimberWheelIOPB());
                 climberWinch = new ClimberWinch(new ClimberWinchIOPB());
 
                 vision =
@@ -240,6 +240,7 @@ public class RobotContainer {
                         )
                     );
                 // practice bot stuff
+                servo = new Servo(new ServoIOPB());
                 break;
             case SIM:
                 driveTrain = WoodBotDriveTrain.createDrivetrain();

@@ -213,7 +213,7 @@ public class RobotContainer {
                 algaeTilt = new AlgaeTilt(new AlgaeTiltIOPB());
                 climberWheel = new ClimberWheel(new ClimberWheelIOPB());
                 climberWinch = new ClimberWinch(new ClimberWinchIOPB());
-
+                lights = new Lights();
                 vision = new Vision(
                         Map.ofEntries(
                                 Map.entry(

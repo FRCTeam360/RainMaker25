@@ -8,9 +8,10 @@ import com.ctre.phoenix.led.*;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CompBotConstants;
+import frc.robot.Constants.PracticeBotConstants;
 
 public class Lights extends SubsystemBase {
-    private final CANdle candle = new CANdle(CompBotConstants.CANDLE_ID);
+    private final CANdle candle = new CANdle(CompBotConstants.CANDLE_ID, CompBotConstants.CANBUS_NAME);
 
     /** Creates a new LEDs. */
     public Lights() {
@@ -19,11 +20,12 @@ public class Lights extends SubsystemBase {
 
     public void setLEDs(int r, int g, int b) {
         candle.setLEDs(r, g, b);
+        // candle.setLEDs(r, g, b, 255, 0, 20);
     }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        candle.setLEDs(200, 200, 200);
+        //candle.setLEDs(200, 200, 200);
     }
 }

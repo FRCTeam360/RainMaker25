@@ -111,6 +111,10 @@ public final class Constants {
         public static final int ALGAE_SHOOTER_ID = 8;
         public static final int ASHOOTER_ENCODER_A = 15;
         public static final int ASHOOTER_ENCODER_B = 16;
+
+        public static final int ALGAE_ROLLER_ID = 9;
+        public static final int AROLLER_ENCODER_A = 17;
+        public static final int AROLLER_ENCODER_B = 18;
     }
 
     public static final class WoodbotConstants {

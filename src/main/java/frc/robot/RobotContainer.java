@@ -82,7 +82,7 @@ import frc.robot.subsystems.AlgaeArm.AlgaeArmIOPB;
 import frc.robot.subsystems.AlgaeArm.AlgaeArmIOSim;
 import frc.robot.subsystems.AlgaeRoller.AlgaeRoller;
 import frc.robot.subsystems.AlgaeRoller.AlgaeRollerIOCB;
-import frc.robot.subsystems.AlgaeRoller.AlgaeRollerIOPB;
+import frc.robot.subsystems.AlgaeRoller.AlgaeRollerIOSim;
 
 import java.lang.ModuleLayer.Controller;
 import java.util.HashMap;
@@ -202,7 +202,7 @@ public class RobotContainer {
                 elevator = new Elevator(new ElevatorIOPB());
                 coralShooter = new CoralShooter(new CoralShooterIOPB(), () -> elevator.getHeight());
                 algaeArm = new AlgaeArm(new AlgaeArmIOPB(), () -> elevator.getHeight());
-                algaeRoller = new AlgaeRoller(new AlgaeRollerIOPB());
+                algaeRoller = new AlgaeRoller(new AlgaeRollerIOSim());
                 algaeShooter = new AlgaeShooter(new AlgaeShooterIOPB());
                 algaeTilt = new AlgaeTilt(new AlgaeTiltIOPB());
                 climberWheel = new ClimberWheel(new ClimberWheelIOPB());
@@ -253,6 +253,7 @@ public class RobotContainer {
                 climberWinch = new ClimberWinch(new ClimberWinchIOSim());
                 climberWheel = new ClimberWheel(new ClimberWheelIOSim());
                 algaeShooter = new AlgaeShooter(new AlgaeShooterIOSim());
+                algaeRoller = new AlgaeRoller(new AlgaeRollerIOSim());
                 break;
             case COMPETITION:
             default:

@@ -70,9 +70,22 @@ public class Vision extends SubsystemBase {
     }
   }
 
+  public void turnOnLights(String name) {
+    ios.get(name).setLEDMode(3);
+  }
+
+  public void turnOffLights(String name) {
+    ios.get(name).setLEDMode(1);
+  }
+
+  public void blinkLights(String name) {
+    ios.get(name).setLEDMode(2);
+  }
+
   public int getAprilTagID(String name) {
     return ios.get(name).getAprilTagID();
   }
+  
 
   public double getTXRaw(String name) {
     // TODO: replace with more robust code

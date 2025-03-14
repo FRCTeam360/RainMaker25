@@ -91,7 +91,7 @@ public class AlignWithLimelight extends Command {
         if (vision.getTV(LIMELIGHT_NAME) == 1 && tagIDToAngle.containsKey(priorityID)) {
             endEarly = false;
             angleToFace = tagIDToAngle.get(priorityID);
-        }
+        } //TODO: switch to endEarly = false, change to true if no valid target
 
         Optional<Alliance> alliance = DriverStation.getAlliance();
         if (alliance.isPresent() && alliance.get() == Alliance.Red) {
@@ -176,6 +176,8 @@ public class AlignWithLimelight extends Command {
         boolean onTX = driveTrain.strafeController.atSetpoint();
         boolean onTY = driveTrain.forwardController.atSetpoint();
         boolean onHeading = driveTrain.isAtRotationSetpoint();
+ 
+        // boolean onVelocity = driveTrain.getVelocity(); TODO: FIX!!!
 
         Logger.recordOutput(CMD_NAME + "onTX", onTX);
         Logger.recordOutput(CMD_NAME + "onTY", onTY);

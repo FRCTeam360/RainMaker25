@@ -231,9 +231,10 @@ public class CommandFactory {
     }
 
     public Command intakeAlgaeFromGround() {
-        return algaeRoller.setDutyCycleCmd(-0.1).alongWith(
+        return algaeRoller.setDutyCycleCmd(-0.2).alongWith(
                 algaeShooter.setDutyCycleCmd(-1.0));
     }
+
 
     public Command outtakeAlgaeFromGround() {
         return algaeShooter.setDutyCycleCmd(0.9);
@@ -241,11 +242,14 @@ public class CommandFactory {
 
     public Command shootAlgae() {
         return Commands
-                .waitUntil(() -> algaeShooter.getVelocity() > 5500)
+                .waitUntil(() -> algaeShooter.getVelocity() > 6150.0)
                 .andThen(algaeRoller.setDutyCycleCmd(1.0))
-                .alongWith(algaeShooter.setVelocityCmd(6000));
+                .alongWith(algaeShooter.setVelocityCmd(6250.0));
     }
 
+    public Command spinUpAlgaeShooter() {
+        return algaeShooter.setVelocityCmd(6250.0);
+    }
 
     /**
      * This command assumes the elevator is already above the algae
@@ -300,6 +304,7 @@ public class CommandFactory {
         // .andThen(coralShooter.pullAlgae().alongWith(algaeArm.setAlgaeArmAngleCmd(110.0)));
 
     }
+
 
     public Command deployClimb() {
         return servo.runWithTimeout(3.5, 0).deadlineFor(algaeTilt.setPositionCmd(0.256))

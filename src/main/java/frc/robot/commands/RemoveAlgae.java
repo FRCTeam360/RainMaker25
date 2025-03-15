@@ -29,8 +29,7 @@ public class RemoveAlgae extends Command {
     private CommandSwerveDrivetrain drivetrain;
 
     private int level;
-
-    private double height;
+    private double height = SetPointConstants.ElevatorHeights.TELE_LEVEL_FOUR;
 
     /** Creates a new RemoveAlgae. */
     public RemoveAlgae(int level, AlgaeArm algaeArm, AlgaeShooter algaeShooter, AlgaeTilt algaeTilt,
@@ -56,6 +55,11 @@ public class RemoveAlgae extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        if (level == 3) {
+            height = SetPointConstants.ElevatorHeights.TELE_LEVEL_FOUR - 10.0;
+        } else if (level == 2) {
+            height = SetPointConstants.ElevatorHeights.TELE_LEVEL_THREE - 5.5;
+        }
 
         coralShooter.setDutyCycle(-1.0);
         algaeTilt.setPosition(0.0);

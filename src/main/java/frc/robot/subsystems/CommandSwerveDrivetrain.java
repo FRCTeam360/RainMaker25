@@ -122,22 +122,17 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         headingController = new PhoenixPIDController(kP, kI, kD);
 
         headingController.enableContinuousInput(-Math.PI, Math.PI);
-        headingController.setTolerance(Math.toRadians(2));
+        headingController.setTolerance(Math.toRadians(1));
     }
 
     public void addStrafeController(double kP, double kI, double kD, double irMax, double irMin) {
         strafeController = new PhoenixPIDController(kP, kI, kD);
-        // strafeController.setIntegratorRange(-irMin, irMax);
-        strafeController.setIZone(2.5);
-        strafeController.setTolerance(1.0, 0.1);
+        strafeController.setTolerance(1.0);
     }
 
     public void addForwardContrller(double kP, double kI, double kD, double irMax, double irMin) {
         forwardController = new PhoenixPIDController(kP, kI, kD);
-
-        // forwardController.setIntegratorRange(-irMin, irMax);
-        forwardController.setIZone(3.0);
-        forwardController.setTolerance(0.75, 0.5);
+        forwardController.setTolerance(0.75);
     }
 
     public void driveFieldCentricFacingAngle(double x, double y, double desiredAngle) {
@@ -452,6 +447,14 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return Math.toDegrees(this.getStateCopy().Speeds.omegaRadiansPerSecond);
     }
 
+    public double getXRate() {
+        return this.getStateCopy().Speeds.vxMetersPerSecond;
+    }
+
+    public double getYRate() {
+        return this.getStateCopy().Speeds.vyMetersPerSecond;
+    }
+
     public void addVisionMeasurements(List<VisionMeasurement> measurements) {
         for (VisionMeasurement measurement : measurements) {
             this.addVisionMeasurement(
@@ -482,6 +485,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 headingController.getPositionTolerance());
         Logger.recordOutput("Swerve: CurrentState", this.getStateCopy().ModuleStates);
         Logger.recordOutput("Swerve: TargetState", this.getStateCopy().ModuleTargets);
+
         /*
          * Periodically try to apply the operator perspective.
          * If we haven't applied the operator perspective before, then we should apply

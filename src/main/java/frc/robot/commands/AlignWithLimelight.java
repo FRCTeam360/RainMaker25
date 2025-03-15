@@ -91,7 +91,7 @@ public class AlignWithLimelight extends Command {
         if (vision.getTV(LIMELIGHT_NAME) == 1 && tagIDToAngle.containsKey(priorityID)) {
             endEarly = false;
             angleToFace = tagIDToAngle.get(priorityID);
-        }
+        } //TODO: switch to endEarly = false, change to true if no valid target
 
         Optional<Alliance> alliance = DriverStation.getAlliance();
         if (alliance.isPresent() && alliance.get() == Alliance.Red) {
@@ -107,7 +107,12 @@ public class AlignWithLimelight extends Command {
         Logger.recordOutput(CMD_NAME + "GoalTx", goalTX);
         Logger.recordOutput(CMD_NAME + "GoalTy", goalTY);
 
+        Logger.recordOutput(CMD_NAME + "endEarly", endEarly);
         LimelightHelpers.setPriorityTagID("limelight", priorityID);
+
+        if(endEarly) return;
+
+        driveRobot();
     }
 
     public static Translation2d rotateTranslation(
@@ -117,11 +122,7 @@ public class AlignWithLimelight extends Command {
         return translationToRotate.rotateBy(rotation);
     }
 
-    // Called every time the scheduler runs while the command is scheduled.
-    @Override
-    public void execute() {
-        if (endEarly) return;
-
+    private void driveRobot() {
         double velX = -driveTrain.forwardController.calculate(
             vision.getTYRaw(LIMELIGHT_NAME),
             goalTY,
@@ -161,27 +162,42 @@ public class AlignWithLimelight extends Command {
         }
     }
 
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        if (endEarly) return;
+
+        driveRobot();
+    }
+
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
         
     //   LimelightHelpers.SetFiducialIDFiltersOverride("limelight", new int[] { 6, 7, 8 });
         LimelightHelpers.setPriorityTagID("limelight", -1);
-        driveTrain.xOut();
+        driveTrain.robotCentricDrive(0.0, 0.0, 0.0);
     }
-
+    
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
         boolean onTX = driveTrain.strafeController.atSetpoint();
         boolean onTY = driveTrain.forwardController.atSetpoint();
         boolean onHeading = driveTrain.isAtRotationSetpoint();
+        boolean onCorrectPipeline = (vision.getPipeline(LIMELIGHT_NAME) == pipeline);
+ 
+        // boolean onVelocity = driveTrain.getVelocity(); TODO: FIX!!!
+        boolean vel0 = ((Math.abs(driveTrain.getXRate()) <= 0.1) && (Math.abs(driveTrain.getYRate()) <= 0.1));
 
         Logger.recordOutput(CMD_NAME + "onTX", onTX);
         Logger.recordOutput(CMD_NAME + "onTY", onTY);
         Logger.recordOutput(CMD_NAME + "setPointTX", goalTX);
         Logger.recordOutput(CMD_NAME + "setPointTY", goalTY);
         Logger.recordOutput(CMD_NAME + "onHeading", onHeading);
-        return endEarly || (onTX && onTY && onHeading && vision.isTargetInView(LIMELIGHT_NAME));
+        Logger.recordOutput(CMD_NAME + "using correct pipeline", onCorrectPipeline);
+        Logger.recordOutput(CMD_NAME + "vel is 0", vel0);
+
+        return endEarly || (vel0 && onCorrectPipeline && onTX && onTY && onHeading && vision.isTargetInView(LIMELIGHT_NAME));
     }
 }

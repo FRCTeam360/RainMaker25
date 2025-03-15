@@ -289,7 +289,7 @@ public class CommandFactory {
         if (level == 2) {
             height = ElevatorHeights.TELE_LEVEL_THREE - 6.0; // - 3.0 rotations from L4
         } else {
-            height = PracticeBotConstants.ElevatorHeights.TELE_LEVEL_FOUR - 6.5; // - 3.0 rotations from L3
+            height = ElevatorHeights.TELE_LEVEL_FOUR - 6.5; // - 3.0 rotations from L3
         }
 
         algaeArm.setAlgaeArmAngleCmd(60.0);

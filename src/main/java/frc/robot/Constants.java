@@ -29,7 +29,7 @@ import frc.robot.generated.OldCompBot;
 public final class Constants {
     public final class SetPointConstants{
 
-        public static final double RIGHT_GOAL_TY = isCompBot() ? 14.0 : 11.75; //TUNED FOR GPEAK
+        public static final double RIGHT_GOAL_TY = isCompBot() ? 14.5 : 11.75; //TUNED FOR GPEAK
         public static final double RIGHT_GOAL_TX = 0.0;
 
         public static final double LEFT_GOAL_TY = RIGHT_GOAL_TY;

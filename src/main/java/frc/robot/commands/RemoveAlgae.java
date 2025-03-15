@@ -38,18 +38,18 @@ public class RemoveAlgae extends Command {
     private int id;
 
  private static final Map<Integer, String> removeHeight = Map.ofEntries(
-        Map.entry(6, "high"),
-        Map.entry(8, "high"),
-        Map.entry(10, "high"),
-        Map.entry(17, "high"),
-        Map.entry(21, "high"),
-        Map.entry(19, "high"),
-        Map.entry(7, "low"),
-        Map.entry(9, "low"),
-        Map.entry(11, "low"),
-        Map.entry(18, "low"),
-        Map.entry(20, "low"),
-        Map.entry(22, "low")
+        Map.entry(6, "low"),
+        Map.entry(8, "low"),
+        Map.entry(10, "low"),
+        Map.entry(17, "low"),
+        Map.entry(21, "low"),
+        Map.entry(19, "low"),
+        Map.entry(7, "high"),
+        Map.entry(9, "high"),
+        Map.entry(11, "high"),
+        Map.entry(18, "high"),
+        Map.entry(20, "high"),
+        Map.entry(22, "high")
     );
 
     /** Creates a new RemoveAlgae. */

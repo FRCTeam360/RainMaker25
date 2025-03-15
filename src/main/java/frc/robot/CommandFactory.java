@@ -315,7 +315,7 @@ public class CommandFactory {
 
 
     public Command deployClimb() {
-        return servo.runWithTimeout(2.0, 0).deadlineFor(algaeTilt.setPositionCmd(0.256))
+        return servo.runWithTimeout(2.0, 0).alongWith(algaeTilt.setPositionCmd(0.256))
                 .andThen(new InstantCommand(() -> this.climberDeployed = true));
     }
 

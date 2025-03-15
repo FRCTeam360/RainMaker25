@@ -32,8 +32,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+//import frc.robot.Constants.PracticeBotConstants.ElevatorHeights;
 import frc.robot.Constants.*;
-import frc.robot.Constants.PracticeBotConstants.ElevatorHeights;
 import frc.robot.commands.AlignWithLimelight;
 import frc.robot.commands.RemoveAlgae;
 import frc.robot.commands.SetCoralIntake;
@@ -371,8 +371,7 @@ public class RobotContainer {
             levelOne = commandFactory.setElevatorToZero();
 
             autoLevelThree = commandFactory.setElevatorHeight(20.5);
-            autoLevelFour =
-                commandFactory.setElevatorHeight(CompBotConstants.ElevatorHeights.AUTO_LEVEL_FOUR);
+            autoLevelFour = commandFactory.setElevatorHeight(CompBotConstants.ElevatorHeights.AUTO_LEVEL_FOUR);
 
             zeroElevatorEncoder = elevator.zeroElevatorCmd();
 
@@ -388,22 +387,16 @@ public class RobotContainer {
         }
 
         if (Objects.nonNull(driveTrain)) {
-            rightAlign =
-                commandFactory.alignWithLimelight(
+            rightAlign = commandFactory.alignWithLimelight(
                     Constants.CompBotConstants.RIGHT_GOAL_TY,
                     Constants.CompBotConstants.RIGHT_GOAL_TX,
-                    0,
-                    driverCont
-                );
+                    0, driverCont);
             // Periodically adds the vision measurement to drivetrain for pose estimation
 
-            leftAlign =
-                commandFactory.alignWithLimelight(
+            leftAlign = commandFactory.alignWithLimelight(
                     Constants.CompBotConstants.LEFT_GOAL_TY,
                     Constants.CompBotConstants.LEFT_GOAL_TX,
-                    1,
-                    driverCont
-                );
+                    1, driverCont);
         }
 
         registerPathplannerCommand("Elevator L4", autoLevelFour);

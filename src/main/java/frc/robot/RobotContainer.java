@@ -248,24 +248,20 @@ public class RobotContainer {
                 vision =
                     new Vision(
                         Map.ofEntries(
-                            Map.entry(
-                                Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
-                                new VisionIOLimelight(
-                                    Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
-                                    () -> driveTrain.getAngle(),
-                                    () -> driveTrain.getAngularRate()
-                                )
-                            )
-                            // Map.entry(
-                            // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                            // new VisionIOLimelight(
-                            // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                            // () -> driveTrain.getAngle(),
-                            // () -> driveTrain.getAngularRate()
-                            // )
-                            // )
-                        )
-                    );
+                                Map.entry(
+                                        Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
+                                        new VisionIOLimelight(
+                                                Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
+                                                () -> driveTrain.getAngle(),
+                                                () -> driveTrain.getAngularRate())),
+                                Map.entry(
+                                        Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                                        new VisionIOLimelight(
+                                                Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                                                () -> driveTrain.getAngle(),
+                                                () -> driveTrain.getAngularRate(), false)
+
+                                )));
                 elevator = new Elevator(new ElevatorIOSim());
                 algaeArm = new AlgaeArm(new AlgaeArmIOSim(() -> elevator.getHeight()));
                 coralShooter = new CoralShooter(new CoralShooterIOSim(() -> elevator.getHeight()));

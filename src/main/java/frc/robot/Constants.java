@@ -171,7 +171,7 @@ public final class Constants {
         public static final int ALGAE_TILT = 24;
 
 
-        public static final double RIGHT_GOAL_TY = 15.5; //gpeak 14.0
+        public static final double RIGHT_GOAL_TY = 14.5;//15.5; //gpeak 14.0
         public static final double RIGHT_GOAL_TX = 0.0;
 
         public static final double LEFT_GOAL_TY = RIGHT_GOAL_TY;

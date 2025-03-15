@@ -188,7 +188,7 @@ public class AlignWithLimelight extends Command {
         boolean onCorrectPipeline = (vision.getPipeline(LIMELIGHT_NAME) == pipeline);
  
         // boolean onVelocity = driveTrain.getVelocity(); TODO: FIX!!!
-        boolean vel0 = ((driveTrain.getXRate() == 0.0) && (driveTrain.getYRate() == 0.0));
+        boolean vel0 = ((Math.abs(driveTrain.getXRate()) <= 0.1) && (Math.abs(driveTrain.getYRate()) <= 0.1));
 
         Logger.recordOutput(CMD_NAME + "onTX", onTX);
         Logger.recordOutput(CMD_NAME + "onTY", onTY);

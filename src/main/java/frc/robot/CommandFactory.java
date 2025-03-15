@@ -141,8 +141,8 @@ public class CommandFactory {
         return CommandLogger.logCommand( // vision.waitUntilTargetTxTy(goalTX,
                                          // goalTY).alongWith(drivetrain.waitUntilDrivetrainAtHeadingSetpoint())
                 new AlignWithLimelight(vision, drivetrain, goalTY, goalTX, pipeline, driverCont),
-                "AlignWithLimelightBase").andThen(drivetrain.xOutCmd()).
-                alongWith(this.rumbleDriverController(driverCont).withTimeout(0.1)); // no more
+                "AlignWithLimelightBase").andThen(this.rumbleDriverController(driverCont).withTimeout(0.1));
+                // alongWith(this.rumbleDriverController(driverCont).withTimeout(0.1)); // no more
                                                                                                              // timeout
     }
 

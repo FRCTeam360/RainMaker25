@@ -360,14 +360,14 @@ public class RobotContainer {
 
         if (Objects.nonNull(driveTrain)) {
             rightAlign = commandFactory.alignWithLimelight(
-                    Constants.CompBotConstants.RIGHT_GOAL_TY,
-                    Constants.CompBotConstants.RIGHT_GOAL_TX,
+                    Constants.PracticeBotConstants.RIGHT_GOAL_TY,
+                    Constants.PracticeBotConstants.RIGHT_GOAL_TX,
                     0, driverCont);
             // Periodically adds the vision measurement to drivetrain for pose estimation
 
             leftAlign = commandFactory.alignWithLimelight(
-                    Constants.CompBotConstants.LEFT_GOAL_TY,
-                    Constants.CompBotConstants.LEFT_GOAL_TX,
+                    Constants.PracticeBotConstants.LEFT_GOAL_TY,
+                    Constants.PracticeBotConstants.LEFT_GOAL_TX,
                     1, driverCont);
         }
 

@@ -104,6 +104,15 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         ), "DrivetrainFieldOriented");
     }
 
+    public double getXRate() {
+        return this.getStateCopy().Speeds.vxMetersPerSecond;
+    }
+
+    
+    public double getYRate() {
+        return this.getStateCopy().Speeds.vyMetersPerSecond;
+    }
+
     public void xOut() {
         SwerveRequest xOutReq = new SwerveRequest.SwerveDriveBrake();
         this.setControl(xOutReq);

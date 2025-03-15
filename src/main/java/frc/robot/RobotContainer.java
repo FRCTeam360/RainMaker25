@@ -360,14 +360,14 @@ public class RobotContainer {
 
         if (Objects.nonNull(driveTrain)) {
             rightAlign = commandFactory.alignWithLimelight(
-                    Constants.CompBotConstants.RIGHT_GOAL_TY,
-                    Constants.CompBotConstants.RIGHT_GOAL_TX,
+                    Constants.PracticeBotConstants.RIGHT_GOAL_TY,
+                    Constants.PracticeBotConstants.RIGHT_GOAL_TX,
                     0, driverCont);
             // Periodically adds the vision measurement to drivetrain for pose estimation
 
             leftAlign = commandFactory.alignWithLimelight(
-                    Constants.CompBotConstants.LEFT_GOAL_TY,
-                    Constants.CompBotConstants.LEFT_GOAL_TX,
+                    Constants.PracticeBotConstants.LEFT_GOAL_TY,
+                    Constants.PracticeBotConstants.LEFT_GOAL_TX,
                     1, driverCont);
         }
 
@@ -456,8 +456,10 @@ public class RobotContainer {
         algaeTilt.setDefaultCommand(commandFactory.homeAlgaeTilt());
         algaeArm.setDefaultCommand(algaeArm.setAlgaeArmAngleCmd(0.0));
 
-        // elevator.setDefaultCommand(elevator.setDutyCycleCommand(() ->
-        // testCont.getLeftY() * 0.1));
+        // elevator.setDefaultCommand(elevator.setDutyCycleCommand(() -> testCont.getLeftY() * 0.1));
+
+        // algaeRoller.setDefaultCommand(algaeRoller.setDutyCycleCmd(() -> testCont.getLeftY()));
+        // testCont.a().whileTrue(algaeRoller.setDutyCycleCmd(0.5));
 
         // testCont.a().whileTrue(algaeArm.zeroPositionAndZeroArm());
         // driverCont.rightStick().toggleOnTrue(isAlgaeMode);
@@ -480,7 +482,7 @@ public class RobotContainer {
         operatorCont.pov(0).whileTrue(commandFactory.climb());
 
         operatorCont.leftTrigger(0.25).whileTrue(coralShooter.setDutyCycleCmd(0.3));
-        
+
         // operatorCont.rightTrigger(0.25).whileTrue(coralShooter.setDutyCycleCmd(-0.4));
 
         // if (Math.abs(operatorCont.getLeftY()) > 0.05) {

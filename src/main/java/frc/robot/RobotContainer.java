@@ -396,7 +396,7 @@ public class RobotContainer {
 
             scoreLevel3RightTeleop = commandFactory.scoringRoutineTeleop(3, false);
 
-            removeAlgae = new RemoveAlgae(3, algaeArm, algaeShooter, algaeTilt, coralShooter, elevator, driveTrain);
+            removeAlgae = new RemoveAlgae(algaeArm, algaeShooter, algaeTilt, coralShooter, elevator, vision);
 
         }
 

@@ -233,7 +233,9 @@ public class CommandFactory {
 
     public Command intakeAlgaeFromGround() {
         return algaeRoller.setDutyCycleCmd(-0.2).alongWith(
-                algaeShooter.setDutyCycleCmd(-1.0));
+                algaeShooter.setDutyCycleCmd(-1.0)).alongWith(
+                    algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.32 : 35.0)
+                );
     }
 
 
@@ -243,9 +245,14 @@ public class CommandFactory {
 
     public Command shootAlgae() {
         return Commands
-                .waitUntil(() -> algaeShooter.getVelocity() > 6150.0)
+                .waitUntil(() -> algaeShooter.getVelocity() > 5750.0)
                 .andThen(algaeRoller.setDutyCycleCmd(1.0))
                 .alongWith(algaeShooter.setVelocityCmd(6250.0));
+    }
+
+    public Command processAndScore() {
+        return algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.253 : 30)
+        .alongWith(this.shootAlgae());
     }
 
     public Command spinUpAlgaeShooter() {

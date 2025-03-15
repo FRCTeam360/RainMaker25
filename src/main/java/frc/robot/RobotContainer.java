@@ -456,8 +456,10 @@ public class RobotContainer {
         algaeTilt.setDefaultCommand(commandFactory.homeAlgaeTilt());
         algaeArm.setDefaultCommand(algaeArm.setAlgaeArmAngleCmd(0.0));
 
-        // elevator.setDefaultCommand(elevator.setDutyCycleCommand(() ->
-        // testCont.getLeftY() * 0.1));
+        // elevator.setDefaultCommand(elevator.setDutyCycleCommand(() -> testCont.getLeftY() * 0.1));
+
+        // algaeRoller.setDefaultCommand(algaeRoller.setDutyCycleCmd(() -> testCont.getLeftY()));
+        // testCont.a().whileTrue(algaeRoller.setDutyCycleCmd(0.5));
 
         // testCont.a().whileTrue(algaeArm.zeroPositionAndZeroArm());
         // driverCont.rightStick().toggleOnTrue(isAlgaeMode);
@@ -480,7 +482,7 @@ public class RobotContainer {
         operatorCont.pov(0).whileTrue(commandFactory.climb());
 
         operatorCont.leftTrigger(0.25).whileTrue(coralShooter.setDutyCycleCmd(0.3));
-        
+
         // operatorCont.rightTrigger(0.25).whileTrue(coralShooter.setDutyCycleCmd(-0.4));
 
         // if (Math.abs(operatorCont.getLeftY()) > 0.05) {

@@ -452,6 +452,14 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return Math.toDegrees(this.getStateCopy().Speeds.omegaRadiansPerSecond);
     }
 
+    public double getXRate() {
+        return this.getStateCopy().Speeds.vxMetersPerSecond;
+    }
+
+    public double getYRate() {
+        return this.getStateCopy().Speeds.vyMetersPerSecond;
+    }
+
     public void addVisionMeasurements(List<VisionMeasurement> measurements) {
         for (VisionMeasurement measurement : measurements) {
             this.addVisionMeasurement(
@@ -482,6 +490,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 headingController.getPositionTolerance());
         Logger.recordOutput("Swerve: CurrentState", this.getStateCopy().ModuleStates);
         Logger.recordOutput("Swerve: TargetState", this.getStateCopy().ModuleTargets);
+
         /*
          * Periodically try to apply the operator perspective.
          * If we haven't applied the operator perspective before, then we should apply

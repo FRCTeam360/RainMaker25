@@ -85,8 +85,8 @@ public class CommandFactory {
     }
 
     public Command rumbleDriverController(CommandXboxController controller) {
-        return Commands.runEnd(() -> controller.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0.15),
-                () -> controller.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0.0));
+        return CommandLogger.logCommand(Commands.runEnd(() -> controller.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0.15),
+                () -> controller.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0.0)), "rumbling");
     }
 
     /*
@@ -141,7 +141,8 @@ public class CommandFactory {
         return CommandLogger.logCommand( // vision.waitUntilTargetTxTy(goalTX,
                                          // goalTY).alongWith(drivetrain.waitUntilDrivetrainAtHeadingSetpoint())
                 new AlignWithLimelight(vision, drivetrain, goalTY, goalTX, pipeline, driverCont),
-                "AlignWithLimelightBase").andThen(this.rumbleDriverController(driverCont).withTimeout(0.1)); // no more
+                "AlignWithLimelightBase").andThen(drivetrain.xOutCmd()).
+                alongWith(this.rumbleDriverController(driverCont).withTimeout(0.1)); // no more
                                                                                                              // timeout
     }
 

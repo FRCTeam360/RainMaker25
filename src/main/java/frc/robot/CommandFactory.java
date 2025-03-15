@@ -308,7 +308,7 @@ public class CommandFactory {
 
 
     public Command deployClimb() {
-        return servo.runWithTimeout(3.0, 0).deadlineFor(algaeTilt.setPositionCmd(0.256))
+        return servo.runWithTimeout(2.0, 0).deadlineFor(algaeTilt.setPositionCmd(0.256))
                 .andThen(new InstantCommand(() -> this.climberDeployed = true));
     }
 
@@ -329,7 +329,7 @@ public class CommandFactory {
     }
 
     public Command climbAutomated() {
-        return Commands.waitUntil(() -> climberWinch.getPosition() < -152)
+        return Commands.waitUntil(() -> climberWinch.getPosition() < -157)
         .deadlineFor(climb());
     }
 

@@ -41,31 +41,28 @@ public class RemoveAlgae extends Command {
 
     private int id;
 
- private static final Map<Integer, String> removeHeight = Map.ofEntries(
-    Map.entry(6, "high"),
-    Map.entry(8, "high"),
-    Map.entry(10, "high"),
-    Map.entry(17, "high"),
-    Map.entry(21, "high"),
-    Map.entry(19, "high"),
-    Map.entry(7, "low"),
-    Map.entry(9, "low"),
-    Map.entry(11, "low"),
-    Map.entry(18, "low"),
-    Map.entry(20, "low"),
-    Map.entry(22, "low")
-);
-
+    private static final Map<Integer, String> removeHeight = Map.ofEntries(
+            Map.entry(6, "high"),
+            Map.entry(8, "high"),
+            Map.entry(10, "high"),
+            Map.entry(17, "high"),
+            Map.entry(21, "high"),
+            Map.entry(19, "high"),
+            Map.entry(7, "low"),
+            Map.entry(9, "low"),
+            Map.entry(11, "low"),
+            Map.entry(18, "low"),
+            Map.entry(20, "low"),
+            Map.entry(22, "low"));
 
     /** Creates a new RemoveAlgae. */
     public RemoveAlgae(
-        AlgaeArm algaeArm,
-        AlgaeShooter algaeShooter,
-        AlgaeTilt algaeTilt,
-        CoralShooter coralShooter,
-        Elevator elevator,
-        Vision vision
-    ) {
+            AlgaeArm algaeArm,
+            AlgaeShooter algaeShooter,
+            AlgaeTilt algaeTilt,
+            CoralShooter coralShooter,
+            Elevator elevator,
+            Vision vision) {
         this.algaeArm = algaeArm;
         this.algaeShooter = algaeShooter;
         this.algaeTilt = algaeTilt;
@@ -86,7 +83,7 @@ public class RemoveAlgae extends Command {
             height = ElevatorHeights.TELE_LEVEL_THREE;
         } else if (removeHeight.get(id) == "low") {
             height = ElevatorHeights.TELE_LEVEL_TWO;
-        } else if(height >= 11.0) {
+        } else if (height >= 11.0) {
             height = ElevatorHeights.TELE_LEVEL_THREE;
         } else if (height < 11.0) {
             height = ElevatorHeights.TELE_LEVEL_TWO;

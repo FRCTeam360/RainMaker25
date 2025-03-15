@@ -232,7 +232,9 @@ public class CommandFactory {
 
     public Command intakeAlgaeFromGround() {
         return algaeRoller.setDutyCycleCmd(-0.1).alongWith(
-                algaeShooter.setDutyCycleCmd(-1.0));
+                algaeShooter.setDutyCycleCmd(-1.0)).alongWith(
+                    algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.32 : 27.0)
+                );
     }
 
     public Command outtakeAlgaeFromGround() {

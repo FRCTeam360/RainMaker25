@@ -493,7 +493,7 @@ public class RobotContainer {
 
         // driverCont.rightStick().whileTrue(driveTrain.robotCentricDrive(driverCont));
 
-        driverCont.pov(180).whileTrue(removeAlgae);
+        driverCont.leftStick().whileTrue(removeAlgae);
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
         driverCont.start().onTrue(commandFactory.depolyAndInitiateClimb());
         driverCont.back().whileTrue(commandFactory.climbAutomated());
@@ -535,7 +535,7 @@ public class RobotContainer {
                 () -> isAlgaeMode));
 
         driverCont.leftBumper().whileTrue(Commands.either(
-                algaeRoller.setDutyCycleCmd(-0.1),
+                algaeRoller.setDutyCycleCmd(-0.2),
                 leftAlign,
                 () -> isAlgaeMode));
         driverCont.rightBumper().whileTrue(Commands.either(

@@ -468,10 +468,10 @@ public class RobotContainer {
         operatorCont.leftBumper().whileTrue(algaeRoller.setDutyCycleCmd(-0.1));
         operatorCont.rightBumper().whileTrue(algaeRoller.setDutyCycleCmd(1.0));
 
-        operatorCont.y().whileTrue(algaeTilt.setPositionCmd(0.001)); // 0.001 used to be 0
-        operatorCont.x().whileTrue(algaeTilt.setPositionCmd(0.03)); // .065 used to be 3
-        operatorCont.b().whileTrue(algaeTilt.setPositionCmd(0.253)); // 0.244 used to be 30
-        operatorCont.a().whileTrue(algaeTilt.setPositionCmd(0.32)); // 0.361 used to be 35
+        operatorCont.y().whileTrue(algaeTilt.setPositionCmd(0.0)); // 0.001 used to be 0
+        operatorCont.x().whileTrue(algaeTilt.setPositionCmd(3.0)); // .065 used to be 3
+        operatorCont.b().whileTrue(algaeTilt.setPositionCmd(21.0)); // 0.244 used to be 30
+        operatorCont.a().whileTrue(algaeTilt.setPositionCmd(27.0)); // 0.361 used to be 35
 
         operatorCont.pov(90).whileTrue(commandFactory.outtakeAlgaeFromGround());
         operatorCont.pov(270).whileTrue(commandFactory.intakeAlgaeFromGround());
@@ -513,7 +513,7 @@ public class RobotContainer {
 
         driverCont.a()
                 .onTrue(Commands.either(
-                        algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.32 : 35.0),
+                        algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.32 : 27.0),
                         levelOneAndZero,
                         () -> isAlgaeMode));
         driverCont.x()
@@ -523,7 +523,7 @@ public class RobotContainer {
                         () -> isAlgaeMode));
 
         driverCont.b().onTrue(Commands.either(
-                algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.253 : 30),
+                algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.253 : 21),
                 levelThree,
                 () -> isAlgaeMode));
 

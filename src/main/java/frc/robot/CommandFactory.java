@@ -218,7 +218,7 @@ public class CommandFactory {
     private boolean climberDeployed = false;
 
     public Command homeAlgaeTilt() {
-        return Commands.either(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.07 : 10.0),
+        return Commands.either(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.07 : 4.0), //used to be 10, 4 works for some reason 3/15
                 algaeTilt.setPositionCmd(0.907), () -> !climberDeployed);
     }
 

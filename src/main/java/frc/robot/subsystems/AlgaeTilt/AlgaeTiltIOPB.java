@@ -37,7 +37,7 @@ public class AlgaeTiltIOPB implements AlgaeTiltIO {
   /** Creates a new AlgaeIntakeIOPB. */
   public AlgaeTiltIOPB() {
     sparkMaxConfig.idleMode(IdleMode.kBrake);
-    sparkMaxConfig.inverted(false);
+    sparkMaxConfig.inverted(true); //USED TO BE FALSE 3/15
 
     SoftLimitConfig softLimitConfig = new SoftLimitConfig();
     softLimitConfig.forwardSoftLimit(forwardLimit);

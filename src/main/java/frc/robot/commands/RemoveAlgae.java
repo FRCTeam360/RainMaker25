@@ -4,6 +4,10 @@
 
 package frc.robot.commands;
 
+import java.util.Map;
+
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -38,19 +42,20 @@ public class RemoveAlgae extends Command {
     private int id;
 
  private static final Map<Integer, String> removeHeight = Map.ofEntries(
-        Map.entry(6, "high"),
-        Map.entry(8, "high"),
-        Map.entry(10, "high"),
-        Map.entry(17, "high"),
-        Map.entry(21, "high"),
-        Map.entry(19, "high"),
-        Map.entry(7, "low"),
-        Map.entry(9, "low"),
-        Map.entry(11, "low"),
-        Map.entry(18, "low"),
-        Map.entry(20, "low"),
-        Map.entry(22, "low")
-    );
+    Map.entry(6, "high"),
+    Map.entry(8, "high"),
+    Map.entry(10, "high"),
+    Map.entry(17, "high"),
+    Map.entry(21, "high"),
+    Map.entry(19, "high"),
+    Map.entry(7, "low"),
+    Map.entry(9, "low"),
+    Map.entry(11, "low"),
+    Map.entry(18, "low"),
+    Map.entry(20, "low"),
+    Map.entry(22, "low")
+);
+
 
     /** Creates a new RemoveAlgae. */
     public RemoveAlgae(

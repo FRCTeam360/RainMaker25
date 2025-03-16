@@ -676,6 +676,8 @@ public class RobotContainer {
         // testCont.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
         // testCont.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
         // testCont.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+
+        // testCont.a().whileTrue(commandFactory.newDeploy());
     }
 
     private void toggleIsAlgaeMode() {

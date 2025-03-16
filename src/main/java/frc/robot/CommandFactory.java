@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.*;
 import frc.robot.Constants.SetPointConstants.ElevatorHeights;
-import frc.robot.commands.AlignWithLimelight;
+import frc.robot.commands.CoralAlign;
 import frc.robot.commands.SetCoralIntake;
 import frc.robot.commands.SnapDrivebaseToAngle;
 import frc.robot.generated.WoodBotDriveTrain;
@@ -156,7 +156,7 @@ public class CommandFactory {
         return CommandLogger
             .logCommand( // vision.waitUntilTargetTxTy(goalTX,
                 // goalTY).alongWith(drivetrain.waitUntilDrivetrainAtHeadingSetpoint())
-                new AlignWithLimelight(vision, drivetrain, goalTY, goalTX, pipeline, driverCont),
+                new CoralAlign(vision, drivetrain, goalTY, goalTX, pipeline, driverCont),
                 "AlignWithLimelightBase"
             )
             .andThen(this.rumbleDriverController(driverCont).withTimeout(0.1));
@@ -237,7 +237,7 @@ public class CommandFactory {
     public Command alignToReefWoodbotLeft(int pipeline) {
         return new SequentialCommandGroup(
             new SnapDrivebaseToAngle(vision, drivetrain, pipeline),
-            new AlignWithLimelight(
+            new CoralAlign(
                 vision,
                 drivetrain,
                 -12.64,

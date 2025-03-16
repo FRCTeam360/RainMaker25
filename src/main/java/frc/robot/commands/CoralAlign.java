@@ -23,7 +23,7 @@ import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AlignWithLimelight extends Command {
+public class CoralAlign extends Command {
     private Vision vision;
     private CommandSwerveDrivetrain driveTrain;
     private double goalTY;
@@ -56,7 +56,7 @@ public class AlignWithLimelight extends Command {
             Map.entry(8, -120.0));
 
     /** Creates a new AlignWithLimelight. */
-    public AlignWithLimelight(
+    public CoralAlign(
             Vision vision,
             CommandSwerveDrivetrain driveTrain,
             double goalTY,

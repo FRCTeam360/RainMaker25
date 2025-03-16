@@ -644,8 +644,8 @@ public class RobotContainer {
             .rightBumper()
             .whileTrue(
                 Commands.either(
-                    commandFactory.driverProcessAlgae()
-                        .alongWith(driveTrain.fieldOrientedDrive(driverCont)),
+                    commandFactory.driverProcessAlgae(),
+                        // .alongWith(driveTrain.fieldOrientedDrive(driverCont)),
                     rightAlign,
                     () -> isAlgaeMode
                 )
@@ -654,6 +654,7 @@ public class RobotContainer {
         // driverCont.leftBumper().whileTrue(leftAlign);
         // driverCont.rightBumper().whileTrue(rightAlign);
         // }
+        
 
         // testCont.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
         // testCont.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));

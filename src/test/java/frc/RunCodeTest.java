@@ -2,7 +2,7 @@ package frc;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import frc.robot.commands.CoralAlign;
+import frc.robot.commands.AlignWithLimelight;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -28,7 +28,7 @@ public class RunCodeTest {
         Translation2d baseSpeeds = new Translation2d(1.0, 1.0);
         Rotation2d rotation = Rotation2d.fromDegrees(0.0);
 
-        Translation2d rotatedSpeeds = CoralAlign.rotateTranslation(baseSpeeds, rotation);
+        Translation2d rotatedSpeeds = AlignWithLimelight.rotateTranslation(baseSpeeds, rotation);
         assertEquals(1.0, rotatedSpeeds.getX(), "X component of translation should match");
         assertEquals(1.0, rotatedSpeeds.getY(), "Y component of translation should match");
     }
@@ -54,7 +54,7 @@ public class RunCodeTest {
         Translation2d baseSpeeds = new Translation2d(x, y);
         Rotation2d rotation = Rotation2d.fromDegrees(angleDegrees);
 
-        Translation2d rotatedSpeeds = CoralAlign.rotateTranslation(baseSpeeds, rotation);
+        Translation2d rotatedSpeeds = AlignWithLimelight.rotateTranslation(baseSpeeds, rotation);
         assertEquals(x * Math.cos(angleRadians) - y * Math.sin(angleRadians), rotatedSpeeds.getX(), "X component of translation should match");
         assertEquals(x * Math.sin(angleRadians) + y * Math.cos(angleRadians), rotatedSpeeds.getY(), "Y component of translation should match");
     }

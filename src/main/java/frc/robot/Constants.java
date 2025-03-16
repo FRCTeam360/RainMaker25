@@ -144,6 +144,12 @@ public final class Constants {
         public static final int INTAKE_SENSOR_ID = 20;
         public static final int OUTTAKE_SENSOR_ID = 21;
 
+        public static final double RIGHT_GOAL_TY = 12.0; //praccy bot 3/15
+        public static final double RIGHT_GOAL_TX = 0.0;
+
+        public static final double LEFT_GOAL_TY = RIGHT_GOAL_TY;
+        public static final double LEFT_GOAL_TX = 0;
+
         public static final String CORAL_LIMELIGHT_NAME = "limelight-coral";
         public static final String ALGAE_LIMELIGHT_NAME = "limelight-algae";
 

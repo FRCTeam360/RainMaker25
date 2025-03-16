@@ -35,38 +35,34 @@ public class AlignWithLimelight extends Command {
     private SlewRateLimiter forwardsAccelerationLimit = new SlewRateLimiter(0.75);
     private SlewRateLimiter leftAccelerationLimit = new SlewRateLimiter(0.75);
     private int pipeline;
-    
+
     private CommandXboxController driverCont;
 
     private final String LIMELIGHT_NAME = Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME;
     private final String CMD_NAME = "AlignWithLimelight: ";
 
     private static final Map<Integer, Double> tagIDToAngle = Map.ofEntries(
-        Map.entry(21, 180.0),
-        Map.entry(7, 180.0),
-        Map.entry(22, 120.0),
-        Map.entry(6, 120.0),
-        Map.entry(17, 60.0),
-        Map.entry(11, 60.0),
-        Map.entry(18, 0.0),
-        Map.entry(10, 0.0),
-        Map.entry(19, -60.0),
-        Map.entry(9, -60.0),
-        Map.entry(20, -120.0),
-        Map.entry(8, -120.0)
-    );
+            Map.entry(21, 180.0),
+            Map.entry(7, 180.0),
+            Map.entry(22, 120.0),
+            Map.entry(6, 120.0),
+            Map.entry(17, 60.0),
+            Map.entry(11, 60.0),
+            Map.entry(18, 0.0),
+            Map.entry(10, 0.0),
+            Map.entry(19, -60.0),
+            Map.entry(9, -60.0),
+            Map.entry(20, -120.0),
+            Map.entry(8, -120.0));
 
-
-    
     /** Creates a new AlignWithLimelight. */
     public AlignWithLimelight(
-        Vision vision,
-        CommandSwerveDrivetrain driveTrain,
-        double goalTY,
-        double goalTX,
-        int pipeline,
-        CommandXboxController driverCont
-    ) {
+            Vision vision,
+            CommandSwerveDrivetrain driveTrain,
+            double goalTY,
+            double goalTX,
+            int pipeline,
+            CommandXboxController driverCont) {
         this.vision = vision;
         this.driveTrain = driveTrain;
         this.goalTY = goalTY;
@@ -116,32 +112,28 @@ public class AlignWithLimelight extends Command {
     }
 
     public static Translation2d rotateTranslation(
-        Translation2d translationToRotate,
-        Rotation2d rotation
-    ) {
+            Translation2d translationToRotate,
+            Rotation2d rotation) {
         return translationToRotate.rotateBy(rotation);
     }
 
     private void driveRobot() {
         double velX = -driveTrain.forwardController.calculate(
-            vision.getTYRaw(LIMELIGHT_NAME),
-            goalTY,
-            driveTrain.getState().Timestamp
-        );
+                vision.getTYRaw(LIMELIGHT_NAME),
+                goalTY,
+                driveTrain.getState().Timestamp);
 
         double velY = driveTrain.strafeController.calculate(
-            vision.getTXRaw(LIMELIGHT_NAME),
-            goalTX,
-            driveTrain.getState().Timestamp
-        );
+                vision.getTXRaw(LIMELIGHT_NAME),
+                goalTX,
+                driveTrain.getState().Timestamp);
 
         Logger.recordOutput(CMD_NAME + "PID OutputX", velX);
         Logger.recordOutput(CMD_NAME + "PID OutputY", velY);
 
         Translation2d PIDSpeed = new Translation2d(
-            forwardsAccelerationLimit.calculate(velX),
-            leftAccelerationLimit.calculate(velY)
-        );
+                forwardsAccelerationLimit.calculate(velX),
+                leftAccelerationLimit.calculate(velY));
 
         Translation2d rotatedPIDSpeeds = rotateTranslation(PIDSpeed, angleToFaceRotation2d);
 
@@ -153,9 +145,9 @@ public class AlignWithLimelight extends Command {
 
         if (vision.getTV(LIMELIGHT_NAME) == 1) {
             driveTrain.driveFieldCentricFacingAngle(
-                rotatedVelocityX, // forward & backward motion
-                rotatedVelocityY,
-                angleToFaceRotation2d.getDegrees() // side to side motion
+                    rotatedVelocityX, // forward & backward motion
+                    rotatedVelocityY,
+                    angleToFaceRotation2d.getDegrees() // side to side motion
             );
         } else {
             driveTrain.driveFieldCentricFacingAngle(0.0, 0.0, angleToFaceRotation2d.getDegrees());
@@ -173,8 +165,9 @@ public class AlignWithLimelight extends Command {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        
-    //   LimelightHelpers.SetFiducialIDFiltersOverride("limelight", new int[] { 6, 7, 8 });
+
+        // LimelightHelpers.SetFiducialIDFiltersOverride("limelight", new int[] { 6, 7,
+        // 8 });
         LimelightHelpers.setPriorityTagID("limelight", -1);
         driveTrain.robotCentricDrive(0.0, 0.0, 0.0);
     }

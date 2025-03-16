@@ -251,11 +251,9 @@ public class CommandFactory {
     private boolean climberDeployed = false;
 
     public Command homeAlgaeTilt() {
-        return Commands.either(
-            algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.07 : 10.0),
-            algaeTilt.setPositionCmd(0.907),
-            () -> !climberDeployed
-        );
+        return Commands.either(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.07 : 7.2), // used to be 10, 4 works
+                                                                                             // for some reason 3/15
+                algaeTilt.setPositionCmd(0.907), () -> !climberDeployed);
     }
 
     public Command groundPickupAlgaeTilt() {
@@ -266,22 +264,43 @@ public class CommandFactory {
         return algaeTilt.setPositionCmd(0.25);
     }
 
-    public Command intakeAlgaeFromGround() {
-        return algaeRoller
-            .setDutyCycleCmd(-0.2)
-            .alongWith(algaeShooter.setDutyCycleCmd(-1.0))
-            .alongWith(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.32 : 35.0));
+    public Command driverIntakeAlgae() {
+        return algaeRoller.setDutyCycleCmd(-0.1).alongWith(
+                algaeShooter.setDutyCycleCmd(-1.0)).alongWith(
+                        algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.32 : 23.5));
     }
 
-    public Command outtakeAlgaeFromGround() {
+    public Command driverProcessAlgae() {
+        return algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.253 : 21)
+                .alongWith(algaeShooter.setDutyCycleCmd(0.8))
+                .alongWith(algaeRoller.setDutyCycleCmd(0.8));
+    }
+
+    public Command operatorIntakeAlgae() {
+        return algaeRoller.setDutyCycleCmd(-0.1).alongWith(
+                algaeShooter.setDutyCycleCmd(-1.0));
+    }
+
+    public Command operatorOutakeAlgae() {
         return algaeShooter.setDutyCycleCmd(0.9);
     }
 
+    public Command processOrShoot() {
+        // 20 or lower is process
+        // higher htan 20 is shoot
+        // use releative position rn, switch to abs for comp 0.2 for absolute
+        if (algaeTilt.getPositionRelative() >= 19.0 || algaeTilt.getPositionAbsolute() >= 0.2) {
+            return operatorOutakeAlgae();
+        } else {
+            return shootAlgae();
+        }
+    }
+
     public Command shootAlgae() {
-        return Commands
-            .waitUntil(() -> algaeShooter.getVelocity() > 5750.0)
-            .andThen(algaeRoller.setDutyCycleCmd(1.0))
-            .alongWith(algaeShooter.setVelocityCmd(6250.0));
+       return Commands.waitUntil(() -> algaeShooter.getVelocity() > 5750)
+        .andThen(algaeRoller.setDutyCycleCmd(1.0))
+        .alongWith(algaeShooter.setVelocityCmd(6250))
+        .alongWith(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.03 : 3.0));
     }
 
     public Command processAndScore() {

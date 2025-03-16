@@ -494,6 +494,10 @@ public class RobotContainer {
         // elevator.setDefaultCommand(elevator.setDutyCycleCommand(() ->
         // testCont.getLeftY() * 0.1));
 
+        // algaeRoller.setDefaultCommand(algaeRoller.setDutyCycleCmd(() ->
+        // testCont.getLeftY()));
+        // testCont.a().whileTrue(algaeRoller.setDutyCycleCmd(0.5));
+
         // testCont.a().whileTrue(algaeArm.zeroPositionAndZeroArm());
         // driverCont.rightStick().toggleOnTrue(isAlgaeMode);
 
@@ -503,13 +507,13 @@ public class RobotContainer {
         operatorCont.leftBumper().whileTrue(algaeRoller.setDutyCycleCmd(-0.1));
         operatorCont.rightBumper().whileTrue(algaeRoller.setDutyCycleCmd(1.0));
 
-        operatorCont.y().whileTrue(algaeTilt.setPositionCmd(0.001)); // 0.001 used to be 0
-        operatorCont.x().whileTrue(algaeTilt.setPositionCmd(0.03)); // .065 used to be 3
-        operatorCont.b().whileTrue(algaeTilt.setPositionCmd(0.253)); // 0.244 used to be 30
-        operatorCont.a().whileTrue(algaeTilt.setPositionCmd(0.32)); // 0.361 used to be 35
+        operatorCont.y().whileTrue(algaeTilt.setPositionCmd(0.0)); // 0.001 used to be 0
+        operatorCont.x().whileTrue(algaeTilt.setPositionCmd(3.0)); // .065 used to be 3
+        operatorCont.b().whileTrue(algaeTilt.setPositionCmd(21.0)); // 0.244 used to be 30
+        operatorCont.a().whileTrue(algaeTilt.setPositionCmd(27.0)); // 0.361 used to be 35
 
-        operatorCont.pov(90).whileTrue(commandFactory.outtakeAlgaeFromGround());
-        operatorCont.pov(270).whileTrue(commandFactory.intakeAlgaeFromGround());
+        operatorCont.pov(90).whileTrue(commandFactory.operatorOutakeAlgae());
+        operatorCont.pov(270).whileTrue(commandFactory.operatorIntakeAlgae());
         operatorCont.pov(180).whileTrue(commandFactory.shootAlgae());
 
         operatorCont.pov(0).whileTrue(commandFactory.climb());
@@ -534,11 +538,13 @@ public class RobotContainer {
 
         // driverCont.pov(180).onTrue(commandFactory.setAlgaeArmAngle(0.0));
 
-        // if (isAlgaeMode) {
-        //     vision.turnOnLights(CompBotConstants.ALGAE_LIMELIGHT_NAME);
-        // } else {
-        //     vision.turnOffLights(CompBotConstants.ALGAE_LIMELIGHT_NAME);
-        // }
+        driverCont.rightStick().onTrue(new InstantCommand(() -> toggleIsAlgaeMode())
+                .andThen(Commands.either(Commands.none(), commandFactory.homeAlgaeTilt(), () -> isAlgaeMode)));
+
+        driverCont.leftTrigger(0.25).whileTrue(Commands.either(
+                commandFactory.driverIntakeAlgae(),
+                smartIntake,
+                () -> isAlgaeMode));
 
         driverCont
             .rightStick()
@@ -575,7 +581,7 @@ public class RobotContainer {
             .leftTrigger(0.25)
             .whileTrue(
                 Commands.either(
-                    commandFactory.intakeAlgaeFromGround(),
+                    commandFactory.driverIntakeAlgae(),
                     smartIntake,
                     () -> isAlgaeMode
                 )

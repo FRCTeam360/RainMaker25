@@ -218,7 +218,8 @@ public class CommandFactory {
     private boolean climberDeployed = false;
 
     public Command homeAlgaeTilt() {
-        return Commands.either(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.07 : 7.2), //used to be 10, 4 works for some reason 3/15
+        return Commands.either(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.07 : 7.2), // used to be 10, 4 works
+                                                                                             // for some reason 3/15
                 algaeTilt.setPositionCmd(0.907), () -> !climberDeployed);
     }
 
@@ -230,24 +231,45 @@ public class CommandFactory {
         return algaeTilt.setPositionCmd(0.25);
     }
 
-    public Command intakeAlgaeFromGround() {
+    public Command driverIntakeAlgae() {
         return algaeRoller.setDutyCycleCmd(-0.1).alongWith(
                 algaeShooter.setDutyCycleCmd(-1.0)).alongWith(
-                    algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.32 : 27.0)
-                );
+                        algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.32 : 23.5));
     }
 
-    public Command outtakeAlgaeFromGround() {
+    public Command driverProcessAlgae() {
+        return algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.253 : 21)
+                .alongWith(algaeShooter.setDutyCycleCmd(0.8))
+                .alongWith(algaeRoller.setDutyCycleCmd(0.8));
+    }
+
+    public Command operatorIntakeAlgae() {
+        return algaeRoller.setDutyCycleCmd(-0.1).alongWith(
+                algaeShooter.setDutyCycleCmd(-1.0));
+    }
+
+    public Command operatorOutakeAlgae() {
         return algaeShooter.setDutyCycleCmd(0.9);
+    }
+
+    public Command processOrShoot() {
+        // 20 or lower is process
+        // higher htan 20 is shoot
+        // use releative position rn, switch to abs for comp 0.2 for absolute
+        if (algaeTilt.getPositionRelative() >= 19.0 || algaeTilt.getPositionAbsolute() >= 0.2) {
+            return operatorOutakeAlgae();
+        } else {
+            return shootAlgae();
+        }
     }
 
     public Command shootAlgae() {
         return Commands
-                .waitUntil(() -> algaeShooter.getVelocity() > 5500)
+                .waitUntil(() -> algaeShooter.getVelocity() > 5750)
                 .andThen(algaeRoller.setDutyCycleCmd(1.0))
-                .alongWith(algaeShooter.setVelocityCmd(6000));
+                .alongWith(algaeShooter.setVelocityCmd(6250))
+                .alongWith(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.03 : 3.0));
     }
-
 
     /**
      * This command assumes the elevator is already above the algae
@@ -280,7 +302,7 @@ public class CommandFactory {
         return this.setAlgaeArmAngle(110.0);
     }
 
-    private Command removeAlgae(int level) { //NOT BEING USED
+    private Command removeAlgae(int level) { // NOT BEING USED
 
         double height;
         if (level == 2) {
@@ -326,7 +348,7 @@ public class CommandFactory {
 
     public Command climbAutomated() {
         return Commands.waitUntil(() -> climberWinch.getPosition() < -145.5)
-        .deadlineFor(climb());
+                .deadlineFor(climb());
     }
 
     public void resetClimberDeployed() {

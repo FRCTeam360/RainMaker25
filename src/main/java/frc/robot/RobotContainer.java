@@ -538,13 +538,6 @@ public class RobotContainer {
 
         // driverCont.pov(180).onTrue(commandFactory.setAlgaeArmAngle(0.0));
 
-        driverCont.rightStick().onTrue(new InstantCommand(() -> toggleIsAlgaeMode())
-                .andThen(Commands.either(Commands.none(), commandFactory.homeAlgaeTilt(), () -> isAlgaeMode)));
-
-        driverCont.leftTrigger(0.25).whileTrue(Commands.either(
-                commandFactory.driverIntakeAlgae(),
-                smartIntake,
-                () -> isAlgaeMode));
 
         driverCont
             .rightStick()
@@ -651,8 +644,7 @@ public class RobotContainer {
             .rightBumper()
             .whileTrue(
                 Commands.either(
-                    algaeRoller
-                        .setDutyCycleCmd(1.0)
+                    commandFactory.driverProcessAlgae()
                         .alongWith(driveTrain.fieldOrientedDrive(driverCont)),
                     rightAlign,
                     () -> isAlgaeMode

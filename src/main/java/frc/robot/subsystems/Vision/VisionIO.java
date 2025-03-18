@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 
 public interface VisionIO {
   /** Creates a new VisionIO. */
@@ -28,6 +29,12 @@ public interface VisionIO {
         public double[] distancesToTargets;
         public boolean poseUpdated;
         public Pose3d[] tagPoses;
+        
+        public boolean connected = false;
+        public TargetObservation latestTargetObservation =
+            new TargetObservation(new Rotation2d(), new Rotation2d());
+        public PoseObservation[] poseObservations = new PoseObservation[0];
+        public int[] tagIds = new int[0];
     }
 
     public void updateInputs(VisionIOInputs inputs);

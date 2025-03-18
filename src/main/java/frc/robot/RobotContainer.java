@@ -641,4 +641,10 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
     }
+
+    public void onInit() {
+        if (Objects.nonNull(vision)) {
+            vision.turnOffLights(CompBotConstants.CORAL_LIMELIGHT_NAME);
+        }
+    }
 }

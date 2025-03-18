@@ -38,9 +38,7 @@ public class Robot extends LoggedRobot {
 
     private final RobotContainer m_robotContainer;
 
-    public void robotInit() {
-    }
-
+   
     /**
      * This function is run when the robot is first started up and should be used
      * for any
@@ -85,6 +83,7 @@ public class Robot extends LoggedRobot {
         // and put our
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
+        m_robotContainer.onInit();
     }
 
     /**

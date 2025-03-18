@@ -82,10 +82,10 @@ public class SmartIntake extends Command {
                 break;
             case FULL:
             default:
+            coralShooter.stop();
                 stallTimer.start();
-                coralShooter.stop();
                 timer.start();
-                if (timer.get() > 0.1) {
+                if (timer.get() > 0.05) {
                     if (coralShooter.getOuttakeSensor() && coralShooter.getIntakeSensor()) {
                         timer.stop();
                         coralShooter.stop();

@@ -228,7 +228,7 @@ public class RobotContainer {
                 // practice bot stuff
                 break;
             case SIM:
-                driveTrain = WoodBotDriveTrain.createDrivetrain();
+                driveTrain = CompBotDriveTrain.createDrivetrain();
                 logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
                 vision = new Vision(
                         Map.ofEntries(

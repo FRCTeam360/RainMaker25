@@ -636,6 +636,8 @@ public class RobotContainer {
             climberWheel.stop();
         if (Objects.nonNull(servo))
             servo.stop();
+        if(Objects.nonNull(vision))
+            vision.setPipeline(CompBotConstants.CORAL_LIMELIGHT_NAME, 0);
     }
 
     public Command getAutonomousCommand() {

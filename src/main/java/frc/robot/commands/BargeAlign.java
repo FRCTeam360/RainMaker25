@@ -100,7 +100,7 @@ public class BargeAlign extends Command {
     @Override
     public void end(boolean interrupted) {
         algaeRoller.setDutyCycle(1.0);
-        Logger.recordOutput(CMD_NAME + )
+        //Logger.recordOutput(CMD_NAME + "")
     }
 
     // Returns true when the command should end.

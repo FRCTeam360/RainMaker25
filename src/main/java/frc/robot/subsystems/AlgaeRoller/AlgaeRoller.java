@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.AlgaeRoller;
 
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -12,9 +14,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class AlgaeRoller extends SubsystemBase {
   private final AlgaeRollerIO io;
   private final AlgaeRollerIOInputsAutoLogged inputs = new AlgaeRollerIOInputsAutoLogged();
+  private DoubleSupplier elevatorHeight;
 
   /** Creates a new AlgaeIntakeRoller. */
-  public AlgaeRoller(AlgaeRollerIO io) {
+  public AlgaeRoller(AlgaeRollerIO io, DoubleSupplier heightSupplier) {
+    this.elevatorHeight = heightSupplier;
     this.io = io;
   }
 

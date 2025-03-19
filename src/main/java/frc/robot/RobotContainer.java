@@ -202,7 +202,7 @@ public class RobotContainer {
                 elevator = new Elevator(new ElevatorIOPB());
                 coralShooter = new CoralShooter(new CoralShooterIOPB(), () -> elevator.getHeight());
                 algaeArm = new AlgaeArm(new AlgaeArmIOPB(), () -> elevator.getHeight());
-                algaeRoller = new AlgaeRoller(new AlgaeRollerIOSim());
+                algaeRoller = new AlgaeRoller(new AlgaeRollerIOSim(() -> elevator.getHeight()), () -> elevator.getHeight());
                 algaeShooter = new AlgaeShooter(new AlgaeShooterIOPB());
                 algaeTilt = new AlgaeTilt(new AlgaeTiltIOPB());
                 climberWheel = new ClimberWheel(new ClimberWheelIOPB());
@@ -253,7 +253,7 @@ public class RobotContainer {
                 climberWinch = new ClimberWinch(new ClimberWinchIOSim());
                 climberWheel = new ClimberWheel(new ClimberWheelIOSim());
                 algaeShooter = new AlgaeShooter(new AlgaeShooterIOSim());
-                algaeRoller = new AlgaeRoller(new AlgaeRollerIOSim());
+                algaeRoller = new AlgaeRoller(new AlgaeRollerIOSim(() -> elevator.getHeight()), () -> elevator.getHeight());
                 break;
             case COMPETITION:
             default:
@@ -262,7 +262,7 @@ public class RobotContainer {
                 elevator = new Elevator(new ElevatorIOCB());
                 coralShooter = new CoralShooter(new CoralShooterIOCB(), () -> elevator.getHeight());
                 algaeArm = new AlgaeArm(new AlgaeArmIOCB(), () -> elevator.getHeight());
-                algaeRoller = new AlgaeRoller(new AlgaeRollerIOCB());
+                algaeRoller = new AlgaeRoller(new AlgaeRollerIOCB(), () -> elevator.getHeight());
                 algaeShooter = new AlgaeShooter(new AlgaeShooterIOCB());
                 algaeTilt = new AlgaeTilt(new AlgaeTiltIOCB());
                 climberWinch = new ClimberWinch(new ClimberWinchIOCB());
@@ -302,7 +302,7 @@ public class RobotContainer {
                 algaeRoller,
                 servo);
 
-        initializeCommands();
+        // initializeCommands();
 
         field = new Field2d();
         SmartDashboard.putData("Field", field);
@@ -323,7 +323,7 @@ public class RobotContainer {
         diagnosticTab.addString("Serial Address", HALUtil::getSerialNumber);
         diagnosticTab.addBoolean("Sim", Constants::isSim);
 
-        configureBindings();
+        // configureBindings();
 
         // configureTestController();
     }

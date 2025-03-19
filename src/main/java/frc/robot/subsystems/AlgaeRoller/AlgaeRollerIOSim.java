@@ -61,7 +61,8 @@ public class AlgaeRollerIOSim implements AlgaeRollerIO {
   private final LoggedMechanismRoot2d mech2dRoot = mech2d.getRoot("shooter root", 10, 0);
 
   /** Creates a new AlgaeIntakeRollerIOPB. */
-  public AlgaeRollerIOSim() {
+  public AlgaeRollerIOSim(DoubleSupplier heightSupplier) {
+    this.heightSupplier = heightSupplier;
   }
 
   public void setDutyCycle(double dutyCycle) {

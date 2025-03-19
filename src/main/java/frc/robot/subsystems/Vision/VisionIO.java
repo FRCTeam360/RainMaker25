@@ -13,8 +13,8 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 public interface VisionIO {
-  /** Creates a new VisionIO. */
-  @AutoLog
+    /** Creates a new VisionIO. */
+    @AutoLog
     public static class VisionIOInputs {
         public double tx;
         public double txAdjusted;
@@ -29,10 +29,9 @@ public interface VisionIO {
         public double[] distancesToTargets;
         public boolean poseUpdated;
         public Pose3d[] tagPoses;
-        
+
         public boolean connected = false;
-        public TargetObservation latestTargetObservation =
-            new TargetObservation(new Rotation2d(), new Rotation2d());
+        public TargetObservation latestTargetObservation = new TargetObservation(new Rotation2d(), new Rotation2d());
         public PoseObservation[] poseObservations = new PoseObservation[0];
         public int[] tagIds = new int[0];
     }
@@ -54,4 +53,22 @@ public interface VisionIO {
     public void takeSnapshot();
 
     public void resetSnapshot();
+
+    public static record TargetObservation(Rotation2d tx, Rotation2d ty) {}
+
+    /** Represents a robot pose sample used for pose estimation. */
+    public static record PoseObservation(
+            double timestamp,
+            Pose3d pose,
+            double ambiguity,
+            int tagCount,
+            double averageTagDistance,
+            PoseObservationType type) {
+    }
+
+    public static enum PoseObservationType {
+        MEGATAG_1,
+        MEGATAG_2,
+        PHOTONVISION
+    }
 }

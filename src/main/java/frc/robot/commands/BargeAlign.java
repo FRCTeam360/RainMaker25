@@ -23,11 +23,12 @@ import org.littletonrobotics.junction.Logger;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class BargeAlign extends Command {
     private final CommandSwerveDrivetrain driveTrain;
-    private final CommandXboxController driverCont;
+    private final CommandXboxController testCont;
     private final AlgaeShooter algaeShooter;
     private final AlgaeTilt algaeTilt;
     private final AlgaeRoller algaeRoller;
     private final Vision vision;
+    private boolean endEarly = false;
 
     private double angle;
     private double goalTY = 0.5;
@@ -49,12 +50,12 @@ public class BargeAlign extends Command {
         AlgaeShooter algaeShooter,
         AlgaeTilt algaeTilt,
         AlgaeRoller algaeRoller,
-        CommandXboxController driverCont
+        CommandXboxController testCont
     ) {
         this.driveTrain = driveTrain;
         this.vision = vision;
         this.algaeShooter = algaeShooter;
-        this.driverCont = driverCont;
+        this.testCont = testCont;
         this.algaeTilt = algaeTilt;
         this.algaeRoller = algaeRoller;
         // Use addRequirements() here to declare subsystem dependencies.
@@ -64,12 +65,23 @@ public class BargeAlign extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        id = vision.getAprilTagID(CompBotConstants.ALGAE_LIMELIGHT_NAME);
-        angle = tagIDToAngle.get(id);
+        System.out.println("Running");
+        id = vision.getAprilTagID(Constants.isCompBot() ? CompBotConstants.ALGAE_LIMELIGHT_NAME
+                : PracticeBotConstants.ALGAE_LIMELIGHT_NAME);
+        
+        endEarly = true;
+        if (vision.getTV(Constants.isCompBot() ? CompBotConstants.ALGAE_LIMELIGHT_NAME
+        : PracticeBotConstants.ALGAE_LIMELIGHT_NAME) == 0 && tagIDToAngle.containsKey(id)) {
+                endEarly = false;
+                angle = tagIDToAngle.get(id);
+        } //TODO: switch to endEarly = false, change to true if no valid target
+
         Optional<Alliance> alliance = DriverStation.getAlliance();
         if (alliance.isPresent() && alliance.get() == Alliance.Red) {
             angle += 180.0;
         }
+
+        if (endEarly) return;
 
         Logger.recordOutput(CMD_NAME + "angle", angle);
     }
@@ -77,6 +89,7 @@ public class BargeAlign extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        System.out.println("Executing");
         // return Commands.waitUntil(() -> algaeShooter.getVelocity() > 5750)
         // .andThen(algaeRoller.setDutyCycleCmd(1.0))
         // .alongWith(algaeShooter.setVelocityCmd(6250))
@@ -86,21 +99,20 @@ public class BargeAlign extends Command {
         algaeTilt.setPosition(Constants.isCompBot() ? 0.03 : 3.0);
 
         double velX = driveTrain.forwardController.calculate(
-            vision.getTYRaw(CompBotConstants.ALGAE_LIMELIGHT_NAME),
+            vision.getTYRaw(PracticeBotConstants.ALGAE_LIMELIGHT_NAME),
             goalTY,
             driveTrain.getState().Timestamp
         );
 
         Logger.recordOutput(CMD_NAME + "velX", velX);
 
-        driveTrain.driveFieldCentricFacingAngle(velX, driverCont.getLeftX(), angle);
+        driveTrain.driveFieldCentricFacingAngle(velX, testCont.getLeftX(), angle);
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
         algaeRoller.setDutyCycle(1.0);
-        Logger.recordOutput(CMD_NAME + )
     }
 
     // Returns true when the command should end.

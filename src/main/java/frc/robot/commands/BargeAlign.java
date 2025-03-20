@@ -32,7 +32,7 @@ public class BargeAlign extends Command {
     private boolean endEarly = false;
 
     private double angle = 0.0;
-    private double goalTY = 0.5;
+    private double goalTY = -1.0;
     private int id;
 
     private final String CMD_NAME = "Barge Align: ";
@@ -92,10 +92,8 @@ public class BargeAlign extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if(driveTrain.forwardController.atSetpoint() && driveTrain.headingController.atSetpoint() && algaeShooter.getVelocity() > 5750){
+        if(driveTrain.forwardController.atSetpoint() && driveTrain.headingController.atSetpoint() && algaeShooter.getVelocity() > 5850){
             state = AlgaeShooterStates.SHOOT;
-        }else{
-            state = AlgaeShooterStates.SET_POSE_AND_ROT;
         }
         Logger.recordOutput(CMD_NAME + "State " , state);
 

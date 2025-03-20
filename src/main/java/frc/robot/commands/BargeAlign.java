@@ -79,22 +79,23 @@ public class BargeAlign extends Command {
         if (endEarly) return;
 
         Logger.recordOutput(CMD_NAME + "angle", angle);
+        state = AlgaeShooterStates.SET_POSE_AND_ROT;
     }
-    private enum AlgeaShooterStates{
+    private enum AlgaeShooterStates{
         SET_POSE_AND_ROT,
         SHOOT
     }
 
-    private AlgeaShooterStates state = AlgeaShooterStates.SET_POSE_AND_ROT;
+    private AlgaeShooterStates state = AlgaeShooterStates.SET_POSE_AND_ROT;
 
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
         if(driveTrain.forwardController.atSetpoint() && driveTrain.headingController.atSetpoint() && algaeShooter.getVelocity() > 5750){
-            state = AlgeaShooterStates.SHOOT;
+            state = AlgaeShooterStates.SHOOT;
         }else{
-            state = AlgeaShooterStates.SET_POSE_AND_ROT;
+            state = AlgaeShooterStates.SET_POSE_AND_ROT;
         }
         Logger.recordOutput(CMD_NAME + "State " , state);
 
@@ -103,6 +104,7 @@ public class BargeAlign extends Command {
                 setPose();
                 break;
             case SHOOT:
+                setPose();
                 algaeRoller.setDutyCycle(1.0);
                 break;
         }
@@ -134,7 +136,7 @@ public class BargeAlign extends Command {
         // Logger.recordOutput(CMD_NAME + "atVelocity", atVelocity);
 
         // return onTY && atAngle && atVelocity;
-        return false;
+        return endEarly;
     }
     private void setPose(){
         algaeShooter.setVelocity(6250.0);

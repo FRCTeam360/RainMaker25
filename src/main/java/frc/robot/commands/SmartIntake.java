@@ -68,7 +68,7 @@ public class SmartIntake extends Command {
                 break;
             case JUST_INTAKE:
                 stallTimer.start();
-                coralShooter.setDutyCycle(-0.15);
+                coralShooter.setDutyCycle(-0.1);
                 timer.reset();
                 timer.stop();
                 updateStates();

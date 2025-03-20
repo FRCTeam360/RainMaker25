@@ -148,6 +148,19 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         request.withDriveRequestType(DriveRequestType.Velocity);
     }
 
+    public void driveFieldCentricFacingAngleBluePerspective(double x, double y, double desiredAngle) {
+        FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle()
+                .withVelocityX(x * maxSpeed)
+                .withVelocityY(y * maxSpeed)
+                .withTargetDirection(Rotation2d.fromDegrees(desiredAngle));
+        request.HeadingController = headingController;
+        request.withDeadband(0.1);
+        request.withRotationalDeadband(0.04);
+        request.ForwardPerspective = ForwardPerspectiveValue.BlueAlliance;
+        this.setControl(request);
+        request.withDriveRequestType(DriveRequestType.Velocity);
+    }
+
     // public Command backUpBot(double meters) {
     // return Commands.runOnce(() -> this.start)
     // }
@@ -248,6 +261,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     private double maxSpeed;
     private double maxAngularRate;
+
+    public double getMaxSpeed(){
+        return maxSpeed;
+    }
 
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.

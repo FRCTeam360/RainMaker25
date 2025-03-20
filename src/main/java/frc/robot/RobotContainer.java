@@ -567,9 +567,11 @@ public class RobotContainer {
          * Joystick B = dynamic forward
          */
 
-        // driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(testCont));
-        // testCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(),
-        // driveTrain));
+        driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(testCont));
+         testCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(),
+        driveTrain));
+
+        testCont.b().whileTrue(commandFactory.driverIntakeAlgae());
 
         // testCont.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
         // testCont.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));

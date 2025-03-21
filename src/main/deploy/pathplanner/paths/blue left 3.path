@@ -47,37 +47,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "intake",
-      "waypointRelativePos": 0.0,
+      "name": "elevator",
+      "waypointRelativePos": 0.5661993769470424,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "intake"
-        }
-      }
-    },
-    {
-      "name": "elevator",
-      "waypointRelativePos": 0.57,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "intake"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "Elevator L4"
-              }
-            }
-          ]
+          "name": "Elevator L4"
         }
       }
     }

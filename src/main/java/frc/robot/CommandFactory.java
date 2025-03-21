@@ -416,5 +416,4 @@ public class CommandFactory {
     public void resetClimberDeployed() {
         climberDeployed = false;
     }
-
 }

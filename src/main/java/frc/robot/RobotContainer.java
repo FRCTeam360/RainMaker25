@@ -36,7 +36,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.*;
 import frc.robot.commands.AlignWithLimelight;
 import frc.robot.commands.BargeAlign;
-import frc.robot.commands.HasCoral;
 import frc.robot.commands.RemoveAlgae;
 import frc.robot.commands.SetCoralIntake;
 import frc.robot.commands.SmartIntake;
@@ -134,6 +133,8 @@ public class RobotContainer {
     private Command autoLevelFour;
     private Command autoLevelThree;
 
+    private Command bargeAlign;
+
     private Command scoreLevel3RightTeleop;
 
     private Command zeroElevatorEncoder;
@@ -163,8 +164,6 @@ public class RobotContainer {
 
     private Command consumeVisionMeasurements;
     private boolean isAlgaeMode = false;
-    private BargeAlign bargeAlign;
-    private HasCoral hasCoral;
 
     public RobotContainer() {
         switch (Constants.getRobotType()) {
@@ -220,16 +219,13 @@ public class RobotContainer {
                                         new VisionIOLimelight(
                                                 Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
                                                 () -> driveTrain.getAngle(),
-                                                () -> driveTrain.getAngularRate()))
-                        // Map.entry(
-                        // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                        // new VisionIOLimelight(
-                        // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                        // () -> driveTrain.getAngle(),
-                        // () -> driveTrain.getAngularRate()
-                        // )
-                        // )
-                        ));
+                                                () -> driveTrain.getAngularRate())),
+                                Map.entry(
+                                        Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                                        new VisionIOLimelight(
+                                                Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                                                () -> driveTrain.getAngle(),
+                                                () -> driveTrain.getAngularRate()))));
                 // practice bot stuff
                 servo = new Servo(new ServoIOPB());
                 break;
@@ -327,10 +323,11 @@ public class RobotContainer {
         diagnosticTab.addBoolean("Sim", Constants::isSim);
 
         configureBindings();
-        // configureTestController();
+        //configureTestController();
     }
 
     public void initializeCommands() {
+        bargeAlign = new BargeAlign(driveTrain, vision, algaeShooter, algaeTilt, algaeRoller, testCont);
         consumeVisionMeasurements = vision.consumeVisionMeasurements(driveTrain::addVisionMeasurements);
         // elevatorHeight = new DoubleSupplier()
         xOut = driveTrain.xOutCmd();
@@ -370,8 +367,6 @@ public class RobotContainer {
                     Constants.CompBotConstants.LEFT_GOAL_TX,
                     1,
                     driverCont);
-
-           
         }
 
         registerPathplannerCommand("Elevator L4", autoLevelFour);
@@ -423,11 +418,9 @@ public class RobotContainer {
             intake = coralShooter.basicIntakeCmd();
 
             smartIntake = SmartIntake.newCommand(coralShooter);
-            hasCoral = new HasCoral(coralShooter, elevator);
 
             NamedCommands.registerCommand("shoot", coralShooter.basicShootCmd());
             NamedCommands.registerCommand("intake", smartIntake);
-            NamedCommands.registerCommand("hasCoral", hasCoral);
         }
         // registerPathplannerCommand("Intake Coral", intake);
     }
@@ -493,10 +486,6 @@ public class RobotContainer {
         // if (Math.abs(operatorCont.getLeftY()) > 0.05) {
         // algaeArm.setDutyCycleCmd(operatorCont.getLeftY());
         // }
-        // testCont.a().whileTrue(bargeAlign);
-        // testCont.leftTrigger().whileTrue(commandFactory.driverIntakeAlgae());
-        // driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(testCont));
-        // testCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
 
         driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
 
@@ -509,7 +498,6 @@ public class RobotContainer {
 
         // driverCont.pov(180).onTrue(commandFactory.setAlgaeArmAngle(0.0));
 
-        
         driverCont
             .rightStick()
             .onTrue(
@@ -561,6 +549,8 @@ public class RobotContainer {
         driverCont.rightBumper().and(() -> !isAlgaeMode).whileTrue(rightAlign);
         driverCont.rightBumper().and(() -> isAlgaeMode).whileTrue(commandFactory.driverProcessAlgae());
 
+        testCont.a().whileTrue(bargeAlign);
+
         // if (Objects.nonNull(coralShooter)) {
         // driverCont.leftBumper().whileTrue(leftAlign);
         // driverCont.rightBumper().whileTrue(rightAlign);
@@ -577,9 +567,11 @@ public class RobotContainer {
          * Joystick B = dynamic forward
          */
 
-        // driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(testCont));
-        // testCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(),
-        // driveTrain));
+        driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(testCont));
+         testCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(),
+        driveTrain));
+
+        testCont.b().whileTrue(commandFactory.driverIntakeAlgae());
 
         // testCont.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
         // testCont.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));

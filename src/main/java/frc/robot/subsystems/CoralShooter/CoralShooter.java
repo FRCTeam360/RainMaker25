@@ -45,7 +45,6 @@ public class CoralShooter extends SubsystemBase {
         return inputs.intakeSensor;
     }
 
-
     public void stop() {
         io.stop();
     }

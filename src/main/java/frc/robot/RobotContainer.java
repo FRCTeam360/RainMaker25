@@ -1,8 +1,10 @@
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+
 
 import static edu.wpi.first.units.Units.*;
 
@@ -471,6 +473,9 @@ public class RobotContainer {
         // testCont.leftTrigger(0.25).whileTrue(smartIntake);
         // testCont.rightTrigger(.25).whileTrue(coralShooter.basicShootCmd());
 
+        // testCont.pov(0).whileTrue(commandFactory.climb());
+
+
         operatorCont.leftBumper().whileTrue(algaeRoller.setDutyCycleCmd(-0.1));
         operatorCont.rightBumper().whileTrue(algaeRoller.setDutyCycleCmd(1.0));
 
@@ -505,7 +510,8 @@ public class RobotContainer {
         driverCont.leftStick().whileTrue(removeAlgae);
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
         driverCont.start().onTrue(commandFactory.depolyAndInitiateClimb());
-        driverCont.back().whileTrue(commandFactory.climbAutomated());
+        driverCont.back().onTrue(commandFactory.climbAutomated());
+
 
         // driverCont.pov(180).onTrue(commandFactory.setAlgaeArmAngle(0.0));
 

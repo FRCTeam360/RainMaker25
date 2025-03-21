@@ -155,6 +155,8 @@ public class Vision extends SubsystemBase {
   }
   @Override
   public void periodic() {
+    
+    
     for (String key : ios.keySet()) {
       VisionIO io = ios.get(key);
       VisionIOInputsAutoLogged input = visionInputs.get(key);

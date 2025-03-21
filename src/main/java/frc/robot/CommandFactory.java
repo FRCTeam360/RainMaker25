@@ -140,8 +140,6 @@ public class CommandFactory {
         return algaeTilt.setPositionCmd(position);
     }
 
-    
-
     /**
      *
      * @param goalTY
@@ -253,9 +251,12 @@ public class CommandFactory {
     private boolean climberDeployed = false;
 
     public Command homeAlgaeTilt() {
-        return Commands.either(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.07 : 7.2), // used to be 10, 4 works
-                                                                                             // for some reason 3/15
-                algaeTilt.setPositionCmd(0.907), () -> !climberDeployed);
+        return Commands.either(
+            algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.07 : 7.2), // used to be 10, 4 works
+            // for some reason 3/15
+            algaeTilt.setPositionCmd(0.907),
+            () -> !climberDeployed
+        );
     }
 
     public Command groundPickupAlgaeTilt() {
@@ -267,20 +268,21 @@ public class CommandFactory {
     }
 
     public Command driverIntakeAlgae() {
-        return algaeRoller.setDutyCycleCmd(-0.1).alongWith(
-                algaeShooter.setDutyCycleCmd(-1.0)).alongWith(
-                        algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.32 : 23.5));
+        return algaeRoller
+            .setDutyCycleCmd(-0.1)
+            .alongWith(algaeShooter.setDutyCycleCmd(-1.0))
+            .alongWith(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.32 : 23.5));
     }
 
     public Command driverProcessAlgae() {
-        return algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.253 : 21)
-                .alongWith(algaeShooter.setDutyCycleCmd(0.8))
-                .alongWith(algaeRoller.setDutyCycleCmd(0.8));
+        return algaeTilt
+            .setPositionCmd(Constants.isCompBot() ? 0.253 : 21)
+            .alongWith(algaeShooter.setDutyCycleCmd(0.8))
+            .alongWith(algaeRoller.setDutyCycleCmd(0.8));
     }
 
     public Command operatorIntakeAlgae() {
-        return algaeRoller.setDutyCycleCmd(-0.1).alongWith(
-                algaeShooter.setDutyCycleCmd(-1.0));
+        return algaeRoller.setDutyCycleCmd(-0.1).alongWith(algaeShooter.setDutyCycleCmd(-1.0));
     }
 
     public Command operatorOutakeAlgae() {
@@ -299,10 +301,11 @@ public class CommandFactory {
     }
 
     public Command shootAlgae() {
-       return Commands.waitUntil(() -> algaeShooter.getVelocity() > 5750)
-        .andThen(algaeRoller.setDutyCycleCmd(1.0))
-        .alongWith(algaeShooter.setVelocityCmd(6250))
-        .alongWith(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.03 : 3.0));
+        return Commands
+            .waitUntil(() -> algaeShooter.getVelocity() > 5750)
+            .andThen(algaeRoller.setDutyCycleCmd(1.0))
+            .alongWith(algaeShooter.setVelocityCmd(6250))
+            .alongWith(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.03 : 3.0));
     }
 
     public Command processAndScore() {
@@ -375,10 +378,19 @@ public class CommandFactory {
     }
 
     public Command deployClimb() {
-        return servo
-            .runWithTimeout(2.0, 0)
-            .deadlineFor(algaeTilt.setPositionCmd(20.0)) //0.256 for comp bot
-            .andThen(new InstantCommand(() -> this.climberDeployed = true));
+        return Commands
+            .waitUntil(() -> (climbTimer.get() > 3.5))
+            .deadlineFor(
+                servo
+                    .runWithTimeout(3.5, 0)
+                    .alongWith(new InstantCommand(() -> climbTimer.reset()))
+                    .alongWith(new InstantCommand(() -> climbTimer.start()))
+                    .alongWith(algaeTilt.setPositionCmd(0.256))
+                    .andThen(
+                        new InstantCommand(() -> System.out.println("TIMEOUT IS DONE HERERERE"))
+                    ) //20 for practice
+                    .andThen(new InstantCommand(() -> this.climberDeployed = true))
+            );
     }
 
     // public Command newDeploy() {
@@ -396,25 +408,27 @@ public class CommandFactory {
 
     public Command initiateClimb() {
         return Commands
-            .waitUntil(() -> Math.abs(climberWinch.getPosition() - climberWinchSetPoint) <= 1.0)
+            .waitUntil(() -> climberWinch.getPosition() < climberWinchSetPoint + 1.0)
             .deadlineFor(climberWinch.setDutyCycleCmd(-0.3))
-            .alongWith(algaeTilt.setPositionCmd(-5.0)); //.907 for comp
+            .alongWith(algaeTilt.setPositionCmd(0.907)); //-5 for comp bot
     }
 
     public Command depolyAndInitiateClimb() {
-        return deployClimb().andThen(Commands.waitSeconds(1.0).andThen(initiateClimb()));
+        return deployClimb().andThen(initiateClimb());
     }
 
     public Command climb() {
-        return climberWinch.setDutyCycleCmd(-0.60).alongWith(algaeTilt.setPositionCmd(0.907));
+        return climberWinch.setDutyCycleCmd(-0.6);
     }
 
     public Command climbAutomated() {
-        return Commands.waitUntil(() -> climberWinch.getPosition() < -157).deadlineFor(climb());
+        return Commands
+            .waitUntil(() -> climberWinch.getPosition() < -150)
+            .deadlineFor(climb())
+            .alongWith(algaeTilt.setPositionCmd(0.907));
     }
 
     public void resetClimberDeployed() {
         climberDeployed = false;
     }
-
 }

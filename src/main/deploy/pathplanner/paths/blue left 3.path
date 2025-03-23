@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.309,
-        "y": 7.173
+        "x": 1.289,
+        "y": 7.193
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.179564176637463,
-        "y": 6.355376061331924
+        "x": 2.159564176637463,
+        "y": 6.375376061331924
       },
       "isLocked": false,
       "linkedName": null
@@ -47,37 +47,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "intake",
-      "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "intake"
-        }
-      }
-    },
-    {
       "name": "elevator",
       "waypointRelativePos": 0.57,
       "endWaypointRelativePos": null,
       "command": {
-        "type": "sequential",
+        "type": "named",
         "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "intake"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "Elevator L4"
-              }
-            }
-          ]
+          "name": "Elevator L4"
         }
       }
     }

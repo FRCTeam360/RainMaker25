@@ -485,10 +485,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     @Override
     public void periodic() {
         Logger.recordOutput("Swerve: Current Pose", this.getPose());
-        Logger.recordOutput("Swerve: Rotation", this.getRotation2d());
-        Logger.recordOutput("Swerve: Angle", this.getAngle());
+        // Logger.recordOutput("Swerve: Rotation", this.getRotation2d());
+        // Logger.recordOutput("Swerve: Angle", this.getAngle());
         // Logger.recordOutput("swerve: pithc", this.isFlat());
-        Logger.recordOutput("Rotation2d", this.getPigeon2().getRotation2d());
+        // Logger.recordOutput("Rotation2d", this.getPigeon2().getRotation2d());
         Logger.recordOutput(
                 "Swerve: Heading Controller: Setpoint",
                 headingController.getSetpoint());
@@ -501,8 +501,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         Logger.recordOutput(
                 "Swerve: Heading Controller: PositionTolerance",
                 headingController.getPositionTolerance());
-        Logger.recordOutput("Swerve: CurrentState", this.getStateCopy().ModuleStates);
-        Logger.recordOutput("Swerve: TargetState", this.getStateCopy().ModuleTargets);
+        // Logger.recordOutput("Swerve: CurrentState", this.getStateCopy().ModuleStates);
+        // Logger.recordOutput("Swerve: TargetState", this.getStateCopy().ModuleTargets);
 
         /*
          * Periodically try to apply the operator perspective.

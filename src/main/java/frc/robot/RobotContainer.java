@@ -165,7 +165,7 @@ public class RobotContainer {
     private Command consumeVisionMeasurements;
     private boolean isAlgaeMode = false;
     private BargeAlign bargeAlign;
-    private HasCoral hasCoral;
+    private Command hasCoral;
 
     public RobotContainer() {
         switch (Constants.getRobotType()) {
@@ -423,7 +423,7 @@ public class RobotContainer {
             intake = coralShooter.basicIntakeCmd();
 
             smartIntake = SmartIntake.newCommand(coralShooter);
-            hasCoral = new HasCoral(coralShooter, elevator);
+            hasCoral = commandFactory.hasCoral(elevator, coralShooter);
 
             NamedCommands.registerCommand("shoot", coralShooter.basicShootCmd());
             NamedCommands.registerCommand("intake", smartIntake);

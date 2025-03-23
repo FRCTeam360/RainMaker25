@@ -57,22 +57,9 @@
                       }
                     },
                     {
-                      "type": "race",
+                      "type": "wait",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 0.5
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "intake"
-                            }
-                          }
-                        ]
+                        "waitTime": 0.75
                       }
                     },
                     {
@@ -82,6 +69,12 @@
                       }
                     }
                   ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
                 }
               }
             ]
@@ -94,7 +87,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "hasCoral"
+                  "name": "shoot"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.75
                 }
               }
             ]
@@ -115,22 +114,9 @@
                       }
                     },
                     {
-                      "type": "race",
+                      "type": "wait",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 0.5
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "intake"
-                            }
-                          }
-                        ]
+                        "waitTime": 0.75
                       }
                     },
                     {
@@ -140,6 +126,12 @@
                       }
                     }
                   ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
                 }
               }
             ]
@@ -152,7 +144,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "hasCoral"
+                  "name": "shoot"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.75
                 }
               }
             ]

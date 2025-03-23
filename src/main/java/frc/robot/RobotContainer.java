@@ -480,9 +480,9 @@ public class RobotContainer {
         operatorCont.rightBumper().whileTrue(algaeRoller.setDutyCycleCmd(1.0));
 
         operatorCont.y().whileTrue(algaeTilt.setPositionCmd(0.001)); // 0.001 used to be 0
-        operatorCont.x().whileTrue(algaeTilt.setPositionCmd(0.065)); // 0.065 used to be 3
-        operatorCont.b().whileTrue(algaeTilt.setPositionCmd(0.244)); // 0.244 used to be 30
-        operatorCont.a().whileTrue(algaeTilt.setPositionCmd(0.361)); // 0.361 used to be 35
+        operatorCont.x().whileTrue(algaeTilt.setPositionCmd(0.03)); // 0.065 used to be 3
+        operatorCont.b().whileTrue(algaeTilt.setPositionCmd(0.253)); // 0.244 used to be 30
+        operatorCont.a().whileTrue(algaeTilt.setPositionCmd(0.32)); // 0.361 used to be 35
 
         operatorCont.pov(90).whileTrue(commandFactory.operatorOutakeAlgae());
         operatorCont.pov(270).whileTrue(commandFactory.operatorIntakeAlgae());
@@ -655,6 +655,7 @@ public class RobotContainer {
             servo.stop();
         if (Objects.nonNull(vision))
             vision.setPipeline(CompBotConstants.CORAL_LIMELIGHT_NAME, 0);
+            vision.turnOffLights(CompBotConstants.ALGAE_LIMELIGHT_NAME);
     }
 
     public Command getAutonomousCommand() {

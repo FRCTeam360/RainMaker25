@@ -36,12 +36,12 @@ public final class Constants {
         public static final double LEFT_GOAL_TX = 0.0;
 
         public class ElevatorHeights {
-            public static final double TELE_LEVEL_FOUR = isCompBot() ? 29.5 : 29.5; //added 0.2 3/20
+            public static final double TELE_LEVEL_FOUR = isCompBot() ? 29.5 - 0.3 : 29.5; //added 0.2 3/20
             public static final double TELE_LEVEL_THREE = isCompBot() ? 16.1 : 16.0;
             public static final double TELE_LEVEL_TWO = isCompBot() ? 7.4 : 7.0;
             public static final double TELE_LEVEL_ONE = 0.0;
 
-            public static final double AUTO_LEVEL_FOUR = isCompBot() ? 29.0 : 29.5;
+            public static final double AUTO_LEVEL_FOUR = isCompBot() ? 29.0 + 0.2 : 29.5;
             public static final double AUTO_LEVEL_THREE = 0.0;
             public static final double AUTO_LEVEL_TWO = 0.0;
             public static final double AUTO_LEVEL_ONE = 0.0;
@@ -177,7 +177,7 @@ public final class Constants {
         public static final int ALGAE_TILT = 24;
 
 
-        public static final double RIGHT_GOAL_TY = 14.5;//15.5; //gpeak 14.0
+        public static final double RIGHT_GOAL_TY = 13.75;//15.5; //gpeak 14.0,
         public static final double RIGHT_GOAL_TX = 0.0;
 
         public static final double LEFT_GOAL_TY = RIGHT_GOAL_TY;

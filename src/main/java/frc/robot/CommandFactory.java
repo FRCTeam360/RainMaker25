@@ -277,7 +277,7 @@ public class CommandFactory {
     public Command driverProcessAlgae() {
         return algaeTilt
             .setPositionCmd(Constants.isCompBot() ? 0.253 : 21)
-            .alongWith(algaeShooter.setDutyCycleCmd(0.8))
+            .alongWith(algaeShooter.setDutyCycleCmd(0.6))
             .alongWith(algaeRoller.setDutyCycleCmd(0.8));
     }
 
@@ -418,12 +418,12 @@ public class CommandFactory {
     }
 
     public Command climb() {
-        return climberWinch.setDutyCycleCmd(-0.6);
+        return climberWinch.setDutyCycleCmd(-0.8);
     }
 
     public Command climbAutomated() {
         return Commands
-            .waitUntil(() -> climberWinch.getPosition() < -150)
+            .waitUntil(() -> climberWinch.getPosition() < -160.0)
             .deadlineFor(climb())
             .alongWith(algaeTilt.setPositionCmd(0.907));
     }

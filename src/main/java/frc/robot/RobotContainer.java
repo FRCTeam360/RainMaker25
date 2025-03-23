@@ -5,7 +5,6 @@
 
 package frc.robot;
 
-
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -373,7 +372,6 @@ public class RobotContainer {
                     1,
                     driverCont);
 
-           
         }
 
         registerPathplannerCommand("Elevator L4", autoLevelFour);
@@ -475,14 +473,16 @@ public class RobotContainer {
 
         // testCont.pov(0).whileTrue(commandFactory.climb());
 
+        operatorCont.leftStick().toggleOnTrue(algaeTilt.setDutyCycleCmd(() -> operatorCont.getLeftY() * 0.1));
+        operatorCont.rightStick().toggleOnTrue(elevator.setDutyCycleCommand(() -> operatorCont.getRightY() * -0.1));
 
         operatorCont.leftBumper().whileTrue(algaeRoller.setDutyCycleCmd(-0.1));
         operatorCont.rightBumper().whileTrue(algaeRoller.setDutyCycleCmd(1.0));
 
-        operatorCont.y().whileTrue(algaeTilt.setPositionCmd(0.0)); // 0.001 used to be 0
-        operatorCont.x().whileTrue(algaeTilt.setPositionCmd(3.0)); // .065 used to be 3
-        operatorCont.b().whileTrue(algaeTilt.setPositionCmd(21.0)); // 0.244 used to be 30
-        operatorCont.a().whileTrue(algaeTilt.setPositionCmd(27.0)); // 0.361 used to be 35
+        operatorCont.y().whileTrue(algaeTilt.setPositionCmd(0.001)); // 0.001 used to be 0
+        operatorCont.x().whileTrue(algaeTilt.setPositionCmd(0.065)); // 0.065 used to be 3
+        operatorCont.b().whileTrue(algaeTilt.setPositionCmd(0.244)); // 0.244 used to be 30
+        operatorCont.a().whileTrue(algaeTilt.setPositionCmd(0.361)); // 0.361 used to be 35
 
         operatorCont.pov(90).whileTrue(commandFactory.operatorOutakeAlgae());
         operatorCont.pov(270).whileTrue(commandFactory.operatorIntakeAlgae());
@@ -501,7 +501,8 @@ public class RobotContainer {
         // testCont.a().whileTrue(bargeAlign);
         // testCont.leftTrigger().whileTrue(commandFactory.driverIntakeAlgae());
         // driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(testCont));
-        // testCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
+        // testCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(),
+        // driveTrain));
 
         driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
 
@@ -512,34 +513,31 @@ public class RobotContainer {
         driverCont.start().onTrue(commandFactory.depolyAndInitiateClimb());
         driverCont.back().onTrue(commandFactory.climbAutomated());
 
-
         // driverCont.pov(180).onTrue(commandFactory.setAlgaeArmAngle(0.0));
 
-        
         driverCont
-            .rightStick()
-            .onTrue(
-                    new InstantCommand(() -> toggleIsAlgaeMode())
-                            .andThen(
-                                Commands.either(
-                                        Commands.none(),
-                                        commandFactory.homeAlgaeTilt(),
-                                        () -> isAlgaeMode))
-                            .alongWith(
-                                    Commands.either(
-                                        Commands.none(),
-                                        elevator.setElevatorHeight(0.0),
-                                        () -> !isAlgaeMode))
-                            .alongWith(
-                                    Commands.either(
-                                        new InstantCommand(
-                                                () -> vision
-                                                    .turnOnLights(CompBotConstants.ALGAE_LIMELIGHT_NAME)),
-                                        new InstantCommand(
-                                                () -> vision
-                                                        .turnOffLights(CompBotConstants.ALGAE_LIMELIGHT_NAME)),                                                () -> isAlgaeMode)));
-
-        
+                .rightStick()
+                .onTrue(
+                        new InstantCommand(() -> toggleIsAlgaeMode())
+                                .andThen(
+                                        Commands.either(
+                                                Commands.none(),
+                                                commandFactory.homeAlgaeTilt(),
+                                                () -> isAlgaeMode))
+                                .alongWith(
+                                        Commands.either(
+                                                Commands.none(),
+                                                elevator.setElevatorHeight(0.0),
+                                                () -> !isAlgaeMode))
+                                .alongWith(
+                                        Commands.either(
+                                                new InstantCommand(
+                                                        () -> vision
+                                                                .turnOnLights(CompBotConstants.ALGAE_LIMELIGHT_NAME)),
+                                                new InstantCommand(
+                                                        () -> vision
+                                                                .turnOffLights(CompBotConstants.ALGAE_LIMELIGHT_NAME)),
+                                                () -> isAlgaeMode)));
 
         driverCont.leftTrigger(0.25).and(() -> !isAlgaeMode).whileTrue(smartIntake);
         driverCont.leftTrigger(0.25).and(() -> isAlgaeMode).whileTrue(commandFactory.driverIntakeAlgae());
@@ -655,7 +653,7 @@ public class RobotContainer {
             climberWheel.stop();
         if (Objects.nonNull(servo))
             servo.stop();
-        if(Objects.nonNull(vision))
+        if (Objects.nonNull(vision))
             vision.setPipeline(CompBotConstants.CORAL_LIMELIGHT_NAME, 0);
     }
 

@@ -2,6 +2,7 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
+import edu.wpi.first.networktables.PubSub;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
@@ -141,7 +142,7 @@ public class CommandFactory {
      * @param pipeline 0 is right, 1 is left
      * @return
      */
-    public Command alignWithLimelight(
+    public Command teleAlignWithLimelight(
         double goalTY,
         double goalTX,
         int pipeline,
@@ -153,6 +154,14 @@ public class CommandFactory {
                 "AlignWithLimelightBase"
             )
             .andThen(this.rumbleDriverController(driverCont).withTimeout(0.1));
+    }
+
+    public Command autoAlignWithLimelight(double goalTY, double goalTX, int pipeline) {
+        return CommandLogger
+            .logCommand(
+                new AlignWithLimelight(vision, drivetrain, goalTY, goalTX, pipeline),
+                "AlignWithLimelightAuto: " + pipeline
+            );
     }
 
     /**
@@ -189,7 +198,7 @@ public class CommandFactory {
                     );
                 }
             )
-            .deadlineFor(alignWithLimelight(goalTY, goalTX, pipeline, driverCont).repeatedly());
+            .deadlineFor(teleAlignWithLimelight(goalTY, goalTX, pipeline, driverCont).repeatedly());
     }
 
     /**

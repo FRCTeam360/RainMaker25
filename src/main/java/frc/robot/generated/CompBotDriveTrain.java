@@ -24,14 +24,14 @@ public class CompBotDriveTrain {
                                                                                                   // per
                                                                                                   // second max angular
                                                                                                   // velocity
-    public static final double headingKP = 1.75; 
+    public static final double headingKP = 2.0; 
     public static final double headingKI = 0.0;
     public static final double headingKD = 0.0;
     public static final double headingKIZone = 0.0;
 
-    public static final double stafeKP = 0.01;
+    public static final double stafeKP = 0.011;
     public static final double stafeKI = 0.0;//0.00015;
-    public static final double stafeKD = 0.0;//0.003;
+    public static final double stafeKD = 0.00001;//0.003;
     public static final double strafeIRMax = 0.05; //DOES NOTHING WE ARENT DOING INTEGRATOR RANGE :((()))
     public static final double strafeIRMin = -0.05;
 
@@ -52,7 +52,7 @@ public class CompBotDriveTrain {
     // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
     private static final Slot0Configs driveGains = new Slot0Configs()
         .withKP(0.12).withKI(0).withKD(0)
-        .withKS(0.5).withKV(0.124);
+        .withKS(0.2).withKV(0.124).withKA(0.006);
 
     // The closed-loop output type to use for the steer motors;
     // This affects the PID/FF gains for the steer motors

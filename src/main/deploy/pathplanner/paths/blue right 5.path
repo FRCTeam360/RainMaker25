@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.541,
-        "y": 0.7392499999999995
+        "x": 1.452,
+        "y": 0.729
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.46675,
-        "y": 1.0804999999999996
+        "x": 2.3777500000000003,
+        "y": 1.0702500000000001
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.148,
-        "y": 2.8939999999999997
+        "x": 5.205170454545455,
+        "y": 2.9031960227272724
       },
       "prevControl": {
-        "x": 4.43625,
-        "y": 1.4900000000000002
+        "x": 6.433023648648649,
+        "y": 0.7146114864864854
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "raise elevator",
-      "waypointRelativePos": 0.4514388489208609,
+      "waypointRelativePos": 0.5726970033296304,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

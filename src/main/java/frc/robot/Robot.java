@@ -9,9 +9,12 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.Constants.CompBotConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorIOSim;
+import frc.robot.subsystems.Vision.Vision;
 import frc.robot.utils.RobotUtils;
 
 import org.littletonrobotics.junction.LogFileUtil;
@@ -31,11 +34,11 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
     private CommandSwerveDrivetrain drivetrain;
+    private Vision vision;
 
     private final RobotContainer m_robotContainer;
 
-    public void robotInit() {}
-
+   
     /**
      * This function is run when the robot is first started up and should be used
      * for any
@@ -80,6 +83,7 @@ public class Robot extends LoggedRobot {
         // and put our
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
+        m_robotContainer.onInit();
     }
 
     /**

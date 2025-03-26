@@ -32,6 +32,8 @@ public interface VisionIO {
 
     public void updateInputs(VisionIOInputs inputs);
 
+    public void setLEDMode(int mode);
+
     public int getAprilTagID();
 
     public double getTXRaw();

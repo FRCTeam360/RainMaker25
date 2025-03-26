@@ -297,7 +297,6 @@ public class RobotContainer {
                 elevator,
                 vision,
                 climberWinch,
-                climberWheel,
                 algaeShooter,
                 algaeArm,
                 driveTrain,

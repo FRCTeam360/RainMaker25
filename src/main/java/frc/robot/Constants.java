@@ -4,16 +4,9 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.*;
-
-import com.ctre.phoenix6.signals.ConnectedMotorValue;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.hal.HALUtil;
-import edu.wpi.first.util.function.BooleanConsumer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.generated.OldCompBot;
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -177,7 +170,7 @@ public final class Constants {
         public static final int ALGAE_TILT = 24;
 
 
-        public static final double RIGHT_GOAL_TY = 13.75;//15.5; //gpeak 14.0,
+        public static final double RIGHT_GOAL_TY = 13.75;//practice fiedl: 15.5 | gpeak: 14.0 | auburn: 13.75
         public static final double RIGHT_GOAL_TX = 0.0;
 
         public static final double LEFT_GOAL_TY = RIGHT_GOAL_TY;

@@ -87,7 +87,7 @@ public class AlignWithLimelight extends Command {
         if (vision.getTV(LIMELIGHT_NAME) == 1 && tagIDToAngle.containsKey(priorityID)) {
             endEarly = false;
             angleToFace = tagIDToAngle.get(priorityID);
-        } //TODO: switch to endEarly = false, change to true if no valid target
+        }
 
         Optional<Alliance> alliance = DriverStation.getAlliance();
         if (alliance.isPresent() && alliance.get() == Alliance.Red) {
@@ -107,7 +107,6 @@ public class AlignWithLimelight extends Command {
         LimelightHelpers.setPriorityTagID("limelight", priorityID);
 
         if(endEarly) return;
-
         driveRobot();
     }
 
@@ -158,16 +157,12 @@ public class AlignWithLimelight extends Command {
     @Override
     public void execute() {
         if (endEarly) return;
-
         driveRobot();
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-
-        // LimelightHelpers.SetFiducialIDFiltersOverride("limelight", new int[] { 6, 7,
-        // 8 });
         LimelightHelpers.setPriorityTagID("limelight", -1);
         driveTrain.robotCentricDrive(0.0, 0.0, 0.0);
     }
@@ -179,8 +174,6 @@ public class AlignWithLimelight extends Command {
         boolean onTY = driveTrain.forwardController.atSetpoint();
         boolean onHeading = driveTrain.isAtRotationSetpoint();
         boolean onCorrectPipeline = (vision.getPipeline(LIMELIGHT_NAME) == pipeline);
- 
-        // boolean onVelocity = driveTrain.getVelocity(); TODO: FIX!!!
         boolean vel0 = ((Math.abs(driveTrain.getXRate()) <= 0.1) && (Math.abs(driveTrain.getYRate()) <= 0.1));
 
         Logger.recordOutput(CMD_NAME + "onTX", onTX);

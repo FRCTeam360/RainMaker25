@@ -583,6 +583,7 @@ public class RobotContainer {
 
     private void toggleIsAlgaeMode() {
         this.isAlgaeMode = !this.isAlgaeMode;
+        driverCont.setRumble(RumbleType.kBothRumble, 0.25);
     }
 
     private void configureTestController() {

@@ -33,6 +33,14 @@ public class AlgaeTilt extends SubsystemBase {
   public void setPosition(double position) {
     io.setPosition(position);
   }
+  
+  public double getPositionRelative() {
+    return inputs.armPositionRelative;
+  }
+
+  public double getPositionAbsolute() {
+    return inputs.armPositionAbsolute;
+  }
 
   public void stop() {
     io.setDutyCycle(0.0);

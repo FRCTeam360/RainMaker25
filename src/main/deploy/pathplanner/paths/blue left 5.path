@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 10.514,
-        "y": 7.444087837837838
+        "x": 1.289,
+        "y": 7.193
       },
       "prevControl": null,
       "nextControl": {
-        "x": 11.275247883097851,
-        "y": 6.656885112040727
+        "x": 2.5435531846299573,
+        "y": 6.195349261656525
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 12.658,
-        "y": 5.279
+        "x": 3.997,
+        "y": 5.265000000000001
       },
       "prevControl": {
-        "x": 11.907614045584399,
-        "y": 6.039452252763509
+        "x": 2.357249882476706,
+        "y": 6.575458387015469
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,7 @@
   "rotationTargets": [],
   "constraintZones": [
     {
-      "name": "Constraints Zone",
+      "name": "fast",
       "minWaypointRelativePos": 0,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
@@ -45,7 +45,19 @@
     }
   ],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "elevator",
+      "waypointRelativePos": 0.75,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Elevator L4"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -62,7 +74,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -67.0
+    "rotation": -54.0
   },
   "useDefaultConstraints": true
 }

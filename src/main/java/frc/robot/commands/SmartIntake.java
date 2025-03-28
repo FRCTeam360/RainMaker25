@@ -53,7 +53,7 @@ public class SmartIntake extends Command {
                 stallTimer.stop();
                 coralShooter.setDutyCycle(0.2);
                 unJammedTimer.start();
-                if(unJammedTimer.hasElapsed(0.025)){
+                if(unJammedTimer.hasElapsed(0.05)){
                     unJammedTimer.reset();
                     unJammedTimer.stop();
                     updateStates();
@@ -61,14 +61,14 @@ public class SmartIntake extends Command {
                 break;
             case EMPTY:
                 stallTimer.start();
-                coralShooter.setDutyCycle(-0.65);
+                coralShooter.setDutyCycle(-0.6);
                 timer.reset();
                 timer.stop();
                 updateStates();
                 break;
             case JUST_INTAKE:
                 stallTimer.start();
-                coralShooter.setDutyCycle(-0.15);
+                coralShooter.setDutyCycle(-0.1);
                 timer.reset();
                 timer.stop();
                 updateStates();
@@ -82,10 +82,10 @@ public class SmartIntake extends Command {
                 break;
             case FULL:
             default:
-                stallTimer.start();
                 coralShooter.stop();
+                stallTimer.start();
                 timer.start();
-                if (timer.get() > 0.1) {
+                if (timer.get() > 0.05) {
                     if (coralShooter.getOuttakeSensor() && coralShooter.getIntakeSensor()) {
                         timer.stop();
                         coralShooter.stop();

@@ -27,7 +27,6 @@ import frc.robot.subsystems.AlgaeArm.AlgaeArm;
 import frc.robot.subsystems.AlgaeRoller.AlgaeRoller;
 import frc.robot.subsystems.AlgaeShooter.AlgaeShooter;
 import frc.robot.subsystems.AlgaeTilt.AlgaeTilt;
-import frc.robot.subsystems.ClimberWheel.ClimberWheel;
 import frc.robot.subsystems.ClimberWinch.ClimberWinch;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CoralShooter.CoralShooter;

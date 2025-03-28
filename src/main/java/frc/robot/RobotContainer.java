@@ -59,10 +59,6 @@ import frc.robot.subsystems.AlgaeShooter.AlgaeShooterIOSim;
 import frc.robot.subsystems.AlgaeTilt.AlgaeTilt;
 import frc.robot.subsystems.AlgaeTilt.AlgaeTiltIOCB;
 import frc.robot.subsystems.AlgaeTilt.AlgaeTiltIOPB;
-import frc.robot.subsystems.ClimberWheel.ClimberWheel;
-import frc.robot.subsystems.ClimberWheel.ClimberWheelIOCB;
-import frc.robot.subsystems.ClimberWheel.ClimberWheelIOPB;
-import frc.robot.subsystems.ClimberWheel.ClimberWheelIOSim;
 import frc.robot.subsystems.ClimberWinch.ClimberWinch;
 import frc.robot.subsystems.ClimberWinch.ClimberWinchIOCB;
 import frc.robot.subsystems.ClimberWinch.ClimberWinchIOPB;
@@ -113,7 +109,6 @@ public class RobotContainer {
     private CoralShooter coralShooter;
     private Elevator elevator;
     private ClimberWinch climberWinch;
-    private ClimberWheel climberWheel;
     private AlgaeArm algaeArm;
     private AlgaeShooter algaeShooter;
     private AlgaeRoller algaeRoller;
@@ -278,7 +273,6 @@ public class RobotContainer {
                 algaeArm = new AlgaeArm(new AlgaeArmIOSim(() -> elevator.getHeight()));
                 coralShooter = new CoralShooter(new CoralShooterIOSim(() -> elevator.getHeight()));
                 climberWinch = new ClimberWinch(new ClimberWinchIOSim());
-                climberWheel = new ClimberWheel(new ClimberWheelIOSim());
                 algaeShooter = new AlgaeShooter(new AlgaeShooterIOSim());
                 break;
             case COMPETITION:
@@ -736,7 +730,6 @@ public class RobotContainer {
         if (Objects.nonNull(algaeShooter)) algaeShooter.stop();
         if (Objects.nonNull(algaeTilt)) algaeTilt.stop();
         if (Objects.nonNull(climberWinch)) climberWinch.stop();
-        if (Objects.nonNull(climberWheel)) climberWheel.stop();
         if (Objects.nonNull(servo)) servo.stop();
         if (Objects.nonNull(vision)) vision.setPipeline(CompBotConstants.CORAL_LIMELIGHT_NAME, 0);
         vision.turnOffLights(CompBotConstants.ALGAE_LIMELIGHT_NAME);

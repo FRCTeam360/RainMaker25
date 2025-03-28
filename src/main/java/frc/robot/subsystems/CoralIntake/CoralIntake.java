@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems.CoralIntake;
 
+import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.CoralIntake.CoralIntakeIO.CoralIntakeIOInputs;
 
@@ -26,6 +29,9 @@ public class CoralIntake extends SubsystemBase {
 
     @Override
     public void periodic() {
+        long periodicStartTime = HALUtil.getFPGATime();
         io.updateInputs(inputs);
+        long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
+        Logger.recordOutput( "Swerve: periodic loop time", (periodicLoopTime / 1000));
     }
 }

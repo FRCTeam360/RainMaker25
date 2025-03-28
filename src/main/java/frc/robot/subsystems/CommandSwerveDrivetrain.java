@@ -19,6 +19,8 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.DriveFeedforwards;
+
+import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -484,6 +486,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     @Override
     public void periodic() {
+        long periodicStartTime = HALUtil.getFPGATime();
+
         Logger.recordOutput("Swerve: Current Pose", this.getPose());
         // Logger.recordOutput("Swerve: Rotation", this.getRotation2d());
         // Logger.recordOutput("Swerve: Angle", this.getAngle());
@@ -527,6 +531,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                                 m_hasAppliedOperatorPerspective = true;
                             });
         }
+        long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
+        Logger.recordOutput( "Swerve: periodic loop time", (periodicLoopTime / 1000));
     }
 
     private void startSimThread() {

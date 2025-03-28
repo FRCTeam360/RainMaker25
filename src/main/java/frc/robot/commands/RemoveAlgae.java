@@ -95,10 +95,11 @@ public class RemoveAlgae extends Command {
         algaeTilt.setPosition(0.0);
         algaeShooter.setDutyCycle(-0.8);
 
-        algaeArm.setPosition(100.0);
-        elevator.setElevatorPostion(height + 1.0);
-        // if (coralShooter.getVelocity() < -6000.0) {
-        // }
+        // algaeArm.setPosition(100.0);
+        // elevator.setElevatorPostion(height + 1.0);
+        elevator.setElevatorPostion(height + 3.0);
+        algaeArm.setPosition(150.0);
+
     }
 
     // Called once the command ends or is interrupted.

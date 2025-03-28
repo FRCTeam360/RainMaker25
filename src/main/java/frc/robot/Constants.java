@@ -200,7 +200,7 @@ public final class Constants {
             return Constants.RobotType.SIM;
         }
 
-        return Constants.RobotType.COMPETITION;
+        return Constants.RobotType.SIM;
     }
 
     public static boolean isOCB() {

@@ -170,6 +170,6 @@ public class CoralShooter extends SubsystemBase {
         io.updateInputs(inputs);
         Logger.processInputs("Coral Outtake", inputs);
         long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
-        Logger.recordOutput( "Swerve: periodic loop time", (periodicLoopTime / 1000));
+        Logger.recordOutput( "Coral Outtake: periodic loop time", (periodicLoopTime / 1000));
     }
 }

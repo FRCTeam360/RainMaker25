@@ -87,6 +87,6 @@ public class AlgaeArm extends SubsystemBase {
         io.updateInputs(inputs);
         Logger.processInputs("Algae Arm", inputs);
         long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
-        Logger.recordOutput( "Swerve: periodic loop time", (periodicLoopTime / 1000));
+        Logger.recordOutput( "Algae Arm: periodic loop time", (periodicLoopTime / 1000));
     }
 }

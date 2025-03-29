@@ -58,6 +58,7 @@ import org.littletonrobotics.junction.Logger;
  * Subsystem so it can easily be used in command-based projects.
  */
 public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
+    private final String CMD_NAME = "Swerve:";
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
@@ -487,23 +488,23 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     @Override
     public void periodic() {
         long periodicStartTime = HALUtil.getFPGATime();
-
-        Logger.recordOutput("Swerve: Current Pose", this.getPose());
+        
+        Logger.recordOutput(CMD_NAME+ " Current Pose", this.getPose());
         // Logger.recordOutput("Swerve: Rotation", this.getRotation2d());
         // Logger.recordOutput("Swerve: Angle", this.getAngle());
         // Logger.recordOutput("swerve: pithc", this.isFlat());
         // Logger.recordOutput("Rotation2d", this.getPigeon2().getRotation2d());
         Logger.recordOutput(
-                "Swerve: Heading Controller: Setpoint",
+                CMD_NAME+ " Heading Controller: Setpoint",
                 headingController.getSetpoint());
         Logger.recordOutput(
-                "Swerve: Heading Controller: Error",
+                CMD_NAME+ " Heading Controller: Error",
                 headingController.getPositionError());
         Logger.recordOutput(
-                "Swerve: Heading Controller: AtSetpoint",
+                CMD_NAME+ " Heading Controller: AtSetpoint",
                 headingController.atSetpoint());
         Logger.recordOutput(
-                "Swerve: Heading Controller: PositionTolerance",
+                CMD_NAME+ " Heading Controller: PositionTolerance",
                 headingController.getPositionTolerance());
         // Logger.recordOutput("Swerve: CurrentState", this.getStateCopy().ModuleStates);
         // Logger.recordOutput("Swerve: TargetState", this.getStateCopy().ModuleTargets);
@@ -532,7 +533,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                             });
         }
         long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
-        Logger.recordOutput( "Swerve: periodic loop time", (periodicLoopTime / 1000));
+        Logger.recordOutput( CMD_NAME+ " periodic loop time", (periodicLoopTime / 1000));
     }
 
     private void startSimThread() {

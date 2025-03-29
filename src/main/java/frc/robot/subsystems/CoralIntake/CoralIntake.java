@@ -32,6 +32,6 @@ public class CoralIntake extends SubsystemBase {
         long periodicStartTime = HALUtil.getFPGATime();
         io.updateInputs(inputs);
         long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
-        Logger.recordOutput( "Swerve: periodic loop time", (periodicLoopTime / 1000));
+        Logger.recordOutput( "Coral Intake: periodic loop time", (periodicLoopTime / 1000));
     }
 }

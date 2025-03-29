@@ -51,7 +51,7 @@ public class Servo extends SubsystemBase {
         io.updateInputs(inputs);
         Logger.processInputs("Servo", inputs);
         long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
-        Logger.recordOutput( "Swerve: periodic loop time", (periodicLoopTime / 1000));
+        Logger.recordOutput( "Servo: periodic loop time", (periodicLoopTime / 1000));
         // This method will be called once per scheduler run
     }
 }

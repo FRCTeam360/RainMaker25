@@ -40,6 +40,6 @@ public class AlgaeRoller extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Algae Intake Roller", inputs);
     long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
-    Logger.recordOutput( "Swerve: periodic loop time", (periodicLoopTime / 1000));
+    Logger.recordOutput( "Algae Intake Roller: periodic loop time", (periodicLoopTime / 1000));
   }
 }

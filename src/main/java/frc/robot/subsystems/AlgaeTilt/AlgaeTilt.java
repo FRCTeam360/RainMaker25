@@ -67,6 +67,6 @@ public class AlgaeTilt extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Algae Tilt", inputs);
     long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
-    Logger.recordOutput( "Swerve: periodic loop time", (periodicLoopTime / 1000));
+    Logger.recordOutput( "Algae Tilt: periodic loop time", (periodicLoopTime / 1000));
   }
 }

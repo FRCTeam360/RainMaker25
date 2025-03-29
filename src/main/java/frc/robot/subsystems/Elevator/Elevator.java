@@ -114,6 +114,6 @@ public class Elevator extends SubsystemBase {
         io.updateInputs(inputs);
         Logger.processInputs("Elevator", inputs);
         long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
-        Logger.recordOutput( "Swerve: periodic loop time", (periodicLoopTime / 1000));
+        Logger.recordOutput( "Elevator: periodic loop time", (periodicLoopTime / 1000));
     }
 }

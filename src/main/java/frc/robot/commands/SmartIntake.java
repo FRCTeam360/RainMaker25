@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CoralShooter.CoralShooter;
@@ -43,8 +44,11 @@ public class SmartIntake extends Command {
     }
 
     // Called every time the scheduler runs while the command is scheduled.
+    private final String CMD_NAME = "SmartIntake";
     @Override
     public void execute() {
+        long executeStartTime = HALUtil.getFPGATime();
+        
         Logger.recordOutput("intake state", intakeStates);
 
         switch (intakeStates) {
@@ -96,6 +100,8 @@ public class SmartIntake extends Command {
                 }
                 break;
         }
+        long executeLoopTime = HALUtil.getFPGATime() - executeStartTime;
+        Logger.recordOutput( CMD_NAME +": execute loop time", (executeLoopTime / 1000));
 
     }
 

@@ -50,6 +50,6 @@ public class AlgaeShooter extends SubsystemBase {
         io.updateInputs(inputs);
         Logger.processInputs("Algae Shooter", inputs);
         long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
-        Logger.recordOutput( "Swerve: periodic loop time", (periodicLoopTime / 1000));
+        Logger.recordOutput( "Algae Shooter: periodic loop time", (periodicLoopTime / 1000));
     }
 }

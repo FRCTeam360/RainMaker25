@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -181,8 +182,11 @@ public class AlignWithLimelight extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        long executeStartTime = HALUtil.getFPGATime();
         if (endEarly) return;
         driveRobot();
+        long executeLoopTime = HALUtil.getFPGATime() - executeStartTime;
+        Logger.recordOutput( CMD_NAME +" execute loop time", (executeLoopTime / 1000));
     }
 
     // Called once the command ends or is interrupted.

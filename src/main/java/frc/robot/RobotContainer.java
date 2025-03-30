@@ -77,6 +77,8 @@ import frc.robot.subsystems.Elevator.ElevatorIOSim;
 import frc.robot.subsystems.Elevator.ElevatorIOSim;
 import frc.robot.subsystems.Elevator.ElevatorIOSim;
 import frc.robot.subsystems.Elevator.ElevatorIOWB;
+import frc.robot.subsystems.Funnel.Funnel;
+import frc.robot.subsystems.Funnel.FunnelIOPB;
 import frc.robot.subsystems.Servo.Servo;
 import frc.robot.subsystems.Servo.ServoIOCB;
 import frc.robot.subsystems.Servo.ServoIOPB;
@@ -114,6 +116,7 @@ public class RobotContainer {
     private AlgaeRoller algaeRoller;
     private AlgaeTilt algaeTilt;
     private Servo servo;
+    private Funnel funnel;
 
     private ShuffleboardTab diagnosticTab;
 
@@ -221,6 +224,7 @@ public class RobotContainer {
                 algaeShooter = new AlgaeShooter(new AlgaeShooterIOPB());
                 algaeTilt = new AlgaeTilt(new AlgaeTiltIOPB());
                 climberWinch = new ClimberWinch(new ClimberWinchIOPB());
+                funnel = new Funnel(new FunnelIOPB());
 
                 vision =
                     new Vision(
@@ -520,6 +524,9 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
+        testCont.leftTrigger(0.25).whileTrue(funnel.setDutyCycleCmd(0.2));
+        testCont.rightTrigger(0.25).whileTrue(smartIntake);
+
         vision.setDefaultCommand(consumeVisionMeasurements.ignoringDisable(true));
         
         driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
@@ -530,7 +537,7 @@ public class RobotContainer {
 
 
         algaeTilt.setDefaultCommand(commandFactory.homeAlgaeTilt());
-        algaeArm.setDefaultCommand(algaeArm.setAlgaeArmAngleCmd(0.0));
+        // algaeArm.setDefaultCommand(algaeArm.setAlgaeArmAngleCmd(0.0));
 
         // elevator.setDefaultCommand(elevator.setDutyCycleCommand(() ->
         // testCont.getLeftY() * 0.1));
@@ -616,7 +623,7 @@ public class RobotContainer {
                                 () -> vision.turnOnLights(CompBotConstants.ALGAE_LIMELIGHT_NAME)
                             ),
                             new InstantCommand(
-                                () -> vision.turnOffLights(CompBotConstants.ALGAE_LIMELIGHT_NAME)
+                                // () -> vision.turnOffLights(CompBotConstants.ALGAE_LIMELIGHT_NAME)
                             ),
                             () -> isAlgaeMode
                         )
@@ -753,7 +760,7 @@ public class RobotContainer {
         if (Objects.nonNull(climberWinch)) climberWinch.stop();
         if (Objects.nonNull(servo)) servo.stop();
         if (Objects.nonNull(vision)) vision.setPipeline(CompBotConstants.CORAL_LIMELIGHT_NAME, 0);
-        vision.turnOffLights(CompBotConstants.ALGAE_LIMELIGHT_NAME);
+        // if (Objects.nonNull(vision)) vision.turnOffLights(CompBotConstants.ALGAE_LIMELIGHT_NAME);
     }
 
     public Command getAutonomousCommand() {
@@ -762,7 +769,7 @@ public class RobotContainer {
 
     public void onInit() {
         if (Objects.nonNull(vision)) {
-            vision.turnOffLights(CompBotConstants.CORAL_LIMELIGHT_NAME);
+            // vision.turnOffLights(CompBotConstants.CORAL_LIMELIGHT_NAME);
         }
     }
 }

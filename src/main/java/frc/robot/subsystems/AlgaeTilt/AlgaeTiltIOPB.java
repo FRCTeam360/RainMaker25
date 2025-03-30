@@ -26,14 +26,14 @@ public class AlgaeTiltIOPB implements AlgaeTiltIO {
   private final SparkMax motor = new SparkMax(Constants.PracticeBotConstants.ALGAE_TILT, MotorType.kBrushless);
   private final AbsoluteEncoder absEncoder = motor.getAbsoluteEncoder();  // TODO: make absolute when we get one!!
 
-  private final double kP = 1;
+  private final double kP = 4.0;
   private final double kI = 0.0;
   private final double kD = 0.0;
 
   private final double forwardLimit = 27.0;
   private final double reverseLimit = -5.0; //used to be 10 3/15
 
-  private final double ZERO_OFFSET = 0.5551491;
+  private final double ZERO_OFFSET = 0.5463262;
 
   private final double positionConversionFactor = 1.0;
   private final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();

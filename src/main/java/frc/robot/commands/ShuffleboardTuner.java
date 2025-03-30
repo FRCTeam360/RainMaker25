@@ -51,29 +51,29 @@ public class ShuffleboardTuner extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    newTiltAngle = SmartDashboard.getNumber("tilt angle", tiltAngle);
-    newShooterVelocity = SmartDashboard.getNumber("tilt angle", shooterVelocity);
-    newRollerDutyCycle = SmartDashboard.getNumber("roller dutycycle", rollerDutyCycle);
+    // newTiltAngle = SmartDashboard.getNumber("tilt angle", tiltAngle);
+    newShooterVelocity = SmartDashboard.getNumber("shoot velocity", shooterVelocity);
+    // newRollerDutyCycle = SmartDashboard.getNumber("roller dutycycle", rollerDutyCycle);
 
-    if (tiltAngle != newTiltAngle) {
-        tiltAngle = newTiltAngle;
-    }
+    // if (tiltAngle != newTiltAngle) {
+    //     tiltAngle = newTiltAngle;
+    // }
 
-    if (tiltAngle != newShooterVelocity) {
+    if (shooterVelocity != newShooterVelocity) {
         shooterVelocity = newShooterVelocity;
     }
 
-    if (tiltAngle != newRollerDutyCycle) {
-        rollerDutyCycle = newRollerDutyCycle;
-    }
+    // if (tiltAngle != newRollerDutyCycle) {
+    //     rollerDutyCycle = newRollerDutyCycle;
+    // }
 
-    algaeTilt.setPosition(tiltAngle);
     algaeShooter.setVelocity(shooterVelocity);
-    algaeRoller.setDutyCycle(rollerDutyCycle);
+    // algaeTilt.setPosition(tiltAngle);
+    // algaeRoller.setDutyCycle(rollerDutyCycle);
 
-    SmartDashboard.putNumber("tilt angle", tiltAngle);
     SmartDashboard.putNumber("shooter velocity", shooterVelocity);
-    SmartDashboard.putNumber("roller velocity", rollerDutyCycle);
+    // SmartDashboard.putNumber("tilt angle", tiltAngle);
+    // SmartDashboard.putNumber("roller velocity", rollerDutyCycle);
   }
 
   // Called once the command ends or is interrupted.

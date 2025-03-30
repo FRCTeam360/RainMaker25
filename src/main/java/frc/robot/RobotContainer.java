@@ -39,6 +39,7 @@ import frc.robot.commands.BargeAlign;
 import frc.robot.commands.HasCoral;
 import frc.robot.commands.RemoveAlgae;
 import frc.robot.commands.SetCoralIntake;
+import frc.robot.commands.ShuffleboardTuner;
 import frc.robot.commands.SmartIntake;
 import frc.robot.commands.SnapDrivebaseToAngle;
 import frc.robot.generated.CompBotDriveTrain;
@@ -168,6 +169,8 @@ public class RobotContainer {
     private Command hasCoral;
 
     private double yVel;
+
+    private ShuffleboardTuner shuffleboardTuner;
 
     public RobotContainer() {
         switch (Constants.getRobotType()) {
@@ -365,6 +368,7 @@ public class RobotContainer {
     }
 
     public void initializeCommands() {
+        shuffleboardTuner = new ShuffleboardTuner(algaeTilt, algaeShooter, algaeRoller, driveTrain);
         consumeVisionMeasurements =
             vision.consumeVisionMeasurements(driveTrain::addVisionMeasurements);
         // elevatorHeight = new DoubleSupplier()
@@ -564,14 +568,15 @@ public class RobotContainer {
         operatorCont.leftBumper().whileTrue(algaeRoller.setDutyCycleCmd(-0.1));
         operatorCont.rightBumper().whileTrue(algaeRoller.setDutyCycleCmd(1.0));
 
-        operatorCont.y().whileTrue(algaeTilt.setPositionCmd(0.001)); // 0.001 used to be 0
-        operatorCont.x().whileTrue(algaeTilt.setPositionCmd(0.03)); // 0.065 used to be 3
-        operatorCont.b().whileTrue(algaeTilt.setPositionCmd(0.253)); // 0.244 used to be 30
-        operatorCont.a().whileTrue(algaeTilt.setPositionCmd(0.32)); // 0.361 used to be 35
+        operatorCont.y().whileTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.001 : 0.001)); // 0.001 used to be 0
+        operatorCont.x().whileTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.03 : 0.03)); // 0.065 used to be 3
+        operatorCont.b().whileTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.253 : 0.253)); // 0.244 used to be 30
+        operatorCont.a().whileTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.32 : 0.293)); // 0.361 used to be 35
 
         operatorCont.pov(90).whileTrue(commandFactory.operatorOutakeAlgae());
         operatorCont.pov(270).whileTrue(commandFactory.operatorIntakeAlgae());
         operatorCont.pov(180).whileTrue(commandFactory.shootAlgae());
+
 
         operatorCont.pov(0).whileTrue(commandFactory.climb());
 

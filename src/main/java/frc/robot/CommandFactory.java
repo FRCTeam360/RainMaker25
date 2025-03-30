@@ -156,11 +156,10 @@ public class CommandFactory {
     }
 
     public Command autoAlignWithLimelight(double goalTY, double goalTX, int pipeline) {
-        return CommandLogger
-            .logCommand(
-                new AlignWithLimelight(vision, drivetrain, goalTY, goalTX, pipeline),
-                "AlignWithLimelightAuto: " + pipeline
-            );
+        return CommandLogger.logCommand(
+            new AlignWithLimelight(vision, drivetrain, goalTY, goalTX, pipeline),
+            "AlignWithLimelightAuto: " + pipeline
+        );
     }
 
     /**
@@ -262,7 +261,9 @@ public class CommandFactory {
 
     public Command homeAlgaeTilt() {
         return Commands.either(
-            algaeTilt.setPositionCmd((Constants.isCompBot() || Constants.isPracticeBot()) ? 0.07 : 7.2), // used to be 10, 4 works
+            algaeTilt.setPositionCmd(
+                (Constants.isCompBot() || Constants.isPracticeBot()) ? 0.07 : 7.2
+            ), // used to be 10, 4 works
             // for some reason 3/15
             algaeTilt.setPositionCmd(0.907),
             () -> !climberDeployed
@@ -277,7 +278,7 @@ public class CommandFactory {
         return algaeRoller
             .setDutyCycleCmd(-0.1)
             .alongWith(algaeShooter.setDutyCycleCmd(-1.0))
-            .alongWith(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.32 : 23.5));
+            .alongWith(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.32 : 0.293));
     }
 
     public Command driverProcessAlgae() {
@@ -304,11 +305,25 @@ public class CommandFactory {
     }
 
     public Command shootAlgae() {
+        double setPoint = 5000.0; //6000, 
+        double over = 50.0;
+        double under = 50.0; 
+        return Commands
+            .waitUntil(
+                () ->
+                    (algaeShooter.getVelocity() > setPoint - under) &&
+                    (algaeShooter.getVelocity() < setPoint + over)
+            )
+            .andThen(algaeRoller.setDutyCycleCmd(1.0))
+            .alongWith(algaeShooter.setVelocityCmd(setPoint))
+            .alongWith(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.03 : 0.06)); //old number 0.028, 0.057, 0.07
+    }
+
+    public Command shootNoAngle() {
         return Commands
             .waitUntil(() -> algaeShooter.getVelocity() > 5750)
             .andThen(algaeRoller.setDutyCycleCmd(1.0))
-            .alongWith(algaeShooter.setVelocityCmd(6250))
-            .alongWith(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.03 : 3.0));
+            .alongWith(algaeShooter.setVelocityCmd(6250));
     }
 
     public Command processAndScore() {
@@ -319,6 +334,10 @@ public class CommandFactory {
 
     public Command spinUpAlgaeShooter() {
         return algaeShooter.setVelocityCmd(6250.0);
+    }
+
+    public Command go100PercentSpeed() {
+        return algaeShooter.setDutyCycleCmd(1.0);
     }
 
     /**

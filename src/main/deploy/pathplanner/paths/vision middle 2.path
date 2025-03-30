@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 10.4,
-        "y": 3.875
+        "x": 11.7195,
+        "y": 3.8787499999999993
       },
       "prevControl": null,
       "nextControl": {
-        "x": 11.486783209235114,
-        "y": 3.7911842895107792
+        "x": 11.319749999999997,
+        "y": 0.9262499999999987
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 11.472719594594594,
-        "y": 3.847128378378378
+        "x": 16.019250000000003,
+        "y": 0.6904999999999996
       },
       "prevControl": {
-        "x": 11.183632389826258,
-        "y": 3.8630045470472036
+        "x": 13.8645,
+        "y": 1.9190000000000005
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,19 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "lower elevator",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Elevator L1"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 1.5,
@@ -41,8 +53,8 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.0,
-    "rotation": 0.0
+    "velocity": 0.0,
+    "rotation": 125.00000000000001
   },
   "reversed": false,
   "folder": "vision",

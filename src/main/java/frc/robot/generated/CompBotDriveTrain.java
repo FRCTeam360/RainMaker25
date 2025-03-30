@@ -29,7 +29,7 @@ public class CompBotDriveTrain {
     public static final double headingKD = 0.0;
     public static final double headingKIZone = 0.0;
 
-    public static final double stafeKP = 0.011;
+    public static final double stafeKP = 0.008;
     public static final double stafeKI = 0.0;//0.00015;
     public static final double stafeKD = 0.00001;//0.003;
     public static final double strafeIRMax = 0.05; //DOES NOTHING WE ARENT DOING INTEGRATOR RANGE :((()))

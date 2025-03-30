@@ -5,9 +5,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.hal.HALUtil;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -37,6 +40,7 @@ public class AlignWithLimelight extends Command {
     private SlewRateLimiter forwardsAccelerationLimit = new SlewRateLimiter(0.75);
     private SlewRateLimiter leftAccelerationLimit = new SlewRateLimiter(0.75);
     private int pipeline;
+    private NetworkTable table = NetworkTableInstance.getDefault().getTable(Constants.CompBotConstants.CORAL_LIMELIGHT_NAME);
 
     private CommandXboxController driverCont;
 
@@ -141,19 +145,24 @@ public class AlignWithLimelight extends Command {
 
     private void driveRobot() {
         double velX = -driveTrain.forwardController.calculate(
-            vision.getTYRaw(LIMELIGHT_NAME),
+            table.getEntry("ty").getDouble(0.0),
             goalTY,
             driveTrain.getState().Timestamp
         );
 
         double velY = driveTrain.strafeController.calculate(
-            vision.getTXRaw(LIMELIGHT_NAME),
+            table.getEntry("tx").getDouble(0.0),
             goalTX,
             driveTrain.getState().Timestamp
         );
 
+        MathUtil.clamp(velX, 0.025, velX);
+        MathUtil.clamp(velY, 0.025, velY); //CLAMP NUMBER FOR HEADINGCONTORLLER IS 0.021
+
+
         Logger.recordOutput(CMD_NAME + "PID OutputX", velX);
         Logger.recordOutput(CMD_NAME + "PID OutputY", velY);
+
 
         Translation2d PIDSpeed = new Translation2d(
             forwardsAccelerationLimit.calculate(velX),

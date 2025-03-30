@@ -164,11 +164,13 @@ public class RobotContainer {
     private BargeAlign bargeAlign;
     private Command hasCoral;
 
+    private double yVel;
+
     public RobotContainer() {
         switch (Constants.getRobotType()) {
             case WOODBOT:
                 driveTrain = WoodBotDriveTrain.createDrivetrain();
-                logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
+                // logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
                 vision =
                     new Vision(
                         Map.ofEntries(
@@ -211,7 +213,7 @@ public class RobotContainer {
                 break;
             case PRACTICE:
                 driveTrain = PracticeBotDriveTrain.createDrivetrain();
-                logger = new Telemetry(PracticeBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
+                // logger = new Telemetry(PracticeBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
                 coralShooter = new CoralShooter(new CoralShooterIOPB());
                 elevator = new Elevator(new ElevatorIOPB());
                 algaeArm = new AlgaeArm(new AlgaeArmIOPB());
@@ -277,8 +279,9 @@ public class RobotContainer {
                 break;
             case COMPETITION:
             default:
+                yVel = 0.0;
                 driveTrain = CompBotDriveTrain.createDrivetrain();
-                logger = new Telemetry(CompBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
+                // logger = new Telemetry(CompBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
                 coralShooter = new CoralShooter(new CoralShooterIOCB());
                 elevator = new Elevator(new ElevatorIOCB());
                 algaeArm = new AlgaeArm(new AlgaeArmIOCB());
@@ -504,8 +507,27 @@ public class RobotContainer {
         }
     }
 
+
+    private void incrementVelocity() {
+        yVel += 0.001;
+        System.out.println("Y VELL IS TIS NUMBER -------=---" + yVel);
+    }
+
+    private void resetVelocity() {
+        yVel = 0.0;
+        System.out.println("RESET RELKJFDSLKJFDSFDSFDS "); //.025
+
+    }
+
     private void configureBindings() {
         vision.setDefaultCommand(consumeVisionMeasurements.ignoringDisable(true));
+        
+        driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
+        
+        // driveTrain.setDefaultCommand(new InstantCommand(() -> driveTrain.robotCentricDrive(0.0, 0.0, yVel), driveTrain));
+        // testCont.b().toggleOnTrue(new InstantCommand(() -> incrementVelocity()));
+        // testCont.a().toggleOnTrue(new InstantCommand(() -> resetVelocity()));
+
 
         algaeTilt.setDefaultCommand(commandFactory.homeAlgaeTilt());
         algaeArm.setDefaultCommand(algaeArm.setAlgaeArmAngleCmd(0.0));
@@ -556,11 +578,10 @@ public class RobotContainer {
         // }
         // testCont.a().whileTrue(bargeAlign);
         // testCont.leftTrigger().whileTrue(commandFactory.driverIntakeAlgae());
+
         // driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(testCont));
         // testCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(),
         // driveTrain));
-
-        driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
 
         // driverCont.rightStick().whileTrue(driveTrain.robotCentricDrive(driverCont));
 

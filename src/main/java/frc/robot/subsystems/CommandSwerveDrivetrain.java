@@ -126,7 +126,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         headingController = new PhoenixPIDController(kP, kI, kD);
 
         headingController.enableContinuousInput(-Math.PI, Math.PI);
-        headingController.setTolerance(Math.toRadians(1));
+        headingController.setTolerance(Math.toRadians(1.0));
     }
 
     public void addStrafeController(double kP, double kI, double kD, double irMax, double irMin) {
@@ -158,7 +158,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 .withTargetDirection(Rotation2d.fromDegrees(desiredAngle));
         request.HeadingController = headingController;
         request.withDeadband(0.1);
-        request.withRotationalDeadband(0.04);
+        request.withRotationalDeadband(0.021); //used to be 0.04
         request.ForwardPerspective = ForwardPerspectiveValue.BlueAlliance;
         this.setControl(request);
         request.withDriveRequestType(DriveRequestType.Velocity);

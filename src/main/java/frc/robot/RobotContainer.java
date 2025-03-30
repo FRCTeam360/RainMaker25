@@ -481,7 +481,7 @@ public class RobotContainer {
             setCoralIntake = new SetCoralIntake(coralShooter);
             intake = coralShooter.basicIntakeCmd();
 
-            smartIntake = SmartIntake.newCommand(coralShooter);
+            smartIntake = SmartIntake.newCommand(coralShooter, funnel);
             hasCoral = commandFactory.hasCoral(elevator, coralShooter);
 
             NamedCommands.registerCommand("shoot", coralShooter.basicShootCmd());
@@ -524,8 +524,8 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        testCont.leftTrigger(0.25).whileTrue(funnel.setDutyCycleCmd(0.2));
-        testCont.rightTrigger(0.25).whileTrue(smartIntake);
+        testCont.leftTrigger(0.25).whileTrue(smartIntake);
+        testCont.rightTrigger(0.25).whileTrue(coralShooter.basicShootCmd());
 
         vision.setDefaultCommand(consumeVisionMeasurements.ignoringDisable(true));
         

@@ -130,6 +130,7 @@ public class SmartIntake extends Command {
     @Override
     public void end(boolean interrupted) {
         coralShooter.stop();
+        funnel.stop();
     }
 
     // Returns true when the command should end.

@@ -226,11 +226,11 @@ public class OldCompBot {
         poseXController.setTolerance(0.02, 0.02);
         poseYController.setTolerance(0.02, 0.02);
         return new CommandSwerveDrivetrain(
-                headingKP, headingKI, headingKD, headingKIZone, stafeKP, stafeKI, stafeKD, strafeIRMax, strafeIRMin, forwardKP, forwardKI, forwardKD, forwardIRMax, forwardIRMin,
-                poseXController, poseYController,
-                kSpeedAt12Volts.in(MetersPerSecond),
-                maxAngularRate, DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight);
-    }
+            headingKP, headingKI, headingKD, headingKIZone, stafeKP, stafeKI, stafeKD, strafeIRMax, strafeIRMin, forwardKP, forwardKI, forwardKD, forwardIRMax, forwardIRMin,
+            kSpeedAt12Volts.in(MetersPerSecond),
+            maxAngularRate, DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight);
+}
+
     /**
      * Swerve Drive class utilizing CTR Electronics' Phoenix 6 API with the selected
      * device types.

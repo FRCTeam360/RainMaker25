@@ -240,11 +240,11 @@ public class PracticeBotDriveTrain {
         POSE_Y_CONTROLLER.setTolerance(POSE_CONTROLLER_POSITION_TOLERANCE, POSE_CONTROLLER_VELOCITY_TOLERANCE);
         POSE_Y_CONTROLLER.setIZone(POSE_CONTROLLER_IZONE);
         return new CommandSwerveDrivetrain(
-                headingKP, headingKI, headingKD, headingKIZone, stafeKP, stafeKI, stafeKD, strafeIRMax, strafeIRMin, forwardKP, forwardKI, forwardKD, forwardIRMax, forwardIRMin,
-                POSE_X_CONTROLLER, POSE_Y_CONTROLLER,
-                kSpeedAt12Volts.in(MetersPerSecond),
-                maxAngularRate, DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight);
-    }
+            headingKP, headingKI, headingKD, headingKIZone, stafeKP, stafeKI, stafeKD, strafeIRMax, strafeIRMin, forwardKP, forwardKI, forwardKD, forwardIRMax, forwardIRMin,
+            kSpeedAt12Volts.in(MetersPerSecond),
+            maxAngularRate, DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight);
+}
+
 
 
     /**

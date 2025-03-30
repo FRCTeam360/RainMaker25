@@ -168,58 +168,48 @@ public class RobotContainer {
     private BargeAlign bargeAlign;
     private Command hasCoral;
 
-    private double yVel;
-
-    private ShuffleboardTuner shuffleboardTuner;
+    public double yVel;
 
     public RobotContainer() {
         switch (Constants.getRobotType()) {
             case WOODBOT:
                 driveTrain = WoodBotDriveTrain.createDrivetrain();
-                // logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
+                logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
                 vision =
                     new Vision(
                         Map.ofEntries(
-                            Map.entry(
-                                Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
-                                new VisionIOLimelight(
-                                    Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
-                                    () -> driveTrain.getAngle(),
-                                    () -> driveTrain.getAngularRate()
-                                )
-                            )
-                        )
-                    );
+                                Map.entry(
+                                        Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
+                                        new VisionIOLimelight(
+                                                Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
+                                                () -> driveTrain.getAngle(),
+                                                () -> driveTrain.getAngularRate()))));
                 elevator = new Elevator(new ElevatorIOPB());
                 coralShooter = new CoralShooter(new CoralShooterIOWB());
                 break;
             case OLD_COMP_BOT:
                 driveTrain = OldCompBot.createDrivetrain();
-                vision =
-                    new Vision(
+                vision = new Vision(
                         Map.ofEntries(
-                            Map.entry(
-                                Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
-                                new VisionIOLimelight(
-                                    Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
-                                    () -> driveTrain.getAngle(),
-                                    () -> driveTrain.getAngularRate()
-                                )
-                            )
-                            // Map.entry(
-                            // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                            // new VisionIOLimelight(
-                            // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                            // () -> driveTrain.getAngle(),
-                            // () -> driveTrain.getAngularRate()
-                            // )
-                            // )
-                        )
-                    );
+                                Map.entry(
+                                        Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
+                                        new VisionIOLimelight(
+                                                Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
+                                                () -> driveTrain.getAngle(),
+                                                () -> driveTrain.getAngularRate()))
+                        // Map.entry(
+                        // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                        // new VisionIOLimelight(
+                        // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                        // () -> driveTrain.getAngle(),
+                        // () -> driveTrain.getAngularRate()
+                        // )
+                        // )
+                        ));
                 break;
             case PRACTICE:
                 driveTrain = PracticeBotDriveTrain.createDrivetrain();
-                // logger = new Telemetry(PracticeBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
+                logger = new Telemetry(PracticeBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
                 coralShooter = new CoralShooter(new CoralShooterIOPB());
                 elevator = new Elevator(new ElevatorIOPB());
                 algaeArm = new AlgaeArm(new AlgaeArmIOPB());
@@ -229,55 +219,44 @@ public class RobotContainer {
                 climberWinch = new ClimberWinch(new ClimberWinchIOPB());
                 funnel = new Funnel(new FunnelIOPB());
 
-                vision =
-                    new Vision(
+                vision = new Vision(
                         Map.ofEntries(
-                            Map.entry(
-                                Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
-                                new VisionIOLimelight(
-                                    Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
-                                    () -> driveTrain.getAngle(),
-                                    () -> driveTrain.getAngularRate()
-                                )
-                            )
-                            // Map.entry(
-                            // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                            // new VisionIOLimelight(
-                            // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                            // () -> driveTrain.getAngle(),
-                            // () -> driveTrain.getAngularRate()
-                            // )
-                            // )
-                        )
-                    );
+                                Map.entry(
+                                        Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
+                                        new VisionIOLimelight(
+                                                Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
+                                                () -> driveTrain.getAngle(),
+                                                () -> driveTrain.getAngularRate()))
+                        // Map.entry(
+                        // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                        // new VisionIOLimelight(
+                        // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                        // () -> driveTrain.getAngle(),
+                        // () -> driveTrain.getAngularRate()
+                        // )
+                        // )
+                        ));
                 // practice bot stuff
                 servo = new Servo(new ServoIOPB());
                 break;
             case SIM:
                 driveTrain = WoodBotDriveTrain.createDrivetrain();
                 logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
-                vision =
-                    new Vision(
+                vision = new Vision(
                         Map.ofEntries(
-                            Map.entry(
-                                Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
-                                new VisionIOLimelight(
-                                    Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
-                                    () -> driveTrain.getAngle(),
-                                    () -> driveTrain.getAngularRate()
-                                )
-                            ),
-                            Map.entry(
-                                Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                                new VisionIOLimelight(
-                                    Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                                    () -> driveTrain.getAngle(),
-                                    () -> driveTrain.getAngularRate(),
-                                    false
-                                )
-                            )
-                        )
-                    );
+                                Map.entry(
+                                        Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
+                                        new VisionIOLimelight(
+                                                Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
+                                                () -> driveTrain.getAngle(),
+                                                () -> driveTrain.getAngularRate())),
+                                Map.entry(
+                                        Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                                        new VisionIOLimelight(
+                                                Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                                                () -> driveTrain.getAngle(),
+                                                () -> driveTrain.getAngularRate(),
+                                                false))));
                 elevator = new Elevator(new ElevatorIOSim());
                 algaeArm = new AlgaeArm(new AlgaeArmIOSim(() -> elevator.getHeight()));
                 coralShooter = new CoralShooter(new CoralShooterIOSim(() -> elevator.getHeight()));
@@ -288,7 +267,7 @@ public class RobotContainer {
             default:
                 yVel = 0.0;
                 driveTrain = CompBotDriveTrain.createDrivetrain();
-                // logger = new Telemetry(CompBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
+                logger = new Telemetry(CompBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
                 coralShooter = new CoralShooter(new CoralShooterIOCB());
                 elevator = new Elevator(new ElevatorIOCB());
                 algaeArm = new AlgaeArm(new AlgaeArmIOCB());
@@ -297,36 +276,28 @@ public class RobotContainer {
                 algaeTilt = new AlgaeTilt(new AlgaeTiltIOCB());
                 climberWinch = new ClimberWinch(new ClimberWinchIOCB());
 
-                vision =
-                    new Vision(
+                vision = new Vision(
                         Map.ofEntries(
-                            Map.entry(
-                                Constants.CompBotConstants.CORAL_LIMELIGHT_NAME,
-                                new VisionIOLimelight(
-                                    Constants.CompBotConstants.CORAL_LIMELIGHT_NAME,
-                                    () -> driveTrain.getAngle(),
-                                    () -> driveTrain.getAngularRate(),
-                                    true
-                                )
-                            ),
-                            Map.entry(
-                                Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                                new VisionIOLimelight(
-                                    Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                                    () -> driveTrain.getAngle(),
-                                    () -> driveTrain.getAngularRate(),
-                                    false
-                                )
-                            )
-                        )
-                    );
+                                Map.entry(
+                                        Constants.CompBotConstants.CORAL_LIMELIGHT_NAME,
+                                        new VisionIOLimelight(
+                                                Constants.CompBotConstants.CORAL_LIMELIGHT_NAME,
+                                                () -> driveTrain.getAngle(),
+                                                () -> driveTrain.getAngularRate(),
+                                                true)),
+                                Map.entry(
+                                        Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                                        new VisionIOLimelight(
+                                                Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                                                () -> driveTrain.getAngle(),
+                                                () -> driveTrain.getAngularRate(),
+                                                false))));
                 servo = new Servo(new ServoIOCB());
                 // competition bot stuff
                 break;
         }
 
-        commandFactory =
-            new CommandFactory(
+        commandFactory = new CommandFactory(
                 coralShooter,
                 elevator,
                 vision,
@@ -337,8 +308,7 @@ public class RobotContainer {
                 driverCont,
                 algaeTilt,
                 algaeRoller,
-                servo
-            );
+                servo);
 
         initializeCommands();
 
@@ -346,11 +316,9 @@ public class RobotContainer {
         SmartDashboard.putData("Field", field);
 
         PathPlannerLogging.setLogActivePathCallback(
-            (poses -> Logger.recordOutput("Swerve/ActivePath", poses.toArray(new Pose2d[0])))
-        );
+                (poses -> Logger.recordOutput("Swerve/ActivePath", poses.toArray(new Pose2d[0]))));
         PathPlannerLogging.setLogTargetPoseCallback(
-            pose -> Logger.recordOutput("Swerve/TargetPathPose", pose)
-        );
+                pose -> Logger.recordOutput("Swerve/TargetPathPose", pose));
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -368,7 +336,6 @@ public class RobotContainer {
     }
 
     public void initializeCommands() {
-        shuffleboardTuner = new ShuffleboardTuner(algaeTilt, algaeShooter, algaeRoller, driveTrain);
         consumeVisionMeasurements =
             vision.consumeVisionMeasurements(driveTrain::addVisionMeasurements);
         // elevatorHeight = new DoubleSupplier()
@@ -382,56 +349,46 @@ public class RobotContainer {
             levelTwo = commandFactory.setElevatorLevelTwo();
             levelOne = commandFactory.setElevatorToZero();
 
-            autoLevelThree =
-                commandFactory.setElevatorHeight(
-                    SetPointConstants.ElevatorHeights.AUTO_LEVEL_THREE
-                );
-            autoLevelFour =
-                commandFactory.setElevatorHeight(SetPointConstants.ElevatorHeights.AUTO_LEVEL_FOUR);
+            autoLevelThree = commandFactory.setElevatorHeight(
+                    SetPointConstants.ElevatorHeights.AUTO_LEVEL_THREE);
+            autoLevelFour = commandFactory.setElevatorHeight(SetPointConstants.ElevatorHeights.AUTO_LEVEL_FOUR);
 
             zeroElevatorEncoder = elevator.zeroElevatorCmd();
 
             levelOneAndZero = new SequentialCommandGroup(levelOne, zeroElevatorEncoder);
             NamedCommands.registerCommand(
-                "raise to l4",
-                commandFactory.setElevatorHeight(33.0).raceWith(elevator.isAtHeight(33.0))
-            );
+                    "raise to l4",
+                    commandFactory.setElevatorHeight(33.0).raceWith(elevator.isAtHeight(33.0)));
             NamedCommands.registerCommand(
-                "zero",
-                commandFactory.setElevatorHeight(0.0).raceWith(elevator.isAtHeight(0.0))
-            );
+                    "zero",
+                    commandFactory.setElevatorHeight(0.0).raceWith(elevator.isAtHeight(0.0)));
         }
 
         if (Objects.nonNull(driveTrain)) {
-            teleRightAlign =
-                commandFactory.teleAlignWithLimelight(
+
+           
+
+            teleRightAlign = commandFactory.teleAlignWithLimelight(
                     Constants.CompBotConstants.TELE_RIGHT_GOAL_TY,
                     Constants.CompBotConstants.TELE_RIGHT_GOAL_TX,
                     0,
-                    driverCont
-                );
+                    driverCont);
 
-            teleLeftAlign =
-                commandFactory.teleAlignWithLimelight(
+            teleLeftAlign = commandFactory.teleAlignWithLimelight(
                     Constants.CompBotConstants.TELE_LEFT_GOAL_TY,
                     Constants.CompBotConstants.TELE_LEFT_GOAL_TX,
                     1,
-                    driverCont
-                );
+                    driverCont);
 
-            autoRightAlign =
-                commandFactory.autoAlignWithLimelight(
+            autoRightAlign = commandFactory.autoAlignWithLimelight(
                     Constants.CompBotConstants.AUTO_RIGHT_GOAL_TY,
                     Constants.CompBotConstants.AUTO_RIGHT_GOAL_TX,
-                    0
-                );
+                    0);
 
-            autoLeftAlign =
-                commandFactory.autoAlignWithLimelight(
+            autoLeftAlign = commandFactory.autoAlignWithLimelight(
                     Constants.CompBotConstants.AUTO_LEFT_GOAL_TY,
                     Constants.CompBotConstants.AUTO_LEFT_GOAL_TX,
-                    1
-                );
+                    1);
         }
         registerPathplannerCommand("left align", autoLeftAlign);
         registerPathplannerCommand("right align", autoRightAlign);
@@ -461,8 +418,7 @@ public class RobotContainer {
 
             scoreLevel3RightTeleop = commandFactory.scoringRoutineTeleop(3, false);
 
-            removeAlgae =
-                new RemoveAlgae(algaeArm, algaeShooter, algaeTilt, coralShooter, elevator, vision);
+            removeAlgae = new RemoveAlgae(algaeArm, algaeShooter, algaeTilt, coralShooter, elevator, vision);
         }
 
         registerPathplannerCommand("Score Coral L4 Left", scoreCoralL4Left);
@@ -492,11 +448,6 @@ public class RobotContainer {
             NamedCommands.registerCommand("intake", smartIntake);
             NamedCommands.registerCommand("hasCoral", hasCoral);
         }
-
-        if(Objects.nonNull(funnel)) {
-            smartIntake = SmartIntake.newCommand(coralShooter, funnel);
-
-        }
     }
 
     /**
@@ -514,12 +465,10 @@ public class RobotContainer {
         } else {
             System.err.println(commandName + " is null");
             NamedCommands.registerCommand(
-                commandName,
-                new InstantCommand(() -> System.err.println(commandName + " is null"))
-            );
+                    commandName,
+                    new InstantCommand(() -> System.err.println(commandName + " is null")));
         }
     }
-
 
     private void incrementVelocity() {
         yVel += 0.001;
@@ -528,22 +477,15 @@ public class RobotContainer {
 
     private void resetVelocity() {
         yVel = 0.0;
-        System.out.println("RESET RELKJFDSLKJFDSFDSFDS "); //.025
+        System.out.println("RESET RELKJFDSLKJFDSFDSFDS "); // .025
 
     }
 
     private void configureBindings() {
-        testCont.leftTrigger(0.25).whileTrue(smartIntake);
-        testCont.rightTrigger(0.25).whileTrue(coralShooter.basicShootCmd());
+        testCont.leftTrigger(0.25).whileTrue(funnel.setDutyCycleCmd(0.2));
+        testCont.rightTrigger(0.25).whileTrue(smartIntake);
 
         vision.setDefaultCommand(consumeVisionMeasurements.ignoringDisable(true));
-        
-        driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
-        
-        // driveTrain.setDefaultCommand(new InstantCommand(() -> driveTrain.robotCentricDrive(0.0, 0.0, yVel), driveTrain));
-        // testCont.b().toggleOnTrue(new InstantCommand(() -> incrementVelocity()));
-        // testCont.a().toggleOnTrue(new InstantCommand(() -> resetVelocity()));
-
 
         algaeTilt.setDefaultCommand(commandFactory.homeAlgaeTilt());
         // algaeArm.setDefaultCommand(algaeArm.setAlgaeArmAngleCmd(0.0));
@@ -563,25 +505,20 @@ public class RobotContainer {
 
         // testCont.pov(0).whileTrue(commandFactory.climb());
 
-        operatorCont
-            .leftStick()
-            .toggleOnTrue(algaeTilt.setDutyCycleCmd(() -> operatorCont.getLeftY() * 0.1));
-        operatorCont
-            .rightStick()
-            .toggleOnTrue(elevator.setDutyCycleCommand(() -> operatorCont.getRightY() * -0.1));
+        operatorCont.leftStick().toggleOnTrue(algaeTilt.setDutyCycleCmd(() -> operatorCont.getLeftY() * 0.1));
+        operatorCont.rightStick().toggleOnTrue(elevator.setDutyCycleCommand(() -> operatorCont.getRightY() * -0.1));
 
         operatorCont.leftBumper().whileTrue(algaeRoller.setDutyCycleCmd(-0.1));
         operatorCont.rightBumper().whileTrue(algaeRoller.setDutyCycleCmd(1.0));
 
-        operatorCont.y().whileTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.001 : 0.001)); // 0.001 used to be 0
-        operatorCont.x().whileTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.03 : 0.03)); // 0.065 used to be 3
-        operatorCont.b().whileTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.253 : 0.253)); // 0.244 used to be 30
-        operatorCont.a().whileTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.32 : 0.293)); // 0.361 used to be 35
+        operatorCont.y().whileTrue(algaeTilt.setPositionCmd(0.001)); // 0.001 used to be 0
+        operatorCont.x().whileTrue(algaeTilt.setPositionCmd(0.03)); // 0.065 used to be 3
+        operatorCont.b().whileTrue(algaeTilt.setPositionCmd(0.253)); // 0.244 used to be 30
+        operatorCont.a().whileTrue(algaeTilt.setPositionCmd(0.32)); // 0.361 used to be 35
 
         operatorCont.pov(90).whileTrue(commandFactory.operatorOutakeAlgae());
         operatorCont.pov(270).whileTrue(commandFactory.operatorIntakeAlgae());
         operatorCont.pov(180).whileTrue(commandFactory.shootAlgae());
-
 
         operatorCont.pov(0).whileTrue(commandFactory.climb());
 
@@ -641,56 +578,29 @@ public class RobotContainer {
             );
 
         driverCont.leftTrigger(0.25).and(() -> !isAlgaeMode).whileTrue(smartIntake);
-        driverCont
-            .leftTrigger(0.25)
-            .and(() -> isAlgaeMode)
-            .whileTrue(commandFactory.driverIntakeAlgae());
+        driverCont.leftTrigger(0.25).and(() -> isAlgaeMode).whileTrue(commandFactory.driverIntakeAlgae());
 
-        driverCont
-            .rightTrigger(0.25)
-            .and(() -> !isAlgaeMode)
-            .whileTrue(coralShooter.basicShootCmd());
+        driverCont.rightTrigger(0.25).and(() -> !isAlgaeMode).whileTrue(coralShooter.basicShootCmd());
         driverCont.rightTrigger(0.25).and(() -> isAlgaeMode).whileTrue(commandFactory.shootAlgae());
 
         driverCont.a().and(() -> !isAlgaeMode).onTrue(levelOneAndZero);
-        driverCont
-            .a()
-            .and(() -> isAlgaeMode)
-            .onTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.32 : 35.0));
+        driverCont.a().and(() -> isAlgaeMode).onTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.32 : 35.0));
 
         driverCont.x().and(() -> !isAlgaeMode).onTrue(levelTwo);
-        driverCont
-            .x()
-            .and(() -> isAlgaeMode)
-            .onTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.03 : 3.0));
+        driverCont.x().and(() -> isAlgaeMode).onTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.03 : 3.0));
 
         driverCont.b().and(() -> !isAlgaeMode).onTrue(levelThree);
-        driverCont
-            .b()
-            .and(() -> isAlgaeMode)
-            .onTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.253 : 30));
+        driverCont.b().and(() -> isAlgaeMode).onTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.253 : 30));
 
         driverCont.y().and(() -> !isAlgaeMode).onTrue(levelFour);
-        driverCont
-            .y()
-            .and(() -> isAlgaeMode)
-            .onTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.001 : 0.0));
+        driverCont.y().and(() -> isAlgaeMode).onTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.001 : 0.0));
 
         driverCont.leftBumper().and(() -> !isAlgaeMode).whileTrue(teleLeftAlign);
-        driverCont
-            .leftBumper()
-            .and(() -> isAlgaeMode)
-            .whileTrue(
-                algaeRoller
-                    .setDutyCycleCmd(-0.1)
-                    .alongWith(driveTrain.fieldOrientedDrive(driverCont))
-            );
+        driverCont.leftBumper().and(() -> isAlgaeMode)
+                .whileTrue(algaeRoller.setDutyCycleCmd(-0.1).alongWith(driveTrain.fieldOrientedDrive(driverCont)));
 
         driverCont.rightBumper().and(() -> !isAlgaeMode).whileTrue(teleRightAlign);
-        driverCont
-            .rightBumper()
-            .and(() -> isAlgaeMode)
-            .whileTrue(commandFactory.driverProcessAlgae());
+        driverCont.rightBumper().and(() -> isAlgaeMode).whileTrue(commandFactory.driverProcessAlgae());
         // if (Objects.nonNull(coralShooter)) {
         // driverCont.leftBumper().whileTrue(leftAlign);
         // driverCont.rightBumper().whileTrue(rightAlign);

@@ -130,12 +130,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public void addStrafeController(double kP, double kI, double kD, double irMax, double irMin) {
         strafeController = new PhoenixPIDController(kP, kI, kD);
-        strafeController.setTolerance(1.0);
+        strafeController.setTolerance(0.5);
     }
 
     public void addForwardContrller(double kP, double kI, double kD, double irMax, double irMin) {
         forwardController = new PhoenixPIDController(kP, kI, kD);
-        forwardController.setTolerance(0.75);
+        forwardController.setTolerance(1.0);
     }
 
     public void driveFieldCentricFacingAngle(double x, double y, double desiredAngle) {

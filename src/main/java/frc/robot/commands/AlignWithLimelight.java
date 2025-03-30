@@ -156,9 +156,15 @@ public class AlignWithLimelight extends Command {
             driveTrain.getState().Timestamp
         );
 
-        MathUtil.clamp(velX, 0.025, velX);
-        MathUtil.clamp(velY, 0.025, velY); //CLAMP NUMBER FOR HEADINGCONTORLLER IS 0.021
+        if(Math.abs(velX) < 0.025) {
+            velX = Math.signum(velX) * 0.025;
+        }
 
+        if(Math.abs(velY) < 0.025) {
+            velY = Math.signum(velY) * 0.025;
+        }
+        
+        //CLAMP NUMBER FOR HEADINGCONTORLLER IS 0.021
 
         Logger.recordOutput(CMD_NAME + "PID OutputX", velX);
         Logger.recordOutput(CMD_NAME + "PID OutputY", velY);

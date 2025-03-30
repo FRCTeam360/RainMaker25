@@ -35,7 +35,7 @@ public class CompBotDriveTrain {
     public static final double strafeIRMax = 0.05; //DOES NOTHING WE ARENT DOING INTEGRATOR RANGE :((()))
     public static final double strafeIRMin = -0.05;
 
-    public static final double forwardKP = 0.04;
+    public static final double forwardKP = 0.06;
     public static final double forwardKI = 0.0;
     public static final double forwardKD = 0.0;
     public static final double forwardIRMax = 0.05;

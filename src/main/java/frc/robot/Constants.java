@@ -174,7 +174,7 @@ public final class Constants {
         public static final int FUNNEL_ID = 29;
 
 
-        public static final double TELE_RIGHT_GOAL_TY = 13.75; //practice field: 15.5 | gpeak: 14.0 | auburn: 13.75
+        public static final double TELE_RIGHT_GOAL_TY = 15.0; //practice field: 15.5 | gpeak: 14.0 | auburn: 13.75
         public static final double TELE_RIGHT_GOAL_TX = 0.0;
         public static final double TELE_LEFT_GOAL_TY = TELE_RIGHT_GOAL_TY;
         public static final double TELE_LEFT_GOAL_TX = 0.0;

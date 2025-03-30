@@ -485,12 +485,17 @@ public class RobotContainer {
             setCoralIntake = new SetCoralIntake(coralShooter);
             intake = coralShooter.basicIntakeCmd();
 
-            smartIntake = SmartIntake.newCommand(coralShooter, funnel);
+            smartIntake = SmartIntake.newCommand(coralShooter);
             hasCoral = commandFactory.hasCoral(elevator, coralShooter);
 
             NamedCommands.registerCommand("shoot", coralShooter.basicShootCmd());
             NamedCommands.registerCommand("intake", smartIntake);
             NamedCommands.registerCommand("hasCoral", hasCoral);
+        }
+
+        if(Objects.nonNull(funnel)) {
+            smartIntake = SmartIntake.newCommand(coralShooter, funnel);
+
         }
     }
 

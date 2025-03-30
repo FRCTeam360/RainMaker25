@@ -22,6 +22,7 @@ public class SmartIntake extends Command {
     private Timer unJammedTimer = new Timer();
 
     private boolean isFinised;
+    private boolean hasFunnel = true;
 
     private enum IntakeStates {
         EMPTY, FULL, JUST_INTAKE, JUST_OUTTAKE, JAMMED
@@ -33,8 +34,19 @@ public class SmartIntake extends Command {
     private SmartIntake(CoralShooter coralShooter, Funnel funnel) {
         this.coralShooter = coralShooter;
         this.funnel = funnel;
+        hasFunnel = true;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(coralShooter, funnel);
+        Logger.recordOutput("intake state", intakeStates);
+    }
+
+    
+    /** Creates a new SmartIntake. */
+    private SmartIntake(CoralShooter coralShooter) {
+        this.coralShooter = coralShooter;
+        hasFunnel = false;
+        // Use addRequirements() here to declare subsystem dependencies.
+        addRequirements(coralShooter);
         Logger.recordOutput("intake state", intakeStates);
     }
 
@@ -59,7 +71,9 @@ public class SmartIntake extends Command {
                 stallTimer.reset();
                 stallTimer.stop();
                 coralShooter.setDutyCycle(0.2);
-                funnel.stop();
+                if(hasFunnel) {
+                    funnel.stop();
+                }
                 unJammedTimer.start();
                 if(unJammedTimer.hasElapsed(0.05)){
                     unJammedTimer.reset();
@@ -70,7 +84,9 @@ public class SmartIntake extends Command {
             case EMPTY:
                 stallTimer.start();
                 coralShooter.setDutyCycle(-0.6);
-                funnel.setDutyCycle(0.2);
+                if(hasFunnel) {
+                    funnel.setDutyCycle(0.2);
+                }
                 timer.reset();
                 timer.stop();
                 updateStates();
@@ -78,7 +94,9 @@ public class SmartIntake extends Command {
             case JUST_INTAKE:
                 stallTimer.start();
                 coralShooter.setDutyCycle(-0.1);
-                funnel.stop();
+                if(hasFunnel) {
+                    funnel.stop();
+                }
                 timer.reset();
                 timer.stop();
                 updateStates();
@@ -86,7 +104,9 @@ public class SmartIntake extends Command {
             case JUST_OUTTAKE:
                 stallTimer.start();
                 coralShooter.setDutyCycle(0.1);
-                funnel.stop();
+                if(hasFunnel) {
+                    funnel.stop();
+                }
                 timer.reset();
                 timer.stop();
                 updateStates();
@@ -130,7 +150,11 @@ public class SmartIntake extends Command {
     @Override
     public void end(boolean interrupted) {
         coralShooter.stop();
-        funnel.stop();
+
+        if(hasFunnel) {
+
+            funnel.stop();
+        }
     }
 
     // Returns true when the command should end.
@@ -141,5 +165,9 @@ public class SmartIntake extends Command {
 
     public static Command newCommand(CoralShooter coralShooter, Funnel funnel){
         return CommandLogger.logCommand(new SmartIntake(coralShooter, funnel), "SmartIntake");
+    }
+
+    public static Command newCommand(CoralShooter coralShooter){
+        return CommandLogger.logCommand(new SmartIntake(coralShooter), "SmartIntake");
     }
 }

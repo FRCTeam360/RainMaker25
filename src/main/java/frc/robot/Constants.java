@@ -129,15 +129,13 @@ public final class Constants {
         public static final int ALGAE_ARM_ID = 18;
         public static final int CORAL_SHOOTER_ID = 19;
 
-        public static final int INTAKE_SENSOR_ID = 20;
-        public static final int OUTTAKE_SENSOR_ID = 21;
-
         public static final int ALGAE_SHOOTER_FRONT_ID = 25;
         public static final int ALGAE_SHOOTER_BACK_ID = 26;
         public static final int ALGAE_TILT = 27;
         public static final int ALGAE_ROLLER = 16;
 
-        public static final int FUNNEL_ID = 29;
+        public static final int INTAKE_SENSOR_ID = 20;
+        public static final int OUTTAKE_SENSOR_ID = 21;
 
         public static final double RIGHT_GOAL_TY = 12.0; //praccy bot 3/15
         public static final double RIGHT_GOAL_TX = 0.0;
@@ -170,8 +168,6 @@ public final class Constants {
         public static final int ALGAE_SHOOTER_BACK_ID = 22;
         public static final int ALGAE_ROLLER = 23;
         public static final int ALGAE_TILT = 24;
-
-        public static final int FUNNEL_ID = 29;
 
 
         public static final double TELE_RIGHT_GOAL_TY = 13.75; //practice field: 15.5 | gpeak: 14.0 | auburn: 13.75

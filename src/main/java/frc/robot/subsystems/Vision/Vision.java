@@ -76,9 +76,9 @@ public class Vision extends SubsystemBase {
         ios.get(name).setLEDMode(3);
     }
 
-    // public void turnOffLights(String name) {
-    //     ios.get(name).setLEDMode(1);
-    // }
+    public void turnOffLights(String name) {
+        ios.get(name).setLEDMode(1);
+    }
 
     public void blinkLights(String name) {
         ios.get(name).setLEDMode(2);
@@ -158,9 +158,9 @@ public class Vision extends SubsystemBase {
     @Override
     public void periodic() {
 
-        // if(DriverStation.isDisabled()) {
-        //     turnOffLights(CompBotConstants.ALGAE_LIMELIGHT_NAME);
-        // }
+        if(DriverStation.isDisabled()) {
+            turnOffLights(CompBotConstants.ALGAE_LIMELIGHT_NAME);
+        }
 
         long periodicStartTime = HALUtil.getFPGATime();
 

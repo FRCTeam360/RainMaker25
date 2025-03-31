@@ -28,8 +28,8 @@ public class AlgaeTiltIOPB implements AlgaeTiltIO {
   private final double kI = 0.0;
   private final double kD = 0.0;
 
-  private final double forwardLimit = 27.0;
-  private final double reverseLimit = -5.0; //used to be 10 3/15
+  private final double forwardLimit = 38.0;
+  private final double reverseLimit = -10.0;
 
   private final double positionConversionFactor = 1.0;
   private final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
@@ -37,7 +37,7 @@ public class AlgaeTiltIOPB implements AlgaeTiltIO {
   /** Creates a new AlgaeIntakeIOPB. */
   public AlgaeTiltIOPB() {
     sparkMaxConfig.idleMode(IdleMode.kBrake);
-    sparkMaxConfig.inverted(true); //USED TO BE FALSE 3/15
+    sparkMaxConfig.inverted(false);
 
     SoftLimitConfig softLimitConfig = new SoftLimitConfig();
     softLimitConfig.forwardSoftLimit(forwardLimit);

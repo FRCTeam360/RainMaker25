@@ -56,19 +56,12 @@ public class VisionIOLimelight implements VisionIO {
         this.gryoAngleRateSupplier = gryoAngleRateSupplier;
     }
 
-    public void setLEDMode(int mode) {
-        table.getEntry("ledMode").setNumber(mode);
-      }
-    
-
     public void updateInputs(VisionIOInputs inputs) {
         // Get the pose estimate from limelight helpers
-        Optional<PoseEstimate> newPoseEstimate;
+        Optional<PoseEstimate> newPoseEstimate = getMegatag1PoseEst();
         // If enabled, get megatag 2 pose
         if (DriverStation.isEnabled()) {
             newPoseEstimate = getMegatag2PoseEst();
-        } else {
-            newPoseEstimate = getMegatag1PoseEst();
         }
 
         // Assume that the pose hasn't been updated

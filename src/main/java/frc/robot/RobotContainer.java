@@ -79,6 +79,7 @@ import frc.robot.subsystems.Elevator.ElevatorIOSim;
 import frc.robot.subsystems.Elevator.ElevatorIOSim;
 import frc.robot.subsystems.Elevator.ElevatorIOWB;
 import frc.robot.subsystems.Funnel.Funnel;
+import frc.robot.subsystems.Funnel.FunnelIOCB;
 import frc.robot.subsystems.Funnel.FunnelIOPB;
 import frc.robot.subsystems.Servo.Servo;
 import frc.robot.subsystems.Servo.ServoIOCB;
@@ -167,6 +168,7 @@ public class RobotContainer {
     private boolean isAlgaeMode = false;
     private BargeAlign bargeAlign;
     private Command hasCoral;
+    
 
     private double yVel;
 
@@ -296,7 +298,7 @@ public class RobotContainer {
                 algaeShooter = new AlgaeShooter(new AlgaeShooterIOCB());
                 algaeTilt = new AlgaeTilt(new AlgaeTiltIOCB());
                 climberWinch = new ClimberWinch(new ClimberWinchIOCB());
-
+                funnel = new Funnel(new FunnelIOCB());
                 vision =
                     new Vision(
                         Map.ofEntries(

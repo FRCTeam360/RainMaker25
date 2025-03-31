@@ -71,11 +71,10 @@ public class SmartIntake extends Command {
                 stallTimer.reset();
                 stallTimer.stop();
                 coralShooter.setDutyCycle(0.2);
-                if(hasFunnel) {
-                    funnel.stop();
-                }
+                funnel.setDutyCycle(-0.05);
+            
                 unJammedTimer.start();
-                if(unJammedTimer.hasElapsed(0.05)){
+                if(unJammedTimer.hasElapsed(0.15)){
                     unJammedTimer.reset();
                     unJammedTimer.stop();
                     updateStates();
@@ -93,10 +92,8 @@ public class SmartIntake extends Command {
                 break;
             case JUST_INTAKE:
                 stallTimer.start();
-                coralShooter.setDutyCycle(-0.1);
-                if(hasFunnel) {
-                    funnel.stop();
-                }
+                coralShooter.setDutyCycle(-0.15);
+                funnel.setDutyCycle(0.2);
                 timer.reset();
                 timer.stop();
                 updateStates();
@@ -114,6 +111,7 @@ public class SmartIntake extends Command {
             case FULL:
             default:
                 coralShooter.stop();
+                funnel.stop();
                 stallTimer.start();
                 timer.start();
                 if (timer.get() > 0.05) {
@@ -133,9 +131,9 @@ public class SmartIntake extends Command {
     }
 
     public void updateStates() {
-        if(stallTimer.hasElapsed(.15) && coralShooter.getStatorCurrent() > 15.0 && Math.abs(coralShooter.getVelocity()) < .1){
+        if(stallTimer.hasElapsed(.15) && coralShooter.getStatorCurrent() > 25.0 && Math.abs(coralShooter.getVelocity()) < .1){
             intakeStates = intakeStates.JAMMED;
-        }else if(coralShooter.getIntakeSensor() && coralShooter.getOuttakeSensor()) {
+         } else if(coralShooter.getIntakeSensor() && coralShooter.getOuttakeSensor()) {
             intakeStates = intakeStates.FULL;
         } else if (coralShooter.getIntakeSensor() && !coralShooter.getOuttakeSensor()) {
             intakeStates = intakeStates.JUST_INTAKE;

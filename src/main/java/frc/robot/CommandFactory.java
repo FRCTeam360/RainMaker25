@@ -102,6 +102,37 @@ public class CommandFactory {
         );
     }
 
+    
+    public double calculateHeight(double height) {
+        
+        // if (vision.getTYRaw(CompBotConstants.CORAL_LIMELIGHT_NAME) < 15.0) {
+        //     double adjustment = 0.5 * (vision.getTYRaw(CompBotConstants.CORAL_LIMELIGHT_NAME) - 12.3);
+        //     newHeight += adjustment;
+        // }
+            double adjustment = 0.25 * (vision.getTYRaw(CompBotConstants.CORAL_LIMELIGHT_NAME) - 12.3);
+            height += adjustment;
+        
+        Logger.recordOutput("ADJUSTMENT HEIGHT", adjustment);
+        Logger.recordOutput("CALCULATED ELEVATOR HEIGHT", height);
+
+        return height;
+    }
+
+    public Command scalingElevatorHeight(double height) {
+        double newHeight = height;
+        if (vision.getTYRaw(CompBotConstants.CORAL_LIMELIGHT_NAME) < 15.0) {
+            double adjustment = 0.5 * (vision.getTYRaw(CompBotConstants.CORAL_LIMELIGHT_NAME) - 12.3);
+            newHeight += adjustment;
+        }
+
+        Logger.recordOutput("SCALING ELEVATOR HEIGHT", newHeight);
+
+        return CommandLogger.logCommand(
+            elevator.isAtHeight(newHeight).deadlineFor(elevator.setElevatorHeight(newHeight)),
+            "ScalingSetElevatorHeight"
+        );
+    }
+
     public Command setElevatorLevelFour() {
         return setElevatorHeight(SetPointConstants.ElevatorHeights.TELE_LEVEL_FOUR);
     }

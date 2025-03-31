@@ -106,6 +106,7 @@ public class CommandFactory {
         return setElevatorHeight(SetPointConstants.ElevatorHeights.TELE_LEVEL_FOUR);
     }
 
+
     public Command setElevatorLevelThree() {
         return setElevatorHeight(SetPointConstants.ElevatorHeights.TELE_LEVEL_THREE);
     }
@@ -417,7 +418,7 @@ public class CommandFactory {
             );
     }
 
-    double climberWinchSetPoint = -44.33;
+    double climberWinchSetPoint = -41.5;
 
     public Command initiateClimb() {
         return Commands
@@ -436,7 +437,7 @@ public class CommandFactory {
 
     public Command climbAutomated() {
         return Commands
-            .waitUntil(() -> climberWinch.getPosition() < -160.0)
+            .waitUntil(() -> climberWinch.getPosition() < -150.0)
             .deadlineFor(climb())
             .alongWith(algaeTilt.setPositionCmd(0.907));
     }

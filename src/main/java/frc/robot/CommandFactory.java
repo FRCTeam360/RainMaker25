@@ -35,6 +35,8 @@ import frc.robot.subsystems.Servo.Servo;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.utils.CommandLogger;
 import java.util.Map;
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
 import org.opencv.calib3d.StereoBM;
 
@@ -116,6 +118,12 @@ public class CommandFactory {
         Logger.recordOutput("CALCULATED ELEVATOR HEIGHT", height);
 
         return height;
+    }
+
+    public Command runElevatorVision(double height, DoubleSupplier tySupplier) {
+        return Commands.runEnd(
+            () -> setElevatorHeight(height + calculateHeight(tySupplier.getAsDouble())),
+        () -> setElevatorHeight(height + calculateHeight(tySupplier.getAsDouble())));
     }
 
     public Command scalingElevatorHeight(double height) {

@@ -584,8 +584,7 @@ public class RobotContainer {
                 .and(() -> isAlgaeMode)
                 .onTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.253 : 30));
 
-        driverCont.y().and(() -> !isAlgaeMode).onTrue(commandFactory
-                .setElevatorHeight(commandFactory.calculateHeight(SetPointConstants.ElevatorHeights.TELE_LEVEL_TWO)));
+        driverCont.y().and(() -> !isAlgaeMode).onTrue(levelFour);
         driverCont
                 .y()
                 .and(() -> isAlgaeMode)

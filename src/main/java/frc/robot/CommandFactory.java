@@ -159,7 +159,7 @@ public class CommandFactory {
         return CommandLogger
             .logCommand(
                 new AlignWithLimelight(vision, drivetrain, goalTY, goalTX, pipeline),
-                "AlignWithLimelightAuto: " + pipeline
+                "AlignWithLimelightAuto"
             );
     }
 

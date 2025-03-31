@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 13.58741554054054,
-        "y": 2.7996621621621616
+        "x": 13.794,
+        "y": 2.83
       },
       "prevControl": null,
       "nextControl": {
-        "x": 15.199101818654947,
-        "y": 1.6526873660422534
+        "x": 14.68921483209832,
+        "y": 1.9194732340283873
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 16.008,
-        "y": 0.724
+        "x": 16.038,
+        "y": 0.674
       },
       "prevControl": {
-        "x": 15.42912493185025,
-        "y": 1.1478401141522765
+        "x": 16.292299906076288,
+        "y": 0.41912187065442436
       },
       "nextControl": null,
       "isLocked": false,
@@ -35,8 +35,8 @@
       "minWaypointRelativePos": 0,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 3.0,
-        "maxAcceleration": 3.5,
+        "maxVelocity": 4.0,
+        "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -47,7 +47,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "lower elevator",
+      "name": "elevator ",
       "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {

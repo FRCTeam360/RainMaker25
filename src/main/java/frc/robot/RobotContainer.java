@@ -481,6 +481,10 @@ public class RobotContainer {
             NamedCommands.registerCommand("intake", smartIntake);
             NamedCommands.registerCommand("hasCoral", hasCoral);
         }
+
+        NamedCommands.registerCommand("pipeline 0", new InstantCommand(() -> vision.setPipeline(CompBotConstants.CORAL_LIMELIGHT_NAME, 0), vision));
+        NamedCommands.registerCommand("pipeline 1", new InstantCommand(() -> vision.setPipeline(CompBotConstants.CORAL_LIMELIGHT_NAME, 1), vision));
+
     }
 
     /**

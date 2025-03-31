@@ -152,6 +152,10 @@ public class AlignWithLimelight extends Command {
             driveTrain.getState().Timestamp
         );
 
+        if(Math.abs(velY) < 0.025) {
+            velY = Math.signum(velY) * 0.025;
+        }
+
         Logger.recordOutput(CMD_NAME + "PID OutputX", velX);
         Logger.recordOutput(CMD_NAME + "PID OutputY", velY);
 

@@ -4,24 +4,24 @@
     {
       "anchor": {
         "x": 10.4,
-        "y": 2.947888513513513
+        "y": 2.6117
       },
       "prevControl": null,
       "nextControl": {
-        "x": 12.371959459459458,
-        "y": 2.5427364864864863
+        "x": 11.986084609136844,
+        "y": 2.536298715948467
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 12.24349662162162,
-        "y": 2.6119087837837833
+        "x": 12.17,
+        "y": 2.663
       },
       "prevControl": {
-        "x": 10.286908783783783,
-        "y": 3.01706081081081
+        "x": 11.520983164923035,
+        "y": 3.0335680930440367
       },
       "nextControl": null,
       "isLocked": false,
@@ -35,8 +35,8 @@
       "minWaypointRelativePos": 0,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 3.0,
-        "maxAcceleration": 3.25,
+        "maxVelocity": 2.5,
+        "maxAcceleration": 2.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -45,7 +45,19 @@
     }
   ],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "elevator",
+      "waypointRelativePos": 0.389928057553957,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Elevator L4"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -55,7 +67,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.0,
+    "velocity": 0.0,
     "rotation": 59.99999999999999
   },
   "reversed": false,

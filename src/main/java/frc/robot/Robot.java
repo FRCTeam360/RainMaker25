@@ -4,7 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -38,7 +40,6 @@ public class Robot extends LoggedRobot {
 
     private final RobotContainer m_robotContainer;
 
-   
     /**
      * This function is run when the robot is first started up and should be used
      * for any
@@ -72,8 +73,7 @@ public class Robot extends LoggedRobot {
                 String logPath = LogFileUtil.findReplayLog();
                 Logger.setReplaySource(new WPILOGReader(logPath));
                 Logger.addDataReceiver(
-                    new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))
-                );
+                        new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
                 break;
         }
 
@@ -83,6 +83,15 @@ public class Robot extends LoggedRobot {
         // and put our
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
+    }
+
+    @Override
+    public void robotInit() {
+        // Threads.setCurrentThreadPriority(true, 5);
+
+        Constants.FIELD_LAYOUT.setOrigin(
+                AprilTagFieldLayout.OriginPosition.kBlueAllianceWallRightSide);
+
         m_robotContainer.onInit();
     }
 
@@ -115,7 +124,8 @@ public class Robot extends LoggedRobot {
     }
 
     @Override
-    public void disabledPeriodic() {}
+    public void disabledPeriodic() {
+    }
 
     /**
      * This autonomous runs the autonomous command selected by your
@@ -129,12 +139,13 @@ public class Robot extends LoggedRobot {
         if (m_autonomousCommand != null) {
             m_autonomousCommand.schedule();
         }
-      //  drivetrain.setSteerCoast(false);
+        // drivetrain.setSteerCoast(false);
     }
 
     /** This function is called periodically during autonomous. */
     @Override
-    public void autonomousPeriodic() {}
+    public void autonomousPeriodic() {
+    }
 
     @Override
     public void teleopInit() {
@@ -149,7 +160,8 @@ public class Robot extends LoggedRobot {
 
     /** This function is called periodically during operator control. */
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+    }
 
     @Override
     public void testInit() {
@@ -159,13 +171,16 @@ public class Robot extends LoggedRobot {
 
     /** This function is called periodically during test mode. */
     @Override
-    public void testPeriodic() {}
+    public void testPeriodic() {
+    }
 
     /** This function is called once when the robot is first started up. */
     @Override
-    public void simulationInit() {}
+    public void simulationInit() {
+    }
 
     /** This function is called periodically whilst in simulation. */
     @Override
-    public void simulationPeriodic() {}
+    public void simulationPeriodic() {
+    }
 }

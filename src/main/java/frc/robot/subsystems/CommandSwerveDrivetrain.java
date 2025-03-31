@@ -124,19 +124,18 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public void addHeadingController(double kP, double kI, double kD, double kIZone) {
         headingController = new PhoenixPIDController(kP, kI, kD);
-
         headingController.enableContinuousInput(-Math.PI, Math.PI);
-        headingController.setTolerance(Math.toRadians(1));
+        headingController.setTolerance(Math.toRadians(1.0));
     }
 
     public void addStrafeController(double kP, double kI, double kD, double irMax, double irMin) {
         strafeController = new PhoenixPIDController(kP, kI, kD);
-        strafeController.setTolerance(1.0);
+        strafeController.setTolerance(0.5);
     }
 
     public void addForwardContrller(double kP, double kI, double kD, double irMax, double irMin) {
         forwardController = new PhoenixPIDController(kP, kI, kD);
-        forwardController.setTolerance(0.75);
+        forwardController.setTolerance(1.0);
     }
 
     public void driveFieldCentricFacingAngle(double x, double y, double desiredAngle) {
@@ -146,7 +145,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 .withTargetDirection(Rotation2d.fromDegrees(desiredAngle));
         request.HeadingController = headingController;
         request.withDeadband(0.1);
-        request.withRotationalDeadband(0.04);
+        request.withRotationalDeadband(0.0001);
         this.setControl(request);
         request.withDriveRequestType(DriveRequestType.Velocity);
     }
@@ -158,11 +157,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 .withTargetDirection(Rotation2d.fromDegrees(desiredAngle));
         request.HeadingController = headingController;
         request.withDeadband(0.1);
-        request.withRotationalDeadband(0.04);
+        request.withRotationalDeadband(0.021); //used to be 0.04
         request.ForwardPerspective = ForwardPerspectiveValue.BlueAlliance;
         this.setControl(request);
         request.withDriveRequestType(DriveRequestType.Velocity);
     }
+
+
 
     // public Command backUpBot(double meters) {
     // return Commands.runOnce(() -> this.start)

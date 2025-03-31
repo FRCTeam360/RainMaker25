@@ -122,8 +122,8 @@ public class CommandFactory {
 
     public Command runElevatorVision(double height, DoubleSupplier tySupplier) {
         return Commands.runEnd(
-            () -> setElevatorHeight(height + calculateHeight(tySupplier.getAsDouble())),
-        () -> setElevatorHeight(height + calculateHeight(tySupplier.getAsDouble())));
+            () -> setElevatorHeight(height + calculateHeight(height)),
+        () -> setElevatorHeight(height + calculateHeight(height )));
     }
 
     public Command scalingElevatorHeight(double height) {

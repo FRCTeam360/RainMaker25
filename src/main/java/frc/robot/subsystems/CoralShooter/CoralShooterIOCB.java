@@ -33,7 +33,7 @@ public class CoralShooterIOCB implements CoralShooterIO {
     public CoralShooterIOCB() {
         sparkMaxConfig.idleMode(IdleMode.kBrake);
         sparkMaxConfig.inverted(false);
-        sparkMaxConfig.smartCurrentLimit(20, 5);
+        sparkMaxConfig.smartCurrentLimit(25, 5);
 
         outtakeMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }

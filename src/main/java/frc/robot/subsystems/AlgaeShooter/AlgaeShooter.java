@@ -21,7 +21,7 @@ public class AlgaeShooter extends SubsystemBase {
     }
 
     public void setVelocity(double velocity) {
-        io.setDutyCycle(velocity);
+        io.setVelocity(velocity);
     }
 
     public void stop() {

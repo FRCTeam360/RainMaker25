@@ -93,7 +93,7 @@ public class SmartIntake extends Command {
             case JUST_INTAKE:
                 stallTimer.start();
                 coralShooter.setDutyCycle(-0.15);
-                funnel.setDutyCycle(0.2);
+                funnel.stop();
                 timer.reset();
                 timer.stop();
                 updateStates();

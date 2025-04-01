@@ -11,6 +11,7 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.EncoderConfig;
 import com.revrobotics.spark.config.SoftLimitConfig;
@@ -53,10 +54,11 @@ public class AlgaeTiltIOPB implements AlgaeTiltIO {
 
     sparkMaxConfig.apply(closedLoopConfig);
 
-    EncoderConfig encoderConfig = new EncoderConfig();
-    encoderConfig.positionConversionFactor(positionConversionFactor);
+    AbsoluteEncoderConfig absoluteEncoderConfig = new AbsoluteEncoderConfig();
+    absoluteEncoderConfig.zeroOffset(ZERO_OFFSET);
 
-    sparkMaxConfig.apply(encoderConfig);
+
+    sparkMaxConfig.apply(absoluteEncoderConfig);
     motor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 

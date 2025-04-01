@@ -5,13 +5,19 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "pipeline 1"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "vision right 1"
           }
         },
         {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -21,9 +27,9 @@
                 }
               },
               {
-                "type": "named",
+                "type": "wait",
                 "data": {
-                  "name": "Elevator L4"
+                  "waitTime": 0.2
                 }
               }
             ]
@@ -33,6 +39,12 @@
           "type": "named",
           "data": {
             "name": "shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "pipeline 0"
           }
         },
         {
@@ -50,9 +62,22 @@
                       }
                     },
                     {
-                      "type": "wait",
+                      "type": "race",
                       "data": {
-                        "waitTime": 0.75
+                        "commands": [
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 0.75
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "outtake sensor"
+                            }
+                          }
+                        ]
                       }
                     },
                     {
@@ -84,9 +109,9 @@
                 }
               },
               {
-                "type": "named",
+                "type": "wait",
                 "data": {
-                  "name": "Elevator L4"
+                  "waitTime": 0.2
                 }
               }
             ]
@@ -96,6 +121,12 @@
           "type": "named",
           "data": {
             "name": "shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "pipeline 1"
           }
         },
         {
@@ -113,9 +144,22 @@
                       }
                     },
                     {
-                      "type": "wait",
+                      "type": "race",
                       "data": {
-                        "waitTime": 0.75
+                        "commands": [
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 0.75
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "outtake sensor"
+                            }
+                          }
+                        ]
                       }
                     },
                     {
@@ -137,7 +181,7 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -147,9 +191,9 @@
                 }
               },
               {
-                "type": "named",
+                "type": "wait",
                 "data": {
-                  "name": "Elevator L4"
+                  "waitTime": 0.2
                 }
               }
             ]

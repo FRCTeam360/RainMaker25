@@ -92,13 +92,13 @@ public class RemoveAlgae extends Command {
     @Override
     public void execute() {
         coralShooter.setDutyCycle(-1.0);
-        algaeTilt.setPosition(0.0);
+        algaeTilt.setPosition(0.12);
         algaeShooter.setDutyCycle(-0.8);
 
         // algaeArm.setPosition(100.0);
         // elevator.setElevatorPostion(height + 1.0);
-        elevator.setElevatorPostion(height + 3.0);
-        algaeArm.setPosition(150.0);
+        elevator.setElevatorPostion(height + 8.0);
+        algaeArm.setPosition(175.0);
 
     }
 

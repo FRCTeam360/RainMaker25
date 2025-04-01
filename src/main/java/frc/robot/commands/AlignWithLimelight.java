@@ -14,9 +14,11 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
+import frc.robot.Constants.CompBotConstants;
 import frc.robot.Constants.PracticeBotConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Vision.Vision;
@@ -43,6 +45,8 @@ public class AlignWithLimelight extends Command {
     private NetworkTable table = NetworkTableInstance.getDefault().getTable(Constants.CompBotConstants.CORAL_LIMELIGHT_NAME);
 
     private CommandXboxController driverCont;
+
+    private Timer timer;
 
     private final String LIMELIGHT_NAME = Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME;
     private final String CMD_NAME = "AlignWithLimelight: ";
@@ -77,6 +81,8 @@ public class AlignWithLimelight extends Command {
         this.goalTX = goalTX;
         this.pipeline = pipeline;
         this.driverCont = driverCont;
+        this.timer = new Timer();
+
         addRequirements(driveTrain);
     }
 
@@ -96,11 +102,14 @@ public class AlignWithLimelight extends Command {
         addRequirements(driveTrain);
 
         this.inAuto = true;
+        this.timer = new Timer();
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        timer.stop();
+        timer.reset();
         leftAccelerationLimit.reset(0);
         forwardsAccelerationLimit.reset(0);
 
@@ -196,11 +205,24 @@ public class AlignWithLimelight extends Command {
         driveRobot();
         long executeLoopTime = HALUtil.getFPGATime() - executeStartTime;
         Logger.recordOutput( CMD_NAME +" execute loop time", (executeLoopTime / 1000));
+
+        if(vision.getTV(CompBotConstants.CORAL_LIMELIGHT_NAME) == 0) {
+            timer.start();
+            if(timer.hasElapsed(0.3)) {
+                endEarly = true;
+            }
+        } else {
+            timer.stop();
+            timer.reset();
+        }
+
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        timer.stop();
+        timer.reset();
         LimelightHelpers.setPriorityTagID("limelight", -1);
         driveTrain.robotCentricDrive(0.0, 0.0, 0.0);
     }
@@ -223,6 +245,7 @@ public class AlignWithLimelight extends Command {
         Logger.recordOutput(CMD_NAME + "using correct pipeline", onCorrectPipeline);
         Logger.recordOutput(CMD_NAME + "vel is 0", vel0);
         Logger.recordOutput(CMD_NAME + "iAuto", inAuto);
+        Logger.recordOutput(CMD_NAME + "endEarly", endEarly);
 
 
         return (

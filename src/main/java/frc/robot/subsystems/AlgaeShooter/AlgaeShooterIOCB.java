@@ -19,6 +19,7 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -52,6 +53,8 @@ public class AlgaeShooterIOCB implements AlgaeShooterIO {
     backConfig.follow(Constants.CompBotConstants.ALGAE_SHOOTER_FRONT_ID, true);
     backConfig.inverted(true);
     frontConfig.inverted(false);
+    backConfig.idleMode(IdleMode.kCoast);
+    frontConfig.idleMode(IdleMode.kCoast);
     
     algaeShooterMotorFront.configure(frontConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     algaeShooterMotorBack.configure(backConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

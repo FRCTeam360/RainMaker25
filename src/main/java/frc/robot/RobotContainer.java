@@ -42,6 +42,7 @@ import frc.robot.commands.SetCoralIntake;
 import frc.robot.commands.ShuffleboardTuner;
 import frc.robot.commands.SmartIntake;
 import frc.robot.commands.SnapDrivebaseToAngle;
+import frc.robot.commands.VisionShootAlgae;
 import frc.robot.generated.CompBotDriveTrain;
 import frc.robot.generated.OldCompBot;
 import frc.robot.generated.PracticeBotDriveTrain;
@@ -128,6 +129,8 @@ public class RobotContainer {
     private Command autoRightAlign;
 
     private SnapDrivebaseToAngle snapDrivebaseToAngle;
+
+    private VisionShootAlgae visionShootAlgae;
 
     private Command levelFour;
     private Command levelThree;
@@ -241,15 +244,15 @@ public class RobotContainer {
                                     () -> driveTrain.getAngle(),
                                     () -> driveTrain.getAngularRate()
                                 )
+                            ),
+                            Map.entry(
+                            Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                            new VisionIOLimelight(
+                            Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                            () -> driveTrain.getAngle(),
+                            () -> driveTrain.getAngularRate()
                             )
-                            // Map.entry(
-                            // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                            // new VisionIOLimelight(
-                            // Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                            // () -> driveTrain.getAngle(),
-                            // () -> driveTrain.getAngularRate()
-                            // )
-                            // )
+                            )
                         )
                     );
                 // practice bot stuff
@@ -377,6 +380,8 @@ public class RobotContainer {
         xOut = driveTrain.xOutCmd();
 
         snapDrivebaseToAngle = new SnapDrivebaseToAngle(vision, driveTrain, 0);
+
+        visionShootAlgae = new VisionShootAlgae(vision, algaeRoller, algaeShooter, algaeTilt);
 
         if (Objects.nonNull(elevator)) {
             levelFour = commandFactory.setElevatorLevelFour();
@@ -541,6 +546,11 @@ public class RobotContainer {
         vision.setDefaultCommand(consumeVisionMeasurements.ignoringDisable(true));
         
         driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
+
+        driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(testCont));
+        testCont.pov(180).whileTrue(visionShootAlgae);
+        testCont.a().whileTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.32 : 0.293));
+        testCont.pov(270).whileTrue(commandFactory.operatorIntakeAlgae());
         
         // driveTrain.setDefaultCommand(new InstantCommand(() -> driveTrain.robotCentricDrive(0.0, 0.0, yVel), driveTrain));
         // testCont.b().toggleOnTrue(new InstantCommand(() -> incrementVelocity()));
@@ -582,7 +592,9 @@ public class RobotContainer {
 
         operatorCont.pov(90).whileTrue(commandFactory.operatorOutakeAlgae());
         operatorCont.pov(270).whileTrue(commandFactory.operatorIntakeAlgae());
-        operatorCont.pov(180).whileTrue(commandFactory.shootAlgae());
+
+
+        operatorCont.pov(180).whileTrue(visionShootAlgae);
 
 
         operatorCont.pov(0).whileTrue(commandFactory.climb());

@@ -60,9 +60,6 @@ public class AlgaeTiltIOPB implements AlgaeTiltIO {
 
     sparkMaxConfig.apply(closedLoopConfig);
 
-    EncoderConfig encoderConfig = new EncoderConfig();
-    encoderConfig.positionConversionFactor(positionConversionFactor);
-
     AbsoluteEncoderConfig absoluteEncoderConfig = new AbsoluteEncoderConfig();
     absoluteEncoderConfig.zeroOffset(ZERO_OFFSET);
 

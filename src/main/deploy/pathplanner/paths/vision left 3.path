@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 14.617726088708602,
-        "y": 2.0226639981637935
+        "y": 2.022663998163794
       },
       "isLocked": false,
       "linkedName": null
@@ -48,7 +48,7 @@
   "eventMarkers": [
     {
       "name": "elevator",
-      "waypointRelativePos": 0.8892086330935258,
+      "waypointRelativePos": 0.9,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

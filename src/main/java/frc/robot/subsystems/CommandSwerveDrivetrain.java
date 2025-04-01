@@ -135,7 +135,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public void addForwardContrller(double kP, double kI, double kD, double irMax, double irMin) {
         forwardController = new PhoenixPIDController(kP, kI, kD);
-        forwardController.setTolerance(1.0);
+        forwardController.setTolerance(0.75);
     }
 
     public void driveFieldCentricFacingAngle(double x, double y, double desiredAngle) {
@@ -396,6 +396,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
      * @return Command to run
      */
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
+        long executeStartTime = HALUtil.getFPGATime();
+        long executeLoopTime = HALUtil.getFPGATime() - executeStartTime;
+        Logger.recordOutput( CMD_NAME +" execute loop time", (executeLoopTime / 1000));
+
         return run(() -> this.setControl(requestSupplier.get()));
     }
 

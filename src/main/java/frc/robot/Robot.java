@@ -26,6 +26,8 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import com.pathplanner.lib.commands.PathfindingCommand;
+
 /**
  * The methods in this class are called automatically corresponding to each
  * mode, as described in
@@ -87,12 +89,13 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void robotInit() {
-        // Threads.setCurrentThreadPriority(true, 5);
+        Threads.setCurrentThreadPriority(true, 10);
 
         Constants.FIELD_LAYOUT.setOrigin(
                 AprilTagFieldLayout.OriginPosition.kBlueAllianceWallRightSide);
 
         m_robotContainer.onInit();
+        PathfindingCommand.warmupCommand().schedule();
     }
 
     /**

@@ -17,9 +17,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "right align"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "right align"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.25
+                }
+              }
+            ]
           }
         },
         {
@@ -43,9 +56,22 @@
                       }
                     },
                     {
-                      "type": "wait",
+                      "type": "race",
                       "data": {
-                        "waitTime": 1.0
+                        "commands": [
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 1.0
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "outtake sensor"
+                            }
+                          }
+                        ]
                       }
                     },
                     {
@@ -67,9 +93,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "right align"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "right align"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.25
+                }
+              }
+            ]
           }
         },
         {
@@ -99,9 +138,22 @@
                       }
                     },
                     {
-                      "type": "wait",
+                      "type": "race",
                       "data": {
-                        "waitTime": 1.0
+                        "commands": [
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 1.0
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "outtake sensor"
+                            }
+                          }
+                        ]
                       }
                     },
                     {
@@ -123,9 +175,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "left align"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "left align"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.25
+                }
+              }
+            ]
           }
         },
         {

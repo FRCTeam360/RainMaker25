@@ -578,7 +578,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                     // For our team, the path does not need to be flipped for Red vs Blue.
                     // The reasoning for this is that the fields are not constructed the same for
                     // each event, each side is a bit different.
-                    () -> false,
+                    () -> {
+                        var alliance = DriverStation.getAlliance();
+                        if(alliance.isPresent()) {
+                            return alliance.get() == DriverStation.Alliance.Blue;
+                        }
+                        return false;
+                    },
                     this // Subsystem for requirements
             );
         } catch (Exception ex) {

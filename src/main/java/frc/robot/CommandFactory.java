@@ -480,7 +480,7 @@ public class CommandFactory {
             );
     }
 
-    double climberWinchSetPoint = -44.33;
+    double climberWinchSetPoint = -34.28; // -34.28 new number 4:53pm 4-1-2025
 
     public Command initiateClimb() {
         return Commands

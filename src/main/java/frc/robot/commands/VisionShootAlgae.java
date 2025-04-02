@@ -41,23 +41,25 @@ public class VisionShootAlgae extends Command {
 
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(algaeRoller, algaeShooter, algaeTilt);
-    }
-
-    // Called when the command is initially scheduled.
-    @Override
-    public void initialize() {
+        
         distanceVelocity.put(2.91, 5000.0);
-        distanceVelocity.put(14.13, 5500.0);
         distanceVelocity.put(9.14, 5250.0);
+        distanceVelocity.put(14.13, 5500.0);
+        distanceVelocity.put(18.2, .0);
 
         distanceAngle.put(2.91, 0.035);
-        distanceAngle.put(14.13, 0.055);
         distanceAngle.put(9.14, 0.05);
+        distanceAngle.put(14.13, 0.055);
+        distanceAngle.put(18.2, 0.06);
 
         setpoint = 0;
         angle = 0;
         tolerance = 50;
     }
+
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {}
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
@@ -71,9 +73,6 @@ public class VisionShootAlgae extends Command {
         if (Math.abs(algaeShooter.getVelocity() - setpoint) < tolerance) {
             algaeRoller.setDutyCycle(1.0);
         }
-
-        Logger.recordOutput("Algae RPM", setpoint);
-        Logger.recordOutput("Algae Angle", distanceAngle.get(vision.getTYRaw(CompBotConstants.ALGAE_LIMELIGHT_NAME)));
     }
 
     // Called once the command ends or is interrupted.
@@ -87,6 +86,9 @@ public class VisionShootAlgae extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
+
+        Logger.recordOutput("Algae RPM", setpoint);
+        Logger.recordOutput("Algae Angle", distanceAngle.get(vision.getTYRaw(CompBotConstants.ALGAE_LIMELIGHT_NAME)));
         return false;
     }
 }

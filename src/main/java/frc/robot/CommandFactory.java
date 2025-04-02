@@ -464,10 +464,10 @@ public class CommandFactory {
 
     public Command deployClimb() {
         return Commands
-            .waitUntil(() -> (climbTimer.get() > 3.5))
+            .waitUntil(() -> (climbTimer.get() > 1.5))
             .deadlineFor(
                 servo
-                    .runWithTimeout(3.5, 0)
+                    .runWithTimeout(1.5, 0)
                     .alongWith(new InstantCommand(() -> climbTimer.reset()))
                     .alongWith(new InstantCommand(() -> climbTimer.start()))
                     .alongWith(algaeTilt.setPositionCmd(0.256))

@@ -531,7 +531,7 @@ public class RobotContainer {
 
         operatorCont.pov(180).whileTrue(visionShootAlgae);
 
-        operatorCont.pov(0).whileTrue(commandFactory.climb());
+        operatorCont.pov(0).whileTrue(commandFactory.operatorClimb());
 
         operatorCont.leftTrigger(0.25).whileTrue(coralShooter.setDutyCycleCmd(0.3));
         operatorCont.rightTrigger(0.25).whileTrue(commandFactory.spinUpAlgaeShooter());

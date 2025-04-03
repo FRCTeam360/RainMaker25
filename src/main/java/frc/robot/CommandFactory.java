@@ -497,9 +497,13 @@ public class CommandFactory {
         return climberWinch.setDutyCycleCmd(-0.8);
     }
 
+    public Command operatorClimb() {
+        return climb().alongWith(algaeTilt.setPositionCmd(0.907));
+    }
+
     public Command climbAutomated() {
         return Commands
-            .waitUntil(() -> climberWinch.getPosition() < -160.0)
+            .waitUntil(() -> climberWinch.getPosition() < -132.0)
             .deadlineFor(climb())
             .alongWith(algaeTilt.setPositionCmd(0.907));
     }

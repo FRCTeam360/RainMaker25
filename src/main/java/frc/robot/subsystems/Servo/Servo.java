@@ -37,6 +37,7 @@ public class Servo extends SubsystemBase {
         return Commands.waitSeconds(timeout).deadlineFor(this.setSpeedCmd(speed));
     }
 
+    
 
     public Command setSpeedCmd(DoubleSupplier speed) {
         System.out.println("speed");

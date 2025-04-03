@@ -22,7 +22,7 @@ import frc.robot.subsystems.ClimberWheel.ClimberWheelIO.ClimberWheelIOInputs;
 
 public class ClimberWheelIOSim implements ClimberWheelIO {
   private final DCMotor gearbox = DCMotor.getNEO(1);
-  private final Encoder encoder = new Encoder(10, 11);
+  private final Encoder encoder = new Encoder(12, 11);
 
   private final PWMSparkMax wheelMotor = new PWMSparkMax(5);
 

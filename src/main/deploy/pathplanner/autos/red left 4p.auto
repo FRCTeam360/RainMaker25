@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "blue left 1"
+                  "pathName": "red left 1"
                 }
               },
               {
@@ -24,22 +24,9 @@
           }
         },
         {
-          "type": "race",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.75
-                }
-              }
-            ]
+            "name": "shoot"
           }
         },
         {
@@ -53,19 +40,19 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "blue left 2"
+                        "pathName": "red left 2"
                       }
                     },
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.75
+                        "waitTime": 0.5
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "blue left 3"
+                        "pathName": "red left 3"
                       }
                     }
                   ]
@@ -93,7 +80,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.75
+                  "waitTime": 0.25
                 }
               }
             ]
@@ -110,19 +97,19 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "blue left 4"
+                        "pathName": "red left 4"
                       }
                     },
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.75
+                        "waitTime": 0.5
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "blue left 5"
+                        "pathName": "red left 5"
                       }
                     }
                   ]
@@ -150,7 +137,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.75
+                  "waitTime": 0.25
                 }
               }
             ]
@@ -167,13 +154,19 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "blue left 6"
+                        "pathName": "red left 6"
                       }
                     },
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.0
+                        "waitTime": 0.5
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "red left 7"
                       }
                     }
                   ]
@@ -186,6 +179,31 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.25
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Elevator L1"
           }
         }
       ]

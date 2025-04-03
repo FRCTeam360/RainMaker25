@@ -216,11 +216,19 @@ public class CompBotDriveTrain {
     private static PhoenixPIDController poseXController = new PhoenixPIDController(0.5, 0.0, 0.0); // TODO: Find actual value
     private static PhoenixPIDController poseYController = new PhoenixPIDController(0.5, 0.0, 0.0); // TODO: Find actual value
 
+    private static double poseXControllerPositionTolerance = 0.05;
+    private static double poseYControllerPositionTolerance = 0.05;
+
+    private static double poseXControllerVelocityTolerance = 0.01;
+    private static double poseYControllerVelocityTolerance = 0.01;
+
     /**
      * Creates a CommandSwerveDrivetrain instance.
      * This should only be called once in your robot program,.
      */
     public static CommandSwerveDrivetrain createDrivetrain() {
+        poseXController.setTolerance(poseXControllerPositionTolerance, poseXControllerVelocityTolerance);
+        poseYController.setTolerance(poseYControllerPositionTolerance, poseYControllerVelocityTolerance);
         return new CommandSwerveDrivetrain(
                 headingKP, headingKI, headingKD, headingKIZone, stafeKP, stafeKI, stafeKD, strafeIRMax, strafeIRMin,
                 forwardKP, forwardKI, forwardKD, forwardIRMax, forwardIRMin,

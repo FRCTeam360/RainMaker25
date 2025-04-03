@@ -529,7 +529,7 @@ public class RobotContainer {
         operatorCont.pov(270).whileTrue(commandFactory.operatorIntakeAlgae());
 
 
-        operatorCont.pov(180).whileTrue(visionShootAlgae);
+        operatorCont.pov(180).whileTrue(commandFactory.shootAlgae());
 
         operatorCont.pov(0).whileTrue(commandFactory.operatorClimb());
 

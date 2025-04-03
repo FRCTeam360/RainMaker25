@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 //import frc.robot.Constants.PracticeBotConstants.ElevatorHeights;
 import frc.robot.Constants.*;
+import frc.robot.commands.AlignToReefFieldRelative;
 import frc.robot.commands.AlignWithLimelight;
 import frc.robot.commands.PathOnTheFly;
 import frc.robot.commands.SetCoralIntake;
@@ -307,7 +308,7 @@ public class RobotContainer {
                 servo,
                 pathOnTheFly);
 
-        initializeCommands();
+        // initializeCommands();
 
         field = new Field2d();
         SmartDashboard.putData("Field", field);
@@ -328,9 +329,9 @@ public class RobotContainer {
         diagnosticTab.addString("Serial Address", HALUtil::getSerialNumber);
         diagnosticTab.addBoolean("Sim", Constants::isSim);
 
-        configureBindings();
+        // configureBindings();
 
-        // configureTestController();
+        configureTestController();
     }
 
     public void initializeCommands() {
@@ -352,10 +353,10 @@ public class RobotContainer {
             zeroElevatorEncoder = elevator.zeroElevatorCmd();
 
             levelOneAndZero = new SequentialCommandGroup(levelOne, zeroElevatorEncoder);
-            NamedCommands.registerCommand(
+            registerPathplannerCommand(
                     "raise to l4",
                     commandFactory.setElevatorHeight(33.0).raceWith(elevator.isAtHeight(33.0)));
-            NamedCommands.registerCommand(
+            registerPathplannerCommand(
                     "zero",
                     commandFactory.setElevatorHeight(0.0).raceWith(elevator.isAtHeight(0.0)));
         }
@@ -424,8 +425,8 @@ public class RobotContainer {
 
             smartIntake = SmartIntake.newCommand(coralShooter);
 
-            NamedCommands.registerCommand("shoot", coralShooter.basicShootCmd());
-            NamedCommands.registerCommand("intake", smartIntake);
+            registerPathplannerCommand("shoot", coralShooter.basicShootCmd());
+            registerPathplannerCommand("intake", smartIntake);
         }
 
         // registerPathplannerCommand("Intake Coral", intake);
@@ -574,6 +575,10 @@ public class RobotContainer {
     }
 
     private void configureTestController() {
+        driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(testCont));
+
+        testCont.rightBumper().whileTrue(AlignToReefFieldRelative.moveToReef(driveTrain, driveTrain::getPose, true));
+        testCont.leftBumper().whileTrue(AlignToReefFieldRelative.moveToReef(driveTrain, driveTrain::getPose, false));
         // elevator.setDefaultCommand(
         // elevator.setDutyCycleCommand(() ->
         // MathUtil.applyDeadband(testCont.getLeftY(), 0.1)));
@@ -613,7 +618,7 @@ public class RobotContainer {
             coralShooter.stop();
         if (Objects.nonNull(algaeArm))
             algaeArm.stop();
-        if (Objects.nonNull(algaeArm))
+        if (Objects.nonNull(algaeRoller))
             algaeRoller.stop();
         if (Objects.nonNull(algaeShooter))
             algaeShooter.stop();

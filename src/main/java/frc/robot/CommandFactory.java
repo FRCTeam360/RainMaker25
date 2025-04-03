@@ -335,11 +335,11 @@ public class CommandFactory {
     }
 
     public Command pathFindToReefLeft() {
-        return PathOnTheFly.pathfindToReef(drivetrain, () -> this.drivetrain.getPose(), false);
+        return AlignToReefFieldRelative.moveToReef(drivetrain, () -> this.drivetrain.getPose(), false);
     }
 
     public Command pathFindToReefRight() {
-        return PathOnTheFly.pathfindToReef(drivetrain, () -> this.drivetrain.getPose(), true);
+        return AlignToReefFieldRelative.moveToReef(drivetrain, () -> this.drivetrain.getPose(), true);
     }
 
     public Command pathFindToProcessor() {

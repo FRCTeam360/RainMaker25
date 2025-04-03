@@ -48,36 +48,35 @@ public class DriveToPose extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-       // System.out.println("Running initialize");
         drivetrain.driveToPose(setpointPose);
+        final double headingSetpoint = setpointPose.getRotation().getDegrees();
+        final double poseXSetpoint = setpointPose.getX();
+        final double poseYSetpoint = setpointPose.getY();
+
+        Logger.recordOutput(LOGGING_PREFIX + "positionSetpoint", headingSetpoint);
+        Logger.recordOutput(LOGGING_PREFIX + "headingSetpoint", headingSetpoint);
+        Logger.recordOutput(LOGGING_PREFIX + "poseXSetpoint", poseXSetpoint);
+        Logger.recordOutput(LOGGING_PREFIX + "poseYSetpoint", poseYSetpoint);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
         drivetrain.driveToPose(setpointPose);
-        //System.out.println("Running execute");
     }
 
     // Called once the command ends or is interrupted.
     @Override
-    public void end(boolean interrupted) {
-        //System.out.println("Running end");
-    }
+    public void end(boolean interrupted) {}
 
     private final String LOGGING_PREFIX = "DriveToPose: ";
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        //System.out.println("Running isFinished");
         final boolean isAtHeadingSetpoint = drivetrain.isAtRotationSetpoint();
         final boolean isAtPoseXSetPoint = drivetrain.isAtPoseXSetpoint();
         final boolean isAtPoseYSetPoint = drivetrain.isAtPoseYSetpoint();
-
-        final double headingSetpoint = Math.toDegrees(drivetrain.getHeadingControllerSetpoint());
-        final double poseXSetpoint = drivetrain.getPoseXSetpoint();
-        final double poseYSetpoint = drivetrain.getPoseYSetpoint();
 
         final double headingPositionError = Math.toDegrees(drivetrain.getHeadingControllerPositionError());
         final double poseXPositionError = drivetrain.getPoseXControllerPositionError();
@@ -90,10 +89,6 @@ public class DriveToPose extends Command {
         Logger.recordOutput(LOGGING_PREFIX + "isAtRotationSetpoint", isAtHeadingSetpoint);
         Logger.recordOutput(LOGGING_PREFIX + "isAtPoseXSetPoint", isAtPoseXSetPoint);
         Logger.recordOutput(LOGGING_PREFIX + "isAtPoseYSetPoint", isAtPoseYSetPoint);
-
-        Logger.recordOutput(LOGGING_PREFIX + "headingSetPoint", headingSetpoint);
-        Logger.recordOutput(LOGGING_PREFIX + "poseXSetpoint", poseXSetpoint);
-        Logger.recordOutput(LOGGING_PREFIX + "poseYSetpoint", poseYSetpoint);
 
         Logger.recordOutput(LOGGING_PREFIX + "headingPositionError", headingPositionError);
         Logger.recordOutput(LOGGING_PREFIX + "poseXPositionError", poseXPositionError);

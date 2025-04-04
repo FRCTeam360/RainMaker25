@@ -23,7 +23,7 @@ import frc.robot.subsystems.CoralShooter.CoralShooterIO.CoralShooterIOInputs;
 
 public class AlgaeShooterIOSim implements AlgaeShooterIO {
   private DCMotor gearbox = DCMotor.getKrakenX60Foc(1);
-  private Encoder encoder = new Encoder(7, 8);
+  private Encoder encoder = new Encoder(2, 3);
 
   private final PWMTalonFX motor = new PWMTalonFX(4);
 

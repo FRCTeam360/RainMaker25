@@ -249,8 +249,8 @@ public class RobotContainer {
                 servo = new Servo(new ServoIOPB());
                 break;
             case SIM:
-                driveTrain = WoodBotDriveTrain.createDrivetrain();
-                logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
+                driveTrain = CompBotDriveTrain.createDrivetrain();
+                logger = new Telemetry(CompBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
                 vision = new Vision(
                         Map.ofEntries(
                                 Map.entry(
@@ -648,6 +648,7 @@ public class RobotContainer {
     }
 
     private void configureTestController() {
+        driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(testCont));
         // elevator.setDefaultCommand(
         // elevator.setDutyCycleCommand(() ->
         // MathUtil.applyDeadband(testCont.getLeftY(), 0.1)));

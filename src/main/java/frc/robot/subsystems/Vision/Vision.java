@@ -159,7 +159,7 @@ public class Vision extends SubsystemBase {
     public void periodic() {
 
         if(DriverStation.isDisabled()) {
-            turnOffLights(CompBotConstants.ALGAE_LIMELIGHT_NAME);
+            // turnOffLights(CompBotConstants.ALGAE_LIMELIGHT_NAME);
         }
 
         long periodicStartTime = HALUtil.getFPGATime();

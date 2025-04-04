@@ -24,7 +24,7 @@ public class ClimberWheelIOSim implements ClimberWheelIO {
   private final DCMotor gearbox = DCMotor.getNEO(1);
   private final Encoder encoder = new Encoder(10, 11);
 
-  private final PWMSparkMax wheelMotor = new PWMSparkMax(5);
+  private final PWMSparkMax wheelMotor = new PWMSparkMax(6);
 
   private final LinearSystem<N1, N1, N1> plant = LinearSystemId.createFlywheelSystem(
       gearbox, 0.00113951385, 1.0); // TODO: find actual MOI

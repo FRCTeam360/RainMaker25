@@ -37,7 +37,7 @@ public class AlgaeArmIOSim implements AlgaeArmIO {
   
   private DoubleSupplier heightSupplier;
   private DCMotor gearbox = DCMotor.getNeo550(1);
-  private Encoder encoder = new Encoder(5, 6);
+  private Encoder encoder = new Encoder(4, 5);
 
   private final PWMSparkMax motor = new PWMSparkMax(3);
   private final PWMSim simMotor = new PWMSim(motor);

@@ -538,6 +538,7 @@ public class RobotContainer {
 
         driverCont.leftStick().whileTrue(removeAlgae);
         driverCont.pov(0).onTrue(new InstantCommand(() -> driveTrain.zero(), driveTrain));
+        driverCont.pov(90).whileTrue(xOut);
         driverCont.start().onTrue(commandFactory.depolyAndInitiateClimb());
         driverCont.back().onTrue(commandFactory.climbAutomated());
 

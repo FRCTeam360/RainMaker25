@@ -126,7 +126,7 @@ public class SmartIntake extends Command {
                 break;
         }
         long executeLoopTime = HALUtil.getFPGATime() - executeStartTime;
-        Logger.recordOutput( CMD_NAME +": execute loop time", (executeLoopTime / 1000));
+        Logger.recordOutput( CMD_NAME +": execute loop time", (executeLoopTime / 1000.0));
 
     }
 

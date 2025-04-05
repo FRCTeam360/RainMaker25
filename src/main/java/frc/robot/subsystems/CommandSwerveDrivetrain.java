@@ -33,6 +33,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -398,7 +399,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
         long executeStartTime = HALUtil.getFPGATime();
         long executeLoopTime = HALUtil.getFPGATime() - executeStartTime;
-        Logger.recordOutput( CMD_NAME +" execute loop time", (executeLoopTime / 1000));
+        Logger.recordOutput( CMD_NAME +" execute loop time", (executeLoopTime / 1000.0));
 
         return run(() -> this.setControl(requestSupplier.get()));
     }
@@ -537,10 +538,38 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                                 m_hasAppliedOperatorPerspective = true;
                             });
         }
-        long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
-        Logger.recordOutput( CMD_NAME+ " periodic loop time", (periodicLoopTime / 1000));
-    }
 
+        // if (DriverStation.isDisabled() && DriverStation.isAutonomous()) {
+        //     if(!rotationalResetTimer.isRunning()) {
+
+        //         rotationalResetTimer.restart();
+        //     } else if (rotationalResetTimer.hasElapsed(5.0)) {
+
+        //         this.initializeRotationForAlliance();
+        //         rotationalResetTimer.restart();
+        //     } 
+        // } else if(rotationalResetTimer.isRunning()) {
+
+        //     rotationalResetTimer.stop();
+        //     rotationalResetTimer.reset();
+        // }
+
+        long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
+        Logger.recordOutput( CMD_NAME+ " periodic loop time", (periodicLoopTime / 1000.0));
+    }
+    private Timer rotationalResetTimer = new Timer();
+
+
+    // public void initializeRotationForAlliance() {
+    //     Pose2d currentPose = this.getPose();
+    //     if(DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+    //         currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), Rotation2d.kZero);
+    //     } else if(DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue) {
+    //         currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), Rotation2d.k180deg);
+    //     }
+    //     this.resetPose(currentPose);
+    // }
+        
     private void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();
 

@@ -185,8 +185,9 @@ public class CommandFactory {
                 .logCommand(
                         new AlignWithLimelight(vision, drivetrain, goalTY, goalTX, pipeline, driverCont),
                         "AlignWithLimelightBase")
-                .andThen(Commands.either(this.rumbleDriverController(driverCont).withTimeout(0.1), Commands.none(),
-                        () -> vision.getTV(Constants.CompBotConstants.CORAL_LIMELIGHT_NAME) == 1));
+                .andThen(this.rumbleDriverController(driverCont)
+                        .onlyIf(() -> vision.getTV(Constants.CompBotConstants.CORAL_LIMELIGHT_NAME) == 1)
+                        .withTimeout(0.1));
     }
 
     public Command autoAlignWithLimelight(double goalTY, double goalTX, int pipeline) {
@@ -358,7 +359,7 @@ public class CommandFactory {
     // }
 
     public Command shootAlgae() {
-        double setPoint = 5750.0; // 6000,
+        double setPoint = 5050.0; // 6000,
         double tolerance = 50.0;
         return Commands
                 .waitUntil(
@@ -484,7 +485,7 @@ public class CommandFactory {
 
     public Command climbAutomated() {
         return Commands
-                .waitUntil(() -> climberWinch.getPosition() < -120.0)
+                .waitUntil(() -> climberWinch.getPosition() < -123.0)
                 .deadlineFor(climb())
                 .alongWith(algaeTilt.setPositionCmd(0.907));
     }

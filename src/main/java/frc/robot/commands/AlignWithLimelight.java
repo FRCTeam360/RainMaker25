@@ -204,7 +204,7 @@ public class AlignWithLimelight extends Command {
         if (endEarly) return;
         driveRobot();
         long executeLoopTime = HALUtil.getFPGATime() - executeStartTime;
-        Logger.recordOutput( CMD_NAME +" execute loop time", (executeLoopTime / 1000));
+        Logger.recordOutput( CMD_NAME +" execute loop time", (executeLoopTime / 1000.0));
 
         if(vision.getTV(CompBotConstants.CORAL_LIMELIGHT_NAME) == 0) {
             timer.start();

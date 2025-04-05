@@ -54,6 +54,6 @@ public class ClimberWinch extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Climber", inputs);
     long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
-    Logger.recordOutput( "Climber: periodic loop time", (periodicLoopTime / 1000));
+    Logger.recordOutput( "Climber: periodic loop time", (periodicLoopTime / 1000.0));
   }
 }

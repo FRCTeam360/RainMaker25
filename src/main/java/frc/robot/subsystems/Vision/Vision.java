@@ -198,7 +198,7 @@ public class Vision extends SubsystemBase {
         }
         this.acceptedMeasurements = acceptedMeasurements;
         long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
-        Logger.recordOutput(VISION_LOGGING_PREFIX + "periodic loop time", (periodicLoopTime / 1000));
+        Logger.recordOutput(VISION_LOGGING_PREFIX + "periodic loop time", (periodicLoopTime / 1000.0));
     }
 
     /**

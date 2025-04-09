@@ -28,7 +28,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 /** Add your docs here. */
-public class AlignToReefFieldRelative {
+public class PIDToReefPoints {
     private static class ReefPositions {
         private static final Map<Integer, Translation2d> LEFT_TAG_ID_TO_POSITION_OFFSET = Map.ofEntries(
                 Map.entry(
@@ -183,7 +183,7 @@ public class AlignToReefFieldRelative {
      *                       move to the left pole
      * @return Command to path find to the reef
      */
-    public static Command moveToReefOptimized(CommandSwerveDrivetrain drivetrain, Supplier<Pose2d> currentBotPose, boolean right) {
+    public static Command pidToReefOptimized(CommandSwerveDrivetrain drivetrain, Supplier<Pose2d> currentBotPose, boolean right) {
         initializeConstants();
         // Create commands
         return findNearestTagFirst(currentBotPose.get()).andThen(
@@ -219,7 +219,7 @@ public class AlignToReefFieldRelative {
      *                       move to the left pole
      * @return Command to path find to the reef
      */
-    public static Command moveToReef(CommandSwerveDrivetrain drivetrain, Supplier<Pose2d> currentBotPose, boolean right) {
+    public static Command pidToReef(CommandSwerveDrivetrain drivetrain, Supplier<Pose2d> currentBotPose, boolean right) {
         initializeConstants();
         // Create commands
         return Commands.either(
@@ -272,7 +272,7 @@ public class AlignToReefFieldRelative {
     private static Entry<Integer, Command> buildMoveToReefCommandEntry(CommandSwerveDrivetrain drivetrain, int tagID,
             Map<Integer, Pose2d> tagIDPositionMap) {
         Pose2d endPose = tagIDPositionMap.get(tagID);
-        return Map.entry(tagID, DriveToPose.getCommand(drivetrain, endPose));
+        return Map.entry(tagID, PIDToPose.getCommand(drivetrain, endPose));
     }
 
     private static int getNearestReefTagID(Pose2d currentBotPose, boolean isRed) {

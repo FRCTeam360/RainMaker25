@@ -17,12 +17,12 @@ import frc.robot.utils.CommandLogger;
 import frc.robot.utils.RobotUtils;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class DriveToPose extends Command {
+public class PIDToPose extends Command {
     private final CommandSwerveDrivetrain drivetrain;
     private final Pose2d setpointPose;
 
     /** Creates a new FaceAngle. */
-    private DriveToPose(CommandSwerveDrivetrain drivetrain, Pose2d setpointPose) {
+    private PIDToPose(CommandSwerveDrivetrain drivetrain, Pose2d setpointPose) {
         this.setpointPose = setpointPose;
         this.drivetrain = drivetrain;
         addRequirements(drivetrain);
@@ -103,7 +103,7 @@ public class DriveToPose extends Command {
 
     public static Command getCommand(CommandSwerveDrivetrain drivetrain, Pose2d setpointPose) {
         return CommandLogger.logCommand(
-                new DriveToPose(drivetrain, setpointPose),
+                new PIDToPose(drivetrain, setpointPose),
                 "DriveToPose");
     }
 }

@@ -249,8 +249,8 @@ public class RobotContainer {
                 servo = new Servo(new ServoIOPB());
                 break;
             case SIM:
-                driveTrain = WoodBotDriveTrain.createDrivetrain();
-                logger = new Telemetry(WoodBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
+                driveTrain = CompBotDriveTrain.createDrivetrain();
+                logger = new Telemetry(CompBotDriveTrain.kSpeedAt12Volts.in(MetersPerSecond));
                 vision = new Vision(
                         Map.ofEntries(
                                 Map.entry(
@@ -367,10 +367,10 @@ public class RobotContainer {
             zeroElevatorEncoder = elevator.zeroElevatorCmd();
 
             levelOneAndZero = new SequentialCommandGroup(levelOne, zeroElevatorEncoder);
-            NamedCommands.registerCommand(
+            registerPathplannerCommand(
                     "raise to l4",
                     commandFactory.setElevatorHeight(33.0).raceWith(elevator.isAtHeight(33.0)));
-            NamedCommands.registerCommand(
+            registerPathplannerCommand(
                     "zero",
                     commandFactory.setElevatorHeight(0.0).raceWith(elevator.isAtHeight(0.0)));
         }
@@ -452,20 +452,20 @@ public class RobotContainer {
             smartIntake = SmartIntake.newCommand(coralShooter);
             hasCoral = commandFactory.hasCoral(elevator, coralShooter);
 
-            NamedCommands.registerCommand("shoot", coralShooter.basicShootCmd());
-            NamedCommands.registerCommand("hasCoral", hasCoral);
-            NamedCommands.registerCommand("outtake sensor", coralShooter.waitUntilOuttakeSensor());
+            registerPathplannerCommand("shoot", coralShooter.basicShootCmd());
+            registerPathplannerCommand("hasCoral", hasCoral);
+            registerPathplannerCommand("outtake sensor", coralShooter.waitUntilOuttakeSensor());
         }
 
-        NamedCommands.registerCommand("pipeline 0",
+        registerPathplannerCommand("pipeline 0",
                 new InstantCommand(() -> vision.setPipeline(CompBotConstants.CORAL_LIMELIGHT_NAME, 0)));
-        NamedCommands.registerCommand("pipeline 1",
+        registerPathplannerCommand("pipeline 1",
                 new InstantCommand(() -> vision.setPipeline(CompBotConstants.CORAL_LIMELIGHT_NAME, 1)));
 
         if (Objects.nonNull(funnel)) {
             smartIntake = SmartIntake.newCommand(coralShooter, funnel);
         }
-        NamedCommands.registerCommand("intake", smartIntake);
+        registerPathplannerCommand("intake", smartIntake);
     }
 
     /**
@@ -649,6 +649,7 @@ public class RobotContainer {
     }
 
     private void configureTestController() {
+        driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(testCont));
         // elevator.setDefaultCommand(
         // elevator.setDutyCycleCommand(() ->
         // MathUtil.applyDeadband(testCont.getLeftY(), 0.1)));
@@ -692,7 +693,7 @@ public class RobotContainer {
             coralShooter.stop();
         if (Objects.nonNull(algaeArm))
             algaeArm.stop();
-        if (Objects.nonNull(algaeArm))
+        if (Objects.nonNull(algaeRoller))
             algaeRoller.stop();
         if (Objects.nonNull(algaeShooter))
             algaeShooter.stop();
@@ -702,9 +703,10 @@ public class RobotContainer {
             climberWinch.stop();
         if (Objects.nonNull(servo))
             servo.stop();
-        if (Objects.nonNull(vision))
+        if (Objects.nonNull(vision)){
             vision.setPipeline(CompBotConstants.CORAL_LIMELIGHT_NAME, 0);
-        vision.turnOffLights(CompBotConstants.ALGAE_LIMELIGHT_NAME);
+            vision.turnOffLights(CompBotConstants.ALGAE_LIMELIGHT_NAME);
+        }
     }
 
     public Command getAutonomousCommand() {

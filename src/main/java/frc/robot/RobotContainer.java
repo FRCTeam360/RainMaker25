@@ -355,6 +355,9 @@ public class RobotContainer {
         // elevatorHeight = new DoubleSupplier()
         xOut = driveTrain.xOutCmd();
 
+        pidToReefRight = PIDToReefPoints.pidToReef(driveTrain, () -> driveTrain.getPose(), true);
+        pidToReefLeft =  PIDToReefPoints.pidToReef(driveTrain, () -> driveTrain.getPose(), false);
+
         snapDrivebaseToAngle = new SnapDrivebaseToAngle(vision, driveTrain, 0);
 
         visionShootAlgae = new VisionShootAlgae(vision, algaeRoller, algaeShooter, algaeTilt);
@@ -405,6 +408,10 @@ public class RobotContainer {
         }
         registerPathplannerCommand("left align", autoLeftAlign);
         registerPathplannerCommand("right align", autoRightAlign);
+
+        registerPathplannerCommand("left align PIDToPose", pidToReefLeft);
+        registerPathplannerCommand("right align PIDToPose", pidToReefRight);
+
 
         registerPathplannerCommand("Elevator L4", autoLevelFour);
         registerPathplannerCommand("Elevator L3", autoLevelThree);
@@ -472,8 +479,7 @@ public class RobotContainer {
         }
         registerPathplannerCommand("intake", smartIntake);
 
-        pidToReefRight = PIDToReefPoints.pidToReef(driveTrain, () -> driveTrain.getPose(), true);
-        pidToReefLeft =  PIDToReefPoints.pidToReef(driveTrain, () -> driveTrain.getPose(), false);
+
     }
 
     /**
@@ -513,7 +519,8 @@ public class RobotContainer {
         driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
 
         algaeTilt.setDefaultCommand(commandFactory.homeAlgaeTilt());
-        algaeArm.setDefaultCommand(new InstantCommand(()->algaeArm.setPosition(0.0), algaeArm));
+        // algaeArm.setDefaultCommand(new InstantCommand(()->algaeArm.setPosition(0.0), algaeArm));
+        algaeArm.setDefaultCommand(algaeArm.setAlgaeArmAngleCmd(0.0));
 
         testCont.rightBumper().whileTrue(pidToReefRight);
         testCont.leftBumper().whileTrue(pidToReefLeft);
@@ -577,7 +584,7 @@ public class RobotContainer {
                                                                 .turnOffLights(CompBotConstants.ALGAE_LIMELIGHT_NAME)),
                                                 () -> isAlgaeMode)));
 
-        driverCont.leftTrigger(0.25).and(() -> !isAlgaeMode).whileTrue(smartIntake);
+        driverCont.leftTrigger(0.25).and(() -> !isAlgaeMode).onTrue(smartIntake);
         driverCont
                 .leftTrigger(0.25)
                 .and(() -> isAlgaeMode)

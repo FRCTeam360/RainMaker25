@@ -25,7 +25,7 @@ public class PracticeBotDriveTrain {
                                                                                                   // per
                                                                                                   // second max angular
                                                                                                   // velocity
-    public static final double headingKP = 1.75; 
+    public static final double headingKP = 3.5; 
     public static final double headingKI = 0.0;
     public static final double headingKD = 0.0;
     public static final double headingKIZone = 0.0;
@@ -219,14 +219,14 @@ public class PracticeBotDriveTrain {
             kBackRightXPos, kBackRightYPos, kInvertRightSide, kBackRightSteerMotorInverted, kBackRightEncoderInverted
         );
 
-    private static PhoenixPIDController poseXController = new PhoenixPIDController(1.0, 0.0, 0.0); // TODO: Find actual value
-    private static PhoenixPIDController poseYController = new PhoenixPIDController(1.0, 0.0, 0.0); // TODO: Find actual value
+    private static PhoenixPIDController poseXController = new PhoenixPIDController(0.9, 0.0, 0.05); // TODO: Find actual value
+    private static PhoenixPIDController poseYController = new PhoenixPIDController(0.9, 0.0, 0.05); // TODO: Find actual value
 
     private static double poseXControllerPositionTolerance = 0.03;
     private static double poseYControllerPositionTolerance = 0.03;
 
-    private static double poseXControllerVelocityTolerance = 0.01;
-    private static double poseYControllerVelocityTolerance = 0.01;
+    private static double poseXControllerVelocityTolerance = 0.05;
+    private static double poseYControllerVelocityTolerance = 0.05;
 
     /**
      * Creates a CommandSwerveDrivetrain instance.

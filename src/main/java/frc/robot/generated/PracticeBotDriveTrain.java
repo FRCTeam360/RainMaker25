@@ -21,7 +21,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 // https://v6.docs.ctr-electronics.com/en/stable/docs/tuner/tuner-swerve/index.html
 public class PracticeBotDriveTrain {
 
-    public static final double maxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation
+    public static final double maxAngularRate = RotationsPerSecond.of(2.0).in(RadiansPerSecond); // 3/4 of a rotation
                                                                                                   // per
                                                                                                   // second max angular
                                                                                                   // velocity
@@ -219,11 +219,11 @@ public class PracticeBotDriveTrain {
             kBackRightXPos, kBackRightYPos, kInvertRightSide, kBackRightSteerMotorInverted, kBackRightEncoderInverted
         );
 
-    private static PhoenixPIDController poseXController = new PhoenixPIDController(0.5, 0.0, 0.0); // TODO: Find actual value
-    private static PhoenixPIDController poseYController = new PhoenixPIDController(0.5, 0.0, 0.0); // TODO: Find actual value
+    private static PhoenixPIDController poseXController = new PhoenixPIDController(1.0, 0.0, 0.0); // TODO: Find actual value
+    private static PhoenixPIDController poseYController = new PhoenixPIDController(1.0, 0.0, 0.0); // TODO: Find actual value
 
-    private static double poseXControllerPositionTolerance = 0.05;
-    private static double poseYControllerPositionTolerance = 0.05;
+    private static double poseXControllerPositionTolerance = 0.03;
+    private static double poseYControllerPositionTolerance = 0.03;
 
     private static double poseXControllerVelocityTolerance = 0.01;
     private static double poseYControllerVelocityTolerance = 0.01;

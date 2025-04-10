@@ -69,7 +69,7 @@ public class PIDToPose extends Command {
     @Override
     public void end(boolean interrupted) {}
 
-    private final String LOGGING_PREFIX = "DriveToPose: ";
+    private final String LOGGING_PREFIX = "PIDToPose: ";
 
     // Returns true when the command should end.
     @Override

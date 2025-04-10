@@ -148,6 +148,16 @@ public final class Constants {
         public static final String CORAL_LIMELIGHT_NAME = "limelight-coral";
         public static final String ALGAE_LIMELIGHT_NAME = "limelight-algae";
 
+        public static final double TELE_RIGHT_GOAL_TY = 10.0; //practice field: 15.5 | gpeak: 14.0 | auburn: 13.75 | dcmp: 13.75
+        public static final double TELE_RIGHT_GOAL_TX = 0.0;
+        public static final double TELE_LEFT_GOAL_TY = TELE_RIGHT_GOAL_TY;
+        public static final double TELE_LEFT_GOAL_TX = 0.0;
+        
+        public static final double AUTO_RIGHT_GOAL_TY = 10.0; 
+        public static final double AUTO_RIGHT_GOAL_TX = 0.0;
+        public static final double AUTO_LEFT_GOAL_TY = AUTO_RIGHT_GOAL_TY;
+        public static final double AUTO_LEFT_GOAL_TX = 0.0;
+
     }
 
     public static final class CompBotConstants { // Currently just a copy of practice bot, values should be adjusted to comp if needed

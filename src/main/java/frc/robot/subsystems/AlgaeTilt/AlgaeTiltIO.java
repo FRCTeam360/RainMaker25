@@ -24,7 +24,7 @@ public interface AlgaeTiltIO {
 
   public void setPosition(double position);
 
-  public void setEncoder(double value);
+//   public void setEncoder(double value);
 
   public default void updateInputs(AlgaeTiltIOInputs inputs) {}
 }

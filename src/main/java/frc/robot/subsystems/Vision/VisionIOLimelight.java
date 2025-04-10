@@ -62,10 +62,6 @@ public class VisionIOLimelight implements VisionIO {
     
 
     public void updateInputs(VisionIOInputs inputs) {
-        // Get the pose estimate from limelight helpers
-        Optional<PoseEstimate> newPoseEstimate;
-        // If enabled, get megatag 2 pose
-        newPoseEstimate = getMegatag2PoseEst();
 
         // Assume that the pose hasn't been updated
         inputs.poseUpdated = false;
@@ -79,6 +75,11 @@ public class VisionIOLimelight implements VisionIO {
         if (acceptMeasurements == false) {
             return;
         }
+
+        // Get the pose estimate from limelight helpers
+        Optional<PoseEstimate> newPoseEstimate;
+        // If enabled, get megatag 2 pose
+        newPoseEstimate = getMegatag2PoseEst();
 
         // if the new pose estimate is null, then don't update further
         if (newPoseEstimate.isEmpty())

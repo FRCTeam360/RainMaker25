@@ -286,7 +286,7 @@ public class CommandFactory {
 
     public Command homeAlgaeTilt() {
         return Commands.either(
-                algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.07 : 7.2), // used to be 10, 4 works
+                algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.07 : 0.07), // used to be 10, 4 works
                 // for some reason 3/15
                 algaeTilt.setPositionCmd(0.907),
                 () -> !climberDeployed);

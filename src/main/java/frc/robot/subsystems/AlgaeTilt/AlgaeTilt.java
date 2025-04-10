@@ -27,9 +27,9 @@ public class AlgaeTilt extends SubsystemBase {
     io.setDutyCycle(dutyCycle);
   }
 
-  public void setEncoder(double value) {
-    io.setEncoder(value);
-  }
+//   public void setEncoder(double value) {
+//     io.setEncoder(value);
+//   }
 
   public void setPosition(double position) {
     io.setPosition(position);

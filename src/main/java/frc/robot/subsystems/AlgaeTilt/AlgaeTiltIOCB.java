@@ -99,9 +99,9 @@ public class AlgaeTiltIOCB implements AlgaeTiltIO {
     inputs.armAmps = motor.getOutputCurrent();
   }
 
-@Override
-public void setEncoder(double value) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setEncoder'");
-}
+// @Override
+// public void setEncoder(double value) {
+//     // TODO Auto-generated method stub
+//     throw new UnsupportedOperationException("Unimplemented method 'setEncoder'");
+// }
 }

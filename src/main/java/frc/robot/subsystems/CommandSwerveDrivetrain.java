@@ -710,8 +710,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 .withVelocityY(y * maxSpeed)
                 .withTargetDirection(setpointPose.getRotation());
         request.HeadingController = headingController;
-        request.withDeadband(0.1);
-        request.withRotationalDeadband(0.04);
+        request.withDeadband(0.025);
+        request.withRotationalDeadband(0.021);
         request.ForwardPerspective = ForwardPerspectiveValue.BlueAlliance;
         request.withDriveRequestType(DriveRequestType.Velocity);
         this.setControl(request);

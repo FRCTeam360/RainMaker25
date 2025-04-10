@@ -37,6 +37,7 @@ import frc.robot.Constants.*;
 import frc.robot.commands.AlignWithLimelight;
 import frc.robot.commands.BargeAlign;
 import frc.robot.commands.HasCoral;
+import frc.robot.commands.PIDToReefPoints;
 import frc.robot.commands.RemoveAlgae;
 import frc.robot.commands.SetCoralIntake;
 import frc.robot.commands.ShuffleboardTuner;
@@ -174,6 +175,9 @@ public class RobotContainer {
 
     private double yVel;
 
+    private Command pidToReefRight;
+    private Command pidToReefLeft;
+
     private ShuffleboardTuner shuffleboardTuner;
 
     public RobotContainer() {
@@ -224,6 +228,7 @@ public class RobotContainer {
                 algaeShooter = new AlgaeShooter(new AlgaeShooterIOPB());
                 algaeTilt = new AlgaeTilt(new AlgaeTiltIOPB());
                 climberWinch = new ClimberWinch(new ClimberWinchIOPB());
+                funnel = new Funnel(new FunnelIOPB());
 
                 vision = new Vision(
                         Map.ofEntries(
@@ -232,7 +237,7 @@ public class RobotContainer {
                                 new VisionIOLimelight(
                                     Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
                                     () -> driveTrain.getAngle(),
-                                    () -> driveTrain.getAngularRate()
+                                    () -> driveTrain.getAngularRate(), true
                                 )
                             ),
                             Map.entry(
@@ -377,25 +382,25 @@ public class RobotContainer {
 
         if (Objects.nonNull(driveTrain)) {
             teleRightAlign = commandFactory.teleAlignWithLimelight(
-                    Constants.CompBotConstants.TELE_RIGHT_GOAL_TY,
-                    Constants.CompBotConstants.TELE_RIGHT_GOAL_TX,
+                    Constants.PracticeBotConstants.TELE_RIGHT_GOAL_TY,
+                    Constants.PracticeBotConstants.TELE_RIGHT_GOAL_TX,
                     0,
                     driverCont);
 
             teleLeftAlign = commandFactory.teleAlignWithLimelight(
-                    Constants.CompBotConstants.TELE_LEFT_GOAL_TY,
-                    Constants.CompBotConstants.TELE_LEFT_GOAL_TX,
+                    Constants.PracticeBotConstants.TELE_LEFT_GOAL_TY,
+                    Constants.PracticeBotConstants.TELE_LEFT_GOAL_TX,
                     1,
                     driverCont);
 
             autoRightAlign = commandFactory.autoAlignWithLimelight(
-                    Constants.CompBotConstants.AUTO_RIGHT_GOAL_TY,
-                    Constants.CompBotConstants.AUTO_RIGHT_GOAL_TX,
+                    Constants.PracticeBotConstants.AUTO_RIGHT_GOAL_TY,
+                    Constants.PracticeBotConstants.AUTO_RIGHT_GOAL_TX,
                     0);
 
             autoLeftAlign = commandFactory.autoAlignWithLimelight(
-                    Constants.CompBotConstants.AUTO_LEFT_GOAL_TY,
-                    Constants.CompBotConstants.AUTO_LEFT_GOAL_TX,
+                    Constants.PracticeBotConstants.AUTO_LEFT_GOAL_TY,
+                    Constants.PracticeBotConstants.AUTO_LEFT_GOAL_TX,
                     1);
         }
         registerPathplannerCommand("left align", autoLeftAlign);
@@ -466,6 +471,9 @@ public class RobotContainer {
             smartIntake = SmartIntake.newCommand(coralShooter, funnel);
         }
         registerPathplannerCommand("intake", smartIntake);
+
+        pidToReefRight = PIDToReefPoints.pidToReef(driveTrain, () -> driveTrain.getPose(), true);
+        pidToReefLeft =  PIDToReefPoints.pidToReef(driveTrain, () -> driveTrain.getPose(), false);
     }
 
     /**
@@ -505,7 +513,10 @@ public class RobotContainer {
         driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
 
         algaeTilt.setDefaultCommand(commandFactory.homeAlgaeTilt());
-        algaeArm.setDefaultCommand(algaeArm.setAlgaeArmAngleCmd(0.0));
+        algaeArm.setDefaultCommand(new InstantCommand(()->algaeArm.setPosition(0.0), algaeArm));
+
+        testCont.rightBumper().whileTrue(pidToReefRight);
+        testCont.leftBumper().whileTrue(pidToReefLeft);
 
         operatorCont
                 .leftStick()
@@ -602,7 +613,7 @@ public class RobotContainer {
         //         .and(() -> isAlgaeMode)
         //         .onTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.001 : 0.0));
 
-        driverCont.leftBumper().and(() -> !isAlgaeMode).whileTrue(teleLeftAlign);
+        driverCont.leftBumper().and(() -> !isAlgaeMode).whileTrue(pidToReefLeft);
         driverCont
                 .leftBumper()
                 .and(() -> isAlgaeMode)
@@ -611,7 +622,7 @@ public class RobotContainer {
                                 .setDutyCycleCmd(-0.1)
                                 .alongWith(driveTrain.fieldOrientedDrive(driverCont)));
 
-        driverCont.rightBumper().and(() -> !isAlgaeMode).whileTrue(teleRightAlign);
+        driverCont.rightBumper().and(() -> !isAlgaeMode).whileTrue(pidToReefRight);
         driverCont
                 .rightBumper()
                 .and(() -> isAlgaeMode)

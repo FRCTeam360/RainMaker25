@@ -143,13 +143,13 @@ public class PIDToReefPoints {
             if (right) {
                 Translation2d offset = RIGHT_TAG_ID_TO_POSITION.get(tag.ID);
                 // x is forwards-backwards, y is right-left relative to the tag position
-                Translation2d tagTranslation = new Translation2d(0.45, 0.14).plus(offset);
+                Translation2d tagTranslation = new Translation2d(0.45, 0.12).plus(offset);
                 tagTranslation.rotateBy(tagRotation);
                 return tagPose.plus(new Transform2d(tagTranslation, Rotation2d.k180deg));
             } else {
                 Translation2d offset = LEFT_TAG_ID_TO_POSITION_OFFSET.get(tag.ID);
                 // x is forwards-backwards, y is right-left relative to the tag position
-                Translation2d tagTranslation = new Translation2d(0.45, -0.14).plus(offset);
+                Translation2d tagTranslation = new Translation2d(0.45, -0.24).plus(offset);
                 tagTranslation.rotateBy(tagRotation);
                 return tagPose.plus(new Transform2d(tagTranslation, Rotation2d.k180deg));
             }

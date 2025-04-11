@@ -92,6 +92,11 @@ public class VisionIOLimelight implements VisionIO {
         // further
         if (!newPoseEstimate.get().isMegaTag2)
             return;
+        if(Math.abs(newPoseEstimate.get().pose.getRotation().minus(
+            Rotation2d.fromDegrees(gyroAngleSupplier.getAsDouble())
+            ).getDegrees()) > 60.0)
+            return;
+        
 
         PoseEstimate poseEstimate = newPoseEstimate.get();
 

@@ -99,12 +99,6 @@ public class RemoveAlgae extends Command {
         algaeTilt.setPosition(0.12);
         algaeShooter.setDutyCycle(-1.0);
         algaeRoller.setDutyCycle(-0.5);
-
-        
-        
-
-        // algaeArm.setPosition(100.0);
-        // elevator.setElevatorPostion(height + 1.0);
         elevator.setElevatorPostion(height + 6.5);
         algaeArm.setPosition(180.0);
 

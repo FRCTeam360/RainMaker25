@@ -20,6 +20,7 @@ import frc.robot.utils.RobotUtils;
 public class PIDToPose extends Command {
     private final CommandSwerveDrivetrain drivetrain;
     private final Pose2d setpointPose;
+    private final String LOGGING_PREFIX = "PIDToPose: ";
 
     /** Creates a new FaceAngle. */
     private PIDToPose(CommandSwerveDrivetrain drivetrain, Pose2d setpointPose) {
@@ -69,7 +70,6 @@ public class PIDToPose extends Command {
     @Override
     public void end(boolean interrupted) {}
 
-    private final String LOGGING_PREFIX = "PIDToPose: ";
 
     // Returns true when the command should end.
     @Override

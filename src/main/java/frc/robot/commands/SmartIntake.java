@@ -150,7 +150,6 @@ public class SmartIntake extends Command {
         coralShooter.stop();
 
         if(hasFunnel) {
-
             funnel.stop();
         }
     }

@@ -100,8 +100,6 @@ import org.littletonrobotics.junction.Logger;
 public class RobotContainer {
     private final Field2d field;
     private final SendableChooser<Command> autoChooser;
-    // max angular velocity
-
     private Telemetry logger;
 
     private final CommandXboxController driverCont = new CommandXboxController(0);
@@ -122,38 +120,19 @@ public class RobotContainer {
     private Servo servo;
     private Funnel funnel;
 
-    private ShuffleboardTab diagnosticTab;
-
     private Command teleLeftAlign;
     private Command teleRightAlign;
     private Command autoLeftAlign;
     private Command autoRightAlign;
-
-    private SnapDrivebaseToAngle snapDrivebaseToAngle;
-
-    private VisionShootAlgae visionShootAlgae;
+    private Command pidToReefRight;
+    private Command pidToReefLeft;
 
     private Command levelFour;
     private Command levelThree;
     private Command levelTwo;
     private Command levelOne;
-
     private Command autoLevelFour;
     private Command autoLevelThree;
-
-    private Command scoreLevel3RightTeleop;
-
-    private Command zeroElevatorEncoder;
-
-    private SequentialCommandGroup levelOneAndZero;
-
-    private Command robotCentricDrive;
-
-    private Command xOut;
-    private Command setSteerCoast;
-
-    private Command allignToReefWoodBot;
-    private SetCoralIntake setCoralIntake;
 
     private Command scoreCoralL4Right = null;
     private Command scoreCoralL3Left = null;
@@ -162,23 +141,31 @@ public class RobotContainer {
     private Command scoreCoralL2Left = null;
     private Command scoreCoralL2Right = null;
     private Command scoreCoralL1 = null;
-    private DoubleSupplier elevatorHeight;
 
-    private RemoveAlgae removeAlgae;
+    private Command scoreLevel3RightTeleop;
+    private Command zeroElevatorEncoder;
 
+    private Command robotCentricDrive;
+    private Command xOut;
+    private Command setSteerCoast;
+    private Command allignToReefWoodBot;
     private Command smartIntake;
-
     private Command consumeVisionMeasurements;
-    private boolean isAlgaeMode = false;
-    private BargeAlign bargeAlign;
     private Command hasCoral;
 
-    private double yVel;
+    private ShuffleboardTab diagnosticTab;
+    private DoubleSupplier elevatorHeight;
 
-    private Command pidToReefRight;
-    private Command pidToReefLeft;
-
+    private SetCoralIntake setCoralIntake;
+    private SequentialCommandGroup levelOneAndZero;
+    private SnapDrivebaseToAngle snapDrivebaseToAngle;
+    private VisionShootAlgae visionShootAlgae;
+    private RemoveAlgae removeAlgae;
     private ShuffleboardTuner shuffleboardTuner;
+    private BargeAlign bargeAlign;
+
+    private double yVel;
+    private boolean isAlgaeMode = false;
 
     public RobotContainer() {
         switch (Constants.getRobotType()) {
@@ -232,24 +219,18 @@ public class RobotContainer {
 
                 vision = new Vision(
                         Map.ofEntries(
-                            Map.entry(
-                                Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
-                                new VisionIOLimelight(
-                                    Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
-                                    () -> driveTrain.getAngle(),
-                                    () -> driveTrain.getAngularRate(), true
-                                )
-                            ),
-                            Map.entry(
-                            Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                            new VisionIOLimelight(
-                            Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
-                            () -> driveTrain.getAngle(),
-                            () -> driveTrain.getAngularRate()
-                            )
-                            )
-                        )
-                    );
+                                Map.entry(
+                                        Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
+                                        new VisionIOLimelight(
+                                                Constants.PracticeBotConstants.CORAL_LIMELIGHT_NAME,
+                                                () -> driveTrain.getAngle(),
+                                                () -> driveTrain.getAngularRate(), true)),
+                                Map.entry(
+                                        Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                                        new VisionIOLimelight(
+                                                Constants.PracticeBotConstants.ALGAE_LIMELIGHT_NAME,
+                                                () -> driveTrain.getAngle(),
+                                                () -> driveTrain.getAngularRate()))));
                 // practice bot stuff
                 servo = new Servo(new ServoIOPB());
                 break;
@@ -308,7 +289,6 @@ public class RobotContainer {
                                                 () -> driveTrain.getAngularRate(),
                                                 false))));
                 servo = new Servo(new ServoIOCB());
-                // competition bot stuff
                 break;
         }
 
@@ -352,11 +332,10 @@ public class RobotContainer {
 
     public void initializeCommands() {
         consumeVisionMeasurements = vision.consumeVisionMeasurements(driveTrain::addVisionMeasurements);
-        // elevatorHeight = new DoubleSupplier()
         xOut = driveTrain.xOutCmd();
 
         pidToReefRight = PIDToReefPoints.pidToReef(driveTrain, () -> driveTrain.getPose(), true);
-        pidToReefLeft =  PIDToReefPoints.pidToReef(driveTrain, () -> driveTrain.getPose(), false);
+        pidToReefLeft = PIDToReefPoints.pidToReef(driveTrain, () -> driveTrain.getPose(), false);
 
         snapDrivebaseToAngle = new SnapDrivebaseToAngle(vision, driveTrain, 0);
 
@@ -412,7 +391,6 @@ public class RobotContainer {
         registerPathplannerCommand("left align PIDToPose", pidToReefLeft);
         registerPathplannerCommand("right align PIDToPose", pidToReefRight);
 
-
         registerPathplannerCommand("Elevator L4", autoLevelFour);
         registerPathplannerCommand("Elevator L3", autoLevelThree);
         registerPathplannerCommand("Elevator L2", levelTwo);
@@ -438,7 +416,8 @@ public class RobotContainer {
 
             scoreLevel3RightTeleop = commandFactory.scoringRoutineTeleop(3, false);
 
-            removeAlgae = new RemoveAlgae(algaeArm, algaeShooter, algaeRoller, algaeTilt, coralShooter, elevator, vision);
+            removeAlgae = new RemoveAlgae(algaeArm, algaeShooter, algaeRoller, algaeTilt, coralShooter, elevator,
+                    vision);
         }
 
         registerPathplannerCommand("Score Coral L4 Left", scoreCoralL4Left);
@@ -479,7 +458,6 @@ public class RobotContainer {
         }
         registerPathplannerCommand("intake", smartIntake);
 
-
     }
 
     /**
@@ -519,7 +497,8 @@ public class RobotContainer {
         driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));
 
         algaeTilt.setDefaultCommand(commandFactory.homeAlgaeTilt());
-        // algaeArm.setDefaultCommand(new InstantCommand(()->algaeArm.setPosition(0.0), algaeArm));
+        // algaeArm.setDefaultCommand(new InstantCommand(()->algaeArm.setPosition(0.0),
+        // algaeArm));
         algaeArm.setDefaultCommand(algaeArm.setAlgaeArmAngleCmd(0.0));
 
         testCont.rightBumper().whileTrue(pidToReefRight);
@@ -543,13 +522,10 @@ public class RobotContainer {
         operatorCont.a().whileTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.32 : 0.293)); // 0.361 used to be
                                                                                                     // 35
 
-        operatorCont.pov(90).whileTrue(commandFactory.operatorOutakeAlgae());
-        operatorCont.pov(270).whileTrue(commandFactory.operatorIntakeAlgae());
-
-
-        operatorCont.pov(180).whileTrue(commandFactory.shootAlgae());
-
         operatorCont.pov(0).whileTrue(commandFactory.operatorClimb());
+        operatorCont.pov(90).whileTrue(commandFactory.operatorOutakeAlgae());
+        operatorCont.pov(180).whileTrue(commandFactory.shootAlgae());
+        operatorCont.pov(270).whileTrue(commandFactory.operatorIntakeAlgae());
 
         operatorCont.leftTrigger(0.25).whileTrue(coralShooter.setDutyCycleCmd(0.3));
         operatorCont.rightTrigger(0.25).whileTrue(commandFactory.spinUpAlgaeShooter());
@@ -604,9 +580,9 @@ public class RobotContainer {
 
         driverCont.x().and(() -> !isAlgaeMode).onTrue(levelTwo);
         // driverCont
-        //         .x()
-        //         .and(() -> isAlgaeMode)
-        //         .onTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.03 : 3.0));
+        // .x()
+        // .and(() -> isAlgaeMode)
+        // .onTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.03 : 3.0));
 
         driverCont.b().and(() -> !isAlgaeMode).onTrue(levelThree);
         driverCont
@@ -616,9 +592,9 @@ public class RobotContainer {
 
         driverCont.y().and(() -> !isAlgaeMode).onTrue(levelFour);
         // driverCont
-        //         .y()
-        //         .and(() -> isAlgaeMode)
-        //         .onTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.001 : 0.0));
+        // .y()
+        // .and(() -> isAlgaeMode)
+        // .onTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.001 : 0.0));
 
         driverCont.leftBumper().and(() -> !isAlgaeMode).whileTrue(pidToReefLeft);
         driverCont
@@ -721,7 +697,7 @@ public class RobotContainer {
             climberWinch.stop();
         if (Objects.nonNull(servo))
             servo.stop();
-        if (Objects.nonNull(vision)){
+        if (Objects.nonNull(vision)) {
             vision.setPipeline(CompBotConstants.CORAL_LIMELIGHT_NAME, 0);
             vision.turnOffLights(CompBotConstants.ALGAE_LIMELIGHT_NAME);
         }

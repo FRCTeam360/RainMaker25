@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.Elevator;
 
+import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -109,7 +110,10 @@ public class Elevator extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+        long periodicStartTime = HALUtil.getFPGATime();
         io.updateInputs(inputs);
         Logger.processInputs("Elevator", inputs);
+        long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
+        Logger.recordOutput( "Elevator: periodic loop time", (periodicLoopTime / 1000.0));
     }
 }

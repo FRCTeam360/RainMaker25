@@ -20,6 +20,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.EncoderConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -37,12 +38,13 @@ public class AlgaeShooterIOPB implements AlgaeShooterIO {
   /** Creates a new AlgaeShooterIOWB. */
   public AlgaeShooterIOPB() {
     // TODO: add values
-    final double kP = 0.0;
+    final double kP = 0.0001; 
     final double kI = 0.0;
     final double kD = 0.0;
+    final double kFF = 0.000175; 
     
     ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
-    closedLoopConfig.pid(kP, kI, kD);
+    closedLoopConfig.pidf(kP, kI, kD, kFF);
     frontConfig.apply(closedLoopConfig);
     backConfig.apply(closedLoopConfig);
     EncoderConfig encoderConfig = new EncoderConfig();
@@ -52,6 +54,8 @@ public class AlgaeShooterIOPB implements AlgaeShooterIO {
     backConfig.follow(Constants.PracticeBotConstants.ALGAE_SHOOTER_FRONT_ID, true);
     backConfig.inverted(true);
     frontConfig.inverted(false);
+    backConfig.idleMode(IdleMode.kCoast);
+    frontConfig.idleMode(IdleMode.kCoast);
     
     algaeShooterMotorFront.configure(frontConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     algaeShooterMotorBack.configure(backConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

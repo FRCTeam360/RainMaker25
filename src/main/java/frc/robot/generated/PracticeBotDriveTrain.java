@@ -8,6 +8,7 @@ import com.ctre.phoenix6.hardware.*;
 import com.ctre.phoenix6.signals.*;
 import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
+import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.numbers.N1;
@@ -20,11 +21,11 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 // https://v6.docs.ctr-electronics.com/en/stable/docs/tuner/tuner-swerve/index.html
 public class PracticeBotDriveTrain {
 
-    public static final double maxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation
+    public static final double maxAngularRate = RotationsPerSecond.of(2.0).in(RadiansPerSecond); // 3/4 of a rotation
                                                                                                   // per
                                                                                                   // second max angular
                                                                                                   // velocity
-    public static final double headingKP = 1.75; 
+    public static final double headingKP = 3.5; 
     public static final double headingKI = 0.0;
     public static final double headingKD = 0.0;
     public static final double headingKIZone = 0.0;
@@ -218,13 +219,26 @@ public class PracticeBotDriveTrain {
             kBackRightXPos, kBackRightYPos, kInvertRightSide, kBackRightSteerMotorInverted, kBackRightEncoderInverted
         );
 
+    private static PhoenixPIDController poseXController = new PhoenixPIDController(0.9, 0.0, 0.05); // TODO: Find actual value
+    private static PhoenixPIDController poseYController = new PhoenixPIDController(0.9, 0.0, 0.05); // TODO: Find actual value
+
+    private static double poseXControllerPositionTolerance = 0.03;
+    private static double poseYControllerPositionTolerance = 0.03;
+
+    private static double poseXControllerVelocityTolerance = 0.05;
+    private static double poseYControllerVelocityTolerance = 0.05;
+
     /**
      * Creates a CommandSwerveDrivetrain instance.
      * This should only be called once in your robot program,.
      */
     public static CommandSwerveDrivetrain createDrivetrain() {
+        poseXController.setTolerance(poseXControllerPositionTolerance, poseXControllerVelocityTolerance);
+        poseYController.setTolerance(poseYControllerPositionTolerance, poseYControllerVelocityTolerance);
         return new CommandSwerveDrivetrain(
-                headingKP, headingKI, headingKD, headingKIZone, stafeKP, stafeKI, stafeKD, strafeIRMax, strafeIRMin, forwardKP, forwardKI, forwardKD, forwardIRMax, forwardIRMin,
+                headingKP, headingKI, headingKD, headingKIZone, stafeKP, stafeKI, stafeKD, strafeIRMax, strafeIRMin,
+                forwardKP, forwardKI, forwardKD, forwardIRMax, forwardIRMin,
+                poseXController, poseYController,
                 kSpeedAt12Volts.in(MetersPerSecond),
                 maxAngularRate, DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight);
     }

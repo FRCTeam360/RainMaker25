@@ -2,6 +2,7 @@ package frc.robot.subsystems.AlgaeShooter;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,7 +21,7 @@ public class AlgaeShooter extends SubsystemBase {
     }
 
     public void setVelocity(double velocity) {
-        io.setDutyCycle(velocity);
+        io.setVelocity(velocity);
     }
 
     public void stop() {
@@ -45,7 +46,10 @@ public class AlgaeShooter extends SubsystemBase {
     
     @Override
     public void periodic() {
+        long periodicStartTime = HALUtil.getFPGATime();
         io.updateInputs(inputs);
         Logger.processInputs("Algae Shooter", inputs);
+        long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
+        Logger.recordOutput( "Algae Shooter: periodic loop time", (periodicLoopTime / 1000.0));
     }
 }

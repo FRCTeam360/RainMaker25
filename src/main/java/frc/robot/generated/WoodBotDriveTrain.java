@@ -8,6 +8,7 @@ import com.ctre.phoenix6.hardware.*;
 import com.ctre.phoenix6.signals.*;
 import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
+import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.PIDController;
@@ -220,13 +221,26 @@ public class WoodBotDriveTrain {
         );
 
 
+    private static PhoenixPIDController poseXController = new PhoenixPIDController(0.5, 0.0, 0.0); // TODO: Find actual value
+    private static PhoenixPIDController poseYController = new PhoenixPIDController(0.5, 0.0, 0.0); // TODO: Find actual value
+
+    private static double poseXControllerPositionTolerance = 0.05;
+    private static double poseYControllerPositionTolerance = 0.05;
+
+    private static double poseXControllerVelocityTolerance = 0.01;
+    private static double poseYControllerVelocityTolerance = 0.01;
+
     /**
      * Creates a CommandSwerveDrivetrain instance.
      * This should only be called once in your robot program,.
      */
     public static CommandSwerveDrivetrain createDrivetrain() {
+        poseXController.setTolerance(poseXControllerPositionTolerance, poseXControllerVelocityTolerance);
+        poseYController.setTolerance(poseYControllerPositionTolerance, poseYControllerVelocityTolerance);
         return new CommandSwerveDrivetrain(
-                headingKP, headingKI, headingKD, headingKIZone, stafeKP, stafeKI, stafeKD, strafeIRMax, strafeIRMin, forwardKP, forwardKI, forwardKD, forwardIRMax, forwardIRMin,
+                headingKP, headingKI, headingKD, headingKIZone, stafeKP, stafeKI, stafeKD, strafeIRMax, strafeIRMin,
+                forwardKP, forwardKI, forwardKD, forwardIRMax, forwardIRMin,
+                poseXController, poseYController,
                 kSpeedAt12Volts.in(MetersPerSecond),
                 maxAngularRate, DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight);
     }

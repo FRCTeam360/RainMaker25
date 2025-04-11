@@ -8,6 +8,7 @@ import com.ctre.phoenix6.hardware.*;
 import com.ctre.phoenix6.signals.*;
 import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
+import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.numbers.N1;
@@ -29,13 +30,13 @@ public class CompBotDriveTrain {
     public static final double headingKD = 0.0;
     public static final double headingKIZone = 0.0;
 
-    public static final double stafeKP = 0.011;
+    public static final double stafeKP = 0.006;
     public static final double stafeKI = 0.0;//0.00015;
     public static final double stafeKD = 0.00001;//0.003;
     public static final double strafeIRMax = 0.05; //DOES NOTHING WE ARENT DOING INTEGRATOR RANGE :((()))
     public static final double strafeIRMin = -0.05;
 
-    public static final double forwardKP = 0.04;
+    public static final double forwardKP = 0.06;
     public static final double forwardKI = 0.0;
     public static final double forwardKD = 0.0;
     public static final double forwardIRMax = 0.05;
@@ -212,13 +213,26 @@ public class CompBotDriveTrain {
             kBackRightXPos, kBackRightYPos, kInvertRightSide, kBackRightSteerMotorInverted, kBackRightEncoderInverted
         );
 
+    private static PhoenixPIDController poseXController = new PhoenixPIDController(0.5, 0.0, 0.0); // TODO: Find actual value
+    private static PhoenixPIDController poseYController = new PhoenixPIDController(0.5, 0.0, 0.0); // TODO: Find actual value
+
+    private static double poseXControllerPositionTolerance = 0.05;
+    private static double poseYControllerPositionTolerance = 0.05;
+
+    private static double poseXControllerVelocityTolerance = 0.01;
+    private static double poseYControllerVelocityTolerance = 0.01;
+
     /**
      * Creates a CommandSwerveDrivetrain instance.
      * This should only be called once in your robot program,.
      */
     public static CommandSwerveDrivetrain createDrivetrain() {
+        poseXController.setTolerance(poseXControllerPositionTolerance, poseXControllerVelocityTolerance);
+        poseYController.setTolerance(poseYControllerPositionTolerance, poseYControllerVelocityTolerance);
         return new CommandSwerveDrivetrain(
-                headingKP, headingKI, headingKD, headingKIZone, stafeKP, stafeKI, stafeKD, strafeIRMax, strafeIRMin, forwardKP, forwardKI, forwardKD, forwardIRMax, forwardIRMin,
+                headingKP, headingKI, headingKD, headingKIZone, stafeKP, stafeKI, stafeKD, strafeIRMax, strafeIRMin,
+                forwardKP, forwardKI, forwardKD, forwardIRMax, forwardIRMin,
+                poseXController, poseYController,
                 kSpeedAt12Volts.in(MetersPerSecond),
                 maxAngularRate, DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight);
     }

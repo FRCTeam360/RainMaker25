@@ -62,14 +62,6 @@ public class VisionIOLimelight implements VisionIO {
     
 
     public void updateInputs(VisionIOInputs inputs) {
-        // Get the pose estimate from limelight helpers
-        Optional<PoseEstimate> newPoseEstimate;
-        // If enabled, get megatag 2 pose
-        if (DriverStation.isEnabled()) {
-            newPoseEstimate = getMegatag2PoseEst();
-        } else {
-            newPoseEstimate = getMegatag1PoseEst();
-        }
 
         // Assume that the pose hasn't been updated
         inputs.poseUpdated = false;
@@ -84,6 +76,11 @@ public class VisionIOLimelight implements VisionIO {
             return;
         }
 
+        // Get the pose estimate from limelight helpers
+        Optional<PoseEstimate> newPoseEstimate;
+        // If enabled, get megatag 2 pose
+        newPoseEstimate = getMegatag2PoseEst();
+
         // if the new pose estimate is null, then don't update further
         if (newPoseEstimate.isEmpty())
             return;
@@ -95,6 +92,11 @@ public class VisionIOLimelight implements VisionIO {
         // further
         if (!newPoseEstimate.get().isMegaTag2)
             return;
+        if(Math.abs(newPoseEstimate.get().pose.getRotation().minus(
+            Rotation2d.fromDegrees(gyroAngleSupplier.getAsDouble())
+            ).getDegrees()) > 60.0)
+            return;
+        
 
         PoseEstimate poseEstimate = newPoseEstimate.get();
 
@@ -129,6 +131,8 @@ public class VisionIOLimelight implements VisionIO {
     }
 
     private Optional<PoseEstimate> getMegatag1PoseEst() {
+        LimelightHelpers.SetRobotOrientation(name, gyroAngleSupplier.getAsDouble(), gryoAngleRateSupplier.getAsDouble(),
+                0, 0, 0, 0);
         PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue(name);
         return Optional.ofNullable(mt2);
     }

@@ -12,6 +12,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.*;
 import frc.robot.Constants.SetPointConstants.ElevatorHeights;
 import frc.robot.subsystems.AlgaeArm.AlgaeArm;
+import frc.robot.subsystems.AlgaeRoller.AlgaeRoller;
 import frc.robot.subsystems.AlgaeShooter.AlgaeShooter;
 import frc.robot.subsystems.AlgaeTilt.AlgaeTilt;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -28,6 +29,7 @@ import org.littletonrobotics.junction.Logger;
 public class RemoveAlgae extends Command {
     private AlgaeArm algaeArm;
     private AlgaeShooter algaeShooter;
+    private AlgaeRoller algaeRoller;
     private AlgaeTilt algaeTilt;
     private CoralShooter coralShooter;
     private Elevator elevator;
@@ -56,6 +58,7 @@ public class RemoveAlgae extends Command {
     public RemoveAlgae(
         AlgaeArm algaeArm,
         AlgaeShooter algaeShooter,
+        AlgaeRoller algaeRoller,
         AlgaeTilt algaeTilt,
         CoralShooter coralShooter,
         Elevator elevator,
@@ -63,12 +66,13 @@ public class RemoveAlgae extends Command {
     ) {
         this.algaeArm = algaeArm;
         this.algaeShooter = algaeShooter;
+        this.algaeRoller = algaeRoller;
         this.algaeTilt = algaeTilt;
         this.coralShooter = coralShooter;
         this.elevator = elevator;
         this.vision = vision;
         // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(algaeArm, algaeShooter, algaeTilt, elevator);
+        addRequirements(algaeArm, algaeShooter, algaeRoller, algaeTilt, elevator);
     }
 
     // Called when the command is initially scheduled.
@@ -92,13 +96,12 @@ public class RemoveAlgae extends Command {
     @Override
     public void execute() {
         coralShooter.setDutyCycle(-1.0);
-        algaeTilt.setPosition(0.0);
-        algaeShooter.setDutyCycle(-0.8);
+        algaeTilt.setPosition(0.12);
+        algaeShooter.setDutyCycle(-1.0);
+        algaeRoller.setDutyCycle(-0.5);
+        elevator.setElevatorPostion(height + 6.5);
+        algaeArm.setPosition(180.0);
 
-        algaeArm.setPosition(100.0);
-        elevator.setElevatorPostion(height + 1.0);
-        // if (coralShooter.getVelocity() < -6000.0) {
-        // }
     }
 
     // Called once the command ends or is interrupted.
@@ -106,6 +109,7 @@ public class RemoveAlgae extends Command {
     public void end(boolean interrupted) {
         coralShooter.stop();
         algaeShooter.stop();
+        algaeRoller.stop();
     }
 
     // Returns true when the command should end.

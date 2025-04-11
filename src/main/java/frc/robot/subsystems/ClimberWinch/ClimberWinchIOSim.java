@@ -26,7 +26,7 @@ import frc.robot.subsystems.CoralShooter.CoralShooterIO.CoralShooterIOInputs;
 public class ClimberWinchIOSim implements ClimberWinchIO {
 
   private DCMotor gearbox = DCMotor.getNEO(1);
-  private Encoder winchEncoder = new Encoder(8, 9);
+  private Encoder winchEncoder = new Encoder(4, 5);
 
   private final PWMSparkMax winchMotor = new PWMSparkMax(5);
 

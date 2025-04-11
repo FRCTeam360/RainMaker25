@@ -19,6 +19,8 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.DriveFeedforwards;
+
+import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -31,6 +33,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -56,6 +59,7 @@ import org.littletonrobotics.junction.Logger;
  * Subsystem so it can easily be used in command-based projects.
  */
 public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
+    private final String CMD_NAME = "Swerve: ";
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
@@ -63,6 +67,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public PhoenixPIDController headingController;
     public PhoenixPIDController strafeController;
     public PhoenixPIDController forwardController;
+    public PhoenixPIDController poseXController;
+    public PhoenixPIDController poseYController;
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -121,14 +127,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public void addHeadingController(double kP, double kI, double kD, double kIZone) {
         headingController = new PhoenixPIDController(kP, kI, kD);
-
         headingController.enableContinuousInput(-Math.PI, Math.PI);
-        headingController.setTolerance(Math.toRadians(1));
+        headingController.setTolerance(Math.toRadians(1.0));
     }
 
     public void addStrafeController(double kP, double kI, double kD, double irMax, double irMin) {
         strafeController = new PhoenixPIDController(kP, kI, kD);
-        strafeController.setTolerance(1.0);
+        strafeController.setTolerance(0.5);
     }
 
     public void addForwardContrller(double kP, double kI, double kD, double irMax, double irMin) {
@@ -143,7 +148,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 .withTargetDirection(Rotation2d.fromDegrees(desiredAngle));
         request.HeadingController = headingController;
         request.withDeadband(0.1);
-        request.withRotationalDeadband(0.04);
+        request.withRotationalDeadband(0.0001);
         this.setControl(request);
         request.withDriveRequestType(DriveRequestType.Velocity);
     }
@@ -155,11 +160,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 .withTargetDirection(Rotation2d.fromDegrees(desiredAngle));
         request.HeadingController = headingController;
         request.withDeadband(0.1);
-        request.withRotationalDeadband(0.04);
+        request.withRotationalDeadband(0.021); //used to be 0.04
         request.ForwardPerspective = ForwardPerspectiveValue.BlueAlliance;
         this.setControl(request);
         request.withDriveRequestType(DriveRequestType.Velocity);
     }
+
+
 
     // public Command backUpBot(double meters) {
     // return Commands.runOnce(() -> this.start)
@@ -293,17 +300,22 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             double forwardKD,
             double forwardIRMax,
             double forwardIRMin,
+            PhoenixPIDController poseXController,
+            PhoenixPIDController poseYController,
             double maxSpeed,
             double maxAngularRate,
             SwerveDrivetrainConstants drivetrainConstants,
             SwerveModuleConstants<?, ?, ?>... modules) {
         super(drivetrainConstants, modules);
+        System.out.println("Utils.isSimulation() " + Utils.isSimulation());
         if (Utils.isSimulation()) {
             startSimThread();
         }
         addHeadingController(headingKP, headingKI, headingKD, headingKIZone);
         addStrafeController(stafeKP, stafeKI, stafeKD, strafeIRMax, strafeIRMin);
         addForwardContrller(forwardKP, forwardKI, forwardKD, forwardIRMax, forwardIRMin);
+        this.poseXController = poseXController;
+        this.poseYController = poseYController;
 
         this.maxSpeed = maxSpeed;
         this.maxAngularRate = maxAngularRate;
@@ -392,6 +404,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
      * @return Command to run
      */
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
+        long executeStartTime = HALUtil.getFPGATime();
+        long executeLoopTime = HALUtil.getFPGATime() - executeStartTime;
+        Logger.recordOutput(CMD_NAME + "execute loop time", (executeLoopTime / 1000.0));
+
         return run(() -> this.setControl(requestSupplier.get()));
     }
 
@@ -484,22 +500,24 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     @Override
     public void periodic() {
-        Logger.recordOutput("Swerve: Current Pose", this.getPose());
+        long periodicStartTime = HALUtil.getFPGATime();
+        
+        Logger.recordOutput(CMD_NAME+ " Current Pose", this.getPose());
         // Logger.recordOutput("Swerve: Rotation", this.getRotation2d());
         // Logger.recordOutput("Swerve: Angle", this.getAngle());
         // Logger.recordOutput("swerve: pithc", this.isFlat());
         // Logger.recordOutput("Rotation2d", this.getPigeon2().getRotation2d());
         Logger.recordOutput(
-                "Swerve: Heading Controller: Setpoint",
+                CMD_NAME+ "Heading Controller: Setpoint",
                 headingController.getSetpoint());
         Logger.recordOutput(
-                "Swerve: Heading Controller: Error",
+                CMD_NAME+ "Heading Controller: Error",
                 headingController.getPositionError());
         Logger.recordOutput(
-                "Swerve: Heading Controller: AtSetpoint",
+                CMD_NAME+ "Heading Controller: AtSetpoint",
                 headingController.atSetpoint());
         Logger.recordOutput(
-                "Swerve: Heading Controller: PositionTolerance",
+                CMD_NAME+ "Heading Controller: PositionTolerance",
                 headingController.getPositionTolerance());
         // Logger.recordOutput("Swerve: CurrentState", this.getStateCopy().ModuleStates);
         // Logger.recordOutput("Swerve: TargetState", this.getStateCopy().ModuleTargets);
@@ -527,8 +545,38 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                                 m_hasAppliedOperatorPerspective = true;
                             });
         }
-    }
 
+        // if (DriverStation.isDisabled() && DriverStation.isAutonomous()) {
+        //     if(!rotationalResetTimer.isRunning()) {
+
+        //         rotationalResetTimer.restart();
+        //     } else if (rotationalResetTimer.hasElapsed(5.0)) {
+
+        //         this.initializeRotationForAlliance();
+        //         rotationalResetTimer.restart();
+        //     } 
+        // } else if(rotationalResetTimer.isRunning()) {
+
+        //     rotationalResetTimer.stop();
+        //     rotationalResetTimer.reset();
+        // }
+
+        long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
+        Logger.recordOutput( CMD_NAME+ " periodic loop time", (periodicLoopTime / 1000.0));
+    }
+    private Timer rotationalResetTimer = new Timer();
+
+
+    // public void initializeRotationForAlliance() {
+    //     Pose2d currentPose = this.getPose();
+    //     if(DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+    //         currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), Rotation2d.kZero);
+    //     } else if(DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue) {
+    //         currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), Rotation2d.k180deg);
+    //     }
+    //     this.resetPose(currentPose);
+    // }
+        
     private void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();
 
@@ -566,7 +614,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                     // For our team, the path does not need to be flipped for Red vs Blue.
                     // The reasoning for this is that the fields are not constructed the same for
                     // each event, each side is a bit different.
-                    () -> false,
+                    () -> {
+                        var alliance = DriverStation.getAlliance();
+                        if(alliance.isPresent()) {
+                            return alliance.get() == DriverStation.Alliance.Blue;
+                        }
+                        return false;
+                    },
                     this // Subsystem for requirements
             );
         } catch (Exception ex) {
@@ -584,5 +638,82 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
                 .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
                 .withDriveRequestType(DriveRequestType.Velocity);
+    }
+
+    public void initializeRotationForAlliance(){
+        Pose2d currentPose = this.getPose();
+        if(DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+            currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), Rotation2d.kZero);
+        } else if(DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue) {
+            currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), Rotation2d.k180deg);
+        }
+        this.resetPose(currentPose);
+    }
+
+    public double getHeadingControllerSetpoint(){
+        return headingController.getSetpoint();
+    }
+
+    public double getHeadingControllerPositionError(){
+        return headingController.getPositionError();
+    }
+
+    public double getHeadingControllerVelocityError(){
+        return headingController.getVelocityError();
+    }
+
+    public double getPoseXSetpoint(){
+        return poseXController.getSetpoint();
+    }
+
+    public boolean isAtPoseXSetpoint(){
+        return poseXController.atSetpoint();
+    }
+
+    public double getPoseXControllerPositionError(){
+        return poseXController.getPositionError();
+    }
+
+    public double getPoseXControllerVelocityError(){
+        return poseXController.getVelocityError();
+    }
+
+    public double getPoseYSetpoint(){
+        return poseYController.getSetpoint();
+    }
+
+    public boolean isAtPoseYSetpoint(){
+        return poseYController.atSetpoint();
+    }
+
+    public double getPoseYControllerPositionError(){
+        return poseYController.getPositionError();
+    }
+
+    public double getPoseYControllerVelocityError(){
+        return poseYController.getVelocityError();
+    }
+
+    /**
+     * Field centric facing angle command without flipping based on operator perspective
+     *
+     * @param setpointPose the position on the field to move to
+     */
+    public void driveToPose(Pose2d setpointPose) {
+        Pose2d currentPose = getPose();
+        double timestamp = getStateCopy().Timestamp;
+        double x = poseXController.calculate(currentPose.getX(), setpointPose.getX(), timestamp);
+        double y = poseYController.calculate(currentPose.getY(), setpointPose.getY(), timestamp);
+
+        FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle()
+                .withVelocityX(x * maxSpeed)
+                .withVelocityY(y * maxSpeed)
+                .withTargetDirection(setpointPose.getRotation());
+        request.HeadingController = headingController;
+        request.withDeadband(0.025);
+        request.withRotationalDeadband(0.021);
+        request.ForwardPerspective = ForwardPerspectiveValue.BlueAlliance;
+        request.withDriveRequestType(DriveRequestType.Velocity);
+        this.setControl(request);
     }
 }

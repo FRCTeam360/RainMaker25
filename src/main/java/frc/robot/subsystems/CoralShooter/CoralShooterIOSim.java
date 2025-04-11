@@ -38,7 +38,7 @@ public class CoralShooterIOSim implements CoralShooterIO {
   private DoubleSupplier heightSupplier;
 
   private DCMotor gearbox = DCMotor.getNEO(1);
-  private Encoder encoder = new Encoder(2, 3);
+  private Encoder encoder = new Encoder(6, 7);
 
   private final PWMSparkMax motor = new PWMSparkMax(2);
 

@@ -8,6 +8,7 @@ import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -26,9 +27,9 @@ public class AlgaeTilt extends SubsystemBase {
     io.setDutyCycle(dutyCycle);
   }
 
-  public void setEncoder(double value) {
-    io.setEncoder(value);
-  }
+//   public void setEncoder(double value) {
+//     io.setEncoder(value);
+//   }
 
   public void setPosition(double position) {
     io.setPosition(position);
@@ -62,7 +63,10 @@ public class AlgaeTilt extends SubsystemBase {
   
   @Override
   public void periodic() {
+    long periodicStartTime = HALUtil.getFPGATime();
     io.updateInputs(inputs);
     Logger.processInputs("Algae Tilt", inputs);
+    long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
+    Logger.recordOutput( "Algae Tilt: periodic loop time", (periodicLoopTime / 1000.0));
   }
 }

@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.*;
 import frc.robot.Constants.SetPointConstants.ElevatorHeights;
 import frc.robot.commands.AlignWithLimelight;
+import frc.robot.commands.PIDToReefPoints;
 import frc.robot.commands.SetCoralIntake;
 import frc.robot.commands.SmartIntake;
 import frc.robot.commands.SnapDrivebaseToAngle;
@@ -32,6 +33,7 @@ import frc.robot.subsystems.ClimberWinch.ClimberWinch;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CoralShooter.CoralShooter;
 import frc.robot.subsystems.Elevator.Elevator;
+import frc.robot.subsystems.Funnel.Funnel;
 import frc.robot.subsystems.Servo.Servo;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.utils.CommandLogger;
@@ -54,6 +56,10 @@ public class CommandFactory {
     private final CommandXboxController driverCont;
     private final AlgaeTilt algaeTilt;
     private final Servo servo;
+    private final Funnel funnel;
+
+    double angleIncrement;
+    double setpointIncrement;
 
     private final Timer climbTimer;
 
@@ -69,7 +75,8 @@ public class CommandFactory {
             CommandXboxController driverCont,
             AlgaeTilt algaeTilt,
             AlgaeRoller algaeRoller,
-            Servo servo) {
+            Servo servo,
+            Funnel funnel) {
         this.coralShooter = coralShooter;
         this.elevator = elevator;
         this.vision = vision;
@@ -81,16 +88,41 @@ public class CommandFactory {
         this.algaeTilt = algaeTilt;
         this.algaeRoller = algaeRoller;
         this.servo = servo;
+        this.funnel = funnel;
         this.climbTimer = new Timer();
+        setpointIncrement = 0.0;
+        angleIncrement = 0.0;
     }
 
-    public Command rumbleDriverController(CommandXboxController controller) {
+    public Command alignRumble(CommandXboxController controller) {
         return CommandLogger.logCommand(
                 Commands.runEnd(
                         () -> controller.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0.15),
                         () -> controller.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0.0)),
                 "rumbling");
     }
+
+    public Command intakeRumble(CommandXboxController controller) {
+        return CommandLogger.logCommand(
+                Commands.runEnd(
+                        () -> controller.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0.5),
+                        () -> controller.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0.0)),
+                "rumbling");
+    }
+
+    public Command smartIntake() {
+        return CommandLogger
+                .logCommand(
+                        SmartIntake.newCommand(coralShooter, funnel)
+                                .andThen(this.intakeRumble(driverCont)
+                                .withTimeout(0.2))
+                                .andThen(Commands.waitSeconds(0.05))
+                                .andThen(this.intakeRumble(driverCont)
+                                .withTimeout(0.2)),
+                        "Smart Intake with Rumble");
+    }
+
+
 
     /*
      * height is in motor rotations!
@@ -185,7 +217,7 @@ public class CommandFactory {
                 .logCommand(
                         new AlignWithLimelight(vision, drivetrain, goalTY, goalTX, pipeline, driverCont),
                         "AlignWithLimelightBase")
-                .andThen(this.rumbleDriverController(driverCont)
+                .andThen(this.alignRumble(driverCont)
                         .onlyIf(() -> vision.getTV(Constants.CompBotConstants.CORAL_LIMELIGHT_NAME) == 1)
                         .withTimeout(0.1));
     }
@@ -195,6 +227,14 @@ public class CommandFactory {
                 .logCommand(
                         new AlignWithLimelight(vision, drivetrain, goalTY, goalTX, pipeline),
                         "AlignWithLimelightAuto");
+    }
+
+    public Command pidAlign(boolean isRight) {
+        return CommandLogger
+                .logCommand(PIDToReefPoints.pidToReef(drivetrain, () -> drivetrain.getPose(), isRight),
+                        "PID Align")
+                .andThen(this.alignRumble(driverCont)
+                        .withTimeout(0.2));
     }
 
     /**
@@ -300,12 +340,19 @@ public class CommandFactory {
         return algaeRoller
                 .setDutyCycleCmd(-0.1)
                 .alongWith(algaeShooter.setDutyCycleCmd(-1.0))
-                .alongWith(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.32 : 23.5));
+                .alongWith(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.32 : 0.32));
+    }
+
+    public Command driverLollipopIntake() {
+        return algaeRoller
+                .setDutyCycleCmd(-0.1)
+                .alongWith(algaeShooter.setDutyCycleCmd(-1.0))
+                .alongWith(algaeTilt.setPositionCmd(0.205));
     }
 
     public Command driverProcessAlgae() {
         return algaeTilt
-                .setPositionCmd(Constants.isCompBot() ? 0.253 : 21)
+                .setPositionCmd(Constants.isCompBot() ? 0.253 : 0.253)
                 .alongWith(algaeShooter.setDutyCycleCmd(0.6))
                 .alongWith(algaeRoller.setDutyCycleCmd(0.8));
     }
@@ -318,13 +365,14 @@ public class CommandFactory {
         return algaeShooter.setDutyCycleCmd(0.9);
     }
 
-    public Command processOrShoot() {
-        if (algaeTilt.getPositionRelative() >= 19.0 || algaeTilt.getPositionAbsolute() >= 0.2) {
-            return operatorOutakeAlgae();
-        } else {
-            return shootAlgae();
-        }
-    }
+    // public Command processOrShoot() {
+    // if (algaeTilt.getPositionRelative() >= 19.0 ||
+    // algaeTilt.getPositionAbsolute() >= 0.2) {
+    // return operatorOutakeAlgae();
+    // } else {
+    // return shootAlgae();
+    // }
+    // }
 
     // public Command limelightShootAlgae() {
     // InterpolatingDoubleTreeMap distanceVelocity = new
@@ -358,8 +406,15 @@ public class CommandFactory {
     // //old number 0.028, 0.057, 0.07
     // }
 
+
     public Command shootAlgae() {
-        double setPoint = 5050.0; // 6000,
+
+        double setPoint = 4700.0; // 6000,
+        double angle = 0.035;
+
+        Logger.recordOutput("shootalgaesetpoint", setPoint);
+        Logger.recordOutput("shootalgaeangle", angle);
+
         double tolerance = 50.0;
         return Commands
                 .waitUntil(
@@ -368,8 +423,24 @@ public class CommandFactory {
                         })
                 .andThen(algaeRoller.setDutyCycleCmd(1.0))
                 .alongWith(algaeShooter.setVelocityCmd(setPoint))
-                .alongWith(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.03 : 0.06)); // old number 0.028, 0.057,
-                                                                                           // 0.07
+                .alongWith(algaeTilt.setPositionCmd(angle)); // old number 0.028, 0.057,
+                                                             // 0.07
+    }
+
+    public void upAngle() {
+        angleIncrement += 0.005;
+    }
+
+    public void downAngle() {
+        angleIncrement -= 0.005;
+    }
+
+    public void upSetPoint() {
+        setpointIncrement += 25.0;
+    }
+
+    public void downSetPoint() {
+        setpointIncrement -= 25.0;
     }
 
     public Command shootNoAngle() {
@@ -377,12 +448,12 @@ public class CommandFactory {
                 .waitUntil(() -> algaeShooter.getVelocity() > 5750)
                 .andThen(algaeRoller.setDutyCycleCmd(1.0))
                 .alongWith(algaeShooter.setVelocityCmd(6250))
-                .alongWith(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.03 : 3.0));
+                .alongWith(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.03 : 0.03));
     }
 
     public Command processAndScore() {
         return algaeTilt
-                .setPositionCmd(Constants.isCompBot() ? 0.253 : 30)
+                .setPositionCmd(Constants.isCompBot() ? 0.253 : 0.253)
                 .alongWith(this.shootAlgae());
     }
 

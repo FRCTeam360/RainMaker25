@@ -219,8 +219,8 @@ public class PracticeBotDriveTrain {
             kBackRightXPos, kBackRightYPos, kInvertRightSide, kBackRightSteerMotorInverted, kBackRightEncoderInverted
         );
 
-    private static PhoenixPIDController poseXController = new PhoenixPIDController(0.9, 0.0, 0.05); // TODO: Find actual value
-    private static PhoenixPIDController poseYController = new PhoenixPIDController(0.9, 0.0, 0.05); // TODO: Find actual value
+    private static PhoenixPIDController poseXController = new PhoenixPIDController(0.95, 0.0, 0.05); // TODO: Find actual value
+    private static PhoenixPIDController poseYController = new PhoenixPIDController(0.95, 0.0, 0.05); // TODO: Find actual value
 
     private static double poseXControllerPositionTolerance = 0.03;
     private static double poseYControllerPositionTolerance = 0.03;

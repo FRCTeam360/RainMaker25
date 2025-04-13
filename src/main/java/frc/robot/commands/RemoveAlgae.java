@@ -101,7 +101,6 @@ public class RemoveAlgae extends Command {
         algaeRoller.setDutyCycle(-0.5);
         elevator.setElevatorPostion(height + 6.5);
         algaeArm.setPosition(180.0);
-
     }
 
     // Called once the command ends or is interrupted.

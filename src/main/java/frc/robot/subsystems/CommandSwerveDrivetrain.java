@@ -153,6 +153,18 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         request.withDriveRequestType(DriveRequestType.Velocity);
     }
 
+    public void bargeFieldCentricFacingAngle(double x, double y, double desiredAngle) {
+        FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle()
+                .withVelocityX(x * maxSpeed)
+                .withVelocityY(y * maxSpeed)
+                .withTargetDirection(Rotation2d.fromDegrees(desiredAngle));
+        request.HeadingController = new PhoenixPIDController(1.7, 0, 0);
+        request.withDeadband(0.1);
+        request.withRotationalDeadband(0.0001);
+        this.setControl(request);
+        request.withDriveRequestType(DriveRequestType.Velocity);
+    }
+
     public void driveFieldCentricFacingAngleBluePerspective(double x, double y, double desiredAngle) {
         FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle()
                 .withVelocityX(x * maxSpeed)

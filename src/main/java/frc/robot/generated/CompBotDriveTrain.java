@@ -212,15 +212,15 @@ public class CompBotDriveTrain {
             kBackRightSteerMotorId, kBackRightDriveMotorId, kBackRightEncoderId, kBackRightEncoderOffset,
             kBackRightXPos, kBackRightYPos, kInvertRightSide, kBackRightSteerMotorInverted, kBackRightEncoderInverted
         );
+    
+    private static PhoenixPIDController poseXController = new PhoenixPIDController(0.95, 0.0, 0.05); // TODO: Find actual value
+    private static PhoenixPIDController poseYController = new PhoenixPIDController(0.95, 0.0, 0.05); // TODO: Find actual value
+    
+    private static double poseXControllerPositionTolerance = 0.03;
+    private static double poseYControllerPositionTolerance = 0.03;
 
-    private static PhoenixPIDController poseXController = new PhoenixPIDController(0.5, 0.0, 0.0); // TODO: Find actual value
-    private static PhoenixPIDController poseYController = new PhoenixPIDController(0.5, 0.0, 0.0); // TODO: Find actual value
-
-    private static double poseXControllerPositionTolerance = 0.05;
-    private static double poseYControllerPositionTolerance = 0.05;
-
-    private static double poseXControllerVelocityTolerance = 0.01;
-    private static double poseYControllerVelocityTolerance = 0.01;
+    private static double poseXControllerVelocityTolerance = 0.05;
+    private static double poseYControllerVelocityTolerance = 0.05;
 
     /**
      * Creates a CommandSwerveDrivetrain instance.

@@ -34,7 +34,7 @@ public final class Constants {
             public static final double TELE_LEVEL_TWO = isCompBot() ? 7.4 : 7.0;
             public static final double TELE_LEVEL_ONE = 0.0;
 
-            public static final double AUTO_LEVEL_FOUR = isCompBot() ? 29.0 + 0.2 : 29.5;
+            public static final double AUTO_LEVEL_FOUR = isCompBot() ? 29.0 + 0.4 : 29.5;
             public static final double AUTO_LEVEL_THREE = 20.5;
             public static final double AUTO_LEVEL_TWO = 0.0;
             public static final double AUTO_LEVEL_ONE = 0.0;

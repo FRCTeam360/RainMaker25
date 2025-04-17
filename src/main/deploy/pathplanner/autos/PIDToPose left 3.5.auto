@@ -118,12 +118,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "pipeline 1"
-          }
-        },
-        {
           "type": "deadline",
           "data": {
             "commands": [

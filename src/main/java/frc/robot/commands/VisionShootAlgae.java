@@ -84,7 +84,7 @@ public class VisionShootAlgae extends Command {
     }
 
     public double setpointCalculator(double ty) {
-        double setpoint = (0.129115 * Math.pow(ty, 3)) + (1.67316 * Math.pow(ty, 2)) + 4641.44221;
+        double setpoint = (0.129115 * Math.pow(ty, 3)) + (1.67316 * Math.pow(ty, 2)) + (4641.44221 + 25.0);
         setpoint = MathUtil.clamp(setpoint, 4600.0, 5600.0);
 
         return setpoint;

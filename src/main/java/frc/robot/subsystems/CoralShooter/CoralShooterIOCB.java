@@ -5,6 +5,7 @@
 package frc.robot.subsystems.CoralShooter;
 
 import com.ctre.phoenix6.configs.CANrangeConfiguration;
+import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.signals.UpdateModeValue;
 import com.reduxrobotics.sensors.canandcolor.Canandcolor;
@@ -58,6 +59,8 @@ public class CoralShooterIOCB implements CoralShooterIO {
 
         canRangeConfig.ProximityParams.MinSignalStrengthForValidMeasurement = 2000; // If CANrange has a signal strength of at least 2000, it is a valid measurement.
         canRangeConfig.ProximityParams.ProximityThreshold = 0.05; // If CANrange detects an object within 0.1 meters, it will trigger the "isDetected" signal.
+        canRangeConfig.FovParams.withFOVRangeX(10.0);
+        canRangeConfig.FovParams.withFOVRangeY(10.0);
 
         // canRangeConfig.ToFParams.UpdateMode = UpdateModeValue.ShortRange100Hz; // Make the CANrange update as fast as possible at 100 Hz. This requires short-range mode.
 
@@ -73,6 +76,7 @@ public class CoralShooterIOCB implements CoralShooterIO {
         // return intakeSensor.getProximity() < 0.1;
         return intakeSensor.getIsDetected().getValue();
     }
+
 
     private boolean isInOuttakeSensor() {
         // return outtakeSensor.getProximity() < 0.1;

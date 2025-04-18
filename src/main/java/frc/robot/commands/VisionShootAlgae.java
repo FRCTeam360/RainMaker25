@@ -68,7 +68,7 @@ public class VisionShootAlgae extends Command {
         setpoint = 0.0;
         angle = 0.0;
         heading = 0.0;
-        tolerance = 50;
+        tolerance = 50.0;
         ty = 0.0;
     }
 

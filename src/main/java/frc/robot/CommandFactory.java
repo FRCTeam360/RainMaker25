@@ -105,7 +105,7 @@ public class CommandFactory {
     public Command intakeRumble(CommandXboxController controller) {
         return CommandLogger.logCommand(
                 Commands.runEnd(
-                        () -> controller.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0.5),
+                        () -> controller.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0.75),
                         () -> controller.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0.0)),
                 "rumbling");
     }
@@ -114,9 +114,6 @@ public class CommandFactory {
         return CommandLogger
                 .logCommand(
                         SmartIntake.newCommand(coralShooter, funnel)
-                                .andThen(this.intakeRumble(driverCont)
-                                .withTimeout(0.2))
-                                .andThen(Commands.waitSeconds(0.05))
                                 .andThen(this.intakeRumble(driverCont)
                                 .withTimeout(0.2)),
                         "Smart Intake with Rumble");
@@ -556,7 +553,7 @@ public class CommandFactory {
 
     public Command climbAutomated() {
         return Commands
-                .waitUntil(() -> climberWinch.getPosition() < -135.0)
+                .waitUntil(() -> climberWinch.getPosition() < -140.0)
                 .deadlineFor(climb())
                 .alongWith(algaeTilt.setPositionCmd(0.907));
     }

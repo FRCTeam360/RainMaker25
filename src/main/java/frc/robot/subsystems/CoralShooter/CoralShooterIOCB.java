@@ -27,7 +27,8 @@ public class CoralShooterIOCB implements CoralShooterIO {
     
     private final RelativeEncoder encoder = outtakeMotor.getEncoder();
     private final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
-    CANrangeConfiguration canRangeConfig = new CANrangeConfiguration();
+    CANrangeConfiguration intakeConfig = new CANrangeConfiguration();
+    CANrangeConfiguration outtakeConfig = new CANrangeConfiguration();
 
     // private final Canandcolor intakeSensor = new Canandcolor(Constants.CompBotConstants.INTAKE_SENSOR_ID);
     // private final Canandcolor outtakeSensor = new Canandcolor(Constants.CompBotConstants.OUTTAKE_SENSOR_ID);
@@ -57,15 +58,23 @@ public class CoralShooterIOCB implements CoralShooterIO {
             PersistMode.kPersistParameters
         );
 
-        canRangeConfig.ProximityParams.MinSignalStrengthForValidMeasurement = 2000; // If CANrange has a signal strength of at least 2000, it is a valid measurement.
-        canRangeConfig.ProximityParams.ProximityThreshold = 0.05; // If CANrange detects an object within 0.1 meters, it will trigger the "isDetected" signal.
-        canRangeConfig.FovParams.withFOVRangeX(10.0);
-        canRangeConfig.FovParams.withFOVRangeY(10.0);
+        intakeConfig.ProximityParams.MinSignalStrengthForValidMeasurement = 2000; // If CANrange has a signal strength of at least 2000, it is a valid measurement.
+        intakeConfig.ProximityParams.ProximityThreshold = 0.1; // If CANrange detects an object within 0.1 meters, it will trigger the "isDetected" signal.
+        // intakeConfig.FovParams.withFOVRangeX(10.0);
+        // intakeConfig.FovParams.withFOVRangeY(10.0);
+        intakeConfig.ToFParams.withUpdateMode(UpdateModeValue.ShortRangeUserFreq);
+
+        
+        outtakeConfig.ProximityParams.MinSignalStrengthForValidMeasurement = 2000; // If CANrange has a signal strength of at least 2000, it is a valid measurement.
+        outtakeConfig.ProximityParams.ProximityThreshold = 0.1; // If CANrange detects an object within 0.1 meters, it will trigger the "isDetected" signal.
+        // outtakeConfig.FovParams.withFOVRangeX(10.0);
+        // outtakeConfig.FovParams.withFOVRangeY(10.0);
+        outtakeConfig.ToFParams.withUpdateMode(UpdateModeValue.ShortRangeUserFreq);
 
         // canRangeConfig.ToFParams.UpdateMode = UpdateModeValue.ShortRange100Hz; // Make the CANrange update as fast as possible at 100 Hz. This requires short-range mode.
 
-        intakeSensor.getConfigurator().apply(canRangeConfig);
-        outtakeSensor.getConfigurator().apply(canRangeConfig);
+        intakeSensor.getConfigurator().apply(intakeConfig);
+        outtakeSensor.getConfigurator().apply(outtakeConfig);
     }
 
     public void setDutyCycle(double dutyCycle) {
@@ -73,13 +82,13 @@ public class CoralShooterIOCB implements CoralShooterIO {
     }
 
     private boolean isInIntakeSensor() {
-        // return intakeSensor.getProximity() < 0.1;
+        // return intakeSensor.getDistance().refresh().getValueAsDouble() < 0.1;
         return intakeSensor.getIsDetected().getValue();
     }
 
 
     private boolean isInOuttakeSensor() {
-        // return outtakeSensor.getProximity() < 0.1;
+        // return outtakeSensor.getDistance().refresh().getValueAsDouble() < 0.1;
         return outtakeSensor.getIsDetected().getValue();
     }
 
@@ -94,9 +103,9 @@ public class CoralShooterIOCB implements CoralShooterIO {
         inputs.outtakeVoltage = outtakeMotor.getAppliedOutput() * outtakeMotor.getBusVoltage();
         inputs.outtakeSensor = this.isInOuttakeSensor();
         // inputs.outtakeSensorProximity = outtakeSensor.getProximity();
-        inputs.outtakeSensorProximity = outtakeSensor.getDistance().getValueAsDouble();
+        inputs.outtakeSensorProximity = outtakeSensor.getDistance().refresh().getValueAsDouble();
         inputs.intakeSensor = this.isInIntakeSensor();
         // inputs.intakeSensorProximity = intakeSensor.getProximity();
-        inputs.intakeSensorProximity = intakeSensor.getDistance().getValueAsDouble();
+        inputs.intakeSensorProximity = intakeSensor.getDistance().refresh().getValueAsDouble();
     }
 }

@@ -513,7 +513,7 @@ public class RobotContainer {
                 .rightStick()
                 .toggleOnTrue(elevator.setDutyCycleCommand(() -> operatorCont.getRightY() * -0.1));
 
-        operatorCont.leftBumper().whileTrue(algaeRoller.setDutyCycleCmd(-0.1));
+        operatorCont.leftBumper().whileTrue(algaeRoller.setDutyCycleCmd(-0.25));
         operatorCont.rightBumper().whileTrue(algaeRoller.setDutyCycleCmd(1.0));
 
         operatorCont.y().whileTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.001 : 0.001)); // 0.001 used to be
@@ -606,7 +606,7 @@ public class RobotContainer {
                 .and(() -> isAlgaeMode)
                 .whileTrue(
                         algaeRoller
-                                .setDutyCycleCmd(-0.1)
+                                .setDutyCycleCmd(-0.40)
                                 .alongWith(driveTrain.fieldOrientedDrive(driverCont)));
 
         driverCont.rightBumper().and(() -> !isAlgaeMode).whileTrue(pidToReefRight);

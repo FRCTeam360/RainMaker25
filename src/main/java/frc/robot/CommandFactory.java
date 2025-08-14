@@ -293,19 +293,19 @@ public class CommandFactory {
     }
 
     public Command groundPickupAlgaeTilt() {
-        return algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.3 : 35.0);
+        return algaeTilt.setPositionCmd(0.3);
     }
 
     public Command driverIntakeAlgae() {
         return algaeRoller
                 .setDutyCycleCmd(-0.1)
                 .alongWith(algaeShooter.setDutyCycleCmd(-1.0))
-                .alongWith(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.32 : 23.5));
+                .alongWith(algaeTilt.setPositionCmd(0.32));
     }
 
     public Command driverProcessAlgae() {
         return algaeTilt
-                .setPositionCmd(Constants.isCompBot() ? 0.253 : 21)
+                .setPositionCmd(0.253)
                 .alongWith(algaeShooter.setDutyCycleCmd(0.6))
                 .alongWith(algaeRoller.setDutyCycleCmd(0.8));
     }
@@ -377,12 +377,12 @@ public class CommandFactory {
                 .waitUntil(() -> algaeShooter.getVelocity() > 5750)
                 .andThen(algaeRoller.setDutyCycleCmd(1.0))
                 .alongWith(algaeShooter.setVelocityCmd(6250))
-                .alongWith(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.03 : 3.0));
+                .alongWith(algaeTilt.setPositionCmd(0.03));
     }
 
     public Command processAndScore() {
         return algaeTilt
-                .setPositionCmd(Constants.isCompBot() ? 0.253 : 30)
+                .setPositionCmd(0.253)
                 .alongWith(this.shootAlgae());
     }
 

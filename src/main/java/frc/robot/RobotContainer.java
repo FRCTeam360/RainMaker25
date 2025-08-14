@@ -504,6 +504,9 @@ public class RobotContainer {
         testCont.rightBumper().whileTrue(pidToReefRight);
         testCont.leftBumper().whileTrue(pidToReefLeft);
 
+        testCont.a().whileTrue(servo.runWithTimeout(0.5, 0));
+        testCont.b().whileTrue(servo.runWithTimeout(0.5, 1));
+
         operatorCont
                 .leftStick()
                 .toggleOnTrue(algaeTilt.setDutyCycleCmd(() -> operatorCont.getLeftY() * 0.1));

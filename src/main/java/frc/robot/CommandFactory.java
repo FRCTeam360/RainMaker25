@@ -2,6 +2,7 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.networktables.PubSub;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -561,4 +562,14 @@ public class CommandFactory {
     public void resetClimberDeployed() {
         climberDeployed = false;
     }
+
+    // public Command calculateWheelRadius() {
+    //     drivetrain.zero();
+    //     double startHeading = drivetrain.getAngle();
+    //     double currentDrivePosition = drivetrain.getModule(1).getDriveMotor().getPosition().getValueAsDouble();
+    //     drivetrain.rotateDrivetrain();
+    //     double currentHeading = 0.0;
+    //     waitUntil()
+
+    // }
 }

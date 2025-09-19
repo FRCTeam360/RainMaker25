@@ -110,6 +110,18 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         ), "DrivetrainFieldOriented");
     }
 
+    public final Command rotateDrivetrain() { // field oriented drive command!
+    SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric(); // creates a fieldcentric drive
+            // .withDriveRequestType(DriveRequestType.Velocity); // Use closed-loop control for drive motors
+
+    return CommandLogger.logCommand(this.applyRequest(
+            () -> drive
+                    .withVelocityX(0.0) // Drive forward with negative Y (forward)
+                    .withVelocityY(0.0) // Drive left with negative X (left)
+                    .withRotationalRate(0.5 * (maxAngularRate / 2.0)) // Drive                                    // (left)
+    ), "rotateDrivetrain");
+}
+
 
     public void xOut() {
         SwerveRequest xOutReq = new SwerveRequest.SwerveDriveBrake();
@@ -489,6 +501,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return Commands.waitUntil(() -> isAtRotationSetpoint());
     }
 
+    
     public double getAngularRate() {
         return Math.toDegrees(this.getStateCopy().Speeds.omegaRadiansPerSecond);
     }
@@ -728,4 +741,5 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         request.withDriveRequestType(DriveRequestType.Velocity);
         this.setControl(request);
     }
+
 }

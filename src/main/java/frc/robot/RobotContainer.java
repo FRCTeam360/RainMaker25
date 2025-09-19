@@ -501,10 +501,12 @@ public class RobotContainer {
         // algaeArm));
         algaeArm.setDefaultCommand(algaeArm.setAlgaeArmAngleCmd(0.0));
 
-        testCont.y().onTrue(new InstantCommand(() -> commandFactory.upSetPoint(), algaeShooter));
-        testCont.x().onTrue(new InstantCommand(() -> commandFactory.downSetPoint(), algaeShooter));
-        testCont.b().onTrue(new InstantCommand(() -> commandFactory.upAngle(), algaeTilt));
-        testCont.a().onTrue(new InstantCommand(() -> commandFactory.downAngle(), algaeTilt));
+        // testCont.y().onTrue(new InstantCommand(() -> commandFactory.upSetPoint(), algaeShooter));
+        // testCont.x().onTrue(new InstantCommand(() -> commandFactory.downSetPoint(), algaeShooter));
+        // testCont.b().onTrue(new InstantCommand(() -> commandFactory.upAngle(), algaeTilt));
+        // testCont.a().onTrue(new InstantCommand(() -> commandFactory.downAngle(), algaeTilt));
+
+        testCont.a().whileTrue(commandFactory.calculateWheelRadius());
 
         operatorCont
                 .leftStick()

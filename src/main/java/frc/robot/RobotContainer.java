@@ -55,6 +55,7 @@ import frc.robot.subsystems.AlgaeArm.AlgaeArmIOSim;
 import frc.robot.subsystems.AlgaeRoller.AlgaeRoller;
 import frc.robot.subsystems.AlgaeRoller.AlgaeRollerIOCB;
 import frc.robot.subsystems.AlgaeRoller.AlgaeRollerIOPB;
+import frc.robot.subsystems.AlgaeRoller.AlgaeRollerIOSim;
 import frc.robot.subsystems.AlgaeShooter.AlgaeShooter;
 import frc.robot.subsystems.AlgaeShooter.AlgaeShooterIOCB;
 import frc.robot.subsystems.AlgaeShooter.AlgaeShooterIOPB;
@@ -62,6 +63,7 @@ import frc.robot.subsystems.AlgaeShooter.AlgaeShooterIOSim;
 import frc.robot.subsystems.AlgaeTilt.AlgaeTilt;
 import frc.robot.subsystems.AlgaeTilt.AlgaeTiltIOCB;
 import frc.robot.subsystems.AlgaeTilt.AlgaeTiltIOPB;
+import frc.robot.subsystems.AlgaeTilt.AlgaeTiltIOSim;
 import frc.robot.subsystems.ClimberWinch.ClimberWinch;
 import frc.robot.subsystems.ClimberWinch.ClimberWinchIOCB;
 import frc.robot.subsystems.ClimberWinch.ClimberWinchIOPB;
@@ -86,6 +88,7 @@ import frc.robot.subsystems.Funnel.FunnelIOPB;
 import frc.robot.subsystems.Servo.Servo;
 import frc.robot.subsystems.Servo.ServoIOCB;
 import frc.robot.subsystems.Servo.ServoIOPB;
+import frc.robot.subsystems.Servo.ServoIOSim;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIO;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
@@ -257,6 +260,9 @@ public class RobotContainer {
                 coralShooter = new CoralShooter(new CoralShooterIOSim(() -> elevator.getHeight()));
                 climberWinch = new ClimberWinch(new ClimberWinchIOSim());
                 algaeShooter = new AlgaeShooter(new AlgaeShooterIOSim());
+                algaeTilt = new AlgaeTilt(new AlgaeTiltIOSim());
+                algaeRoller = new AlgaeRoller(new AlgaeRollerIOSim());
+                servo = new Servo(new ServoIOSim());
                 break;
             case COMPETITION:
             default:

@@ -85,6 +85,7 @@ import frc.robot.subsystems.Elevator.ElevatorIOWB;
 import frc.robot.subsystems.Funnel.Funnel;
 import frc.robot.subsystems.Funnel.FunnelIOCB;
 import frc.robot.subsystems.Funnel.FunnelIOPB;
+import frc.robot.subsystems.Funnel.FunnelIOSim;
 import frc.robot.subsystems.Servo.Servo;
 import frc.robot.subsystems.Servo.ServoIOCB;
 import frc.robot.subsystems.Servo.ServoIOPB;
@@ -263,6 +264,8 @@ public class RobotContainer {
                 algaeTilt = new AlgaeTilt(new AlgaeTiltIOSim());
                 algaeRoller = new AlgaeRoller(new AlgaeRollerIOSim());
                 servo = new Servo(new ServoIOSim());
+                funnel = new Funnel(new FunnelIOSim());
+
                 break;
             case COMPETITION:
             default:

@@ -34,20 +34,16 @@ import frc.robot.Constants.PracticeBotConstants;
 import frc.robot.Constants.WoodbotConstants;
 
 /** Add your docs here. */
-public class ElevatorIOPB implements ElevatorIO {
+public class ElevatorIOPB extends ElevatorIOCB {
     private final TalonFX backElevatorMotor = new TalonFX(PracticeBotConstants.BACK_ELEVATOR_ID, PracticeBotConstants.CANBUS_NAME);
     private final TalonFX frontElevatorMotor = new TalonFX(PracticeBotConstants.FRONT_ELEVATOR_ID, PracticeBotConstants.CANBUS_NAME);
     // private final DifferentialMechanism elevatorDiff;
-    private TalonFXConfiguration frontConfig = new TalonFXConfiguration();
-    private TalonFXConfiguration backConfig = new TalonFXConfiguration();
-    private MotorOutputConfigs outputConfigs = new MotorOutputConfigs();
     // private DifferentialSensorsConfigs sens = backConfig.DifferentialSensors;
 
     private final DigitalInput bottomSwitch = new DigitalInput(
         WoodbotConstants.ELEVATOR_BOTTOM_SWITCH
     );
 
-    private final double GEAR_RATIO = 1.0;
 
     public ElevatorIOPB() {
         final double UPPER_LIMIT = 31.0;

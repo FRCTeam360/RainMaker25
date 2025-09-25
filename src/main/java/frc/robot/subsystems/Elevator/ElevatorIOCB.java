@@ -39,16 +39,16 @@ public class ElevatorIOCB implements ElevatorIO {
     private final TalonFX backElevatorMotor = new TalonFX(CompBotConstants.BACK_ELEVATOR_ID, CompBotConstants.CANBUS_NAME);
     private final TalonFX frontElevatorMotor = new TalonFX(CompBotConstants.FRONT_ELEVATOR_ID, CompBotConstants.CANBUS_NAME);
     // private final DifferentialMechanism elevatorDiff;
-    private TalonFXConfiguration frontConfig = new TalonFXConfiguration();
-    private TalonFXConfiguration backConfig = new TalonFXConfiguration();
-    private MotorOutputConfigs outputConfigs = new MotorOutputConfigs();
+    protected TalonFXConfiguration frontConfig = new TalonFXConfiguration();
+    protected TalonFXConfiguration backConfig = new TalonFXConfiguration();
+    protected MotorOutputConfigs outputConfigs = new MotorOutputConfigs();
     // private DifferentialSensorsConfigs sens = backConfig.DifferentialSensors;
 
     private final DigitalInput bottomSwitch = new DigitalInput(
         WoodbotConstants.ELEVATOR_BOTTOM_SWITCH
     );
 
-    private final double GEAR_RATIO = 1.0;
+    protected final double GEAR_RATIO = 1.0;
 
     public ElevatorIOCB() {
         final double UPPER_LIMIT = 31.0;

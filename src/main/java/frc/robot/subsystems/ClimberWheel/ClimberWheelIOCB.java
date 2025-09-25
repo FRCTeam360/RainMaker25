@@ -20,10 +20,10 @@ import frc.robot.subsystems.ClimberWheel.ClimberWheelIO.ClimberWheelIOInputs;
 
 public class ClimberWheelIOCB implements ClimberWheelIO {
   private final SparkMax wheelMotor = new SparkMax(CompBotConstants.CLIMBER_ROLLER_ID, MotorType.kBrushless);
-  private final RelativeEncoder encoder = wheelMotor.getEncoder();
-  private final PIDController pid = new PIDController(0, 0, 0); // TODO: find pid values
+  protected final RelativeEncoder encoder = wheelMotor.getEncoder();
+  protected final PIDController pid = new PIDController(0, 0, 0); // TODO: find pid values
 
-  private final SparkMaxConfig config = new SparkMaxConfig();
+  protected final SparkMaxConfig config = new SparkMaxConfig();
 
   /** Creates a new ClimberWheelIOPB. */
   public ClimberWheelIOCB() {

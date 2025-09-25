@@ -30,23 +30,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class AlgaeArmIOPB implements AlgaeArmIO {
-
-  private final SparkMax armMotor = new SparkMax(Constants.PracticeBotConstants.ALGAE_ARM_ID, MotorType.kBrushless); // placeholder                                                                                                                    // ID
-  private final RelativeEncoder encoder = armMotor.getEncoder();
-  
-  private final double kP = 0.025;
-  private final double kI = 0.0;
-  private final double kD = 0.0;
-
-  private final double POSITION_CONVERSION_FACTOR = (1.0 / 5.0) * (1.0 / 5.0) * (18.0 / 36.0) * (360.0 / 1.0);
-  private final double VELOCITY_CONVERSION_FACTOR = POSITION_CONVERSION_FACTOR / 60.0;
-
-  private final double FORWARD_LIMIT = 150.0;
-  private final double REVERSE_LIMIT = 1.0;
-  private final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
-
-  private final double MAX_OUTPUT = 0.5;
+public class AlgaeArmIOPB extends AlgaeArmIOCB{
 
   /** Creates a new AlgaeArmIOPB. */
   public AlgaeArmIOPB() {

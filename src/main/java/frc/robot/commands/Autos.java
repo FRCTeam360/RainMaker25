@@ -19,4 +19,3 @@
 //   }
 // }
 
-Hello, this is Paul Hauge;

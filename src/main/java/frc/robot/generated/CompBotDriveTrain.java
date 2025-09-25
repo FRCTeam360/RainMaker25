@@ -109,6 +109,7 @@ public class CompBotDriveTrain {
     private static final boolean kInvertLeftSide = false;
     private static final boolean kInvertRightSide = true;
 
+
     private static final int kPigeonId = 13;
 
     // These are only used for simulation
@@ -191,6 +192,8 @@ public class CompBotDriveTrain {
     private static final Distance kBackRightXPos = Inches.of(-11.375);
     private static final Distance kBackRightYPos = Inches.of(-11.375);
 
+    
+
 
     public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> FrontLeft =
         ConstantCreator.createModuleConstants(
@@ -221,6 +224,7 @@ public class CompBotDriveTrain {
 
     private static double poseXControllerVelocityTolerance = 0.05;
     private static double poseYControllerVelocityTolerance = 0.05;
+
 
     /**
      * Creates a CommandSwerveDrivetrain instance.

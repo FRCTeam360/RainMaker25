@@ -506,7 +506,7 @@ public class RobotContainer {
         // testCont.b().onTrue(new InstantCommand(() -> commandFactory.upAngle(), algaeTilt));
         // testCont.a().onTrue(new InstantCommand(() -> commandFactory.downAngle(), algaeTilt));
 
-        testCont.a().whileTrue(commandFactory.calculateWheelRadius());
+        // testCont.a().whileTrue(commandFactory.calculateWheelRadius());
 
         operatorCont
                 .leftStick()

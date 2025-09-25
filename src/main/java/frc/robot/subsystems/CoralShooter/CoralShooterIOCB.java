@@ -19,16 +19,16 @@ import frc.robot.Constants;
 public class CoralShooterIOCB implements CoralShooterIO {
 
     private final SparkMax outtakeMotor = new SparkMax(Constants.CompBotConstants.CORAL_SHOOTER_ID, MotorType.kBrushless);
-    private final RelativeEncoder encoder = outtakeMotor.getEncoder();
-    private final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
+    protected final RelativeEncoder encoder = outtakeMotor.getEncoder();
+    protected final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
 
     private final Canandcolor intakeSensor = new Canandcolor(Constants.CompBotConstants.INTAKE_SENSOR_ID);
     private final Canandcolor outtakeSensor = new Canandcolor(Constants.CompBotConstants.OUTTAKE_SENSOR_ID);
   
-    private final double KP = 0.0;
-    private final double KI = 0.0;
-    private final double KD = 0.0;
-    private final double KF = 0.0;
+    protected final double KP = 0.0;
+    protected final double KI = 0.0;
+    protected final double KD = 0.0;
+    protected final double KF = 0.0;
 
     public CoralShooterIOCB() {
         sparkMaxConfig.idleMode(IdleMode.kBrake);
@@ -40,7 +40,7 @@ public class CoralShooterIOCB implements CoralShooterIO {
         outtakeMotor.set(dutyCycle);
     }
 
-    private boolean isInOuttakeSensor() {
+    protected boolean isInOuttakeSensor() {
         return outtakeSensor.getProximity() < 0.1;
     }
 

@@ -25,14 +25,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Elevator.ElevatorIO.ElevatorIOInputs;
 
-public class AlgaeShooterIOPB implements AlgaeShooterIO {
+public class AlgaeShooterIOPB extends AlgaeShooterIOCB {
 
   private final SparkFlex algaeShooterMotorFront = new SparkFlex(Constants.PracticeBotConstants.ALGAE_SHOOTER_FRONT_ID, MotorType.kBrushless); // no ID
   private final SparkFlex algaeShooterMotorBack = new SparkFlex(Constants.PracticeBotConstants.ALGAE_SHOOTER_BACK_ID, MotorType.kBrushless); // no ID
-
-  private SparkFlexConfig frontConfig = new SparkFlexConfig();
-  private SparkFlexConfig backConfig = new SparkFlexConfig();
-  private final double positionConversionFactor = 1.0;
 
   /** Creates a new AlgaeShooterIOWB. */
   public AlgaeShooterIOPB() {

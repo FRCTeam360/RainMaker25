@@ -19,17 +19,9 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.PracticeBotConstants;
 
-public class ClimberWinchIOPB implements ClimberWinchIO {
+public class ClimberWinchIOPB extends ClimberWinchIOCB {
 
   private final SparkMax winchMotor = new SparkMax(PracticeBotConstants.CLIMBER_WINCH_ID, MotorType.kBrushless);
-  private final RelativeEncoder winchEncoder = winchMotor.getEncoder();
-
-  private final double kP = 0.2;
-  private final double kI = 0.0;
-  private final double kD = 0.0;
-  
-  private final double positionConversionFactor = 1.0;
-  private final SparkMaxConfig config = new SparkMaxConfig();
 
   /** Creates a new ClimberIOPB. */
   public ClimberWinchIOPB() {

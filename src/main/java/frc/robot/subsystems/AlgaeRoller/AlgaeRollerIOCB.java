@@ -17,8 +17,8 @@ import frc.robot.Constants;
 
 public class AlgaeRollerIOCB implements AlgaeRollerIO {
   private final SparkMax motor = new SparkMax(Constants.CompBotConstants.ALGAE_ROLLER, MotorType.kBrushless);
-  private final SparkMaxConfig config = new SparkMaxConfig();
-  private final RelativeEncoder encoder = motor.getEncoder();
+  protected final SparkMaxConfig config = new SparkMaxConfig();
+  protected final RelativeEncoder encoder = motor.getEncoder();
 
   /** Creates a new AlgaeIntakeRollerIOPB. */
   public AlgaeRollerIOCB() {

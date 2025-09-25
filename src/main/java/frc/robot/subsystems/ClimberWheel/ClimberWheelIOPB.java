@@ -17,13 +17,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.PracticeBotConstants;
 import frc.robot.subsystems.ClimberWheel.ClimberWheelIO.ClimberWheelIOInputs;
 
-public class ClimberWheelIOPB implements ClimberWheelIO {
+public class ClimberWheelIOPB extends ClimberWheelIOCB {
   private final SparkMax wheelMotor = new SparkMax(PracticeBotConstants.CLIMBER_ROLLER_ID, MotorType.kBrushless);
-  private final RelativeEncoder encoder = wheelMotor.getEncoder();
-  private final PIDController pid = new PIDController(0, 0, 0); // TODO: find pid values
-
-  private final SparkMaxConfig config = new SparkMaxConfig();
-
+  
   /** Creates a new ClimberWheelIOPB. */
   public ClimberWheelIOPB() {
     config.idleMode(IdleMode.kBrake);

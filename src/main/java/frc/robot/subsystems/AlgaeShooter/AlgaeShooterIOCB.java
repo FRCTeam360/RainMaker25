@@ -30,9 +30,9 @@ public class AlgaeShooterIOCB implements AlgaeShooterIO {
   private final SparkFlex algaeShooterMotorFront = new SparkFlex(Constants.CompBotConstants.ALGAE_SHOOTER_FRONT_ID, MotorType.kBrushless); // no ID
   private final SparkFlex algaeShooterMotorBack = new SparkFlex(Constants.CompBotConstants.ALGAE_SHOOTER_BACK_ID, MotorType.kBrushless); // no ID
 
-  private SparkFlexConfig frontConfig = new SparkFlexConfig();
-  private SparkFlexConfig backConfig = new SparkFlexConfig();
-  private final double positionConversionFactor = 1.0;
+  protected SparkFlexConfig frontConfig = new SparkFlexConfig();
+  protected SparkFlexConfig backConfig = new SparkFlexConfig();
+  protected final double positionConversionFactor = 1.0;
 
   /** Creates a new AlgaeShooterIOWB. */
   public AlgaeShooterIOCB() {

@@ -29,16 +29,16 @@ public class AlgaeTiltIOCB implements AlgaeTiltIO {
   // private final RelativeEncoder encoder = motor.getEncoder(); // TODO: make absolute when we get one!!
 
   private final double kP = 4;
-  private final double kI = 0.0;
-  private final double kD = 0.0;
+  protected final double kI = 0.0;
+  protected final double kD = 0.0;
 
-  private final double forwardLimit = 38.0;
-  private final double reverseLimit = -10.0;
+  protected final double forwardLimit = 38.0;
+  protected final double reverseLimit = -10.0;
 
   private final double ZERO_OFFSET = 0.2145; // TODO: find the zero offset
 
-  private final double positionConversionFactor = 1.0;
-  private final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
+  protected final double positionConversionFactor = 1.0;
+  protected final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
 
   /** Creates a new AlgaeIntakeIOPB. */
   public AlgaeTiltIOCB() {

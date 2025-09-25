@@ -15,10 +15,8 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class AlgaeRollerIOPB implements AlgaeRollerIO {
+public class AlgaeRollerIOPB extends AlgaeRollerIOCB {
   private final SparkMax motor = new SparkMax(Constants.PracticeBotConstants.ALGAE_ROLLER, MotorType.kBrushless);
-  private final SparkMaxConfig config = new SparkMaxConfig();
-  private final RelativeEncoder encoder = motor.getEncoder();
 
   /** Creates a new AlgaeIntakeRollerIOPB. */
   public AlgaeRollerIOPB() {

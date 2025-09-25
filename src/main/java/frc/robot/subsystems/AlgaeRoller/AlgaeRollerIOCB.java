@@ -16,12 +16,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class AlgaeRollerIOCB implements AlgaeRollerIO {
-  private final SparkMax motor = new SparkMax(Constants.CompBotConstants.ALGAE_ROLLER, MotorType.kBrushless);
+  protected final SparkMax motor;
   protected final SparkMaxConfig config = new SparkMaxConfig();
   protected final RelativeEncoder encoder = motor.getEncoder();
 
   /** Creates a new AlgaeIntakeRollerIOPB. */
   public AlgaeRollerIOCB() {
+    motor= new SparkMax(Constants.CompBotConstants.ALGAE_ROLLER, MotorType.kBrushless);
+
     config.inverted(true);
     config.idleMode(IdleMode.kBrake);
     motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

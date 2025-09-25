@@ -1,6 +1,7 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
+//if CB & PB IO files have equal values, remove from PB, which extends CB. Everything "private" must be "protected"
 package frc.robot.subsystems.AlgaeArm;
 
 import java.util.function.DoubleSupplier;

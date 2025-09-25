@@ -36,8 +36,8 @@ import frc.robot.Constants.WoodbotConstants;
 
 /** Add your docs here. */
 public class ElevatorIOCB implements ElevatorIO {
-    private final TalonFX backElevatorMotor = new TalonFX(CompBotConstants.BACK_ELEVATOR_ID, CompBotConstants.CANBUS_NAME);
-    private final TalonFX frontElevatorMotor = new TalonFX(CompBotConstants.FRONT_ELEVATOR_ID, CompBotConstants.CANBUS_NAME);
+    protected final TalonFX backElevatorMotor;
+    protected final TalonFX frontElevatorMotor;
     // private final DifferentialMechanism elevatorDiff;
     protected TalonFXConfiguration frontConfig = new TalonFXConfiguration();
     protected TalonFXConfiguration backConfig = new TalonFXConfiguration();
@@ -51,6 +51,9 @@ public class ElevatorIOCB implements ElevatorIO {
     protected final double GEAR_RATIO = 1.0;
 
     public ElevatorIOCB() {
+        backElevatorMotor = new TalonFX(CompBotConstants.BACK_ELEVATOR_ID, CompBotConstants.CANBUS_NAME);
+        frontElevatorMotor = new TalonFX(CompBotConstants.FRONT_ELEVATOR_ID, CompBotConstants.CANBUS_NAME);
+
         final double UPPER_LIMIT = 31.0;
         final double LOWER_LIMIT = 0.0;
 

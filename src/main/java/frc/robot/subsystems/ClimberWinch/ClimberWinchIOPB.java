@@ -21,10 +21,12 @@ import frc.robot.Constants.PracticeBotConstants;
 
 public class ClimberWinchIOPB extends ClimberWinchIOCB {
 
-  private final SparkMax winchMotor = new SparkMax(PracticeBotConstants.CLIMBER_WINCH_ID, MotorType.kBrushless);
 
   /** Creates a new ClimberIOPB. */
   public ClimberWinchIOPB() {
+    winchMotor = new SparkMax(PracticeBotConstants.CLIMBER_WINCH_ID, MotorType.kBrushless);
+
+
     config.idleMode(IdleMode.kBrake);
     config.inverted(true);
     ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
@@ -36,19 +38,4 @@ public class ClimberWinchIOPB extends ClimberWinchIOCB {
     winchMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
-  public void setDutyCycle(double dutyCycle) {
-    winchMotor.set(dutyCycle);
-  }
-
-  public void setPosition(double position) {
-    winchMotor.getClosedLoopController().setReference(position, ControlType.kPosition);
-  }
-
-  public void updateInputs(ClimberWinchIOInputs inputs) {
-    inputs.winchDutyCycle = winchMotor.getAppliedOutput();
-    inputs.winchPosition = winchEncoder.getPosition();
-    inputs.winchVelocity = winchEncoder.getVelocity();
-    inputs.winchCurrent = winchMotor.getOutputCurrent();
-    inputs.winchTemp = winchMotor.getMotorTemperature();
-  }
 }

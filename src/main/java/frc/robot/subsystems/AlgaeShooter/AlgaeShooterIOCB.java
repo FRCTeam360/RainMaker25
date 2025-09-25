@@ -27,8 +27,8 @@ import frc.robot.subsystems.Elevator.ElevatorIO.ElevatorIOInputs;
 
 public class AlgaeShooterIOCB implements AlgaeShooterIO {
 
-  private final SparkFlex algaeShooterMotorFront = new SparkFlex(Constants.CompBotConstants.ALGAE_SHOOTER_FRONT_ID, MotorType.kBrushless); // no ID
-  private final SparkFlex algaeShooterMotorBack = new SparkFlex(Constants.CompBotConstants.ALGAE_SHOOTER_BACK_ID, MotorType.kBrushless); // no ID
+  protected final SparkFlex algaeShooterMotorFront;
+  protected final SparkFlex algaeShooterMotorBack;
 
   protected SparkFlexConfig frontConfig = new SparkFlexConfig();
   protected SparkFlexConfig backConfig = new SparkFlexConfig();
@@ -36,6 +36,8 @@ public class AlgaeShooterIOCB implements AlgaeShooterIO {
 
   /** Creates a new AlgaeShooterIOWB. */
   public AlgaeShooterIOCB() {
+    algaeShooterMotorFront = new SparkFlex(Constants.CompBotConstants.ALGAE_SHOOTER_FRONT_ID, MotorType.kBrushless); // no ID
+    algaeShooterMotorBack = new SparkFlex(Constants.CompBotConstants.ALGAE_SHOOTER_BACK_ID, MotorType.kBrushless); // no ID
     // TODO: add values
     final double kP = 0.0;
     final double kI = 0.0;

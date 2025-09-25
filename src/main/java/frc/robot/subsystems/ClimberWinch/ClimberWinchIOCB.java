@@ -23,7 +23,7 @@ import frc.robot.Constants.PracticeBotConstants;
 
 public class ClimberWinchIOCB implements ClimberWinchIO {
 
-  private final SparkMax winchMotor = new SparkMax(CompBotConstants.CLIMBER_WINCH_ID, MotorType.kBrushless);
+  protected final SparkMax winchMotor;
   protected final RelativeEncoder winchEncoder = winchMotor.getEncoder();
 
   protected final double kP = 0.2;
@@ -35,6 +35,8 @@ public class ClimberWinchIOCB implements ClimberWinchIO {
 
   /** Creates a new ClimberIOPB. */
   public ClimberWinchIOCB() {
+    winchMotor =  = new SparkMax(CompBotConstants.CLIMBER_WINCH_ID, MotorType.kBrushless);
+
     config.idleMode(IdleMode.kBrake);
     config.inverted(true);
     ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();

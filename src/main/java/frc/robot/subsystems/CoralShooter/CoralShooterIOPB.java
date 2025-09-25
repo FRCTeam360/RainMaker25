@@ -18,37 +18,19 @@ import frc.robot.Constants;
 /** Add your docs here. */
 public class CoralShooterIOPB extends CoralShooterIOCB {
 
-    private final SparkMax outtakeMotor = new SparkMax(Constants.PracticeBotConstants.CORAL_SHOOTER_ID, MotorType.kBrushless);
-    
-    private final Canandcolor intakeSensor = new Canandcolor(Constants.PracticeBotConstants.INTAKE_SENSOR_ID);
-    private final Canandcolor outtakeSensor = new Canandcolor(Constants.PracticeBotConstants.OUTTAKE_SENSOR_ID);
-  
+ 
     public CoralShooterIOPB() {
+        outtakeMotor = new SparkMax(Constants.PracticeBotConstants.CORAL_SHOOTER_ID, MotorType.kBrushless);
+    
+        intakeSensor = new Canandcolor(Constants.PracticeBotConstants.INTAKE_SENSOR_ID);
+        outtakeSensor = new Canandcolor(Constants.PracticeBotConstants.OUTTAKE_SENSOR_ID);    
+
         sparkMaxConfig.idleMode(IdleMode.kBrake);
         sparkMaxConfig.inverted(false);
         outtakeMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
-    public void setDutyCycle(double dutyCycle) {
-        outtakeMotor.set(dutyCycle);
-    }
-
     private boolean isInIntakeSensor() {
         return intakeSensor.getProximity() < 0.06;
-    }
-
-    public void stop() {
-        outtakeMotor.stopMotor();
-    }
-
-    public void updateInputs(CoralShooterIOInputs inputs) {
-        inputs.outtakeStatorCurrent = outtakeMotor.getOutputCurrent();
-        inputs.outtakePosition = encoder.getPosition();
-        inputs.outtakeVelocity = encoder.getVelocity();
-        inputs.outtakeVoltage = outtakeMotor.getAppliedOutput() * outtakeMotor.getBusVoltage();
-        inputs.outtakeSensor = this.isInOuttakeSensor();
-        inputs.outtakeSensorProximity = outtakeSensor.getProximity();
-        inputs.intakeSensor = this.isInIntakeSensor();
-        inputs.intakeSensorProximity = intakeSensor.getProximity();
     }
 }

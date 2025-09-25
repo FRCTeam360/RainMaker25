@@ -27,11 +27,13 @@ import frc.robot.subsystems.Elevator.ElevatorIO.ElevatorIOInputs;
 
 public class AlgaeShooterIOPB extends AlgaeShooterIOCB {
 
-  private final SparkFlex algaeShooterMotorFront = new SparkFlex(Constants.PracticeBotConstants.ALGAE_SHOOTER_FRONT_ID, MotorType.kBrushless); // no ID
-  private final SparkFlex algaeShooterMotorBack = new SparkFlex(Constants.PracticeBotConstants.ALGAE_SHOOTER_BACK_ID, MotorType.kBrushless); // no ID
-
+ 
   /** Creates a new AlgaeShooterIOWB. */
   public AlgaeShooterIOPB() {
+    algaeShooterMotorFront = new SparkFlex(Constants.PracticeBotConstants.ALGAE_SHOOTER_FRONT_ID, MotorType.kBrushless); // no ID
+    algaeShooterMotorBack = new SparkFlex(Constants.PracticeBotConstants.ALGAE_SHOOTER_BACK_ID, MotorType.kBrushless); // no ID
+  
+
     // TODO: add values
     final double kP = 0.0;
     final double kI = 0.0;
@@ -51,31 +53,5 @@ public class AlgaeShooterIOPB extends AlgaeShooterIOCB {
     
     algaeShooterMotorFront.configure(frontConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     algaeShooterMotorBack.configure(backConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-  }
-
-  public void updateInputs(AlgaeShooterIOInputs inputs) {
-    inputs.algaeShooterFrontVoltage = algaeShooterMotorFront.getBusVoltage();
-    inputs.algaeShooterFrontPosition = algaeShooterMotorFront.getEncoder().getPosition();
-    inputs.algaeShooterFrontVelocity = algaeShooterMotorFront.getEncoder().getVelocity();
-    inputs.algaeShooterFromCurrent = algaeShooterMotorFront.getOutputCurrent();
-    inputs.algaeShooterFromTemperature = algaeShooterMotorFront.getMotorTemperature();
-
-    inputs.algaeShooterBackVoltage = algaeShooterMotorBack.getBusVoltage();
-    inputs.algaeShooterBackPosition = algaeShooterMotorBack.getEncoder().getPosition();
-    inputs.algaeShooterBackVelocity = algaeShooterMotorBack.getEncoder().getVelocity();
-    inputs.algaeShooterBackCurrent = algaeShooterMotorBack.getOutputCurrent();
-    inputs.algaeShooterBackTemperature = algaeShooterMotorBack.getMotorTemperature();
-  }
-
-  public void setDutyCycle(double dutyCycle) {
-    algaeShooterMotorFront.set(dutyCycle);
-  }
-
-  public void setVelocity(double velocity) {
-    algaeShooterMotorFront.getClosedLoopController().setReference(velocity, ControlType.kVelocity);
-  }
-
-  public void stop() {
-    algaeShooterMotorFront.stopMotor();
   }
 }

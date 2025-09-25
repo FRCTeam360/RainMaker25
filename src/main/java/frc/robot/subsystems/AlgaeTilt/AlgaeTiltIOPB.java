@@ -21,15 +21,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class AlgaeTiltIOPB extends AlgaeTiltIOCB {
-  private final SparkMax motor = new SparkMax(Constants.PracticeBotConstants.ALGAE_TILT, MotorType.kBrushless);
   private final RelativeEncoder encoder = motor.getEncoder(); // TODO: make absolute when we get one!!
-
-  private final double kP = 0.035 * 2.0;
-  
-  private final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
 
   /** Creates a new AlgaeIntakeIOPB. */
   public AlgaeTiltIOPB() {
+    motor = new SparkMax(Constants.PracticeBotConstants.ALGAE_TILT, MotorType.kBrushless);
+
+    kP = 0.035 * 2.0;
+
+    
+
     sparkMaxConfig.idleMode(IdleMode.kBrake);
     sparkMaxConfig.inverted(false);
 
@@ -51,13 +52,6 @@ public class AlgaeTiltIOPB extends AlgaeTiltIOCB {
     motor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
-  public void setDutyCycle(double dutyCycle) {
-    motor.set(dutyCycle);
-  }
-
-  public void setPosition(double position) {
-    motor.getClosedLoopController().setReference(position, ControlType.kPosition);
-  }
 
   /**
    * method for updating the encoder value

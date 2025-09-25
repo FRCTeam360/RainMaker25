@@ -19,7 +19,7 @@ import frc.robot.Constants.PracticeBotConstants;
 import frc.robot.subsystems.ClimberWheel.ClimberWheelIO.ClimberWheelIOInputs;
 
 public class ClimberWheelIOCB implements ClimberWheelIO {
-  private final SparkMax wheelMotor = new SparkMax(CompBotConstants.CLIMBER_ROLLER_ID, MotorType.kBrushless);
+  protected final SparkMax wheelMotor;
   protected final RelativeEncoder encoder = wheelMotor.getEncoder();
   protected final PIDController pid = new PIDController(0, 0, 0); // TODO: find pid values
 
@@ -27,6 +27,8 @@ public class ClimberWheelIOCB implements ClimberWheelIO {
 
   /** Creates a new ClimberWheelIOPB. */
   public ClimberWheelIOCB() {
+    wheelMotor = new SparkMax(CompBotConstants.CLIMBER_ROLLER_ID, MotorType.kBrushless);
+    
     config.idleMode(IdleMode.kBrake);
     config.inverted(false);
     wheelMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

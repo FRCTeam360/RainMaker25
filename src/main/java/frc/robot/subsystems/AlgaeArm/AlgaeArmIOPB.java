@@ -58,31 +58,5 @@ public class AlgaeArmIOPB extends AlgaeArmIOCB{
     armMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
-  public void updateInputs(AlgaeArmIOInputs inputs) {
-    inputs.algaeArmAngle = encoder.getPosition();
-    inputs.algaeArmVelocity = encoder.getVelocity();
-    inputs.algaeArmVoltage = armMotor.getBusVoltage() * armMotor.getAppliedOutput();
-    inputs.algaeArmCurrent = armMotor.getOutputCurrent();
-    inputs.algaeArmTemp = armMotor.getMotorTemperature();
-  }
 
-  public void setDutyCycle(double dutyCycle) {
-    armMotor.set(dutyCycle);
-  }
-
-  public void setPosition(double position) {
-    armMotor.getClosedLoopController().setReference(position, ControlType.kPosition);
-  }
-
-  public void enableReverseSoftLimit(boolean enabled){
-    sparkMaxConfig.softLimit.reverseSoftLimitEnabled(enabled);
-  }
-
-  /**
-   * method for updating the encoder position
-   * @param value new encoder position in motor rotations
-   */
-  public void setEncoder(double value) {
-    encoder.setPosition(value);
-  }
 }

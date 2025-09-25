@@ -35,8 +35,7 @@ import frc.robot.Constants.WoodbotConstants;
 
 /** Add your docs here. */
 public class ElevatorIOPB extends ElevatorIOCB {
-    private final TalonFX backElevatorMotor = new TalonFX(PracticeBotConstants.BACK_ELEVATOR_ID, PracticeBotConstants.CANBUS_NAME);
-    private final TalonFX frontElevatorMotor = new TalonFX(PracticeBotConstants.FRONT_ELEVATOR_ID, PracticeBotConstants.CANBUS_NAME);
+    
     // private final DifferentialMechanism elevatorDiff;
     // private DifferentialSensorsConfigs sens = backConfig.DifferentialSensors;
 
@@ -46,6 +45,9 @@ public class ElevatorIOPB extends ElevatorIOCB {
 
 
     public ElevatorIOPB() {
+        backElevatorMotor = new TalonFX(PracticeBotConstants.BACK_ELEVATOR_ID, PracticeBotConstants.CANBUS_NAME);
+        frontElevatorMotor = new TalonFX(PracticeBotConstants.FRONT_ELEVATOR_ID, PracticeBotConstants.CANBUS_NAME);
+
         final double UPPER_LIMIT = 31.0;
         final double LOWER_LIMIT = 0.0;
 
@@ -109,23 +111,6 @@ public class ElevatorIOPB extends ElevatorIOCB {
         frontElevatorMotor.setControl(new Follower(PracticeBotConstants.BACK_ELEVATOR_ID, true));
     }
 
-    public void updateInputs(ElevatorIOInputs inputs) {
-        inputs.elevatorStatorCurrent = backElevatorMotor.getStatorCurrent().getValueAsDouble();
-        inputs.elevatorSupplyCurrent = backElevatorMotor.getSupplyCurrent().getValueAsDouble();
-        inputs.elevatorVoltage = backElevatorMotor.getMotorVoltage().getValueAsDouble();
-        inputs.elevatorPosition = backElevatorMotor.getPosition().getValueAsDouble();
-        inputs.elevatorVelocity = backElevatorMotor.getVelocity().getValueAsDouble();
-        inputs.elevatorSensor = !bottomSwitch.get();
-        
-        Logger.recordOutput("front motor", frontElevatorMotor.getPosition().getValueAsDouble());
-        Logger.recordOutput("back motor", backElevatorMotor.getPosition().getValueAsDouble());
-
-        Logger.recordOutput("front motor duty cycle", frontElevatorMotor.getDutyCycle().getValueAsDouble());
-        Logger.recordOutput("back motor duty cycle", backElevatorMotor.getDutyCycle().getValueAsDouble());
-
-
-    }
-
     public void setDutyCycle(double dutyCycle) {
         DutyCycleOut duty = new DutyCycleOut(dutyCycle);
         // Logger.recordOutput("duty", duty.Output);
@@ -137,20 +122,10 @@ public class ElevatorIOPB extends ElevatorIOCB {
 
         backElevatorMotor.setControl(duty);
 
+        
+
     }
 
-    public void stop() {
-        backElevatorMotor.stopMotor();
-        frontElevatorMotor.stopMotor();
-    }
-    
-    /*
-     * value is new encoder value in rotations
-     */
-    public void setEncoder(double value) {
-        backElevatorMotor.setPosition(value);
-        frontElevatorMotor.setPosition(value);
-    }
 
     /*
      * height is in motor rotations

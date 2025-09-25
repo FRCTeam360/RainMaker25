@@ -24,11 +24,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class AlgaeTiltIOCB implements AlgaeTiltIO {
-  private final SparkMax motor = new SparkMax(Constants.CompBotConstants.ALGAE_TILT, MotorType.kBrushless);
-  private final AbsoluteEncoder absEncoder = motor.getAbsoluteEncoder(); // TODO: make absolute when we get one!!
+  protected final SparkMax motor;
+  protected final AbsoluteEncoder absEncoder;
   // private final RelativeEncoder encoder = motor.getEncoder(); // TODO: make absolute when we get one!!
 
-  private final double kP = 4;
+  protected final double kP;
   protected final double kI = 0.0;
   protected final double kD = 0.0;
 
@@ -42,6 +42,11 @@ public class AlgaeTiltIOCB implements AlgaeTiltIO {
 
   /** Creates a new AlgaeIntakeIOPB. */
   public AlgaeTiltIOCB() {
+    motor = new SparkMax(Constants.CompBotConstants.ALGAE_TILT, MotorType.kBrushless);
+    absEncoder = motor.getAbsoluteEncoder(); // TODO: make absolute when we get one!!
+
+    kP = 4;
+
     sparkMaxConfig.idleMode(IdleMode.kBrake);
     sparkMaxConfig.inverted(true);
 

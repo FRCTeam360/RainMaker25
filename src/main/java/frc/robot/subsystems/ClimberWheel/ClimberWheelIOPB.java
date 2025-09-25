@@ -18,24 +18,13 @@ import frc.robot.Constants.PracticeBotConstants;
 import frc.robot.subsystems.ClimberWheel.ClimberWheelIO.ClimberWheelIOInputs;
 
 public class ClimberWheelIOPB extends ClimberWheelIOCB {
-  private final SparkMax wheelMotor = new SparkMax(PracticeBotConstants.CLIMBER_ROLLER_ID, MotorType.kBrushless);
   
   /** Creates a new ClimberWheelIOPB. */
   public ClimberWheelIOPB() {
+    wheelMotor = new SparkMax(PracticeBotConstants.CLIMBER_ROLLER_ID, MotorType.kBrushless);
+
     config.idleMode(IdleMode.kBrake);
     config.inverted(false);
     wheelMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-  }
-
-  public void setDutyCycle(double dutyCycle) {
-    wheelMotor.set(dutyCycle);
-  }
-
-  public void updateInputs(ClimberWheelIOInputs inputs) {
-    inputs.wheelDutyCycle = wheelMotor.get();
-    inputs.wheelPosition = encoder.getPosition();
-    inputs.wheelVelocity = encoder.getVelocity();
-    inputs.wheelCurrent = wheelMotor.getOutputCurrent();
-    inputs.wheelTemp = wheelMotor.getMotorTemperature();
   }
 }

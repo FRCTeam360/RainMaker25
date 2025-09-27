@@ -563,13 +563,29 @@ public class CommandFactory {
         climberDeployed = false;
     }
 
-    // public Command calculateWheelRadius() {
-    //     drivetrain.zero();
-    //     double startHeading = drivetrain.getAngle();
-    //     double currentDrivePosition = drivetrain.getModule(1).getDriveMotor().getPosition().getValueAsDouble();
-    //     drivetrain.rotateDrivetrain();
-    //     double currentHeading = 0.0;
-    //     waitUntil()
+    public double calculateWheelRadius() {
+        double[] startPositions = new double[4];
+        double[] distanceCovered = new double[4]; 
+        double totalDistance = 0.0;
+        drivetrain.zero();
+        for (int i = 1; i < 5; i++) {
+            startPositions[i - 1] = drivetrain.getModule(i).getDriveMotor().getPosition().getValueAsDouble();
+        }
+        Commands
+            .waitUntil(() -> drivetrain.getAngle() <= -1.0 && drivetrain.getAngle() >= -2.0)
+            .deadlineFor(drivetrain.rotateDrivetrain());
 
-    // }
+        for (int i = 1; i < 5; i++) {
+            distanceCovered[i - 1] = drivetrain.getModule(i).getDriveMotor().getPosition().getValueAsDouble() - startPositions[i - 1];
+        }
+
+        for (int pos = 0; pos < 4; pos++) {
+            totalDistance += distanceCovered[pos];
+        }
+
+        // equation for wheel radius is: sqrt(l^2 + w^2) / 2 (avg motor rotations * gear ratio) aka wheel rotations)
+        double wheelRadius = 0.0 / (2 * ((totalDistance / 4) * 6.746031746031747)); // bottom of wheel to bottom of wheel needs to be the "length"
+        return wheelRadius;
+
+    }
 }

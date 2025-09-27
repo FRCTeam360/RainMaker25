@@ -121,7 +121,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             () -> drive
                     .withVelocityX(0.0) // Drive forward with negative Y (forward)
                     .withVelocityY(0.0) // Drive left with negative X (left)
-                    .withRotationalRate(0.5 * (maxAngularRate / 2.0)) // Drive                                    // (left)
+                    .withRotationalRate(0.25 * (maxAngularRate / 2.0)) // Drive                                    // (left)
     ), "rotateDrivetrain");
 }
 

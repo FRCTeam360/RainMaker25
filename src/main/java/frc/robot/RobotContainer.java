@@ -492,6 +492,7 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
+        testCont.a().whileTrue(commandFactory.rotate());
         vision.setDefaultCommand(consumeVisionMeasurements.ignoringDisable(true));
 
         driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));

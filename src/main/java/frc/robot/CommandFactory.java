@@ -563,29 +563,43 @@ public class CommandFactory {
         climberDeployed = false;
     }
 
-    public double calculateWheelRadius() {
-        double[] startPositions = new double[4];
-        double[] distanceCovered = new double[4]; 
-        double totalDistance = 0.0;
+    public Command rotate() {
+        return drivetrain.rotateDrivetrain();
+    }
+
+    public double convert360(double angle) {
+        if(angle >= 0.0) {
+            return angle;
+        } else {
+            return (angle + 360.0);
+        }
+    }
+
+    public Command rotateDriveTrain360() {
         drivetrain.zero();
         for (int i = 1; i < 5; i++) {
-            startPositions[i - 1] = drivetrain.getModule(i).getDriveMotor().getPosition().getValueAsDouble();
+            drivetrain.getModule(i).getDriveMotor().setPosition(0.0);
+            // startPositions[i - 1] = drivetrain.getModule(i).getDriveMotor().getPosition().getValueAsDouble();
         }
-        Commands
-            .waitUntil(() -> drivetrain.getAngle() <= -1.0 && drivetrain.getAngle() >= -2.0)
-            .deadlineFor(drivetrain.rotateDrivetrain());
+        return Commands
+        .waitUntil(() -> convert360(drivetrain.getAngle()) > 355.0)
+        .deadlineFor(drivetrain.rotateDrivetrain())
+        .andThen(this::radiusCalculation);
+    }
+
+    public double radiusCalculation() {
+        double totalPosition = 0.0;
+        double robotRotationalRadius = 32.173358544;
+        double swerveGearRatio = 6.746031746031747;
 
         for (int i = 1; i < 5; i++) {
-            distanceCovered[i - 1] = drivetrain.getModule(i).getDriveMotor().getPosition().getValueAsDouble() - startPositions[i - 1];
-        }
-
-        for (int pos = 0; pos < 4; pos++) {
-            totalDistance += distanceCovered[pos];
+            totalPosition += drivetrain.getModule(i).getDriveMotor().getPosition().getValueAsDouble();
         }
 
         // equation for wheel radius is: sqrt(l^2 + w^2) / 2 (avg motor rotations * gear ratio) aka wheel rotations)
-        double wheelRadius = 0.0 / (2 * ((totalDistance / 4) * 6.746031746031747)); // bottom of wheel to bottom of wheel needs to be the "length"
+        double wheelRadius = robotRotationalRadius / (2 * ((totalPosition / 4) * swerveGearRatio));
+        Logger.recordOutput("wheel radius", wheelRadius); // bottom of wheel to bottom of wheel needs to be the "length"
         return wheelRadius;
-
+        // 32.17... is the sqrt(l^2 + w^2)
     }
 }

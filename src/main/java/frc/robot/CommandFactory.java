@@ -584,7 +584,7 @@ public class CommandFactory {
         return Commands
         .waitUntil(() -> convert360(drivetrain.getAngle()) > 355.0)
         .deadlineFor(drivetrain.rotateDrivetrain())
-        .andThen(this::radiusCalculation);
+        .andThen(() -> this.radiusCalculation());
     }
 
     public double radiusCalculation() {

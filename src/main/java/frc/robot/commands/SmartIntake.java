@@ -56,6 +56,7 @@ public class SmartIntake extends Command {
         updateStates();
         isFinised = false;
         timer.reset();
+        Logger.recordOutput("intake state", intakeStates);
     }
 
     // Called every time the scheduler runs while the command is scheduled.

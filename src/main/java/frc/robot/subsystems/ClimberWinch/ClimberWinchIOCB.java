@@ -14,17 +14,12 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CompBotConstants;
-import frc.robot.Constants.PracticeBotConstants;
 
 public class ClimberWinchIOCB implements ClimberWinchIO {
 
-  protected final SparkMax winchMotor;
-  protected final RelativeEncoder winchEncoder = winchMotor.getEncoder();
+  protected SparkMax winchMotor;
+  protected RelativeEncoder winchEncoder;
 
   protected final double kP = 0.2;
   protected final double kI = 0.0;
@@ -35,7 +30,8 @@ public class ClimberWinchIOCB implements ClimberWinchIO {
 
   /** Creates a new ClimberIOPB. */
   public ClimberWinchIOCB() {
-    winchMotor =  = new SparkMax(CompBotConstants.CLIMBER_WINCH_ID, MotorType.kBrushless);
+    winchMotor =  new SparkMax(CompBotConstants.CLIMBER_WINCH_ID, MotorType.kBrushless);
+    winchEncoder = winchMotor.getEncoder();
 
     config.idleMode(IdleMode.kBrake);
     config.inverted(true);

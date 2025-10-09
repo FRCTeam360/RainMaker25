@@ -4,9 +4,7 @@
 
 package frc.robot.subsystems.AlgaeTilt;
 
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -15,9 +13,6 @@ import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.EncoderConfig;
 import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
-
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class AlgaeTiltIOPB extends AlgaeTiltIOCB {
@@ -25,11 +20,9 @@ public class AlgaeTiltIOPB extends AlgaeTiltIOCB {
 
   /** Creates a new AlgaeIntakeIOPB. */
   public AlgaeTiltIOPB() {
-    motor = new SparkMax(Constants.PracticeBotConstants.ALGAE_TILT, MotorType.kBrushless);
+    super.motor = new SparkMax(Constants.PracticeBotConstants.ALGAE_TILT, MotorType.kBrushless);
 
-    kP = 0.035 * 2.0;
-
-    
+    super.kP = 0.035 * 2.0;
 
     sparkMaxConfig.idleMode(IdleMode.kBrake);
     sparkMaxConfig.inverted(false);
@@ -41,6 +34,7 @@ public class AlgaeTiltIOPB extends AlgaeTiltIOCB {
     softLimitConfig.reverseSoftLimitEnabled(true);
     sparkMaxConfig.apply(softLimitConfig);
 
+    ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
     closedLoopConfig.pid(kP, kI, kD);
 
     sparkMaxConfig.apply(closedLoopConfig);
@@ -51,7 +45,6 @@ public class AlgaeTiltIOPB extends AlgaeTiltIOCB {
     sparkMaxConfig.apply(encoderConfig);
     motor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
-
 
   /**
    * method for updating the encoder value

@@ -5,11 +5,8 @@
 package frc.robot.subsystems.CoralShooter;
 
 import com.reduxrobotics.sensors.canandcolor.Canandcolor;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -20,8 +17,8 @@ public class CoralShooterIOPB extends CoralShooterIOCB {
 
  
     public CoralShooterIOPB() {
+        super();
         outtakeMotor = new SparkMax(Constants.PracticeBotConstants.CORAL_SHOOTER_ID, MotorType.kBrushless);
-    
         intakeSensor = new Canandcolor(Constants.PracticeBotConstants.INTAKE_SENSOR_ID);
         outtakeSensor = new Canandcolor(Constants.PracticeBotConstants.OUTTAKE_SENSOR_ID);    
 

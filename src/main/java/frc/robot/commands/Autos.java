@@ -18,6 +18,3 @@
 //     throw new UnsupportedOperationException("This is a utility class!");
 //   }
 // }
-
-System.out.println("hello world");
-hello this is kaleb

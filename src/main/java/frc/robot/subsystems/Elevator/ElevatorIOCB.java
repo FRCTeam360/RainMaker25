@@ -5,39 +5,24 @@
 package frc.robot.subsystems.Elevator;
 
 import org.littletonrobotics.junction.Logger;
-
-import com.ctre.phoenix6.configs.DifferentialSensorsConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.configs.TalonFXConfigurator;
-import com.ctre.phoenix6.controls.DifferentialDutyCycle;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.PositionDutyCycle;
-import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.mechanisms.DifferentialMechanism;
-import com.ctre.phoenix6.mechanisms.SimpleDifferentialMechanism;
-import com.ctre.phoenix6.signals.DifferentialSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DutyCycle;
-import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.Constants;
 import frc.robot.Constants.CompBotConstants;
-import frc.robot.Constants.PracticeBotConstants;
 import frc.robot.Constants.WoodbotConstants;
 
 /** Add your docs here. */
 public class ElevatorIOCB implements ElevatorIO {
-    protected final TalonFX backElevatorMotor;
-    protected final TalonFX frontElevatorMotor;
+    protected TalonFX backElevatorMotor;
+    protected TalonFX frontElevatorMotor;
     // private final DifferentialMechanism elevatorDiff;
     protected TalonFXConfiguration frontConfig = new TalonFXConfiguration();
     protected TalonFXConfiguration backConfig = new TalonFXConfiguration();
@@ -79,7 +64,6 @@ public class ElevatorIOCB implements ElevatorIO {
 
         backElevatorMotor.getConfigurator().apply(new TalonFXConfiguration());
         frontElevatorMotor.getConfigurator().apply(new TalonFXConfiguration());
-
 
         //outputConfigs.withInverted(InvertedValue.Clockwise_Positive);
         
@@ -130,8 +114,6 @@ public class ElevatorIOCB implements ElevatorIO {
 
         Logger.recordOutput("front motor duty cycle", frontElevatorMotor.getDutyCycle().getValueAsDouble());
         Logger.recordOutput("back motor duty cycle", backElevatorMotor.getDutyCycle().getValueAsDouble());
-
-
     }
 
     public void setDutyCycle(double dutyCycle) {
@@ -144,7 +126,6 @@ public class ElevatorIOCB implements ElevatorIO {
         frontElevatorMotor.setControl(new Follower(CompBotConstants.BACK_ELEVATOR_ID, true));
 
         backElevatorMotor.setControl(duty);
-
     }
 
     public void stop() {
@@ -171,5 +152,4 @@ public class ElevatorIOCB implements ElevatorIO {
         // elevatorDiff.setControl(motionMagicVoltage, positionVoltage);
         backElevatorMotor.setControl(motionMagicVoltage);
     }
-
 }

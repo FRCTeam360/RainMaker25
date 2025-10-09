@@ -5,8 +5,6 @@
 package frc.robot.subsystems.AlgaeTilt;
 
 import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -15,20 +13,18 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.EncoderConfig;
-import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class AlgaeTiltIOCB implements AlgaeTiltIO {
-  protected final SparkMax motor;
-  protected final AbsoluteEncoder absEncoder;
+  protected SparkMax motor;
+  protected AbsoluteEncoder absEncoder;
   // private final RelativeEncoder encoder = motor.getEncoder(); // TODO: make absolute when we get one!!
 
-  protected final double kP;
+  protected double kP;
   protected final double kI = 0.0;
   protected final double kD = 0.0;
 
@@ -105,5 +101,5 @@ public class AlgaeTiltIOCB implements AlgaeTiltIO {
 public void setEncoder(double value) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'setEncoder'");
-}
+  }
 }

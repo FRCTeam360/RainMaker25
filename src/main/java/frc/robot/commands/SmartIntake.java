@@ -23,6 +23,7 @@ public class SmartIntake extends Command {
 
     private boolean isFinised;
     private boolean hasFunnel = true;
+    private final String LOGGING_PREFIX = "intake state";
 
     private enum IntakeStates {
         EMPTY, FULL, JUST_INTAKE, JUST_OUTTAKE, JAMMED
@@ -37,7 +38,7 @@ public class SmartIntake extends Command {
         hasFunnel = true;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(coralShooter, funnel);
-        Logger.recordOutput("intake state", intakeStates);
+        Logger.recordOutput(LOGGING_PREFIX, intakeStates);
     }
 
     
@@ -47,7 +48,7 @@ public class SmartIntake extends Command {
         hasFunnel = false;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(coralShooter);
-        Logger.recordOutput("intake state", intakeStates);
+        Logger.recordOutput(LOGGING_PREFIX, intakeStates);
     }
 
     // Called when the command is initially scheduled.
@@ -56,7 +57,7 @@ public class SmartIntake extends Command {
         updateStates();
         isFinised = false;
         timer.reset();
-        Logger.recordOutput("intake state", intakeStates);
+        Logger.recordOutput(LOGGING_PREFIX, intakeStates);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -65,7 +66,7 @@ public class SmartIntake extends Command {
     public void execute() {
         long executeStartTime = HALUtil.getFPGATime();
         
-        Logger.recordOutput("intake state", intakeStates);
+        Logger.recordOutput(LOGGING_PREFIX, intakeStates);
 
         switch (intakeStates) {
             case JAMMED:

@@ -4,40 +4,8 @@
 
 package frc.robot.subsystems.AlgaeArm;
 
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.config.ClosedLoopConfig;
-import com.revrobotics.spark.config.EncoderConfig;
-import com.revrobotics.spark.config.SoftLimitConfig;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
 public class AlgaeArmIOPB extends AlgaeArmIOCB{
-
   /** Creates a new AlgaeArmIOPB. */
   public AlgaeArmIOPB() {
-    sparkMaxConfig.idleMode(IdleMode.kBrake);
-    sparkMaxConfig.inverted(false);
-
-    ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
-    closedLoopConfig.pid(kP, kI, kD);
-    closedLoopConfig.minOutput(-MAX_OUTPUT);
-    closedLoopConfig.maxOutput(MAX_OUTPUT);
-    sparkMaxConfig.apply(closedLoopConfig);
-
-    EncoderConfig encoderConfig = new EncoderConfig();
-    encoderConfig.positionConversionFactor(POSITION_CONVERSION_FACTOR);
-    encoderConfig.velocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
-    sparkMaxConfig.apply(encoderConfig);
-
-    SoftLimitConfig softLimitConfig = new SoftLimitConfig();
-    softLimitConfig.forwardSoftLimit(FORWARD_LIMIT);
-    softLimitConfig.forwardSoftLimitEnabled(true);
-    softLimitConfig.reverseSoftLimit(REVERSE_LIMIT);
-    softLimitConfig.reverseSoftLimitEnabled(true);
-    sparkMaxConfig.apply(softLimitConfig);
-
-    armMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-  }
-
-
+      }
 }

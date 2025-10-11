@@ -408,7 +408,7 @@ public class CommandFactory {
     public Command shootAlgae() {
 
         double setPoint = 5000.0; // 6000,
-        double angle = 0.035;
+        double angle = 0.03;
 
         Logger.recordOutput("shootalgaesetpoint", setPoint);
         Logger.recordOutput("shootalgaeangle", angle);

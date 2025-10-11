@@ -531,7 +531,7 @@ public class CommandFactory {
                                 .andThen(new InstantCommand(() -> this.climberDeployed = true)));
     }
 
-    double climberWinchSetPoint = -33.00; // -34.28 new number 4:53pm 4-1-2025
+    double climberWinchSetPoint = -29.0; // -34.28 new number 4:53pm 4-1-2025
 
     public Command initiateClimb() {
         return Commands

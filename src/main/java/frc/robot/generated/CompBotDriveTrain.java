@@ -109,6 +109,7 @@ public class CompBotDriveTrain {
     private static final boolean kInvertLeftSide = false;
     private static final boolean kInvertRightSide = true;
 
+
     private static final int kPigeonId = 13;
 
     // These are only used for simulation
@@ -191,6 +192,8 @@ public class CompBotDriveTrain {
     private static final Distance kBackRightXPos = Inches.of(-11.375);
     private static final Distance kBackRightYPos = Inches.of(-11.375);
 
+    
+
 
     public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> FrontLeft =
         ConstantCreator.createModuleConstants(
@@ -212,15 +215,16 @@ public class CompBotDriveTrain {
             kBackRightSteerMotorId, kBackRightDriveMotorId, kBackRightEncoderId, kBackRightEncoderOffset,
             kBackRightXPos, kBackRightYPos, kInvertRightSide, kBackRightSteerMotorInverted, kBackRightEncoderInverted
         );
+    
+    private static PhoenixPIDController poseXController = new PhoenixPIDController(1.5, 0.0, 0.05); // TODO: Find actual value
+    private static PhoenixPIDController poseYController = new PhoenixPIDController(1.5, 0.0, 0.05); // TODO: Find actual value
+    
+    private static double poseXControllerPositionTolerance = 0.03;
+    private static double poseYControllerPositionTolerance = 0.03;
 
-    private static PhoenixPIDController poseXController = new PhoenixPIDController(0.5, 0.0, 0.0); // TODO: Find actual value
-    private static PhoenixPIDController poseYController = new PhoenixPIDController(0.5, 0.0, 0.0); // TODO: Find actual value
+    private static double poseXControllerVelocityTolerance = 0.05;
+    private static double poseYControllerVelocityTolerance = 0.05;
 
-    private static double poseXControllerPositionTolerance = 0.05;
-    private static double poseYControllerPositionTolerance = 0.05;
-
-    private static double poseXControllerVelocityTolerance = 0.01;
-    private static double poseYControllerVelocityTolerance = 0.01;
 
     /**
      * Creates a CommandSwerveDrivetrain instance.

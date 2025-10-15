@@ -42,12 +42,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "pipeline 0"
-          }
-        },
-        {
           "type": "deadline",
           "data": {
             "commands": [
@@ -121,12 +115,6 @@
           "type": "named",
           "data": {
             "name": "shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "pipeline 1"
           }
         },
         {

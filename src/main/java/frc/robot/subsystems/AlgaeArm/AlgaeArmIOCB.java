@@ -35,14 +35,14 @@ public class AlgaeArmIOCB implements AlgaeArmIO {
   private final SparkMax armMotor = new SparkMax(Constants.CompBotConstants.ALGAE_ARM_ID, MotorType.kBrushless); // placeholder                                                                                                                    // ID
   private final RelativeEncoder encoder = armMotor.getEncoder();
   
-  private final double kP = 0.025;
+  private final double kP = 0.25;
   private final double kI = 0.0;
   private final double kD = 0.0;
 
   private final double POSITION_CONVERSION_FACTOR = (1.0 / 5.0) * (1.0 / 5.0) * (18.0 / 36.0) * (360.0 / 1.0);
   private final double VELOCITY_CONVERSION_FACTOR = POSITION_CONVERSION_FACTOR / 60.0;
 
-  private final double FORWARD_LIMIT = 150.0;
+  private final double FORWARD_LIMIT = 180.0;
   private final double REVERSE_LIMIT = -18.0;
   private final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
 
@@ -57,13 +57,12 @@ public class AlgaeArmIOCB implements AlgaeArmIO {
 
     ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
     closedLoopConfig.pid(kP, kI, kD);
-    closedLoopConfig.minOutput(-MAX_OUTPUT);
-    closedLoopConfig.maxOutput(MAX_OUTPUT);
+    closedLoopConfig.outputRange(-MAX_OUTPUT, MAX_OUTPUT);
     sparkMaxConfig.apply(closedLoopConfig);
 
     EncoderConfig encoderConfig = new EncoderConfig();
-    encoderConfig.positionConversionFactor(POSITION_CONVERSION_FACTOR);
-    encoderConfig.velocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
+    // encoderConfig.positionConversionFactor(POSITION_CONVERSION_FACTOR);
+    // encoderConfig.velocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
     sparkMaxConfig.apply(encoderConfig);
 
     SoftLimitConfig softLimitConfig = new SoftLimitConfig();
@@ -82,6 +81,7 @@ public class AlgaeArmIOCB implements AlgaeArmIO {
     inputs.algaeArmVoltage = armMotor.getBusVoltage() * armMotor.getAppliedOutput();
     inputs.algaeArmCurrent = armMotor.getOutputCurrent();
     inputs.algaeArmTemp = armMotor.getMotorTemperature();
+    inputs.algaeArmAppliedOutput = armMotor.getAppliedOutput();
   }
 
   public void setDutyCycle(double dutyCycle) {

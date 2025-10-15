@@ -27,6 +27,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -43,6 +44,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.CompBotConstants;
+import frc.robot.generated.CompBotDriveTrain;
 import frc.robot.generated.OldCompBot;
 import frc.robot.generated.OldCompBot.TunerSwerveDrivetrain;
 import frc.robot.subsystems.Vision.Vision;
@@ -110,6 +113,18 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         ), "DrivetrainFieldOriented");
     }
 
+    public final Command rotateDrivetrain() { // field oriented drive command!
+    SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric(); // creates a fieldcentric drive
+            // .withDriveRequestType(DriveRequestType.Velocity); // Use closed-loop control for drive motors
+
+    return CommandLogger.logCommand(this.applyRequest(
+            () -> drive
+                    .withVelocityX(0.0) // Drive forward with negative Y (forward)
+                    .withVelocityY(0.0) // Drive left with negative X (left)
+                    .withRotationalRate(0.5 * (maxAngularRate / 2.0)) // Drive                                    // (left)
+    ), "rotateDrivetrain");
+}
+
 
     public void xOut() {
         SwerveRequest xOutReq = new SwerveRequest.SwerveDriveBrake();
@@ -147,6 +162,18 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 .withVelocityY(y * maxSpeed)
                 .withTargetDirection(Rotation2d.fromDegrees(desiredAngle));
         request.HeadingController = headingController;
+        request.withDeadband(0.1);
+        request.withRotationalDeadband(0.0001);
+        this.setControl(request);
+        request.withDriveRequestType(DriveRequestType.Velocity);
+    }
+
+    public void bargeFieldCentricFacingAngle(double x, double y, double desiredAngle) {
+        FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle()
+                .withVelocityX(x * maxSpeed)
+                .withVelocityY(y * maxSpeed)
+                .withTargetDirection(Rotation2d.fromDegrees(desiredAngle));
+        request.HeadingController = new PhoenixPIDController(1.7, 0, 0);
         request.withDeadband(0.1);
         request.withRotationalDeadband(0.0001);
         this.setControl(request);
@@ -445,6 +472,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return this.getRotation2d().getDegrees();
     }
 
+
     /**
      * Checks the heading controller for the drivetrain's rotation
      * 
@@ -477,6 +505,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return Commands.waitUntil(() -> isAtRotationSetpoint());
     }
 
+    
     public double getAngularRate() {
         return Math.toDegrees(this.getStateCopy().Speeds.omegaRadiansPerSecond);
     }
@@ -506,7 +535,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         // Logger.recordOutput("Swerve: Rotation", this.getRotation2d());
         // Logger.recordOutput("Swerve: Angle", this.getAngle());
         // Logger.recordOutput("swerve: pithc", this.isFlat());
-        // Logger.recordOutput("Rotation2d", this.getPigeon2().getRotation2d());
+        Logger.recordOutput("Rotation2d", this.getPigeon2().getRotation2d());
+        Logger.recordOutput("Current angle", this.getAngle());
         Logger.recordOutput(
                 CMD_NAME+ "Heading Controller: Setpoint",
                 headingController.getSetpoint());
@@ -694,6 +724,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return poseYController.getVelocityError();
     }
 
+
     /**
      * Field centric facing angle command without flipping based on operator perspective
      *
@@ -716,4 +747,5 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         request.withDriveRequestType(DriveRequestType.Velocity);
         this.setControl(request);
     }
+
 }

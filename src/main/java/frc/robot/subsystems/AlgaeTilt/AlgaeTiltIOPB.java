@@ -33,7 +33,7 @@ public class AlgaeTiltIOPB implements AlgaeTiltIO {
   private final double forwardLimit = 27.0;
   private final double reverseLimit = -5.0; //used to be 10 3/15
 
-  private final double ZERO_OFFSET = 0.0428443;
+  private final double ZERO_OFFSET = 0.3735929;
 
   private final double positionConversionFactor = 1.0;
   private final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();

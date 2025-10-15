@@ -545,7 +545,7 @@ public class CommandFactory {
     }
 
     public Command climb() {
-        return climberWinch.setDutyCycleCmd(-0.8);
+        return climberWinch.setDutyCycleCmd(-0.6);
     }
 
     public Command operatorClimb() {

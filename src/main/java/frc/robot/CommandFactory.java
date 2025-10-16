@@ -98,7 +98,7 @@ public class CommandFactory {
     public Command alignRumble(CommandXboxController controller) {
         return CommandLogger.logCommand(
                 Commands.runEnd(
-                        () -> controller.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0.15),
+                        () -> controller.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0.35),
                         () -> controller.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0.0)),
                 "rumbling");
     }

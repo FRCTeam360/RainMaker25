@@ -16,5 +16,4 @@ jobs:
                   distribution: "temurin"
                   java-version: "17"
             - name: Check formatting
-              run: mvn spotless:check
-              # Or for Gradle: ./gradlew spotlessCheck
+              run: ./gradlew spotlessCheck

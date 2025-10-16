@@ -53,6 +53,8 @@ public class Robot extends LoggedRobot {
         if (isReal()) {
             if (RobotUtils.isUsbWriteable()) {
                 Logger.addDataReceiver(new WPILOGWriter("/U"));
+            } else {
+                Logger.addDataReceiver(new WPILOGWriter("/home/lvuser/logs"));
             }
             Logger.addDataReceiver(new NT4Publisher());
             new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging

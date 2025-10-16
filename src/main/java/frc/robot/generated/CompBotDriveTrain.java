@@ -219,8 +219,8 @@ public class CompBotDriveTrain {
     private static PhoenixPIDController poseXController = new PhoenixPIDController(1.5, 0.0, 0.05); // TODO: Find actual value
     private static PhoenixPIDController poseYController = new PhoenixPIDController(1.5, 0.0, 0.05); // TODO: Find actual value
     
-    private static double poseXControllerPositionTolerance = 0.03;
-    private static double poseYControllerPositionTolerance = 0.03;
+    private static double poseXControllerPositionTolerance = 0.035;
+    private static double poseYControllerPositionTolerance = 0.035;
 
     private static double poseXControllerVelocityTolerance = 0.05;
     private static double poseYControllerVelocityTolerance = 0.05;

@@ -480,6 +480,8 @@ public class RobotContainer {
         }
     }
 
+    
+
     private void incrementVelocity() {
         yVel += 0.001;
         System.out.println("Y VELL IS TIS NUMBER -------=---" + yVel);
@@ -575,7 +577,7 @@ public class RobotContainer {
                 .rightTrigger(0.25)
                 .and(() -> !isAlgaeMode)
                 .whileTrue(coralShooter.basicShootCmd());
-        driverCont.rightTrigger(0.25).and(() -> isAlgaeMode).whileTrue(visionShootAlgae);
+        driverCont.rightTrigger(0.25).and(() -> isAlgaeMode).whileTrue(commandFactory.shootAlgae());
 
         driverCont.a().and(() -> !isAlgaeMode).onTrue(levelOneAndZero);
         driverCont

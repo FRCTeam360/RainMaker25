@@ -13,6 +13,7 @@ spotless {
     java {
         googleJavaFormat()
     }
+    enforceCheck false  // Don't automatically run spotlessCheck during build
 }
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"

@@ -95,10 +95,11 @@ public class CommandFactory {
         angleIncrement = 0.0;
     }
 
+
     public Command alignRumble(CommandXboxController controller) {
         return CommandLogger.logCommand(
                 Commands.runEnd(
-                        () -> controller.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0.35),
+                        () -> controller.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 1.0),
                         () -> controller.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0.0)),
                 "rumbling");
     }
@@ -337,14 +338,14 @@ public class CommandFactory {
     public Command driverIntakeAlgae() {
         return algaeRoller
                 .setDutyCycleCmd(-0.1)
-                .alongWith(algaeShooter.setDutyCycleCmd(-1.0))
+                .alongWith(algaeShooter.setDutyCycleCmd(-0.8))
                 .alongWith(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.32 : 0.32));
     }
 
     public Command driverLollipopIntake() {
         return algaeRoller
                 .setDutyCycleCmd(-0.1)
-                .alongWith(algaeShooter.setDutyCycleCmd(-1.0))
+                .alongWith(algaeShooter.setDutyCycleCmd(-0.8))
                 .alongWith(algaeTilt.setPositionCmd(0.205));
     }
 
@@ -545,7 +546,7 @@ public class CommandFactory {
     }
 
     public Command climb() {
-        return climberWinch.setDutyCycleCmd(-0.6);
+        return climberWinch.setDutyCycleCmd(-0.7);
     }
 
     public Command operatorClimb() {
@@ -554,7 +555,7 @@ public class CommandFactory {
 
     public Command climbAutomated() {
         return Commands
-                .waitUntil(() -> climberWinch.getPosition() < -140.0)
+                .waitUntil(() -> climberWinch.getPosition() < -160.0)
                 .deadlineFor(climb())
                 .alongWith(algaeTilt.setPositionCmd(0.907));
     }

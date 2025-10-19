@@ -555,7 +555,7 @@ public class CommandFactory {
 
     public Command climbAutomated() {
         return Commands
-                .waitUntil(() -> climberWinch.getPosition() < -160.0)
+                .waitUntil(() -> climberWinch.getPosition() < -145.0) // was initially 160, change made 10/19/2025
                 .deadlineFor(climb())
                 .alongWith(algaeTilt.setPositionCmd(0.907));
     }

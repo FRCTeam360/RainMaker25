@@ -7,10 +7,12 @@ package frc.robot.subsystems.AlgaeTilt;
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.Team360SubSystemBase;
+
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
-public class AlgaeTilt extends SubsystemBase {
+public class AlgaeTilt extends Team360SubSystemBase {
   private final AlgaeTiltIO io;
   private final AlgaeTiltIOInputsAutoLogged inputs = new AlgaeTiltIOInputsAutoLogged();
 
@@ -55,8 +57,8 @@ public class AlgaeTilt extends SubsystemBase {
   public void periodic() {
     long periodicStartTime = HALUtil.getFPGATime();
     io.updateInputs(inputs);
-    Logger.processInputs("Algae Tilt", inputs);
+    Logger.processInputs(getLogPreFix(), inputs);
     long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
-    Logger.recordOutput("Algae Tilt: periodic loop time", (periodicLoopTime / 1000.0));
+    Logger.recordOutput(getLogPreFix() + "periodic loop time", (periodicLoopTime / 1000.0));
   }
 }

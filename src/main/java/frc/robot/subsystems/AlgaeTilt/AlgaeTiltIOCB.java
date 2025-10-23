@@ -12,6 +12,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.EncoderConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -31,7 +32,8 @@ public class AlgaeTiltIOCB implements AlgaeTiltIO {
   protected final double forwardLimit = 38.0;
   protected final double reverseLimit = -10.0;
 
-  private final double ZERO_OFFSET = 0.2145; // TODO: find the zero offset
+  private final double ZERO_OFFSET = 0.7170253;
+  // 0.5551491; //0.7218491 + 0.833;
 
   protected final double positionConversionFactor = 1.0;
   protected final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
@@ -45,6 +47,7 @@ public class AlgaeTiltIOCB implements AlgaeTiltIO {
 
     sparkMaxConfig.idleMode(IdleMode.kBrake);
     sparkMaxConfig.inverted(true);
+    sparkMaxConfig.smartCurrentLimit(20, 5);
 
     // SoftLimitConfig softLimitConfig = new SoftLimitConfig();
     // softLimitConfig.forwardSoftLimit(forwardLimit);
@@ -66,7 +69,7 @@ public class AlgaeTiltIOCB implements AlgaeTiltIO {
 
     EncoderConfig encoderConfig = new EncoderConfig();
     encoderConfig.positionConversionFactor(positionConversionFactor);
-    
+
     AbsoluteEncoderConfig absoluteEncoderConfig = new AbsoluteEncoderConfig();
     absoluteEncoderConfig.zeroOffset(ZERO_OFFSET);
 
@@ -84,10 +87,9 @@ public class AlgaeTiltIOCB implements AlgaeTiltIO {
 
   /**
    * method for updating the encoder value
-   * 
+   *
    * @param value sets the new encoder value in rotations!!
    */
-
   public void updateInputs(AlgaeTiltIOInputs inputs) {
     inputs.armDutyCycle = motor.get();
     inputs.armPositionRelative = absEncoder.getPosition();

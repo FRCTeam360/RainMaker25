@@ -5,24 +5,20 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.CoralShooter.CoralShooter;
-import frc.robot.subsystems.Elevator.Elevator;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AdjustToScoreReef extends Command {
   private CommandSwerveDrivetrain drivetrain;
   private Translation2d initialTranslation;
   private Translation2d currentTranslation;
+
   /** Creates a new ScoreInReef. */
-  public AdjustToScoreReef(
-    CommandSwerveDrivetrain drivetrain) 
-    { 
+  public AdjustToScoreReef(CommandSwerveDrivetrain drivetrain) {
     this.drivetrain = drivetrain;
-    
+
     addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -36,7 +32,7 @@ public class AdjustToScoreReef extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+
     currentTranslation = drivetrain.getPose().getTranslation();
     double distance = Math.abs(currentTranslation.getDistance(initialTranslation));
     drivetrain.robotCentricDrive(0.1, 0.0, 0.0);

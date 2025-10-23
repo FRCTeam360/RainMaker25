@@ -11,6 +11,7 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import frc.robot.Constants;
 
@@ -38,9 +39,10 @@ public class AlgaeShooterIOCB implements AlgaeShooterIO {
     final double kP = 0.0;
     final double kI = 0.0;
     final double kD = 0.0;
-    
+    final double kFF = 0.00015;
+
     ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
-    closedLoopConfig.pid(kP, kI, kD);
+    closedLoopConfig.pidf(kP, kI, kD, kFF);
     frontConfig.apply(closedLoopConfig);
     backConfig.apply(closedLoopConfig);
     EncoderConfig encoderConfig = new EncoderConfig();
@@ -50,17 +52,21 @@ public class AlgaeShooterIOCB implements AlgaeShooterIO {
     backConfig.follow(Constants.CompBotConstants.ALGAE_SHOOTER_FRONT_ID, true);
     backConfig.inverted(true);
     frontConfig.inverted(false);
-    
-    algaeShooterMotorFront.configure(frontConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    algaeShooterMotorBack.configure(backConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    backConfig.idleMode(IdleMode.kCoast);
+    frontConfig.idleMode(IdleMode.kCoast);
+
+    algaeShooterMotorFront.configure(
+        frontConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    algaeShooterMotorBack.configure(
+        backConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   public void updateInputs(AlgaeShooterIOInputs inputs) {
     inputs.algaeShooterFrontVoltage = algaeShooterMotorFront.getBusVoltage();
     inputs.algaeShooterFrontPosition = algaeShooterMotorFront.getEncoder().getPosition();
     inputs.algaeShooterFrontVelocity = algaeShooterMotorFront.getEncoder().getVelocity();
-    inputs.algaeShooterFromCurrent = algaeShooterMotorFront.getOutputCurrent();
-    inputs.algaeShooterFromTemperature = algaeShooterMotorFront.getMotorTemperature();
+    inputs.algaeShooterFrontCurrent = algaeShooterMotorFront.getOutputCurrent();
+    inputs.algaeShooterFrontTemperature = algaeShooterMotorFront.getMotorTemperature();
 
     inputs.algaeShooterBackVoltage = algaeShooterMotorBack.getBusVoltage();
     inputs.algaeShooterBackPosition = algaeShooterMotorBack.getEncoder().getPosition();

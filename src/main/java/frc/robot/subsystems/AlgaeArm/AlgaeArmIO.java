@@ -15,6 +15,7 @@ public interface AlgaeArmIO {
     public double algaeArmVelocity = 0.0;
     public double algaeArmAngle = 0.0;
     public double algaeArmTemp = 0.0;
+    public double algaeArmAppliedOutput = 0.0;
   }
 
   public default void updateInputs(AlgaeArmIOInputs inputs) {}
@@ -26,4 +27,4 @@ public interface AlgaeArmIO {
   public void setEncoder(double value);
 
   public void enableReverseSoftLimit(boolean enabled);
-} 
+}

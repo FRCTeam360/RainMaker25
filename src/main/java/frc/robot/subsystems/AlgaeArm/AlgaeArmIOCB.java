@@ -15,7 +15,6 @@ import com.revrobotics.spark.config.EncoderConfig;
 import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-
 import frc.robot.Constants;
 
 public class AlgaeArmIOCB implements AlgaeArmIO {
@@ -40,16 +39,16 @@ public class AlgaeArmIOCB implements AlgaeArmIO {
   public AlgaeArmIOCB() {
     sparkMaxConfig.idleMode(IdleMode.kBrake);
     sparkMaxConfig.inverted(false);
+    sparkMaxConfig.smartCurrentLimit(20, 5);
 
     ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
     closedLoopConfig.pid(kP, kI, kD);
-    closedLoopConfig.minOutput(-MAX_OUTPUT);
-    closedLoopConfig.maxOutput(MAX_OUTPUT);
+    closedLoopConfig.outputRange(-MAX_OUTPUT, MAX_OUTPUT);
     sparkMaxConfig.apply(closedLoopConfig);
 
     EncoderConfig encoderConfig = new EncoderConfig();
-    encoderConfig.positionConversionFactor(POSITION_CONVERSION_FACTOR);
-    encoderConfig.velocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
+    // encoderConfig.positionConversionFactor(POSITION_CONVERSION_FACTOR);
+    // encoderConfig.velocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
     sparkMaxConfig.apply(encoderConfig);
 
     SoftLimitConfig softLimitConfig = new SoftLimitConfig();
@@ -59,7 +58,8 @@ public class AlgaeArmIOCB implements AlgaeArmIO {
     softLimitConfig.reverseSoftLimitEnabled(true);
     sparkMaxConfig.apply(softLimitConfig);
 
-    armMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    armMotor.configure(
+        sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   public void updateInputs(AlgaeArmIOInputs inputs) {
@@ -68,6 +68,7 @@ public class AlgaeArmIOCB implements AlgaeArmIO {
     inputs.algaeArmVoltage = armMotor.getBusVoltage() * armMotor.getAppliedOutput();
     inputs.algaeArmCurrent = armMotor.getOutputCurrent();
     inputs.algaeArmTemp = armMotor.getMotorTemperature();
+    inputs.algaeArmAppliedOutput = armMotor.getAppliedOutput();
   }
 
   public void setDutyCycle(double dutyCycle) {
@@ -78,12 +79,13 @@ public class AlgaeArmIOCB implements AlgaeArmIO {
     armMotor.getClosedLoopController().setReference(position, ControlType.kPosition);
   }
 
-  public void enableReverseSoftLimit(boolean enabled){
+  public void enableReverseSoftLimit(boolean enabled) {
     sparkMaxConfig.softLimit.reverseSoftLimitEnabled(enabled);
   }
 
   /**
    * method for updating the encoder position
+   *
    * @param value new encoder position in motor rotations
    */
   public void setEncoder(double value) {

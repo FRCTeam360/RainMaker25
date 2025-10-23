@@ -4,47 +4,46 @@
 
 package frc.robot.subsystems.Vision;
 
-import org.littletonrobotics.junction.AutoLog;
-
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.math.geometry.Pose3d;
+import org.littletonrobotics.junction.AutoLog;
 
 public interface VisionIO {
   /** Creates a new VisionIO. */
   @AutoLog
-    public static class VisionIOInputs {
-        public double tx;
-        public double txAdjusted;
-        public double ty;
-        public double tyAdjusted;
-        public double tv;
-        public double pipeline;
-        public double tagID;
-        public Pose2d estimatedPose;
-        public double timestampSeconds;
-        public int[] targetIds;
-        public double[] distancesToTargets;
-        public boolean poseUpdated;
-        public Pose3d[] tagPoses;
-    }
+  public static class VisionIOInputs {
+    public double tx;
+    public double txAdjusted;
+    public double ty;
+    public double tyAdjusted;
+    public double tv;
+    public double pipeline;
+    public double tagID;
+    public Pose2d estimatedPose;
+    public double timestampSeconds;
+    public int[] targetIds;
+    public double[] distancesToTargets;
+    public boolean poseUpdated;
+    public Pose3d[] tagPoses;
+  }
 
-    public void updateInputs(VisionIOInputs inputs);
+  public void updateInputs(VisionIOInputs inputs);
 
-    public int getAprilTagID();
+  public void setLEDMode(int mode);
 
-    public double getTXRaw();
+  public int getAprilTagID();
 
-    public double getTYRaw();
+  public double getTXRaw();
 
-    public double getTV();
+  public double getTYRaw();
 
-    public double getPipeline();
+  public double getTV();
 
-    public void setPipeline(int pipeline);
+  public double getPipeline();
 
-    public void takeSnapshot();
+  public void setPipeline(int pipeline);
 
-    public void resetSnapshot();
+  public void takeSnapshot();
+
+  public void resetSnapshot();
 }

@@ -1,11 +1,19 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2025.3.1"
+    id 'com.diffplug.spotless' version '6.25.0'
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
+}
+
+spotless {
+    java {
+        googleJavaFormat()
+    }
+    enforceCheck false  // Don't automatically run spotlessCheck during build
 }
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
@@ -27,7 +35,9 @@ deploy {
                 // getTargetTypeClass is a shortcut to get the class type using a string
 
                 frcJava(getArtifactTypeClass('FRCJavaArtifact')) {
-                }
+   // Enable VisualVM connection
+}
+
 
                 // Static files artifact
                 frcStaticFileDeploy(getArtifactTypeClass('FileTreeArtifact')) {
@@ -110,3 +120,5 @@ wpi.java.configureTestTasks(test)
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
 }
+
+//https://www.google.com/imgres?q=sunset%20dog%20meme&imgurl=https%3A%2F%2Fi.imgflip.com%2F9f27fe.png&imgrefurl=https%3A%2F%2Fimgflip.com%2Fmemetemplate%2F569492762%2FDog-accepting-fate&docid=hHs1B8MUC154NM&tbnid=nX_Dz5Xk-FYyAM&vet=12ahUKEwjJpr2jx6uMAxXixuYEHSV9EAkQM3oECFYQAA..i&w=806&h=614&hcb=2&ved=2ahUKEwjJpr2jx6uMAxXixuYEHSV9EAkQM3oECFYQAA

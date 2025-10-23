@@ -4,14 +4,13 @@
 
 package frc.robot.subsystems.AlgaeArm;
 
-import java.util.function.DoubleSupplier;
-
-import org.littletonrobotics.junction.Logger;
-
-import edu.wpi.first.wpilibj.DutyCycle;
+import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.CommandLogger;
+import java.util.function.DoubleSupplier;
+import org.littletonrobotics.junction.Logger;
 
 public class AlgaeArm extends SubsystemBase {
   private final AlgaeArmIO io;
@@ -30,7 +29,7 @@ public class AlgaeArm extends SubsystemBase {
     io.setDutyCycle(dutyCycle);
   }
 
-  public void stop(){
+  public void stop() {
     io.setDutyCycle(0.0);
   }
 
@@ -40,6 +39,7 @@ public class AlgaeArm extends SubsystemBase {
 
   /**
    * method for setting encoder to a new value (i.e. for zeroing)
+   *
    * @param value new value in motor rotations
    */
   public void setEncoder(double value) {
@@ -52,8 +52,7 @@ public class AlgaeArm extends SubsystemBase {
 
   public Command setDutyCycleCmd(DoubleSupplier dutyCycleSupplier) {
     return this.runEnd(
-        () -> this.setDutyCycle(dutyCycleSupplier.getAsDouble()),
-        () -> this.setDutyCycle(0.0));
+        () -> this.setDutyCycle(dutyCycleSupplier.getAsDouble()), () -> this.setDutyCycle(0.0));
   }
 
   public Command setDutyCycleCmd(double dutyCycle) {
@@ -61,15 +60,29 @@ public class AlgaeArm extends SubsystemBase {
   }
 
   public Command setAlgaeArmAngleCmd(double angle) {
-    return CommandLogger.logCommand( this.runEnd(
-        () -> this.setPosition(angle),
-        () -> this.setPosition(angle)), "set algae arm angle cmd");
+    return CommandLogger.logCommand(
+        this.runEnd(() -> this.setPosition(angle), () -> this.setPosition(angle)),
+        "set algae arm angle cmd");
+  }
+
+  public Command zeroPositionAndZeroArm() {
+    return Commands.waitSeconds(0.2)
+        .andThen(
+            Commands.waitUntil(
+                () ->
+                    Math.abs(inputs.algaeArmCurrent) > 20.0
+                        && Math.abs(inputs.algaeArmVelocity) <= 1.0))
+        .deadlineFor(this.setDutyCycleCmd(-0.5))
+        .andThen(this.runOnce(() -> io.setEncoder(-10.0)));
   }
 
   @Override
   public void periodic() {
+    long periodicStartTime = HALUtil.getFPGATime();
     // This method will be called once per scheduler run
     io.updateInputs(inputs);
     Logger.processInputs("Algae Arm", inputs);
+    long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
+    Logger.recordOutput("Algae Arm: periodic loop time", (periodicLoopTime / 1000.0));
   }
 }

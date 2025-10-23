@@ -5,12 +5,6 @@
 package frc.robot.subsystems.ClimberWinch;
 
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.ClosedLoopConfig;
-import com.revrobotics.spark.config.EncoderConfig;
-import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -35,6 +29,7 @@ public class ClimberWinchIOCB implements ClimberWinchIO {
 
     config.idleMode(IdleMode.kBrake);
     config.inverted(true);
+    config.smartCurrentLimit(50);
     ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
     closedLoopConfig.pid(kP, kI, kD);
     config.apply(closedLoopConfig);
@@ -59,5 +54,4 @@ public class ClimberWinchIOCB implements ClimberWinchIO {
     inputs.winchCurrent = winchMotor.getOutputCurrent();
     inputs.winchTemp = winchMotor.getMotorTemperature();
   }
-
 }

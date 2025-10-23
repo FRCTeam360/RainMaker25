@@ -24,12 +24,13 @@ public class AlgaeShooterIOPB extends AlgaeShooterIOCB {
     );
 
     // TODO: add values
-    final double kP = 0.0;
+    final double kP = 0.0001;
     final double kI = 0.0;
     final double kD = 0.0;
-    
+    final double kFF = 0.000175;
+
     ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
-    closedLoopConfig.pid(kP, kI, kD);
+    closedLoopConfig.pidf(kP, kI, kD, kFF);
     frontConfig.apply(closedLoopConfig);
     backConfig.apply(closedLoopConfig);
     EncoderConfig encoderConfig = new EncoderConfig();
@@ -39,8 +40,12 @@ public class AlgaeShooterIOPB extends AlgaeShooterIOCB {
     backConfig.follow(Constants.PracticeBotConstants.ALGAE_SHOOTER_FRONT_ID, true);
     backConfig.inverted(true);
     frontConfig.inverted(false);
-    
-    algaeShooterMotorFront.configure(frontConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    algaeShooterMotorBack.configure(backConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    backConfig.idleMode(IdleMode.kCoast);
+    frontConfig.idleMode(IdleMode.kCoast);
+
+    algaeShooterMotorFront.configure(
+        frontConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    algaeShooterMotorBack.configure(
+        backConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 }

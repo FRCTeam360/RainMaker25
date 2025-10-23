@@ -9,9 +9,9 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig;
-import com.revrobotics.spark.config.EncoderConfig;
-import com.revrobotics.spark.config.SoftLimitConfig;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import frc.robot.Constants;
 
@@ -26,24 +26,23 @@ public class AlgaeTiltIOPB extends AlgaeTiltIOCB {
     super.kP = 0.035 * 2.0;
 
     sparkMaxConfig.idleMode(IdleMode.kBrake);
-    sparkMaxConfig.inverted(false);
-
-    SoftLimitConfig softLimitConfig = new SoftLimitConfig();
-    softLimitConfig.forwardSoftLimit(forwardLimit);
-    softLimitConfig.forwardSoftLimitEnabled(true);
-    softLimitConfig.reverseSoftLimit(reverseLimit);
-    softLimitConfig.reverseSoftLimitEnabled(true);
-    sparkMaxConfig.apply(softLimitConfig);
+    sparkMaxConfig.inverted(true); // USED TO BE FALSE 3/15
+    sparkMaxConfig.smartCurrentLimit(20, 5);
 
     ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
     closedLoopConfig.pid(kP, kI, kD);
 
+    closedLoopConfig.outputRange(-1.0, 1.0);
+    closedLoopConfig.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
+    closedLoopConfig.positionWrappingEnabled(true);
+    closedLoopConfig.positionWrappingInputRange(0, 1.0);
+
     sparkMaxConfig.apply(closedLoopConfig);
 
-    EncoderConfig encoderConfig = new EncoderConfig();
-    encoderConfig.positionConversionFactor(positionConversionFactor);
+    AbsoluteEncoderConfig absoluteEncoderConfig = new AbsoluteEncoderConfig();
+    absoluteEncoderConfig.zeroOffset(ZERO_OFFSET);
 
-    sparkMaxConfig.apply(encoderConfig);
+    sparkMaxConfig.apply(absoluteEncoderConfig);
     motor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 

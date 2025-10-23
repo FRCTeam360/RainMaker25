@@ -6,7 +6,4 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 
 public record VisionMeasurement(
-        double timestamp,
-        Pose2d estimatedPose,
-        Matrix<N3, N1> standardDeviation) {
-}
+    double timestamp, Pose2d estimatedPose, Matrix<N3, N1> standardDeviation) {}

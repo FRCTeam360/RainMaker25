@@ -4,19 +4,22 @@
 
 package frc.robot.subsystems.CoralShooter;
 
-import com.reduxrobotics.sensors.canandcolor.Canandcolor;
+import com.ctre.phoenix6.configs.CANrangeConfiguration;
+import com.ctre.phoenix6.hardware.CANrange;
+import com.ctre.phoenix6.signals.UpdateModeValue;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import frc.robot.Constants;
 
 /** Add your docs here. */
 public class CoralShooterIOCB implements CoralShooterIO {
+  private final SparkMax outtakeMotor =
+      new SparkMax(Constants.CompBotConstants.CORAL_SHOOTER_ID, MotorType.kBrushless);
 
     protected SparkMax outtakeMotor;
     protected RelativeEncoder encoder;
@@ -42,30 +45,71 @@ public class CoralShooterIOCB implements CoralShooterIO {
         outtakeMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
-    public void setDutyCycle(double dutyCycle) {
-        outtakeMotor.set(dutyCycle);
-    }
+  private final double KP = 0.0;
+  private final double KI = 0.0;
+  private final double KD = 0.0;
+  private final double KF = 0.0;
 
     protected boolean isInOuttakeSensor() {
         return outtakeSensor.getProximity() < 0.1;
     }
 
-    private boolean isInIntakeSensor() {
-        return intakeSensor.getProximity() < 0.0575;
-    }
+    outtakeMotor.configure(
+        sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    public void stop() {
-        outtakeMotor.stopMotor();
-    }
+    intakeConfig.ProximityParams.MinSignalStrengthForValidMeasurement =
+        2000; // If CANrange has a signal strength of at least 2000, it is a valid measurement.
+    intakeConfig.ProximityParams.ProximityThreshold =
+        0.1; // If CANrange detects an object within 0.1 meters, it will trigger the "isDetected"
+    // signal.
+    // intakeConfig.FovParams.withFOVRangeX(10.0);
+    // intakeConfig.FovParams.withFOVRangeY(10.0);
+    intakeConfig.ToFParams.withUpdateMode(UpdateModeValue.ShortRangeUserFreq);
 
-    public void updateInputs(CoralShooterIOInputs inputs) {
-        inputs.outtakeStatorCurrent = outtakeMotor.getOutputCurrent();
-        inputs.outtakePosition = encoder.getPosition();
-        inputs.outtakeVelocity = encoder.getVelocity();
-        inputs.outtakeVoltage = outtakeMotor.getAppliedOutput() * outtakeMotor.getBusVoltage();
-        inputs.outtakeSensor = this.isInOuttakeSensor();
-        inputs.outtakeSensorProximity = outtakeSensor.getProximity();
-        inputs.intakeSensor = this.isInIntakeSensor();
-        inputs.intakeSensorProximity = intakeSensor.getProximity();
-    }
+    outtakeConfig.ProximityParams.MinSignalStrengthForValidMeasurement =
+        2000; // If CANrange has a signal strength of at least 2000, it is a valid measurement.
+    outtakeConfig.ProximityParams.ProximityThreshold =
+        0.1; // If CANrange detects an object within 0.1 meters, it will trigger the "isDetected"
+    // signal.
+    // outtakeConfig.FovParams.withFOVRangeX(10.0);
+    // outtakeConfig.FovParams.withFOVRangeY(10.0);
+    outtakeConfig.ToFParams.withUpdateMode(UpdateModeValue.ShortRangeUserFreq);
+
+    // canRangeConfig.ToFParams.UpdateMode = UpdateModeValue.ShortRange100Hz; // Make the CANrange
+    // update as fast as possible at 100 Hz. This requires short-range mode.
+
+    intakeSensor.getConfigurator().apply(intakeConfig);
+    outtakeSensor.getConfigurator().apply(outtakeConfig);
+  }
+
+  public void setDutyCycle(double dutyCycle) {
+    outtakeMotor.set(dutyCycle);
+  }
+
+  private boolean isInIntakeSensor() {
+    // return intakeSensor.getDistance().refresh().getValueAsDouble() < 0.1;
+    return intakeSensor.getIsDetected().getValue();
+  }
+
+  private boolean isInOuttakeSensor() {
+    // return outtakeSensor.getDistance().refresh().getValueAsDouble() < 0.1;
+    return outtakeSensor.getIsDetected().getValue();
+  }
+
+  public void stop() {
+    outtakeMotor.stopMotor();
+  }
+
+  public void updateInputs(CoralShooterIOInputs inputs) {
+    inputs.outtakeStatorCurrent = outtakeMotor.getOutputCurrent();
+    inputs.outtakePosition = encoder.getPosition();
+    inputs.outtakeVelocity = encoder.getVelocity();
+    inputs.outtakeVoltage = outtakeMotor.getAppliedOutput() * outtakeMotor.getBusVoltage();
+    inputs.outtakeSensor = this.isInOuttakeSensor();
+    // inputs.outtakeSensorProximity = outtakeSensor.getProximity();
+    inputs.outtakeSensorProximity = outtakeSensor.getDistance().refresh().getValueAsDouble();
+    inputs.intakeSensor = this.isInIntakeSensor();
+    // inputs.intakeSensorProximity = intakeSensor.getProximity();
+    inputs.intakeSensorProximity = intakeSensor.getDistance().refresh().getValueAsDouble();
+  }
 }

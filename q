@@ -1,0 +1,13 @@
+[1mdiff --git a/src/main/java/frc/robot/RobotContainer.java b/src/main/java/frc/robot/RobotContainer.java[m
+[1mindex c528558..d81933d 100644[m
+[1m--- a/src/main/java/frc/robot/RobotContainer.java[m
+[1m+++ b/src/main/java/frc/robot/RobotContainer.java[m
+[36m@@ -480,6 +480,8 @@[m [mpublic class RobotContainer {[m
+   }[m
+ [m
+   private void configureBindings() {[m
+[32m+[m[32m    testCont.b().whileTrue(commandFactory.rotate());[m
+[32m+[m[32m    // testCont.a().onTrue(commandFactory.rotateDriveTrain360());[m
+     vision.setDefaultCommand(consumeVisionMeasurements.ignoringDisable(true));[m
+ [m
+     driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(driverCont));[m

@@ -538,7 +538,7 @@ public class CommandFactory {
 
   public Command rotateDriveTrain360() {
     drivetrain.zero();
-    for (int i = 1; i < 5; i++) {
+    for (int i = 0; i < 4; i++) {
       drivetrain.getModule(i).getDriveMotor().setPosition(0.0);
       // startPositions[i - 1] =
       // drivetrain.getModule(i).getDriveMotor().getPosition().getValueAsDouble();

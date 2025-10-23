@@ -18,6 +18,7 @@ public class ClimberWinchIOPB extends ClimberWinchIOCB {
 
   /** Creates a new ClimberIOPB. */
   public ClimberWinchIOPB() {
+    super();
     winchMotor = new SparkMax(PracticeBotConstants.CLIMBER_WINCH_ID, MotorType.kBrushless);
 
 

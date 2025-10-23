@@ -20,6 +20,7 @@ public class AlgaeTiltIOPB extends AlgaeTiltIOCB {
 
   /** Creates a new AlgaeIntakeIOPB. */
   public AlgaeTiltIOPB() {
+    super();
     super.motor = new SparkMax(Constants.PracticeBotConstants.ALGAE_TILT, MotorType.kBrushless);
 
     super.kP = 0.035 * 2.0;

@@ -5,31 +5,27 @@
 package frc.robot.subsystems.ClimberWinch;
 
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.ClosedLoopConfig;
-import com.revrobotics.spark.config.EncoderConfig;
-import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import frc.robot.Constants.CompBotConstants;
-import frc.robot.Constants.PracticeBotConstants;
 
 public class ClimberWinchIOCB implements ClimberWinchIO {
 
-  private final SparkMax winchMotor = new SparkMax(CompBotConstants.CLIMBER_WINCH_ID, MotorType.kBrushless);
+  private final SparkMax winchMotor =
+      new SparkMax(CompBotConstants.CLIMBER_WINCH_ID, MotorType.kBrushless);
   private final RelativeEncoder winchEncoder = winchMotor.getEncoder();
 
   private final double kP = 0.2;
   private final double kI = 0.0;
   private final double kD = 0.0;
-  
+
   private final double positionConversionFactor = 1.0;
   private final SparkMaxConfig config = new SparkMaxConfig();
 
@@ -62,5 +58,4 @@ public class ClimberWinchIOCB implements ClimberWinchIO {
     inputs.winchCurrent = winchMotor.getOutputCurrent();
     inputs.winchTemp = winchMotor.getMotorTemperature();
   }
-
 }

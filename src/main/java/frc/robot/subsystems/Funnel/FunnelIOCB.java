@@ -13,36 +13,36 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 import frc.robot.Constants;
 
 public class FunnelIOCB implements FunnelIO {
-    private final SparkFlex funnelMotor = new SparkFlex(Constants.CompBotConstants.FUNNEL_ID, MotorType.kBrushless);
-    private final double positionConversionFactor = 1.0;
+  private final SparkFlex funnelMotor =
+      new SparkFlex(Constants.CompBotConstants.FUNNEL_ID, MotorType.kBrushless);
+  private final double positionConversionFactor = 1.0;
 
-    private SparkFlexConfig motorConfig = new SparkFlexConfig();
+  private SparkFlexConfig motorConfig = new SparkFlexConfig();
 
-    /** Creates a new AlgaeShooterIOWB. */
-    public FunnelIOCB() {
-        
-        EncoderConfig encoderConfig = new EncoderConfig();
-        encoderConfig.positionConversionFactor(positionConversionFactor);
-        motorConfig.apply(encoderConfig);
-        
-        motorConfig.inverted(true);
+  /** Creates a new AlgaeShooterIOWB. */
+  public FunnelIOCB() {
 
-        funnelMotor.configure(motorConfig, ResetMode.kResetSafeParameters,PersistMode.kPersistParameters
-        );
-    }
+    EncoderConfig encoderConfig = new EncoderConfig();
+    encoderConfig.positionConversionFactor(positionConversionFactor);
+    motorConfig.apply(encoderConfig);
 
-    public void updateInputs(FunnelIOInputs inputs) {
-        inputs.funnelCurrent = funnelMotor.getOutputCurrent();
-        inputs.funnelVoltage = funnelMotor.getBusVoltage();
-        inputs.funnelVelocity = funnelMotor.getEncoder().getVelocity();
-    }
+    motorConfig.inverted(true);
 
-    public void setDutyCycle(double dutyCycle) {
-        funnelMotor.set(dutyCycle);
-    }
+    funnelMotor.configure(
+        motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+  }
 
-    public void stop() {
-        funnelMotor.stopMotor();
-    }
+  public void updateInputs(FunnelIOInputs inputs) {
+    inputs.funnelCurrent = funnelMotor.getOutputCurrent();
+    inputs.funnelVoltage = funnelMotor.getBusVoltage();
+    inputs.funnelVelocity = funnelMotor.getEncoder().getVelocity();
+  }
+
+  public void setDutyCycle(double dutyCycle) {
+    funnelMotor.set(dutyCycle);
+  }
+
+  public void stop() {
+    funnelMotor.stopMotor();
+  }
 }
-

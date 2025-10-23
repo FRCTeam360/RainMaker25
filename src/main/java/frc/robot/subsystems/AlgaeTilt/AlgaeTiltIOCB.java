@@ -5,8 +5,6 @@
 package frc.robot.subsystems.AlgaeTilt;
 
 import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -14,19 +12,19 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.EncoderConfig;
-import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
-
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class AlgaeTiltIOCB implements AlgaeTiltIO {
-  private final SparkMax motor = new SparkMax(Constants.CompBotConstants.ALGAE_TILT, MotorType.kBrushless);
-  private final AbsoluteEncoder absEncoder = motor.getAbsoluteEncoder(); // TODO: make absolute when we get one!!
-  // private final RelativeEncoder encoder = motor.getEncoder(); // TODO: make absolute when we get one!!
+  private final SparkMax motor =
+      new SparkMax(Constants.CompBotConstants.ALGAE_TILT, MotorType.kBrushless);
+  private final AbsoluteEncoder absEncoder =
+      motor.getAbsoluteEncoder(); // TODO: make absolute when we get one!!
+  // private final RelativeEncoder encoder = motor.getEncoder(); // TODO: make absolute when we get
+  // one!!
 
   private final double kP = 4;
   private final double kI = 0.0;
@@ -36,7 +34,7 @@ public class AlgaeTiltIOCB implements AlgaeTiltIO {
   private final double reverseLimit = -10.0;
 
   private final double ZERO_OFFSET = 0.7170253;
-  //0.5551491; //0.7218491 + 0.833;
+  // 0.5551491; //0.7218491 + 0.833;
 
   private final double positionConversionFactor = 1.0;
   private final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
@@ -46,7 +44,6 @@ public class AlgaeTiltIOCB implements AlgaeTiltIO {
     sparkMaxConfig.idleMode(IdleMode.kBrake);
     sparkMaxConfig.inverted(true);
     sparkMaxConfig.smartCurrentLimit(20, 5);
-
 
     // SoftLimitConfig softLimitConfig = new SoftLimitConfig();
     // softLimitConfig.forwardSoftLimit(forwardLimit);
@@ -68,7 +65,7 @@ public class AlgaeTiltIOCB implements AlgaeTiltIO {
 
     EncoderConfig encoderConfig = new EncoderConfig();
     encoderConfig.positionConversionFactor(positionConversionFactor);
-    
+
     AbsoluteEncoderConfig absoluteEncoderConfig = new AbsoluteEncoderConfig();
     absoluteEncoderConfig.zeroOffset(ZERO_OFFSET);
 
@@ -86,10 +83,9 @@ public class AlgaeTiltIOCB implements AlgaeTiltIO {
 
   /**
    * method for updating the encoder value
-   * 
+   *
    * @param value sets the new encoder value in rotations!!
    */
-
   public void updateInputs(AlgaeTiltIOInputs inputs) {
     inputs.armDutyCycle = motor.get();
     inputs.armPositionRelative = absEncoder.getPosition();
@@ -99,9 +95,9 @@ public class AlgaeTiltIOCB implements AlgaeTiltIO {
     inputs.armAmps = motor.getOutputCurrent();
   }
 
-// @Override
-// public void setEncoder(double value) {
-//     // TODO Auto-generated method stub
-//     throw new UnsupportedOperationException("Unimplemented method 'setEncoder'");
-// }
+  // @Override
+  // public void setEncoder(double value) {
+  //     // TODO Auto-generated method stub
+  //     throw new UnsupportedOperationException("Unimplemented method 'setEncoder'");
+  // }
 }

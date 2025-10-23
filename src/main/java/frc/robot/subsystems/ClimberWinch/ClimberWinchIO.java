@@ -6,11 +6,8 @@ package frc.robot.subsystems.ClimberWinch;
 
 import org.littletonrobotics.junction.AutoLog;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 public interface ClimberWinchIO {
   /** Creates a new ClimberIO. */
-
   @AutoLog
   public static class ClimberWinchIOInputs {
     public double winchVelocity = 0.0;
@@ -25,5 +22,4 @@ public interface ClimberWinchIO {
   public void setDutyCycle(double dutyCycle);
 
   public void setPosition(double position);
-
 }

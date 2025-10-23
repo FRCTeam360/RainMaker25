@@ -4,18 +4,16 @@
 
 package frc.robot.subsystems.ClimberWinch;
 
-import java.util.function.DoubleSupplier;
-
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.function.DoubleSupplier;
+import org.littletonrobotics.junction.Logger;
 
 public class ClimberWinch extends SubsystemBase {
   private final ClimberWinchIO io;
   private final ClimberWinchIOInputsAutoLogged inputs = new ClimberWinchIOInputsAutoLogged();
-  
+
   /** Creates a new Climber. */
   public ClimberWinch(ClimberWinchIO io) {
     this.io = io;
@@ -30,16 +28,18 @@ public class ClimberWinch extends SubsystemBase {
   }
 
   public Command setDutyCycleCmd(double dutyCycle) {
-      return this.runEnd(() -> this.setDutyCycle(dutyCycle), () -> this.setDutyCycle(0));
+    return this.runEnd(() -> this.setDutyCycle(dutyCycle), () -> this.setDutyCycle(0));
   }
 
   public Command setDutyCycleCmd(DoubleSupplier dutyCycle) {
-    return this.runEnd(() -> this.setDutyCycle(dutyCycle.getAsDouble()), () -> this.setDutyCycle(0));
-}
+    return this.runEnd(
+        () -> this.setDutyCycle(dutyCycle.getAsDouble()), () -> this.setDutyCycle(0));
+  }
 
   public void setPosition(double position) {
     io.setPosition(position);
   }
+
   public double getPosition() {
     return inputs.winchPosition;
   }
@@ -54,6 +54,6 @@ public class ClimberWinch extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Climber", inputs);
     long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
-    Logger.recordOutput( "Climber: periodic loop time", (periodicLoopTime / 1000.0));
+    Logger.recordOutput("Climber: periodic loop time", (periodicLoopTime / 1000.0));
   }
 }

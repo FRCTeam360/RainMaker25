@@ -5,6 +5,7 @@
 package frc.robot.subsystems.AlgaeTilt;
 
 import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -13,22 +14,24 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class AlgaeTiltIOPB implements AlgaeTiltIO {
-  private final SparkMax motor =
-      new SparkMax(Constants.PracticeBotConstants.ALGAE_TILT, MotorType.kBrushless);
-  private final AbsoluteEncoder encoder =
-      motor.getAbsoluteEncoder(); // TODO: make absolute when we get one!!
+  private final SparkMax motor = new SparkMax(Constants.PracticeBotConstants.ALGAE_TILT, MotorType.kBrushless);
+  private final AbsoluteEncoder encoder = motor.getAbsoluteEncoder(); // TODO: make absolute when we get one!!
 
   private final double kP = 4.0;
   private final double kI = 0.0;
   private final double kD = 0.0;
 
   private final double forwardLimit = 27.0;
-  private final double reverseLimit = -5.0; // used to be 10 3/15
+  private final double reverseLimit = -5.0; //used to be 10 3/15
 
   private final double ZERO_OFFSET = 0.3735929;
 
@@ -38,12 +41,12 @@ public class AlgaeTiltIOPB implements AlgaeTiltIO {
   /** Creates a new AlgaeIntakeIOPB. */
   public AlgaeTiltIOPB() {
     sparkMaxConfig.idleMode(IdleMode.kBrake);
-    sparkMaxConfig.inverted(true); // USED TO BE FALSE 3/15
+    sparkMaxConfig.inverted(true); //USED TO BE FALSE 3/15
     sparkMaxConfig.smartCurrentLimit(20, 5);
-
+    
     ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
     closedLoopConfig.pid(kP, kI, kD);
-
+    
     closedLoopConfig.outputRange(-1.0, 1.0);
     closedLoopConfig.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
     closedLoopConfig.positionWrappingEnabled(true);
@@ -66,14 +69,14 @@ public class AlgaeTiltIOPB implements AlgaeTiltIO {
     motor.getClosedLoopController().setReference(position, ControlType.kPosition);
   }
 
-  //   /**
-  //    * method for updating the encoder value
-  //    *
-  //    * @param value sets the new encoder value in rotations!!
-  //    */
-  //   public void setEncoder(double value) {
-  //     encoder.setPosition(value);
-  //   }
+//   /**
+//    * method for updating the encoder value
+//    * 
+//    * @param value sets the new encoder value in rotations!!
+//    */
+//   public void setEncoder(double value) {
+//     encoder.setPosition(value);
+//   }
 
   public void updateInputs(AlgaeTiltIOInputs inputs) {
     inputs.armDutyCycle = motor.get();

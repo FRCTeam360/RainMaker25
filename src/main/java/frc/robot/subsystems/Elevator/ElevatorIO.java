@@ -6,8 +6,12 @@ package frc.robot.subsystems.Elevator;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 public interface ElevatorIO {
   /** Creates a new ElevatorIO. */
+
   @AutoLog
   public static class ElevatorIOInputs {
     public double elevatorStatorCurrent = 0.0;
@@ -16,7 +20,7 @@ public interface ElevatorIO {
     public double elevatorVelocity = 0.0;
     public double elevatorPosition = 0.0;
     public boolean elevatorSensor = false;
-    // insert inputs
+      // insert inputs
   }
 
   public default void updateInputs(ElevatorIOInputs inputs) {}
@@ -28,4 +32,5 @@ public interface ElevatorIO {
   public void stop();
 
   public void setEncoder(double value);
+
 }

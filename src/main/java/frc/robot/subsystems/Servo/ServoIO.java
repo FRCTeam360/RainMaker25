@@ -6,14 +6,16 @@ package frc.robot.subsystems.Servo;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 public interface ServoIO {
   /** Creates a new ServoIO. */
   @AutoLog
   public static class ServoIOInputs {
     public double setOutput = 0.0;
-  }
+}
 
-  public default void updateInputs(ServoIOInputs inputs) {}
+  public default void updateInputs(ServoIOInputs inputs){}
 
   public void setServoSpeed(double speed);
 }

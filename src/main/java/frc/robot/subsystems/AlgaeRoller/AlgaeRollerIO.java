@@ -6,6 +6,8 @@ package frc.robot.subsystems.AlgaeRoller;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 public interface AlgaeRollerIO {
   /** Creates a new AlgaeIntakeRollerIO. */
   @AutoLog

@@ -7,17 +7,17 @@ package frc.robot.subsystems.Funnel;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface FunnelIO {
-  /** Creates a new FunnelIO. */
-  @AutoLog
-  public static class FunnelIOInputs {
-    public double funnelCurrent = 0.0;
-    public double funnelVoltage = 0.0;
-    public double funnelVelocity = 0.0;
-  }
+    /** Creates a new FunnelIO. */
+    @AutoLog
+    public static class FunnelIOInputs {
+        public double funnelCurrent = 0.0;
+        public double funnelVoltage = 0.0;
+        public double funnelVelocity = 0.0;
+    }
 
-  public default void updateInputs(FunnelIOInputs inputs) {}
+    public default void updateInputs(FunnelIOInputs inputs) {}
 
-  public void setDutyCycle(double dutyCycle);
+    public void setDutyCycle(double dutyCycle);
 
-  public void stop();
+    public void stop();
 }

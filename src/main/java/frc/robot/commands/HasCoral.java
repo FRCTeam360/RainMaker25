@@ -4,21 +4,22 @@
 
 package frc.robot.commands;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.*;
 import frc.robot.Constants.SetPointConstants.ElevatorHeights;
 import frc.robot.subsystems.CoralShooter.CoralShooter;
 import frc.robot.subsystems.Elevator.Elevator;
-import org.littletonrobotics.junction.Logger;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class HasCoral extends Command {
-  private final CoralShooter coralShooter;
-  private final Elevator elevator;
-  private final String CMD_NAME = "HasCoral";
+    private final CoralShooter coralShooter;
+    private final Elevator elevator;
+    private final String CMD_NAME = "HasCoral";
 
-  private boolean isFinished;
+    private boolean isFinished;
 
   /** Creates a new HasCoral. */
   public HasCoral(CoralShooter coralShooter, Elevator elevator) {
@@ -37,17 +38,18 @@ public class HasCoral extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
+    if(coralShooter.getIntakeSensor() || coralShooter.getOuttakeSensor()) {
 
-    if (coralShooter.getIntakeSensor() || coralShooter.getOuttakeSensor()) {
+        new SequentialCommandGroup(
+            elevator.setElevatorHeight(ElevatorHeights.AUTO_LEVEL_FOUR),
+            coralShooter.basicShootCmd()
+        );
 
-      new SequentialCommandGroup(
-          elevator.setElevatorHeight(ElevatorHeights.AUTO_LEVEL_FOUR),
-          coralShooter.basicShootCmd());
-
-      isFinished = true;
+        isFinished = true;
 
     } else {
-      isFinished = true;
+        isFinished = true;
     }
   }
 

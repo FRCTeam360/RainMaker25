@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.ClimberWinch;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -17,6 +19,9 @@ import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.simulation.PWMSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.CoralShooter.CoralShooterIO.CoralShooterIOInputs;
 
 public class ClimberWinchIOSim implements ClimberWinchIO {
 
@@ -25,14 +30,13 @@ public class ClimberWinchIOSim implements ClimberWinchIO {
 
   private final PWMSparkMax winchMotor = new PWMSparkMax(5);
 
-  private final LinearSystem<N1, N1, N1> plant =
-      LinearSystemId.createFlywheelSystem(gearbox, 0.00113951385, 1.0); // TODO: find actual MOI
+  private final LinearSystem<N1, N1, N1> plant = LinearSystemId.createFlywheelSystem(
+      gearbox, 0.00113951385, 1.0); // TODO: find actual MOI
 
-  private final FlywheelSim climberSim =
-      new FlywheelSim(
-          plant, //
-          gearbox, // gearbox
-          0.01);
+  private final FlywheelSim climberSim = new FlywheelSim(
+      plant, //
+      gearbox, // gearbox
+      0.01);
 
   private final EncoderSim simWinchEncoder = new EncoderSim(winchEncoder);
   private final PWMSim simWinchMotor = new PWMSim(winchMotor);
@@ -46,8 +50,7 @@ public class ClimberWinchIOSim implements ClimberWinchIO {
     climberSim.update(0.02);
     simWinchEncoder.setDistance(simWinchMotor.getPosition());
 
-    RoboRioSim.setVInVoltage(
-        BatterySim.calculateDefaultBatteryLoadedVoltage(climberSim.getCurrentDrawAmps()));
+    RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(climberSim.getCurrentDrawAmps()));
 
     inputs.winchPosition = simWinchMotor.getPosition();
     inputs.winchVelocity = climberSim.getAngularVelocityRPM();

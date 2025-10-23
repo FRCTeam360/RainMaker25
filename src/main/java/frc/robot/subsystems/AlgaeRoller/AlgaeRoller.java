@@ -4,10 +4,11 @@
 
 package frc.robot.subsystems.AlgaeRoller;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.littletonrobotics.junction.Logger;
 
 public class AlgaeRoller extends SubsystemBase {
   private final AlgaeRollerIO io;
@@ -22,12 +23,15 @@ public class AlgaeRoller extends SubsystemBase {
     io.setDutyCycle(duty);
   }
 
-  public void stop() {
+  public void stop(){
     io.setDutyCycle(0.0);
   }
 
   public Command setDutyCycleCmd(double duty) {
-    return this.runEnd(() -> io.setDutyCycle(duty), () -> io.setDutyCycle(0.0));
+    return this.runEnd(
+      () -> io.setDutyCycle(duty),
+      () -> io.setDutyCycle(0.0)
+    );
   }
 
   @Override
@@ -36,6 +40,6 @@ public class AlgaeRoller extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Algae Intake Roller", inputs);
     long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
-    Logger.recordOutput("Algae Intake Roller: periodic loop time", (periodicLoopTime / 1000.0));
+    Logger.recordOutput( "Algae Intake Roller: periodic loop time", (periodicLoopTime / 1000.0));
   }
 }

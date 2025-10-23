@@ -6,6 +6,8 @@ package frc.robot.subsystems.AlgaeTilt;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 public interface AlgaeTiltIO {
   /** Creates a new AlgaeIntakeIO. */
   @AutoLog
@@ -22,7 +24,7 @@ public interface AlgaeTiltIO {
 
   public void setPosition(double position);
 
-  //   public void setEncoder(double value);
+//   public void setEncoder(double value);
 
   public default void updateInputs(AlgaeTiltIOInputs inputs) {}
 }

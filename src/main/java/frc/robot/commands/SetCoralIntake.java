@@ -10,7 +10,6 @@ import frc.robot.subsystems.CoralShooter.CoralShooter;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class SetCoralIntake extends Command {
   private CoralShooter coralShooter;
-
   /** Creates a new SetCoralIntake. */
   public SetCoralIntake(CoralShooter coralShooter) {
     this.coralShooter = coralShooter;
@@ -27,6 +26,7 @@ public class SetCoralIntake extends Command {
   public void execute() {
     coralShooter.setDutyCycle(-0.3);
   }
+  
 
   // Called once the command ends or is interrupted.
   @Override

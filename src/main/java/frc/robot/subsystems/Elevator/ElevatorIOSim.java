@@ -4,31 +4,44 @@
 
 package frc.robot.subsystems.Elevator;
 
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
+import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
+import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
+
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+
+import edu.wpi.first.epilogue.Logged;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.motorcontrol.PWMTalonFX;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.PWMSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.WoodbotConstants;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
-import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
-import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
-import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 
 public class ElevatorIOSim implements ElevatorIO {
   /** Creates a new ElevatorIOSim. */
-  private DCMotor gearbox = DCMotor.getFalcon500(1);
 
+  private DCMotor gearbox = DCMotor.getFalcon500(1);
   public static Encoder encoder = new Encoder(8, 9);
 
   final double UPPER_LIMIT = 20;
@@ -42,24 +55,23 @@ public class ElevatorIOSim implements ElevatorIO {
   final double kS = 0.05;
   final double kV = 0.0;
 
-  private ProfiledPIDController pidController =
-      new ProfiledPIDController(kP, kI, kD, new TrapezoidProfile.Constraints(600, 300));
+  private ProfiledPIDController pidController = new ProfiledPIDController(kP, kI, kD,
+      new TrapezoidProfile.Constraints(600, 300));
   private ElevatorFeedforward feedforward = new ElevatorFeedforward(kS, kG, kV, kA);
 
   private final PWMTalonFX motor = new PWMTalonFX(1);
 
-  public final ElevatorSim elevatorSim =
-      new ElevatorSim(
-          gearbox,
-          1.0, // elevator gearing
-          2.0, // carriage mass
-          Units.inchesToMeters(2.0), // elevator drum radius
-          LOWER_LIMIT, // min elevator height meters
-          UPPER_LIMIT, // max elevator height meters
-          true,
-          0,
-          0.01,
-          0.0);
+  public final ElevatorSim elevatorSim = new ElevatorSim(
+      gearbox,
+      1.0, // elevator gearing
+      2.0, // carriage mass
+      Units.inchesToMeters(2.0), // elevator drum radius
+      LOWER_LIMIT, // min elevator height meters
+      UPPER_LIMIT, // max elevator height meters
+      true,
+      0,
+      0.01,
+      0.0);
 
   // private DCMotorSim elevatorSim = new DCMotorSim(
   // LinearSystemId.createDCMotorSystem(DCMotor.getFalcon500(1), 0.004,
@@ -69,13 +81,10 @@ public class ElevatorIOSim implements ElevatorIO {
   private final EncoderSim simEncoder = new EncoderSim(encoder);
   private final PWMSim simMotor = new PWMSim(motor);
 
-  private final LoggedMechanism2d mech2d =
-      new LoggedMechanism2d(20, 50, new Color8Bit(Color.kBlue));
+  private final LoggedMechanism2d mech2d = new LoggedMechanism2d(20, 50, new Color8Bit(Color.kBlue));
   private final LoggedMechanismRoot2d mech2dRoot = mech2d.getRoot("elevator root", 10, 0);
-  private final LoggedMechanismLigament2d elevatorMech2d =
-      mech2dRoot.append(
-          new LoggedMechanismLigament2d(
-              "elevator", elevatorSim.getPositionMeters(), 90, 5, new Color8Bit(Color.kCoral)));
+  private final LoggedMechanismLigament2d elevatorMech2d = mech2dRoot.append(
+      new LoggedMechanismLigament2d("elevator", elevatorSim.getPositionMeters(), 90, 5, new Color8Bit(Color.kCoral)));
 
   public ElevatorIOSim() {
     // distance per pulse = (distance per revolution) / (pulses per revolution)
@@ -89,9 +98,8 @@ public class ElevatorIOSim implements ElevatorIO {
     elevatorSim.setInput(simMotor.getSpeed() * RobotController.getBatteryVoltage());
     elevatorSim.update(0.02);
     simEncoder.setDistance(elevatorSim.getPositionMeters());
-    RoboRioSim.setVInVoltage(
-        BatterySim.calculateDefaultBatteryLoadedVoltage(elevatorSim.getCurrentDrawAmps()));
-    // elevatorMech2d.setLength(elevatorSim.getPositionMeters());
+    RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(elevatorSim.getCurrentDrawAmps()));
+    //elevatorMech2d.setLength(elevatorSim.getPositionMeters());
     elevatorMech2d.setLength(encoder.getDistance());
 
     Logger.recordOutput("elevator sim", mech2d);
@@ -118,11 +126,11 @@ public class ElevatorIOSim implements ElevatorIO {
     simMotor.setSpeed(dutyCycle);
   }
 
-  public void zeroElevatorEncoder() {}
+  public void zeroElevatorEncoder(){ }
 
   public void setEncoder(double value) {}
 
-  public void stop() {
+  public void stop(){
     simMotor.setSpeed(0.0);
   }
 }

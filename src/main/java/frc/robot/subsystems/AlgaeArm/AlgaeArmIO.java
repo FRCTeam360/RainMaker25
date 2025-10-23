@@ -27,4 +27,4 @@ public interface AlgaeArmIO {
   public void setEncoder(double value);
 
   public void enableReverseSoftLimit(boolean enabled);
-}
+} 

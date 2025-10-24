@@ -106,6 +106,25 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         "DrivetrainFieldOriented");
   }
 
+  public final Command rotateDrivetrain() { // field oriented drive command!
+    SwerveRequest.FieldCentric drive =
+        new SwerveRequest.FieldCentric(); // creates a fieldcentric drive
+    // .withDriveRequestType(DriveRequestType.Velocity); // Use closed-loop control for drive motors
+
+    return CommandLogger.logCommand(
+        this.applyRequest(
+            () ->
+                drive
+                    .withVelocityX(0.0) // Drive forward with negative Y (forward)
+                    .withVelocityY(0.0) // Drive left with negative X (left)
+                    .withRotationalRate(
+                        0.25
+                            * (maxAngularRate
+                                / 2.0)) // Drive                                    // (left)
+            ),
+        "rotateDrivetrain");
+  }
+
   public void xOut() {
     SwerveRequest xOutReq = new SwerveRequest.SwerveDriveBrake();
     this.setControl(xOutReq);
@@ -123,7 +142,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   public void addHeadingController(double kP, double kI, double kD, double kIZone) {
     headingController = new PhoenixPIDController(kP, kI, kD);
     headingController.enableContinuousInput(-Math.PI, Math.PI);
-    headingController.setTolerance(Math.toRadians(1.0));
+    headingController.setTolerance(Math.toRadians(1.5));
   }
 
   public void addStrafeController(double kP, double kI, double kD, double irMax, double irMin) {
@@ -144,7 +163,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             .withTargetDirection(Rotation2d.fromDegrees(desiredAngle));
     request.HeadingController = headingController;
     request.withDeadband(0.1);
-    request.withRotationalDeadband(0.0001);
+    request.withRotationalDeadband(0.0001); // used to be 0.04
+    request.ForwardPerspective = ForwardPerspectiveValue.BlueAlliance;
     this.setControl(request);
     request.withDriveRequestType(DriveRequestType.Velocity);
   }
@@ -496,7 +516,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     // Logger.recordOutput("Swerve: Rotation", this.getRotation2d());
     // Logger.recordOutput("Swerve: Angle", this.getAngle());
     // Logger.recordOutput("swerve: pithc", this.isFlat());
-    // Logger.recordOutput("Rotation2d", this.getPigeon2().getRotation2d());
+    Logger.recordOutput("Rotation2d", this.getPigeon2().getRotation2d());
+    Logger.recordOutput("Current angle", this.getAngle());
     Logger.recordOutput(CMD_NAME + "Heading Controller: Setpoint", headingController.getSetpoint());
     Logger.recordOutput(
         CMD_NAME + "Heading Controller: Error", headingController.getPositionError());

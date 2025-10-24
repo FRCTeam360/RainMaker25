@@ -84,7 +84,7 @@ public class CommandFactory {
   public Command alignRumble(CommandXboxController controller) {
     return CommandLogger.logCommand(
         Commands.runEnd(
-            () -> controller.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0.15),
+            () -> controller.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 1.0),
             () -> controller.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0.0)),
         "rumbling");
   }
@@ -304,14 +304,14 @@ public class CommandFactory {
   public Command driverIntakeAlgae() {
     return algaeRoller
         .setDutyCycleCmd(-0.1)
-        .alongWith(algaeShooter.setDutyCycleCmd(-1.0))
+        .alongWith(algaeShooter.setDutyCycleCmd(-0.8))
         .alongWith(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.32 : 0.32));
   }
 
   public Command driverLollipopIntake() {
     return algaeRoller
         .setDutyCycleCmd(-0.1)
-        .alongWith(algaeShooter.setDutyCycleCmd(-1.0))
+        .alongWith(algaeShooter.setDutyCycleCmd(-0.8))
         .alongWith(algaeTilt.setPositionCmd(0.205));
   }
 
@@ -373,8 +373,8 @@ public class CommandFactory {
 
   public Command shootAlgae() {
 
-    double setPoint = 4700.0; // 6000,
-    double angle = 0.035;
+    double setPoint = 5000.0; // 6000,
+    double angle = 0.03;
 
     Logger.recordOutput("shootalgaesetpoint", setPoint);
     Logger.recordOutput("shootalgaeangle", angle);
@@ -493,7 +493,7 @@ public class CommandFactory {
                 .andThen(new InstantCommand(() -> this.climberDeployed = true)));
   }
 
-  double climberWinchSetPoint = -33.00; // -34.28 new number 4:53pm 4-1-2025
+  double climberWinchSetPoint = -29.0; // -34.28 new number 4:53pm 4-1-2025
 
   public Command initiateClimb() {
     return Commands.waitUntil(() -> climberWinch.getPosition() < climberWinchSetPoint + 1.0)
@@ -506,7 +506,7 @@ public class CommandFactory {
   }
 
   public Command climb() {
-    return climberWinch.setDutyCycleCmd(-0.8);
+    return climberWinch.setDutyCycleCmd(-0.7);
   }
 
   public Command operatorClimb() {
@@ -514,12 +514,56 @@ public class CommandFactory {
   }
 
   public Command climbAutomated() {
-    return Commands.waitUntil(() -> climberWinch.getPosition() < -140.0)
+    return Commands.waitUntil(
+            () -> climberWinch.getPosition() < -145.0) // was initially 160, change made 10/19/2025
         .deadlineFor(climb())
         .alongWith(algaeTilt.setPositionCmd(0.907));
   }
 
   public void resetClimberDeployed() {
     climberDeployed = false;
+  }
+
+  public Command rotate() {
+    return drivetrain.rotateDrivetrain();
+  }
+
+  public double convert360(double angle) {
+    if (angle >= 0.0) {
+      return angle;
+    } else {
+      return (angle + 360.0);
+    }
+  }
+
+  public Command rotateDriveTrain360() {
+    drivetrain.zero();
+    for (int i = 1; i < 5; i++) {
+      drivetrain.getModule(i).getDriveMotor().setPosition(0.0);
+      // startPositions[i - 1] =
+      // drivetrain.getModule(i).getDriveMotor().getPosition().getValueAsDouble();
+    }
+    return Commands.waitUntil(() -> convert360(drivetrain.getAngle()) > 355.0)
+        .deadlineFor(drivetrain.rotateDrivetrain())
+        .andThen(() -> this.radiusCalculation());
+  }
+
+  public double radiusCalculation() {
+    double totalPosition = 0.0;
+    double robotRotationalRadius = 32.173358544;
+    double swerveGearRatio = 6.746031746031747;
+
+    for (int i = 1; i < 5; i++) {
+      totalPosition += drivetrain.getModule(i).getDriveMotor().getPosition().getValueAsDouble();
+    }
+  
+
+    // equation for wheel radius is: sqrt(l^2 + w^2) / 2 (avg motor rotations * gear ratio) aka
+    // wheel rotations)
+    double wheelRadius = robotRotationalRadius / (2 * ((totalPosition / 4) * swerveGearRatio));
+    Logger.recordOutput(
+        "wheel radius", wheelRadius); // bottom of wheel to bottom of wheel needs to be the "length"
+    return wheelRadius;
+    // 32.17... is the sqrt(l^2 + w^2)
   }
 }

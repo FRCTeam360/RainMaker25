@@ -573,7 +573,7 @@ public class RobotContainer {
         .whileTrue(commandFactory.driverIntakeAlgae());
 
     driverCont.rightTrigger(0.25).and(() -> !isAlgaeMode).whileTrue(coralShooter.basicShootCmd());
-    driverCont.rightTrigger(0.25).and(() -> isAlgaeMode).whileTrue(visionShootAlgae);
+    driverCont.rightTrigger(0.25).and(() -> isAlgaeMode).whileTrue(commandFactory.shootAlgae());
 
     driverCont.a().and(() -> !isAlgaeMode).onTrue(levelOneAndZero);
     driverCont.a().and(() -> isAlgaeMode).whileTrue(commandFactory.shootAlgae());

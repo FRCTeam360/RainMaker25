@@ -4,18 +4,13 @@
 
 package frc.robot.subsystems.Servo;
 
-import edu.wpi.first.wpilibj.Servo;
-import frc.robot.Constants;
-
 public class ServoIOSim implements ServoIO {
-   // private final Servo servo = new Servo(Constants.PracticeBotConstants.SERVO_PORT);
+  // private final Servo servo = new Servo(Constants.PracticeBotConstants.SERVO_PORT);
 
-    /** Creates a new ServoIOCB. */
-    public ServoIOSim() {}
+  /** Creates a new ServoIOCB. */
+  public ServoIOSim() {}
 
-    public void setServoSpeed(double speed) {
-    }
+  public void setServoSpeed(double speed) {}
 
-    public void updateInputs(ServoIOInputs inputs) {
-    }
+  public void updateInputs(ServoIOInputs inputs) {}
 }

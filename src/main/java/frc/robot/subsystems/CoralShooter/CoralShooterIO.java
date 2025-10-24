@@ -6,11 +6,8 @@ package frc.robot.subsystems.CoralShooter;
 
 import org.littletonrobotics.junction.AutoLog;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 public interface CoralShooterIO {
   /** Creates a new CoralOutakeIO. */
-  
   @AutoLog
   public static class CoralShooterIOInputs {
     public double outtakeStatorCurrent = 0.0;
@@ -29,11 +26,11 @@ public interface CoralShooterIO {
 
   /**
    * sets the speed ot a number between -1 and 1
+   *
    * @param dutyCycle
    */
   public void setDutyCycle(double dutyCycle);
 
- 
   public void stop();
   // insert subsystem methods
 }

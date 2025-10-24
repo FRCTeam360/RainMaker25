@@ -4,31 +4,14 @@
 
 package frc.robot.subsystems.Funnel;
 
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.EncoderConfig;
-import com.revrobotics.spark.config.SparkFlexConfig;
-import frc.robot.Constants;
-
 public class FunnelIOSim implements FunnelIO {
 
+  /** Creates a new AlgaeShooterIOWB. */
+  public FunnelIOSim() {}
 
-    /** Creates a new AlgaeShooterIOWB. */
-    public FunnelIOSim() {
-        
+  public void updateInputs(FunnelIOInputs inputs) {}
 
-    }
+  public void setDutyCycle(double dutyCycle) {}
 
-    public void updateInputs(FunnelIOInputs inputs) {
-
-    }
-
-    public void setDutyCycle(double dutyCycle) {
-    }
-
-    public void stop() {
-    }
+  public void stop() {}
 }
-

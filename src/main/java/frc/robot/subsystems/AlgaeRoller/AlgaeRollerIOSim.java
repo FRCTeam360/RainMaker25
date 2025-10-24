@@ -4,29 +4,12 @@
 
 package frc.robot.subsystems.AlgaeRoller;
 
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.SparkMax;
-
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-
 public class AlgaeRollerIOSim implements AlgaeRollerIO {
 
-
   /** Creates a new AlgaeIntakeRollerIOPB. */
-  public AlgaeRollerIOSim() {
+  public AlgaeRollerIOSim() {}
 
-  }
+  public void setDutyCycle(double dutyCycle) {}
 
-  public void setDutyCycle(double dutyCycle) {
-  }
-
-  public void updateInputs(AlgaeRollerIOInputs inputs) {
-
-  }
+  public void updateInputs(AlgaeRollerIOInputs inputs) {}
 }

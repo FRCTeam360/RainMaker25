@@ -8,16 +8,16 @@ import edu.wpi.first.wpilibj.Servo;
 import frc.robot.Constants;
 
 public class ServoIOPB implements ServoIO {
-    private final Servo servo = new Servo(Constants.PracticeBotConstants.SERVO_PORT);
+  private final Servo servo = new Servo(Constants.PracticeBotConstants.SERVO_PORT);
 
-    /** Creates a new ServoIOCB. */
-    public ServoIOPB() {}
+  /** Creates a new ServoIOCB. */
+  public ServoIOPB() {}
 
-    public void setServoSpeed(double speed) {
-        servo.setPosition(speed);
-    }
+  public void setServoSpeed(double speed) {
+    servo.setPosition(speed);
+  }
 
-    public void updateInputs(ServoIOInputs inputs) {
-        inputs.setOutput = servo.getPosition();
-    }
+  public void updateInputs(ServoIOInputs inputs) {
+    inputs.setOutput = servo.getPosition();
+  }
 }

@@ -6,30 +6,34 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.AlgaeRoller.AlgaeRoller;
 import frc.robot.subsystems.AlgaeShooter.AlgaeShooter;
 import frc.robot.subsystems.AlgaeTilt.AlgaeTilt;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ShuffleboardTuner extends Command {
-    private AlgaeTilt algaeTilt;
-    private AlgaeShooter algaeShooter;
-    private AlgaeRoller algaeRoller;
-    private CommandSwerveDrivetrain drivetrain;
+  private AlgaeTilt algaeTilt;
+  private AlgaeShooter algaeShooter;
+  private AlgaeRoller algaeRoller;
+  private CommandSwerveDrivetrain drivetrain;
 
-    private double tiltAngle = 0.0;
-    private double shooterVelocity = 0.0;
-    private double rollerDutyCycle = 0.0;
+  private double tiltAngle = 0.0;
+  private double shooterVelocity = 0.0;
+  private double rollerDutyCycle = 0.0;
 
-    private double newTiltAngle = tiltAngle;
-    private double newShooterVelocity = shooterVelocity;
-    private double newRollerDutyCycle = rollerDutyCycle;
+  private double newTiltAngle = tiltAngle;
+  private double newShooterVelocity = shooterVelocity;
+  private double newRollerDutyCycle = rollerDutyCycle;
 
-    private double xDistance;
-    
+  private double xDistance;
+
   /** Creates a new ShuffleboardTuner. */
-  public ShuffleboardTuner(AlgaeTilt algaeTilt, AlgaeShooter algaeShooter, AlgaeRoller algaeRoller, CommandSwerveDrivetrain drivetrain) {
+  public ShuffleboardTuner(
+      AlgaeTilt algaeTilt,
+      AlgaeShooter algaeShooter,
+      AlgaeRoller algaeRoller,
+      CommandSwerveDrivetrain drivetrain) {
     this.algaeTilt = algaeTilt;
     this.algaeShooter = algaeShooter;
     this.algaeRoller = algaeRoller;
@@ -60,7 +64,7 @@ public class ShuffleboardTuner extends Command {
     // }
 
     if (shooterVelocity != newShooterVelocity) {
-        shooterVelocity = newShooterVelocity;
+      shooterVelocity = newShooterVelocity;
     }
 
     // if (tiltAngle != newRollerDutyCycle) {

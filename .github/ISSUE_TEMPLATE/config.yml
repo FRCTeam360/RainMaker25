@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Team Discussion
+    url: https://www.chiefdelphi.com/t/frc-360-the-revolution-2025-build-thread-open-alliance/479679
+    about: Visit our build thread on Chief Delphi for general discussion and updates
+  - name: FRC Documentation
+    url: https://docs.wpilib.org/
+    about: Official WPILib documentation for FRC programming

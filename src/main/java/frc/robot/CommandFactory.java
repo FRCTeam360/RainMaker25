@@ -26,6 +26,8 @@ import frc.robot.subsystems.Funnel.Funnel;
 import frc.robot.subsystems.Servo.Servo;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.utils.CommandLogger;
+
+import java.io.Console;
 import java.util.Map;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
@@ -539,13 +541,14 @@ public class CommandFactory {
   public Command rotateDriveTrain360() {
     drivetrain.zero();
     for (int i = 0; i < 4; i++) {
-      drivetrain.getModule(i).getDriveMotor().setPosition(0.0);
-      // startPositions[i - 1] =
-      // drivetrain.getModule(i).getDriveMotor().getPosition().getValueAsDouble();
+        drivetrain.getModule(i).getDriveMotor().setPosition(0.0);
+        // startPositions[i - 1] =
+         // drivetrain.getModule(i).getDriveMotor().getPosition().getValueAsDouble();
     }
     return Commands.waitUntil(() -> convert360(drivetrain.getAngle()) > 355.0)
         .deadlineFor(drivetrain.rotateDrivetrain())
-        .andThen(() -> this.radiusCalculation());
+        .andThen(Commands.runOnce(() -> this.radiusCalculation()));
+
   }
 
   public double radiusCalculation() {
@@ -553,13 +556,14 @@ public class CommandFactory {
     double robotRotationalRadius = 32.173358544;
     double swerveGearRatio = 6.746031746031747;
 
-    for (int i = 1; i < 5; i++) {
+    for (int i = 0; i < 4; i++) {
       totalPosition += drivetrain.getModule(i).getDriveMotor().getPosition().getValueAsDouble();
     }
 
     // equation for wheel radius is: sqrt(l^2 + w^2) / 2 (avg motor rotations * gear ratio) aka
     // wheel rotations)
     double wheelRadius = robotRotationalRadius / (2 * ((totalPosition / 4) * swerveGearRatio));
+    Logger.recordOutput("average wheel position", (totalPosition / 4));
     Logger.recordOutput(
         "wheel radius", wheelRadius); // bottom of wheel to bottom of wheel needs to be the "length"
     return wheelRadius;

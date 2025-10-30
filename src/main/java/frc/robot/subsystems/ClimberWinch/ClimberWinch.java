@@ -6,11 +6,11 @@ package frc.robot.subsystems.ClimberWinch;
 
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.Team360SubSystemBase;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
-public class ClimberWinch extends SubsystemBase {
+public class ClimberWinch extends Team360SubSystemBase {
   private final ClimberWinchIO io;
   private final ClimberWinchIOInputsAutoLogged inputs = new ClimberWinchIOInputsAutoLogged();
 
@@ -52,8 +52,8 @@ public class ClimberWinch extends SubsystemBase {
   public void periodic() {
     long periodicStartTime = HALUtil.getFPGATime();
     io.updateInputs(inputs);
-    Logger.processInputs("Climber", inputs);
+    Logger.processInputs(getLogPreFix(), inputs);
     long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
-    Logger.recordOutput("Climber: periodic loop time", (periodicLoopTime / 1000.0));
+    Logger.recordOutput(getLogPreFix() + "periodic loop time", (periodicLoopTime / 1000.0));
   }
 }

@@ -7,11 +7,11 @@ package frc.robot.subsystems.Servo;
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.Team360SubSystemBase;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
-public class Servo extends SubsystemBase {
+public class Servo extends Team360SubSystemBase {
   private final ServoIO io;
   private final ServoIOInputsAutoLogged inputs = new ServoIOInputsAutoLogged();
 
@@ -46,9 +46,9 @@ public class Servo extends SubsystemBase {
   public void periodic() {
     long periodicStartTime = HALUtil.getFPGATime();
     io.updateInputs(inputs);
-    Logger.processInputs("Servo", inputs);
+    Logger.processInputs(getLogPreFix(), inputs);
     long periodicLoopTime = HALUtil.getFPGATime() - periodicStartTime;
-    Logger.recordOutput("Servo: periodic loop time", (periodicLoopTime / 1000.0));
+    Logger.recordOutput(getLogPreFix() + "periodic loop time", (periodicLoopTime / 1000.0));
     // This method will be called once per scheduler run
   }
 }

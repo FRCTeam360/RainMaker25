@@ -320,8 +320,8 @@ public class RobotContainer {
     diagnosticTab.addString("Serial Address", HALUtil::getSerialNumber);
     diagnosticTab.addBoolean("Sim", Constants::isSim);
 
-    configureBindings();
-    // configureTestController();
+    // configureBindings();
+    configureTestController();
   }
 
   public void initializeCommands() {
@@ -642,6 +642,11 @@ public class RobotContainer {
 
   private void configureTestController() {
     driveTrain.setDefaultCommand(driveTrain.fieldOrientedDrive(testCont));
+    // elevator.setDefaultCommand(elevator.setDutyCycleCommand(() -> testCont.getLeftY()));
+    testCont.x().whileTrue(elevator.setElevatorHeight(1.3));
+    testCont.a().whileTrue(elevator.setElevatorHeight(1.3 * 2));
+    testCont.b().whileTrue(elevator.setElevatorHeight(1.3 * 3));
+    testCont.y().whileTrue(elevator.setElevatorHeight(1.3 * 4));
     // elevator.setDefaultCommand(
     // elevator.setDutyCycleCommand(() ->
     // MathUtil.applyDeadband(testCont.getLeftY(), 0.1)));

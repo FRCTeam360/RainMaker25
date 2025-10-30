@@ -47,12 +47,12 @@ public class AlgaeArmIOSim implements AlgaeArmIO {
 
   private final EncoderSim encoderSim = new EncoderSim(encoder);
 
-  private final LoggedMechanism2d mech2d =
+  /*private final LoggedMechanism2d mech2d =
       new LoggedMechanism2d(30, 50, new Color8Bit(Color.kPapayaWhip));
   private final LoggedMechanismRoot2d mechRoot2D = mech2d.getRoot("algae arm root", 18, 0);
   private final LoggedMechanismLigament2d mechLigiment2D =
       mechRoot2D.append(
-          new LoggedMechanismLigament2d("algae arm", 5, 0, 5, new Color8Bit(Color.kTomato)));
+          new LoggedMechanismLigament2d("algae arm", 5, 0, 5, new Color8Bit(Color.kTomato)));*/
 
   /** Creates a new AlgaeArmSim. */
   public AlgaeArmIOSim(DoubleSupplier heightSupplier) {
@@ -70,10 +70,10 @@ public class AlgaeArmIOSim implements AlgaeArmIO {
     inputs.algaeArmVelocity = armSim.getVelocityRadPerSec();
     inputs.algaeArmAngle = armSim.getAngleRads();
 
-    mechLigiment2D.setAngle(new Rotation2d(armSim.getAngleRads()));
+    /*mechLigiment2D.setAngle(new Rotation2d(armSim.getAngleRads()));
     mechRoot2D.setPosition(19.5, heightSupplier.getAsDouble() - 3.5);
     Logger.recordOutput("elevator sim", mech2d);
-    SmartDashboard.putData("algae arm sim", mech2d);
+    SmartDashboard.putData("algae arm sim", mech2d);*/
   }
 
   public void setDutyCycle(double dutyCycle) {

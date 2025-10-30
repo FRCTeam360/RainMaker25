@@ -26,6 +26,7 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 
 public class ElevatorIOSim implements ElevatorIO {
+    
   /** Creates a new ElevatorIOSim. */
   private DCMotor gearbox = DCMotor.getFalcon500(1);
 
@@ -33,6 +34,7 @@ public class ElevatorIOSim implements ElevatorIO {
 
   final double UPPER_LIMIT = 20;
   final double LOWER_LIMIT = 2;
+  final double startingHeight = 1.3; // meters
 
   final double kA = 0.0;
   final double kD = 0.35;
@@ -57,7 +59,7 @@ public class ElevatorIOSim implements ElevatorIO {
           LOWER_LIMIT, // min elevator height meters
           UPPER_LIMIT, // max elevator height meters
           true,
-          0,
+          startingHeight,
           0.01,
           0.0);
 
@@ -70,12 +72,12 @@ public class ElevatorIOSim implements ElevatorIO {
   private final PWMSim simMotor = new PWMSim(motor);
 
   private final LoggedMechanism2d mech2d =
-      new LoggedMechanism2d(20, 50, new Color8Bit(Color.kBlue));
-  private final LoggedMechanismRoot2d mech2dRoot = mech2d.getRoot("elevator root", 10, 0);
+      new LoggedMechanism2d(5, 20, new Color8Bit(Color.kBlue));
+  private final LoggedMechanismRoot2d mech2dRoot = mech2d.getRoot("elevator root", 0, 0);
   private final LoggedMechanismLigament2d elevatorMech2d =
       mech2dRoot.append(
           new LoggedMechanismLigament2d(
-              "elevator", elevatorSim.getPositionMeters(), 90, 5, new Color8Bit(Color.kCoral)));
+              "elevator", 1.3, 90, 5, new Color8Bit(Color.kCoral)));
 
   public ElevatorIOSim() {
     // distance per pulse = (distance per revolution) / (pulses per revolution)

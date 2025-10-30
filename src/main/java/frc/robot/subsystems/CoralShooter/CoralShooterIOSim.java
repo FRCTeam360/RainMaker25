@@ -46,7 +46,7 @@ public class CoralShooterIOSim implements CoralShooterIO {
   private final EncoderSim simEncoder = new EncoderSim(encoder);
   private final PWMSim simMotor = new PWMSim(motor);
 
-  private final Color8Bit color = new Color8Bit(Color.kCoral);
+  /* private final Color8Bit color = new Color8Bit(Color.kCoral);
   private final LoggedMechanism2d mech2d =
       new LoggedMechanism2d(30, 50, new Color8Bit(Color.kBlue));
   private final LoggedMechanismRoot2d mech2dRoot = mech2d.getRoot("shooter root", 10, 0);
@@ -58,7 +58,7 @@ public class CoralShooterIOSim implements CoralShooterIO {
       mech2dSide1.append(new LoggedMechanismLigament2d("side3", 5, 290, 5, color));
   private final LoggedMechanismLigament2d mech2dSide4 =
       mech2dSide2.append(new LoggedMechanismLigament2d("side4", 10, 70, 5, color));
-
+    */ 
   /** Creates a new CoralOuttakeIOSim. */
   public CoralShooterIOSim(DoubleSupplier heightSupplier) {
     this.heightSupplier = heightSupplier;
@@ -71,10 +71,10 @@ public class CoralShooterIOSim implements CoralShooterIO {
     simEncoder.setDistance(simMotor.getPosition());
     RoboRioSim.setVInVoltage(
         BatterySim.calculateDefaultBatteryLoadedVoltage(shooterSim.getCurrentDrawAmps()));
-    mech2dRoot.setPosition(10, (heightSupplier.getAsDouble() + 5.0));
+    //mech2dRoot.setPosition(10, (heightSupplier.getAsDouble() + 5.0));
 
-    Logger.recordOutput("elevator sim", mech2d);
-    SmartDashboard.putData("shooter sim", mech2d);
+    /*Logger.recordOutput("elevator sim", mech2d);
+    SmartDashboard.putData("shooter sim", mech2d);*/
     inputs.outtakePosition = simMotor.getPosition();
     inputs.outtakeVelocity = shooterSim.getAngularVelocityRPM();
     inputs.outtakeVoltage = shooterSim.getInputVoltage();

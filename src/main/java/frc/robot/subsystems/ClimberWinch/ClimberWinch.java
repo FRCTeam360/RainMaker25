@@ -6,9 +6,7 @@ package frc.robot.subsystems.ClimberWinch;
 
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Team360SubSystemBase;
-
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 

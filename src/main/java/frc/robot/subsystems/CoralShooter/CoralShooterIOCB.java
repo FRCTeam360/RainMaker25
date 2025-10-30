@@ -19,7 +19,7 @@ import frc.robot.Constants;
 /** Add your docs here. */
 public class CoralShooterIOCB implements CoralShooterIO {
   private final SparkMax outtakeMotor =
-      new SparkMax(Constants.CompBotConstants.CORAL_SHOOTER_ID, MotorType.kBrushless);
+        new SparkMax(Constants.CompBotConstants.CORAL_SHOOTER_ID, MotorType.kBrushless);
 
     protected SparkMax outtakeMotor;
     protected RelativeEncoder encoder;
@@ -37,22 +37,26 @@ public class CoralShooterIOCB implements CoralShooterIO {
         outtakeMotor = new SparkMax(Constants.CompBotConstants.CORAL_SHOOTER_ID, MotorType.kBrushless);
         encoder = outtakeMotor.getEncoder();
         
-        intakeSensor = new Canandcolor(Constants.CompBotConstants.INTAKE_SENSOR_ID);
-        outtakeSensor = new Canandcolor(Constants.CompBotConstants.OUTTAKE_SENSOR_ID);
+        CANrangeConfiguration intakeConfig = new CANrangeConfiguration();
+        CANrangeConfiguration outtakeConfig = new CANrangeConfiguration();
   
         sparkMaxConfig.idleMode(IdleMode.kBrake);
         sparkMaxConfig.inverted(false);
         outtakeMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
-
+/* Stated twice, this one is commented because it is private
   private final double KP = 0.0;
   private final double KI = 0.0;
   private final double KD = 0.0;
   private final double KF = 0.0;
-
+  */
+/* Commented because this method occurs twice (however they run different code!!)
     protected boolean isInOuttakeSensor() {
         return outtakeSensor.getProximity() < 0.1;
     }
+*/
+    intakeSensor = new Canandcolor(Constants.CompBotConstants.INTAKE_SENSOR_ID);
+    outtakeSensor = new Canandcolor(Constants.CompBotConstants.OUTTAKE_SENSOR_ID);
 
     outtakeMotor.configure(
         sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

@@ -32,8 +32,8 @@ public class ElevatorIOSim implements ElevatorIO {
 
   public static Encoder encoder = new Encoder(8, 9);
 
-  final double UPPER_LIMIT = 20;
-  final double LOWER_LIMIT = 2;
+  final double UPPER_LIMIT = 5.0;
+  final double LOWER_LIMIT = 1.3;
   final double startingHeight = 1.3; // meters
 
   final double kA = 0.0;
@@ -72,12 +72,12 @@ public class ElevatorIOSim implements ElevatorIO {
   private final PWMSim simMotor = new PWMSim(motor);
 
   private final LoggedMechanism2d mech2d =
-      new LoggedMechanism2d(5, 20, new Color8Bit(Color.kBlue));
-  private final LoggedMechanismRoot2d mech2dRoot = mech2d.getRoot("elevator root", 0, 0);
+      new LoggedMechanism2d(1, 20, new Color8Bit(Color.kBlue)); // guys this is not meters this is canvas units
+  private final LoggedMechanismRoot2d mech2dRoot = mech2d.getRoot("elevator root", 0.5, 0); // this also is not meters and it's relative to the canvas size you set
   private final LoggedMechanismLigament2d elevatorMech2d =
       mech2dRoot.append(
           new LoggedMechanismLigament2d(
-              "elevator", 1.3, 90, 5, new Color8Bit(Color.kCoral)));
+              "elevator", 0, 90, 5, new Color8Bit(Color.kCoral)));
 
   public ElevatorIOSim() {
     // distance per pulse = (distance per revolution) / (pulses per revolution)
@@ -93,8 +93,9 @@ public class ElevatorIOSim implements ElevatorIO {
     simEncoder.setDistance(elevatorSim.getPositionMeters());
     RoboRioSim.setVInVoltage(
         BatterySim.calculateDefaultBatteryLoadedVoltage(elevatorSim.getCurrentDrawAmps()));
-    // elevatorMech2d.setLength(elevatorSim.getPositionMeters());
-    elevatorMech2d.setLength(encoder.getDistance());
+    elevatorMech2d.setLength(elevatorSim.getPositionMeters());
+    // elevatorMech2d.setLength(encoder.getDistance());
+
 
     Logger.recordOutput("elevator sim", mech2d);
     inputs.elevatorPosition = elevatorSim.getPositionMeters();

@@ -11,16 +11,19 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+
 import frc.robot.Constants;
 
 public class AlgaeRollerIOCB implements AlgaeRollerIO {
-  private final SparkMax motor =
-      new SparkMax(Constants.CompBotConstants.ALGAE_ROLLER, MotorType.kBrushless);
-  private final SparkMaxConfig config = new SparkMaxConfig();
-  private final RelativeEncoder encoder = motor.getEncoder();
+  protected SparkMax motor;
+  protected SparkMaxConfig config = new SparkMaxConfig();
+  protected RelativeEncoder encoder;
 
   /** Creates a new AlgaeIntakeRollerIOPB. */
   public AlgaeRollerIOCB() {
+    motor = new SparkMax(Constants.CompBotConstants.ALGAE_ROLLER, MotorType.kBrushless);
+    encoder = motor.getEncoder();
+
     config.inverted(true);
     config.idleMode(IdleMode.kCoast);
     config.smartCurrentLimit(20, 5);

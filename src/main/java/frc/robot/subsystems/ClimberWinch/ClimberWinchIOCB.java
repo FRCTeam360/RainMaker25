@@ -14,23 +14,26 @@ import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.EncoderConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+
 import frc.robot.Constants.CompBotConstants;
 
 public class ClimberWinchIOCB implements ClimberWinchIO {
 
-  private final SparkMax winchMotor =
-      new SparkMax(CompBotConstants.CLIMBER_WINCH_ID, MotorType.kBrushless);
-  private final RelativeEncoder winchEncoder = winchMotor.getEncoder();
+  protected SparkMax winchMotor;
+  protected RelativeEncoder winchEncoder;
 
-  private final double kP = 0.2;
-  private final double kI = 0.0;
-  private final double kD = 0.0;
-
-  private final double positionConversionFactor = 1.0;
-  private final SparkMaxConfig config = new SparkMaxConfig();
+  protected final double kP = 0.2;
+  protected final double kI = 0.0;
+  protected final double kD = 0.0;
+  
+  protected final double positionConversionFactor = 1.0;
+  protected final SparkMaxConfig config = new SparkMaxConfig();
 
   /** Creates a new ClimberIOPB. */
   public ClimberWinchIOCB() {
+    winchMotor =  new SparkMax(CompBotConstants.CLIMBER_WINCH_ID, MotorType.kBrushless);
+    winchEncoder = winchMotor.getEncoder();
+
     config.idleMode(IdleMode.kBrake);
     config.inverted(true);
     config.smartCurrentLimit(50);

@@ -18,36 +18,48 @@ import frc.robot.Constants;
 
 /** Add your docs here. */
 public class CoralShooterIOCB implements CoralShooterIO {
-  private final SparkMax outtakeMotor =
-      new SparkMax(Constants.CompBotConstants.CORAL_SHOOTER_ID, MotorType.kBrushless);
+    
+    protected SparkMax outtakeMotor;
+    protected RelativeEncoder encoder;
+    protected SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
 
-  private final RelativeEncoder encoder = outtakeMotor.getEncoder();
-  private final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
-  CANrangeConfiguration intakeConfig = new CANrangeConfiguration();
-  CANrangeConfiguration outtakeConfig = new CANrangeConfiguration();
+    private final CANrangeConfiguration intakeConfig;
+    private final CANrangeConfiguration outtakeConfig;
+  
+    private final CANrange intakeSensor;
+    private final CANrange outtakeSensor;
 
-  // private final Canandcolor intakeSensor = new
-  // Canandcolor(Constants.CompBotConstants.INTAKE_SENSOR_ID);
-  // private final Canandcolor outtakeSensor = new
-  // Canandcolor(Constants.CompBotConstants.OUTTAKE_SENSOR_ID);
+    protected final double KP = 0.0;
+    protected final double KI = 0.0;
+    protected final double KD = 0.0;
+    protected final double KF = 0.0;
 
-  private final CANrange intakeSensor =
-      new CANrange(
-          Constants.CompBotConstants.INTAKE_SENSOR_ID, Constants.CompBotConstants.CANBUS_NAME);
-  private final CANrange outtakeSensor =
-      new CANrange(
-          Constants.CompBotConstants.OUTTAKE_SENSOR_ID, Constants.CompBotConstants.CANBUS_NAME);
+    public CoralShooterIOCB() {
+        outtakeMotor = new SparkMax(Constants.CompBotConstants.CORAL_SHOOTER_ID, MotorType.kBrushless);
+        encoder = outtakeMotor.getEncoder();
 
+        intakeSensor = new CANrange(Constants.CompBotConstants.INTAKE_SENSOR_ID);
+        outtakeSensor = new CANrange(Constants.CompBotConstants.OUTTAKE_SENSOR_ID);
+        
+        intakeConfig = new CANrangeConfiguration();
+        outtakeConfig = new CANrangeConfiguration();
+  
+        sparkMaxConfig.idleMode(IdleMode.kBrake);
+        sparkMaxConfig.inverted(false);
+        outtakeMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    
+/* Stated twice, this one is commented because it is private
   private final double KP = 0.0;
   private final double KI = 0.0;
   private final double KD = 0.0;
   private final double KF = 0.0;
-
-  public CoralShooterIOCB() {
-    sparkMaxConfig.idleMode(IdleMode.kBrake);
-    sparkMaxConfig.inverted(false);
-    sparkMaxConfig.smartCurrentLimit(25, 5);
-
+  */
+/* Commented because this method occurs twice (however they run different code!!)
+    protected boolean isInOuttakeSensor() {
+        return outtakeSensor.getProximity() < 0.1;
+    }
+*/
+    
     outtakeMotor.configure(
         sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 

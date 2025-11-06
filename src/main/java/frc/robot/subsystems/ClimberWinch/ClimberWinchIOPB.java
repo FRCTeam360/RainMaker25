@@ -4,33 +4,24 @@
 
 package frc.robot.subsystems.ClimberWinch;
 
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkBase.ControlType;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.EncoderConfig;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import frc.robot.Constants.PracticeBotConstants;
 
-public class ClimberWinchIOPB implements ClimberWinchIO {
+public class ClimberWinchIOPB extends ClimberWinchIOCB {
 
-  private final SparkMax winchMotor =
-      new SparkMax(PracticeBotConstants.CLIMBER_WINCH_ID, MotorType.kBrushless);
-  private final RelativeEncoder winchEncoder = winchMotor.getEncoder();
-
-  private final double kP = 0.2;
-  private final double kI = 0.0;
-  private final double kD = 0.0;
-
-  private final double positionConversionFactor = 1.0;
-  private final SparkMaxConfig config = new SparkMaxConfig();
 
   /** Creates a new ClimberIOPB. */
   public ClimberWinchIOPB() {
+    super();
+    winchMotor = new SparkMax(PracticeBotConstants.CLIMBER_WINCH_ID, MotorType.kBrushless);
+
+
     config.idleMode(IdleMode.kBrake);
     config.inverted(true);
     ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
@@ -40,21 +31,5 @@ public class ClimberWinchIOPB implements ClimberWinchIO {
     encoderConfig.positionConversionFactor(positionConversionFactor);
     config.apply(encoderConfig);
     winchMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-  }
-
-  public void setDutyCycle(double dutyCycle) {
-    winchMotor.set(dutyCycle);
-  }
-
-  public void setPosition(double position) {
-    winchMotor.getClosedLoopController().setReference(position, ControlType.kPosition);
-  }
-
-  public void updateInputs(ClimberWinchIOInputs inputs) {
-    inputs.winchDutyCycle = winchMotor.getAppliedOutput();
-    inputs.winchPosition = winchEncoder.getPosition();
-    inputs.winchVelocity = winchEncoder.getVelocity();
-    inputs.winchCurrent = winchMotor.getOutputCurrent();
-    inputs.winchTemp = winchMotor.getMotorTemperature();
   }
 }

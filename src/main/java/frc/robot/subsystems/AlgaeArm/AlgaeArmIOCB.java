@@ -1,7 +1,7 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
+//if CB & PB IO files have equal values, remove from PB, which extends CB. Everything "private" must be "protected"
 package frc.robot.subsystems.AlgaeArm;
 
 import com.revrobotics.RelativeEncoder;
@@ -19,24 +19,21 @@ import frc.robot.Constants;
 
 public class AlgaeArmIOCB implements AlgaeArmIO {
 
-  private final SparkMax armMotor =
-      new SparkMax(Constants.CompBotConstants.ALGAE_ARM_ID, MotorType.kBrushless); // placeholder
-  //                                                          // ID
-  private final RelativeEncoder encoder = armMotor.getEncoder();
+  protected final SparkMax armMotor = new SparkMax(Constants.CompBotConstants.ALGAE_ARM_ID, MotorType.kBrushless); // placeholder                                                                                                                    // ID
+  protected final RelativeEncoder encoder = armMotor.getEncoder();
+  
+  protected final double kP = 0.025;
+  protected final double kI = 0.0;
+  protected final double kD = 0.0;
 
-  private final double kP = 0.25;
-  private final double kI = 0.0;
-  private final double kD = 0.0;
+  protected final double POSITION_CONVERSION_FACTOR = (1.0 / 5.0) * (1.0 / 5.0) * (18.0 / 36.0) * (360.0 / 1.0);
+  protected final double VELOCITY_CONVERSION_FACTOR = POSITION_CONVERSION_FACTOR / 60.0;
 
-  private final double POSITION_CONVERSION_FACTOR =
-      (1.0 / 5.0) * (1.0 / 5.0) * (18.0 / 36.0) * (360.0 / 1.0);
-  private final double VELOCITY_CONVERSION_FACTOR = POSITION_CONVERSION_FACTOR / 60.0;
+  protected final double FORWARD_LIMIT = 150.0;
+  protected final double REVERSE_LIMIT = 10.0;
+  protected final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
 
-  private final double FORWARD_LIMIT = 180.0;
-  private final double REVERSE_LIMIT = -18.0;
-  private final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
-
-  private final double MAX_OUTPUT = 0.5;
+  protected final double MAX_OUTPUT = 0.5;
 
   /** Creates a new AlgaeArmIOPB. */
   public AlgaeArmIOCB() {

@@ -16,31 +16,34 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.EncoderConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+
 import frc.robot.Constants;
 
 public class AlgaeTiltIOCB implements AlgaeTiltIO {
-  private final SparkMax motor =
-      new SparkMax(Constants.CompBotConstants.ALGAE_TILT, MotorType.kBrushless);
-  private final AbsoluteEncoder absEncoder =
-      motor.getAbsoluteEncoder(); // TODO: make absolute when we get one!!
-  // private final RelativeEncoder encoder = motor.getEncoder(); // TODO: make absolute when we get
-  // one!!
+  protected SparkMax motor;
+  protected AbsoluteEncoder absEncoder;
+  // private final RelativeEncoder encoder = motor.getEncoder(); // TODO: make absolute when we get one!!
 
-  private final double kP = 4;
-  private final double kI = 0.0;
-  private final double kD = 0.0;
+  protected double kP;
+  protected final double kI = 0.0;
+  protected final double kD = 0.0;
 
-  private final double forwardLimit = 38.0;
-  private final double reverseLimit = -10.0;
+  protected final double forwardLimit = 38.0;
+  protected final double reverseLimit = -10.0;
 
-  private final double ZERO_OFFSET = 0.7170253;
+  protected final double ZERO_OFFSET = 0.7170253;
   // 0.5551491; //0.7218491 + 0.833;
 
-  private final double positionConversionFactor = 1.0;
-  private final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
+  protected final double positionConversionFactor = 1.0;
+  protected final SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
 
   /** Creates a new AlgaeIntakeIOPB. */
   public AlgaeTiltIOCB() {
+    motor = new SparkMax(Constants.CompBotConstants.ALGAE_TILT, MotorType.kBrushless);
+    absEncoder = motor.getAbsoluteEncoder(); // TODO: make absolute when we get one!!
+
+    kP = 4;
+
     sparkMaxConfig.idleMode(IdleMode.kBrake);
     sparkMaxConfig.inverted(true);
     sparkMaxConfig.smartCurrentLimit(20, 5);
@@ -94,10 +97,4 @@ public class AlgaeTiltIOCB implements AlgaeTiltIO {
     inputs.armVelocityAbsolute = absEncoder.getVelocity();
     inputs.armAmps = motor.getOutputCurrent();
   }
-
-  // @Override
-  // public void setEncoder(double value) {
-  //     // TODO Auto-generated method stub
-  //     throw new UnsupportedOperationException("Unimplemented method 'setEncoder'");
-  // }
 }

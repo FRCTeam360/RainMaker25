@@ -20,41 +20,18 @@ import frc.robot.Constants.WoodbotConstants;
 import org.littletonrobotics.junction.Logger;
 
 /** Add your docs here. */
-public class ElevatorIOPB implements ElevatorIO {
-  private final TalonFX backElevatorMotor =
-      new TalonFX(PracticeBotConstants.BACK_ELEVATOR_ID, PracticeBotConstants.CANBUS_NAME);
-  private final TalonFX frontElevatorMotor =
-      new TalonFX(PracticeBotConstants.FRONT_ELEVATOR_ID, PracticeBotConstants.CANBUS_NAME);
+public class ElevatorIOPB extends ElevatorIOCB {
   // private final DifferentialMechanism elevatorDiff;
-  private TalonFXConfiguration frontConfig = new TalonFXConfiguration();
-  private TalonFXConfiguration backConfig = new TalonFXConfiguration();
-  private MotorOutputConfigs outputConfigs = new MotorOutputConfigs();
   // private DifferentialSensorsConfigs sens = backConfig.DifferentialSensors;
 
-  private final DigitalInput bottomSwitch =
-      new DigitalInput(WoodbotConstants.ELEVATOR_BOTTOM_SWITCH);
-
-  private final double GEAR_RATIO = 1.0;
-
   public ElevatorIOPB() {
+    super(
+        new TalonFX(PracticeBotConstants.BACK_ELEVATOR_ID, PracticeBotConstants.CANBUS_NAME),
+        new TalonFX(PracticeBotConstants.FRONT_ELEVATOR_ID, PracticeBotConstants.CANBUS_NAME)
+    );
+
     final double UPPER_LIMIT = 31.0;
     final double LOWER_LIMIT = 0.0;
-
-    final double kA = 0.01;
-    final double kD = 0.0;
-    final double kG = 0.3;
-    final double kI = 0.0;
-    final double kP = 5.0; // 5 original
-    final double kS = 0.01;
-    final double kV = 0.07;
-    Slot0Configs slot0Configs = backConfig.Slot0;
-    slot0Configs.kA = kA;
-    slot0Configs.kD = kD;
-    slot0Configs.kG = kG;
-    slot0Configs.kI = kI;
-    slot0Configs.kP = kP;
-    slot0Configs.kS = kS;
-    slot0Configs.kV = kV;
 
     final double motionMagicCruiseVelocity = 800.0;
     final double motionMagicAcceleration = 350.0; // used to be 300 - jan 30

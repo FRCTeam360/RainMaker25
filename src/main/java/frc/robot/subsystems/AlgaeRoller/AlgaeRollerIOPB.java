@@ -4,36 +4,22 @@
 
 package frc.robot.subsystems.AlgaeRoller;
 
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkMax;
 import frc.robot.Constants;
 
-public class AlgaeRollerIOPB implements AlgaeRollerIO {
-  private final SparkMax motor =
-      new SparkMax(Constants.PracticeBotConstants.ALGAE_ROLLER, MotorType.kBrushless);
-  private final SparkMaxConfig config = new SparkMaxConfig();
-  private final RelativeEncoder encoder = motor.getEncoder();
+public class AlgaeRollerIOPB extends AlgaeRollerIOCB {
 
   /** Creates a new AlgaeIntakeRollerIOPB. */
   public AlgaeRollerIOPB() {
+    super();
+    motor = new SparkMax(Constants.PracticeBotConstants.ALGAE_ROLLER, MotorType.kBrushless);
+
     config.inverted(true);
     config.idleMode(IdleMode.kBrake);
     motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-  }
-
-  public void setDutyCycle(double dutyCycle) {
-    motor.set(dutyCycle);
-  }
-
-  public void updateInputs(AlgaeRollerIOInputs inputs) {
-    inputs.rollerDutyCycle = motor.get();
-    inputs.rollerPosition = encoder.getPosition();
-    inputs.rollerVelocity = encoder.getVelocity();
-    inputs.rollerCurrent = motor.getAppliedOutput();
   }
 }

@@ -17,20 +17,26 @@ import frc.robot.Constants;
 
 public class AlgaeShooterIOCB implements AlgaeShooterIO {
 
-  private final SparkFlex algaeShooterMotorFront =
-      new SparkFlex(
-          Constants.CompBotConstants.ALGAE_SHOOTER_FRONT_ID, MotorType.kBrushless); // no ID
-  private final SparkFlex algaeShooterMotorBack =
-      new SparkFlex(
-          Constants.CompBotConstants.ALGAE_SHOOTER_BACK_ID, MotorType.kBrushless); // no ID
+  protected final SparkFlex algaeShooterMotorFront;
+  protected final SparkFlex algaeShooterMotorBack;
 
-  private SparkFlexConfig frontConfig = new SparkFlexConfig();
-  private SparkFlexConfig backConfig = new SparkFlexConfig();
-  private final double positionConversionFactor = 1.0;
+  protected SparkFlexConfig frontConfig = new SparkFlexConfig();
+  protected SparkFlexConfig backConfig = new SparkFlexConfig();
+  protected final double positionConversionFactor = 1.0;
 
   /** Creates a new AlgaeShooterIOWB. */
   public AlgaeShooterIOCB() {
-    final double kP = 0.00035;
+    this(
+        new SparkFlex(Constants.CompBotConstants.ALGAE_SHOOTER_FRONT_ID, MotorType.kBrushless), 
+        new SparkFlex(Constants.CompBotConstants.ALGAE_SHOOTER_BACK_ID, MotorType.kBrushless)
+        );
+  }
+
+  public AlgaeShooterIOCB(SparkFlex algaeShooterMotorFront, SparkFlex algaeShooterMotorBack) {
+    this.algaeShooterMotorFront = algaeShooterMotorFront;
+    this.algaeShooterMotorBack = algaeShooterMotorBack;
+
+    final double kP = 0.0;
     final double kI = 0.0;
     final double kD = 0.0;
     final double kFF = 0.00015;

@@ -10,11 +10,11 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import frc.robot.Constants;
 
 public class AlgaeShooterIOPB extends AlgaeShooterIOCB {
-
  
   /** Creates a new AlgaeShooterIOWB. */
   public AlgaeShooterIOPB() {

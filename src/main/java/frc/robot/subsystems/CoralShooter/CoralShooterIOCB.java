@@ -7,7 +7,6 @@ package frc.robot.subsystems.CoralShooter;
 import com.ctre.phoenix6.configs.CANrangeConfiguration;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.signals.UpdateModeValue;
-import com.reduxrobotics.sensors.canandcolor.Canandcolor;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -19,15 +18,16 @@ import frc.robot.Constants;
 
 /** Add your docs here. */
 public class CoralShooterIOCB implements CoralShooterIO {
-  private final SparkMax outtakeMotor =
-        new SparkMax(Constants.CompBotConstants.CORAL_SHOOTER_ID, MotorType.kBrushless);
-
+    
     protected SparkMax outtakeMotor;
     protected RelativeEncoder encoder;
     protected SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
 
-    protected Canandcolor intakeSensor;
-    protected Canandcolor outtakeSensor;
+    private final CANrangeConfiguration intakeConfig;
+    private final CANrangeConfiguration outtakeConfig;
+  
+    private final CANrange intakeSensor;
+    private final CANrange outtakeSensor;
 
     protected final double KP = 0.0;
     protected final double KI = 0.0;
@@ -37,14 +37,17 @@ public class CoralShooterIOCB implements CoralShooterIO {
     public CoralShooterIOCB() {
         outtakeMotor = new SparkMax(Constants.CompBotConstants.CORAL_SHOOTER_ID, MotorType.kBrushless);
         encoder = outtakeMotor.getEncoder();
+
+        intakeSensor = new CANrange(Constants.CompBotConstants.INTAKE_SENSOR_ID);
+        outtakeSensor = new CANrange(Constants.CompBotConstants.OUTTAKE_SENSOR_ID);
         
-        CANrangeConfiguration intakeConfig = new CANrangeConfiguration();
-        CANrangeConfiguration outtakeConfig = new CANrangeConfiguration();
+        intakeConfig = new CANrangeConfiguration();
+        outtakeConfig = new CANrangeConfiguration();
   
         sparkMaxConfig.idleMode(IdleMode.kBrake);
         sparkMaxConfig.inverted(false);
         outtakeMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    }
+    
 /* Stated twice, this one is commented because it is private
   private final double KP = 0.0;
   private final double KI = 0.0;
@@ -56,9 +59,7 @@ public class CoralShooterIOCB implements CoralShooterIO {
         return outtakeSensor.getProximity() < 0.1;
     }
 */
-    intakeSensor = new Canandcolor(Constants.CompBotConstants.INTAKE_SENSOR_ID);
-    outtakeSensor = new Canandcolor(Constants.CompBotConstants.OUTTAKE_SENSOR_ID);
-
+    
     outtakeMotor.configure(
         sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 

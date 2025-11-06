@@ -16,7 +16,6 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.EncoderConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
 import frc.robot.Constants;
 
@@ -32,7 +31,7 @@ public class AlgaeTiltIOCB implements AlgaeTiltIO {
   protected final double forwardLimit = 38.0;
   protected final double reverseLimit = -10.0;
 
-  private final double ZERO_OFFSET = 0.7170253;
+  protected final double ZERO_OFFSET = 0.7170253;
   // 0.5551491; //0.7218491 + 0.833;
 
   protected final double positionConversionFactor = 1.0;
@@ -97,11 +96,5 @@ public class AlgaeTiltIOCB implements AlgaeTiltIO {
     inputs.armVelocityRelative = absEncoder.getVelocity();
     inputs.armVelocityAbsolute = absEncoder.getVelocity();
     inputs.armAmps = motor.getOutputCurrent();
-  }
-
-@Override
-public void setEncoder(double value) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setEncoder'");
   }
 }

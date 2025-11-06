@@ -32,20 +32,20 @@ public class ElevatorIOSim implements ElevatorIO {
 
   public static Encoder encoder = new Encoder(8, 9);
 
-  final double UPPER_LIMIT = 5.0;
-  final double LOWER_LIMIT = 1.3;
-  final double startingHeight = 1.3; // meters
+  final double UPPER_LIMIT = 2.0;
+  final double LOWER_LIMIT = 0.35;
+  final double startingHeight = 0.1; // meters
 
   final double kA = 0.0;
-  final double kD = 0.35;
-  final double kG = 0.65;
-  final double kI = 0.2;
-  final double kP = 0.55;
-  final double kS = 0.05;
+  final double kD = 0.0;
+  final double kG = 0.0;
+  final double kI = 0.0;
+  final double kP = 0.5;
+  final double kS = 0.0;
   final double kV = 0.0;
 
   private ProfiledPIDController pidController =
-      new ProfiledPIDController(kP, kI, kD, new TrapezoidProfile.Constraints(600, 300));
+      new ProfiledPIDController(kP, kI, kD, new TrapezoidProfile.Constraints(50, 25));
   private ElevatorFeedforward feedforward = new ElevatorFeedforward(kS, kG, kV, kA);
 
   private final PWMTalonFX motor = new PWMTalonFX(1);
@@ -60,7 +60,7 @@ public class ElevatorIOSim implements ElevatorIO {
           UPPER_LIMIT, // max elevator height meters
           true,
           startingHeight,
-          0.01,
+          0.0,
           0.0);
 
   // private DCMotorSim elevatorSim = new DCMotorSim(
@@ -72,8 +72,8 @@ public class ElevatorIOSim implements ElevatorIO {
   private final PWMSim simMotor = new PWMSim(motor);
 
   private final LoggedMechanism2d mech2d =
-      new LoggedMechanism2d(1, 20, new Color8Bit(Color.kBlue)); // guys this is not meters this is canvas units
-  private final LoggedMechanismRoot2d mech2dRoot = mech2d.getRoot("elevator root", 0.5, 0); // this also is not meters and it's relative to the canvas size you set
+      new LoggedMechanism2d(1, 5, new Color8Bit(Color.kBlue)); // guys this is not meters this is canvas units
+  private final LoggedMechanismRoot2d mech2dRoot = mech2d.getRoot("elevator root", 0.5, 0.1); // this also is not meters and it's relative to the canvas size you set
   private final LoggedMechanismLigament2d elevatorMech2d =
       mech2dRoot.append(
           new LoggedMechanismLigament2d(

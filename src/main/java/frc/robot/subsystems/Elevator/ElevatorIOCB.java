@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems.Elevator;
 
-import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -22,25 +21,24 @@ import org.littletonrobotics.junction.Logger;
 
 /** Add your docs here. */
 public class ElevatorIOCB implements ElevatorIO {
-    protected TalonFX backElevatorMotor;
-    protected TalonFX frontElevatorMotor;
-    // private final DifferentialMechanism elevatorDiff;
-    protected TalonFXConfiguration frontConfig = new TalonFXConfiguration();
-    protected TalonFXConfiguration backConfig = new TalonFXConfiguration();
-    protected MotorOutputConfigs outputConfigs = new MotorOutputConfigs();
-    // private DifferentialSensorsConfigs sens = backConfig.DifferentialSensors;
+  private final TalonFX backElevatorMotor =
+      new TalonFX(CompBotConstants.BACK_ELEVATOR_ID, CompBotConstants.CANBUS_NAME);
+  private final TalonFX frontElevatorMotor =
+      new TalonFX(CompBotConstants.FRONT_ELEVATOR_ID, CompBotConstants.CANBUS_NAME);
+  // private final DifferentialMechanism elevatorDiff;
+  private TalonFXConfiguration frontConfig = new TalonFXConfiguration();
+  private TalonFXConfiguration backConfig = new TalonFXConfiguration();
+  private MotorOutputConfigs outputConfigs = new MotorOutputConfigs();
+  // private DifferentialSensorsConfigs sens = backConfig.DifferentialSensors;
 
   private final DigitalInput bottomSwitch =
       new DigitalInput(WoodbotConstants.ELEVATOR_BOTTOM_SWITCH);
 
-    protected final double GEAR_RATIO = 1.0;
+  private final double GEAR_RATIO = 1.0;
 
-    public ElevatorIOCB() {
-        backElevatorMotor = new TalonFX(CompBotConstants.BACK_ELEVATOR_ID, CompBotConstants.CANBUS_NAME);
-        frontElevatorMotor = new TalonFX(CompBotConstants.FRONT_ELEVATOR_ID, CompBotConstants.CANBUS_NAME);
-
-        final double UPPER_LIMIT = 31.0;
-        final double LOWER_LIMIT = 0.0;
+  public ElevatorIOCB() {
+    final double UPPER_LIMIT = 31.0;
+    final double LOWER_LIMIT = 0.0;
 
     final double kA = 0.01;
     final double kD = 0.0;
@@ -65,12 +63,12 @@ public class ElevatorIOCB implements ElevatorIO {
     backElevatorMotor.getConfigurator().apply(new TalonFXConfiguration());
     frontElevatorMotor.getConfigurator().apply(new TalonFXConfiguration());
 
-        //outputConfigs.withInverted(InvertedValue.Clockwise_Positive);
-        
-        // talonFXConfiguration.SoftwareLimitSwitch.withForwardSoftLimitThreshold(UPPER_LIMIT);
-        // talonFXConfiguration.SoftwareLimitSwitch.withForwardSoftLimitEnable(true);
-        // talonFXConfiguration.SoftwareLimitSwitch.withReverseSoftLimitThreshold(LOWER_LIMIT);
-        // talonFXConfiguration.SoftwareLimitSwitch.withReverseSoftLimitEnable(true);
+    // outputConfigs.withInverted(InvertedValue.Clockwise_Positive);
+
+    // talonFXConfiguration.SoftwareLimitSwitch.withForwardSoftLimitThreshold(UPPER_LIMIT);
+    // talonFXConfiguration.SoftwareLimitSwitch.withForwardSoftLimitEnable(true);
+    // talonFXConfiguration.SoftwareLimitSwitch.withReverseSoftLimitThreshold(LOWER_LIMIT);
+    // talonFXConfiguration.SoftwareLimitSwitch.withReverseSoftLimitEnable(true);
 
     MotionMagicConfigs motionMagicConfigs = backConfig.MotionMagic;
 
@@ -93,15 +91,41 @@ public class ElevatorIOCB implements ElevatorIO {
     backConfig.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);
     backElevatorMotor.getConfigurator().apply(backConfig, 0.05);
 
-        Logger.recordOutput("front motor duty cycle", frontElevatorMotor.getDutyCycle().getValueAsDouble());
-        Logger.recordOutput("back motor duty cycle", backElevatorMotor.getDutyCycle().getValueAsDouble());
-    }
+    frontElevatorMotor.setNeutralMode(NeutralModeValue.Brake);
+    frontConfig.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);
+    frontElevatorMotor.getConfigurator().apply(frontConfig, 0.05);
+
+    // elevatorDiff = new DifferentialMechanism(backElevatorMotor, frontElevatorMotor, false);
+    // elevatorDiff.applyConfigs();
+    frontElevatorMotor.setControl(new Follower(CompBotConstants.BACK_ELEVATOR_ID, true));
+  }
+
+  public void updateInputs(ElevatorIOInputs inputs) {
+    inputs.elevatorStatorCurrent = backElevatorMotor.getStatorCurrent().getValueAsDouble();
+    inputs.elevatorSupplyCurrent = backElevatorMotor.getSupplyCurrent().getValueAsDouble();
+    inputs.elevatorVoltage = backElevatorMotor.getMotorVoltage().getValueAsDouble();
+    inputs.elevatorPosition = backElevatorMotor.getPosition().getValueAsDouble();
+    inputs.elevatorVelocity = backElevatorMotor.getVelocity().getValueAsDouble();
+    inputs.elevatorSensor = !bottomSwitch.get();
 
     Logger.recordOutput("front motor", frontElevatorMotor.getPosition().getValueAsDouble());
     Logger.recordOutput("back motor", backElevatorMotor.getPosition().getValueAsDouble());
 
-        backElevatorMotor.setControl(duty);
-    }
+    Logger.recordOutput(
+        "front motor duty cycle", frontElevatorMotor.getDutyCycle().getValueAsDouble());
+    Logger.recordOutput(
+        "back motor duty cycle", backElevatorMotor.getDutyCycle().getValueAsDouble());
+  }
+
+  public void setDutyCycle(double dutyCycle) {
+    DutyCycleOut duty = new DutyCycleOut(dutyCycle);
+    // Logger.recordOutput("duty", duty.Output);
+    // DifferentialDutyCycle differentialDuty = new DifferentialDutyCycle(dutyCycle, 0.0); //
+    // difference between mechanism position should be zero?
+    // PositionDutyCycle positionDuty = new PositionDutyCycle(0.0);
+    // elevatorDiff.setControl(duty, differentialDuty);
+    // backElevatorMotor.set(dutyCycle);
+    frontElevatorMotor.setControl(new Follower(CompBotConstants.BACK_ELEVATOR_ID, true));
 
     backElevatorMotor.setControl(duty);
   }
@@ -111,8 +135,24 @@ public class ElevatorIOCB implements ElevatorIO {
     frontElevatorMotor.stopMotor();
   }
 
-        // PositionVoltage positionVoltage = new PositionVoltage(0); // difference between mechanism position should be zero?
-        // elevatorDiff.setControl(motionMagicVoltage, positionVoltage);
-        backElevatorMotor.setControl(motionMagicVoltage);
-    }
+  /*
+   * value is new encoder value in rotations
+   */
+  public void setEncoder(double value) {
+    backElevatorMotor.setPosition(value);
+    frontElevatorMotor.setPosition(value);
+  }
+
+  /*
+   * height is in motor rotations
+   */
+  public void setElevatorPostion(double height) {
+    MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(height);
+    frontElevatorMotor.setControl(new Follower(CompBotConstants.BACK_ELEVATOR_ID, true));
+
+    // PositionVoltage positionVoltage = new PositionVoltage(0); // difference between mechanism
+    // position should be zero?
+    // elevatorDiff.setControl(motionMagicVoltage, positionVoltage);
+    backElevatorMotor.setControl(motionMagicVoltage);
+  }
 }

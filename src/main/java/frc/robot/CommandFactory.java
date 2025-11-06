@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -538,26 +539,29 @@ public class CommandFactory {
     }
   }
 
+  private double[] initialPositions = new double[4]; 
   public Command rotateDriveTrain360() {
-    drivetrain.zero();
-    for (int i = 0; i < 4; i++) {
-        drivetrain.getModule(i).getDriveMotor().setPosition(0.0);
-        // startPositions[i - 1] =
-         // drivetrain.getModule(i).getDriveMotor().getPosition().getValueAsDouble();
-    }
-    return Commands.waitUntil(() -> convert360(drivetrain.getAngle()) > 355.0)
+    return Commands.runOnce(() -> {
+        for (int i = 0; i < 4; i++) {
+            initialPositions[i] = drivetrain.getModule(i).getDriveMotor().getPosition().getValueAsDouble();
+        }
+    }).andThen(Commands.waitUntil(() -> convert360(drivetrain.getAngle()) > 355.0)
         .deadlineFor(drivetrain.rotateDrivetrain())
-        .andThen(Commands.runOnce(() -> this.radiusCalculation()));
-
+        .andThen(Commands.runOnce(() -> this.radiusCalculation())));
   }
 
   public double radiusCalculation() {
     double totalPosition = 0.0;
     double robotRotationalRadius = 32.173358544;
+    double[] finalPositions = new double[4];
+    Translation2d[] moduleLocations = drivetrain.getModuleLocations();
+    // robotRotationalRadius = Math.sqrt(
+    //     Math.pow(moduleLocations[0].getX(), 2.0) + Math.pow(moduleLocations[0].getY(), 2.0)); 
     double swerveGearRatio = 6.746031746031747;
-
+        
     for (int i = 0; i < 4; i++) {
-      totalPosition += drivetrain.getModule(i).getDriveMotor().getPosition().getValueAsDouble();
+      finalPositions[i] = drivetrain.getModule(i).getDriveMotor().getPosition().getValueAsDouble();
+      totalPosition += finalPositions[i] - initialPositions[i];
     }
 
     // equation for wheel radius is: sqrt(l^2 + w^2) / 2 (avg motor rotations * gear ratio) aka

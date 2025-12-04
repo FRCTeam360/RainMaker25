@@ -11,6 +11,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -424,6 +425,15 @@ public class RobotContainer {
     registerPathplannerCommand("left align", teleLeftAlign);
 
     registerPathplannerCommand("x out", xOut);
+    
+
+    registerPathplannerCommand("point1", commandFactory.pidToPoseDriveToSetpoint(12.455, 2.774, Rotation2d.fromDegrees(24.153)));
+    registerPathplannerCommand("point2", commandFactory.pidToPoseDriveToSetpoint(16.008, 0.512, Rotation2d.fromDegrees(-47.683)));
+    registerPathplannerCommand("point3", commandFactory.pidToPoseDriveToSetpoint(13.8, 2.9, Rotation2d.fromDegrees(120.000)));
+    registerPathplannerCommand("point4", commandFactory.pidToPoseDriveToSetpoint(12.455, 2.774, Rotation2d.fromDegrees(24.153)));
+    registerPathplannerCommand("point5", commandFactory.pidToPoseDriveToSetpoint(12.455, 2.774, Rotation2d.fromDegrees(24.153)));
+    registerPathplannerCommand("point6", commandFactory.pidToPoseDriveToSetpoint(12.455, 2.774, Rotation2d.fromDegrees(24.153)));
+    registerPathplannerCommand("point7", commandFactory.pidToPoseDriveToSetpoint(12.455, 2.774, Rotation2d.fromDegrees(24.153)));
 
     registerPathplannerCommand("consume vision measurements", consumeVisionMeasurements);
 
@@ -603,7 +613,7 @@ public class RobotContainer {
                 .setDutyCycleCmd(-0.40)
                 .alongWith(driveTrain.fieldOrientedDrive(driverCont)));
 
-    driverCont.rightBumper().and(() -> !isAlgaeMode).whileTrue(commandFactory.pidToPoseBoxDrive());
+    driverCont.rightBumper().and(() -> !isAlgaeMode).whileTrue(commandFactory.pidToPoseFigure8());
     driverCont.rightBumper().and(() -> isAlgaeMode).whileTrue(commandFactory.driverProcessAlgae());
     // if (Objects.nonNull(coralShooter)) {
     // driverCont.leftBumper().whileTrue(leftAlign);

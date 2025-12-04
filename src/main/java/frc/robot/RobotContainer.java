@@ -103,6 +103,8 @@ public class RobotContainer {
   private Command autoRightAlign;
   private Command pidToReefRight;
   private Command pidToReefLeft;
+  private Command pidToPoseOneMeter;
+  private Command pidToPoseDriveToSetpoint;
 
   private Command levelFour;
   private Command levelThree;
@@ -321,7 +323,7 @@ public class RobotContainer {
 
     pidToReefRight = commandFactory.pidAlign(true);
     pidToReefLeft = commandFactory.pidAlign(false);
-
+    pidToPoseOneMeter = commandFactory.pidToPoseOneMeter();    
     snapDrivebaseToAngle = new SnapDrivebaseToAngle(vision, driveTrain, 0);
 
     visionShootAlgae =
@@ -592,7 +594,7 @@ public class RobotContainer {
     // .and(() -> isAlgaeMode)
     // .onTrue(algaeTilt.setPositionCmd(Constants.isCompBot() ? 0.001 : 0.0));
 
-    driverCont.leftBumper().and(() -> !isAlgaeMode).whileTrue(pidToReefLeft);
+    driverCont.leftBumper().and(() -> !isAlgaeMode).whileTrue(commandFactory.pidToPoseOneMeter());
     driverCont
         .leftBumper()
         .and(() -> isAlgaeMode)
@@ -601,7 +603,7 @@ public class RobotContainer {
                 .setDutyCycleCmd(-0.40)
                 .alongWith(driveTrain.fieldOrientedDrive(driverCont)));
 
-    driverCont.rightBumper().and(() -> !isAlgaeMode).whileTrue(pidToReefRight);
+    driverCont.rightBumper().and(() -> !isAlgaeMode).whileTrue(commandFactory.pidToPoseBoxDrive());
     driverCont.rightBumper().and(() -> isAlgaeMode).whileTrue(commandFactory.driverProcessAlgae());
     // if (Objects.nonNull(coralShooter)) {
     // driverCont.leftBumper().whileTrue(leftAlign);

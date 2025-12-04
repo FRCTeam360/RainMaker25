@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
@@ -12,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.*;
 import frc.robot.Constants.SetPointConstants.ElevatorHeights;
 import frc.robot.commands.AlignWithLimelight;
+import frc.robot.commands.PIDToPose;
 import frc.robot.commands.PIDToReefPoints;
 import frc.robot.commands.SmartIntake;
 import frc.robot.commands.SnapDrivebaseToAngle;
@@ -212,6 +215,25 @@ public class CommandFactory {
             PIDToReefPoints.pidToReef(drivetrain, () -> drivetrain.getPose(), isRight), "PID Align")
         .andThen(this.alignRumble(driverCont).withTimeout(0.2));
   }
+
+  public Command pidToPoseOneMeter() {
+    Pose2d setpointPose = new Pose2d(9.0, 4.0, Rotation2d.k180deg);
+    return PIDToPose.getCommand(drivetrain, setpointPose);
+  }
+
+  public Command pidToPoseDriveToSetpoint(double x, double y, Rotation2d rotation) {
+    Pose2d setpointPose = new Pose2d(x, y, rotation);
+    return PIDToPose.getCommand(drivetrain, setpointPose);
+  }
+
+  public Command pidToPoseBoxDrive() {
+    return this.pidToPoseDriveToSetpoint(9.0, 4.0, Rotation2d.k180deg)
+        .andThen(this.pidToPoseDriveToSetpoint(4.5, 7.0, Rotation2d.fromDegrees(-90.0)))
+        .andThen(this.pidToPoseDriveToSetpoint(1.6, 4.0, Rotation2d.kZero))
+        .andThen(this.pidToPoseDriveToSetpoint(4.0, 1.0, Rotation2d.fromDegrees(90.0)))
+        .andThen(this.pidToPoseDriveToSetpoint(9.0, 4.0, Rotation2d.k180deg));
+  }
+  
 
   /**
    * This method is to reliably align the drivebase with the limelight It repeatedly attempts to

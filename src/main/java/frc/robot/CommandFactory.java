@@ -231,7 +231,7 @@ public class CommandFactory {
         .andThen(this.pidToPoseDriveToSetpoint(4.5, 7.0, Rotation2d.fromDegrees(-90.0)))
         .andThen(this.pidToPoseDriveToSetpoint(1.6, 4.0, Rotation2d.kZero))
         .andThen(this.pidToPoseDriveToSetpoint(4.0, 1.0, Rotation2d.fromDegrees(90.0)))
-        .andThen(this.pidToPoseDriveToSetpoint(6.5, 2.5, Rotation2d.fromDegrees(135.0)))
+        .andThen(this.pidToPoseDriveToSetpoint(6.5, 2.5, Rotation2d.fromDegrees(135.0))) //this one is in the middle of top and bottom paths
         .andThen(this.pidToPoseDriveToSetpoint(9.0, 4.0, Rotation2d.k180deg));
   }
   

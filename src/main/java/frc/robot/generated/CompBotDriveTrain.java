@@ -24,7 +24,7 @@ public class CompBotDriveTrain {
   // per
   // second max angular
   // velocity
-  public static final double headingKP = 2.0;
+  public static final double headingKP = 2.5;
   public static final double headingKI = 0.0;
   public static final double headingKD = 0.0;
   public static final double headingKIZone = 0.0;

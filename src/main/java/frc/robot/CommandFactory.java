@@ -216,7 +216,7 @@ public class CommandFactory {
         .andThen(this.alignRumble(driverCont).withTimeout(0.2));
   }
 
-  public Command pidToPoseOneMeter() {
+    public Command pidToPoseOneMeter() {
     Pose2d setpointPose = new Pose2d(9.0, 4.0, Rotation2d.k180deg);
     return PIDToPose.getCommand(drivetrain, setpointPose);
   }
@@ -585,29 +585,24 @@ public class CommandFactory {
   }
 
   private double[] initialPositions = new double[4]; 
-  double initialAngle = 0.0;
   public Command rotateDriveTrain360() {
     return Commands.runOnce(() -> {
-        initialAngle = drivetrain.getAngle();
         for (int i = 0; i < 4; i++) {
             initialPositions[i] = drivetrain.getModule(i).getDriveMotor().getPosition().getValueAsDouble();
         }
-    }).andThen(Commands.waitUntil(() -> convert360(drivetrain.getAngle()) > 357.0)
+    }).andThen(Commands.waitUntil(() -> convert360(drivetrain.getAngle()) > 355.0)
         .deadlineFor(drivetrain.rotateDrivetrain())
         .andThen(Commands.runOnce(() -> this.radiusCalculation())));
   }
+
   public double radiusCalculation() {
-    double angleChange = 0.0;
-    double finalAngle = drivetrain.getAngle();
     double totalPosition = 0.0;
-    double robotRotationalRadius = 32.173358544;
+    double robotRotationalRadius;
     double[] finalPositions = new double[4];
     Translation2d[] moduleLocations = drivetrain.getModuleLocations();
-    // robotRotationalRadius = Math.sqrt(
-    //     Math.pow(moduleLocations[0].getX(), 2.0) + Math.pow(moduleLocations[0].getY(), 2.0));
-     
+    robotRotationalRadius = Math.sqrt(
+        Math.pow(moduleLocations[0].getX(), 2.0) + Math.pow(moduleLocations[0].getY(), 2.0)); 
     double swerveGearRatio = 6.746031746031747;
-    angleChange = finalAngle - initialAngle;
         
     for (int i = 0; i < 4; i++) {
       finalPositions[i] = drivetrain.getModule(i).getDriveMotor().getPosition().getValueAsDouble();
@@ -616,7 +611,7 @@ public class CommandFactory {
 
     // equation for wheel radius is: sqrt(l^2 + w^2) / 2 (avg motor rotations * gear ratio) aka
     // wheel rotations)
-    double wheelRadius = (robotRotationalRadius / (2 * ((totalPosition / 4) * swerveGearRatio)))/(angleChange/360.0);
+    double wheelRadius = robotRotationalRadius / (2 * ((totalPosition / 4) * swerveGearRatio));
     Logger.recordOutput("average wheel position", (totalPosition / 4));
     Logger.recordOutput(
         "wheel radius", wheelRadius); // bottom of wheel to bottom of wheel needs to be the "length"

@@ -12,11 +12,6 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveRequest.FieldCentricFacingAngle;
 import com.ctre.phoenix6.swerve.SwerveRequest.ForwardPerspectiveValue;
 import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.config.RobotConfig;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.util.DriveFeedforwards;
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -602,49 +597,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   }
 
   private void configureAutoBuilder() {
-    try {
-      // Load the RobotConfig from the GUI settings. You should probably
-      // store this in your Constants file
-      RobotConfig config = RobotConfig.fromGUISettings();
-
-      AutoBuilder.configure(
-          () -> getStateCopy().Pose, // Supplier of current robot pose
-          this::resetPose, // Consumer for seeding pose against auto
-          () -> getStateCopy().Speeds, // Supplier of current robot speeds
-          // Consumer of ChassisSpeeds and feedforwards to drive the robot
-          (speeds, feedforwards) ->
-              this.setControl(this.driveRobotRelativeRequest(speeds, feedforwards)),
-          new PPHolonomicDriveController(
-              // PID constants for translation
-              new PIDConstants(11, 0, 0),
-              // PID constants for rotation
-              new PIDConstants(9, 0, 0)),
-          config,
-          // For our team, the path does not need to be flipped for Red vs Blue.
-          // The reasoning for this is that the fields are not constructed the same for
-          // each event, each side is a bit different.
-          () -> {
-            var alliance = DriverStation.getAlliance();
-            if (alliance.isPresent()) {
-              return alliance.get() == DriverStation.Alliance.Blue;
-            }
-            return false;
-          },
-          this // Subsystem for requirements
-          );
-    } catch (Exception ex) {
-      DriverStation.reportError(
-          "Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
-    }
-  }
-
-  private SwerveRequest driveRobotRelativeRequest(
-      ChassisSpeeds speeds, DriveFeedforwards feedforwards) {
-    return new SwerveRequest.ApplyRobotSpeeds()
-        .withSpeeds(speeds)
-        .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
-        .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
-        .withDriveRequestType(DriveRequestType.Velocity);
   }
 
   public void initializeRotationForAlliance() {

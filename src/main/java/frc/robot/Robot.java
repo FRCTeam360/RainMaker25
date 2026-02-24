@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.commands.PathfindingCommand;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -85,7 +84,6 @@ public class Robot extends LoggedRobot {
     Constants.FIELD_LAYOUT.setOrigin(AprilTagFieldLayout.OriginPosition.kBlueAllianceWallRightSide);
 
     m_robotContainer.onInit();
-    PathfindingCommand.warmupCommand().schedule();
   }
 
   /**

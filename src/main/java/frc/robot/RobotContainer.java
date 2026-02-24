@@ -6,9 +6,6 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -76,7 +73,6 @@ import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
   private final Field2d field;
-  private final SendableChooser<Command> autoChooser;
   private Telemetry logger;
 
   private final CommandXboxController driverCont = new CommandXboxController(0);
@@ -295,14 +291,6 @@ public class RobotContainer {
     field = new Field2d();
     SmartDashboard.putData("Field", field);
 
-    PathPlannerLogging.setLogActivePathCallback(
-        (poses -> Logger.recordOutput("Swerve/ActivePath", poses.toArray(new Pose2d[0]))));
-    PathPlannerLogging.setLogTargetPoseCallback(
-        pose -> Logger.recordOutput("Swerve/TargetPathPose", pose));
-
-    autoChooser = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Chooser", autoChooser);
-
     diagnosticTab = Shuffleboard.getTab("Diagnostics");
     diagnosticTab.addBoolean("Wood Bot", Constants::isWoodBot);
     diagnosticTab.addBoolean("Comp Bot", Constants::isCompBot);
@@ -460,13 +448,6 @@ public class RobotContainer {
    * @param command the actual command
    */
   private void registerPathplannerCommand(String commandName, Command command) {
-    if (Objects.nonNull(command)) {
-      NamedCommands.registerCommand(commandName, command);
-    } else {
-      System.err.println(commandName + " is null");
-      NamedCommands.registerCommand(
-          commandName, new InstantCommand(() -> System.err.println(commandName + " is null")));
-    }
   }
 
   private void incrementVelocity() {
@@ -687,7 +668,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+    return Commands.none();
   }
 
   public void onInit() {
